@@ -1,6 +1,8 @@
 title:               Rohan Mahnot
 include:             ['_pages', '_notes']
 
+theme: minima
+
 url:                 "https://mahnotrohan.github.io"
 baseurl:             ''
 
