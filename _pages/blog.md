@@ -1,5 +1,5 @@
 ---
-layout: note
+layout: page
 title: Blog
 permalink: /blog
 ---
@@ -7,7 +7,7 @@ permalink: /blog
 # Random Thoughts
 
 <div>
-  {%- for notes in site.note -%}
-    <p><a href = "{{ notes.url }}">{{ notes.title }}</a></p>
+  {%- for note in site.notes -%}
+    <p><a href = "{{ note.url }}">{{ note.title }}</a></p>
   {%- endfor -%}
 </div>
