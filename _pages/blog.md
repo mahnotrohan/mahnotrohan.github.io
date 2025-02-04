@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Blog
-permalink: /notes/
+permalink: /blog/
 ---
 
 # Random Thoughts
