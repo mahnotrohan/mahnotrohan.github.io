@@ -30,4 +30,4 @@ defaults:
   - scope:
       path: "_notes/**/*.md"
     values:
-      layout: "note" 
+      layout: "notes" 
