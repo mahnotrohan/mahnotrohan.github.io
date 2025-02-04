@@ -1,7 +1,11 @@
 ---
 layout: page
-title: About
-permalink: /about
+title: Bookshelf
+permalink: /bookshelf
 ---
 
-Hi, I'm Rohan!
+A list of books I'm reading this year (2025)
+
+* The Three Body Problem
+* A Mysterious Affair At Styles
+* What I Talk About When I Talk About Running
