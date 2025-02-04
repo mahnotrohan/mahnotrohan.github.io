@@ -1,9 +1,11 @@
 ---
 layout: page
 title: Blog
-permalink: /blog
+permalink: /notes
 ---
 
 # Random Thoughts
 
-[coffee-101]
+{% for note in site.notes %}
+- [{{ notes.title }}]({{ notes.url }})
+{% endfor %}
