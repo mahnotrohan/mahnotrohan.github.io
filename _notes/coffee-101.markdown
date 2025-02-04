@@ -1,7 +1,8 @@
 ---
-title: brewing a new bag of coffee
+layout: notes
+title: Brewing a new bag of coffee
 ---
-# Brewing a New Bag of Coffee
+# Brewing a new bag of coffee
 
 ## Goal
 
