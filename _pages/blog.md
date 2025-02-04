@@ -7,7 +7,7 @@ permalink: /blog
 # Random Thoughts
 
 <div>
-  {%- for note in site.notes -%}
-    <p><a href = "{{ note.url }}">{{ note.title }}</a></p>
+  {%- for notes in site.note -%}
+    <p><a href = "{{ notes.url }}">{{ notes.title }}</a></p>
   {%- endfor -%}
 </div>
