@@ -1,11 +1,13 @@
 ---
 layout: page
 title: Blog
-permalink: /notes
+permalink: /notes/
 ---
 
 # Random Thoughts
 
-{% for note in site.notes %}
-- [{{ notes.title }}]({{ notes.url }})
-{% endfor %}
+<div>
+  {% for note in site.notes %}
+    <p><a href="{{ note.url }}">{{ note.title }}</a></p>
+  {% endfor %}
+</div>
