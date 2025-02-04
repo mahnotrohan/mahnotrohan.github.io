@@ -1,3 +1,8 @@
+---
+layout: notes
+title: children
+---
+
 seeing Amyra grow in front of you and now acting like a grown up person feels odd. 
 
 She’s no more a little kiddo I can squish or will eat anything I make. She’s a person now. Has her own feelings, own choices and some rather strong one. 
