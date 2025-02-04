@@ -84,16 +84,13 @@ a {
   &:hover {
     text-decoration: underline; 
     background: none;  
-
   }
   &:after {
     position: relative;
     top: -0.5em;
     font-size: 0.7em;
-    content: "↗";
     color: #aaaaaa;
   }
-  &.internal-link:after,
   &.footnote:after,
   &.reversefootnote:after {
     content: "";
@@ -107,6 +104,7 @@ a {
 
 nav {
   margin: 1em 0 3em;
+  text-decoration: none;  
 }
 
 #notes-entry-container {
