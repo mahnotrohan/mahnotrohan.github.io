@@ -4,8 +4,11 @@ title: Home
 id: home
 permalink: /
 ---
+## Rohan Mahnot
+I work as a Data Scientist at Microsoft in Bangalore, focusing on Audience Targeting for Microsoft Advertising.
 
-Hi, I'm Rohan! I'm a Data Scientist working at Microsoft. Prior to this, I spend 4 crazy years at IITK. 
-I love to brew coffee, cook and run!
+Before that, I spent four years at IIT Kanpur - learning a lot, getting confused even more, and somehow making it through.
 
-This website is where I write all of my random thoughts and put them out there. An attempt to strengthen my beliefs and share my ideas with the world.
+I was born in Bikaner and raised in Delhi - two contrasting places that, in their own ways, shaped who I am. I love to brew coffee,cook and go for long runs.
+
+This website is my digital garden - a space to explore and share ideas as they take shape.
