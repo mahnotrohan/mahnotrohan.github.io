@@ -1,4 +1,8 @@
-WhatsApp Image 2025-02-10 at 2.20.37 PM.jpeg
+---
+layout: notes
+---
+![WhatsApp Image 2025-02-10 at 2 20 37 PM](https://github.com/user-attachments/assets/4293c1cb-ec60-4c8e-86f7-49536787aeb5)
+
 Hey Bubs,
 
 Writing this one a little later than usual, as I've been sitting with my thoughts, trying to find the right words. Several drafts later, here I am, wanting to be completely raw with you.
