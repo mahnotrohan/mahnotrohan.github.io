@@ -23,6 +23,9 @@ collections:
   notes:
     output: true
     permalink: /notes/:slug/
+  letters:
+    output: true
+    permalink: /letters/:slug/
 
 defaults:
   - scope:
