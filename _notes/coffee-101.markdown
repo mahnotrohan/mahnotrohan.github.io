@@ -2,7 +2,6 @@
 layout: notes
 title: Brewing a new bag of coffee
 ---
-# Brewing a new bag of coffee
 
 ## Goal
 
