@@ -1,5 +1,5 @@
 title:               Rohan Mahnot
-include:             ['_pages', '_notes']
+include:             ['_pages', '_notes','_letters']
 
 theme: minima
 
