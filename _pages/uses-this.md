@@ -9,9 +9,8 @@ permalink: /uses-this
 
 ## Hardware
 
-*   Thinkpad X1
+*   MacBook Pro
 *   iPhone 15
-*   Oneplus Buds Z2
 *   Apple Wired Earphones
 *   Garmin Forerunner 55
 *   StuffCool Power Bank
