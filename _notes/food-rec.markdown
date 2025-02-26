@@ -12,4 +12,4 @@ The problem with restaurant recommendations is twofold. First, different people 
 
 But for all the risks, recommendations also lead to some of the best dining experiences. They help you find hidden gems, try food you wouldn’t have otherwise, and sometimes even give you a new go-to spot.
 
-So when someone asks for a rec, the key is figuring out what they are looking for. Most people are happy with a place that serves decent food and has a nice atmosphere. And of course-don’t suggest a ramen bar when they’re asking for Chinese.
+So when someone asks for a rec, the key is figuring out what they are looking for. Most people are happy with a place that serves decent food and has a nice atmosphere. And of course - don’t suggest a ramen bar when they’re asking for Chinese.
