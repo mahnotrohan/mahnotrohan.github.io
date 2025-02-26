@@ -1,3 +1,9 @@
+---
+layout: notes
+title: Predicament With Restaurant Recommendation
+date: 2025-02-26
+---
+
 Everyone loves a good meal and every few days, someone visits a new restaurant. Maybe it’s trending on Instagram, maybe there’s a discount on Swiggy/Zomato, maybe it just won an award. Or a friend recommended it.
 
 People love recommending food and restaurants. Maybe it’s about sharing joy, maybe it’s about signaling taste or maybe its about finding like minded people, who knows? But it is a battleground of strongly held opinions.
