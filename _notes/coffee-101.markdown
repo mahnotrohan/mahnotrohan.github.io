@@ -1,6 +1,7 @@
 ---
 layout: notes
 title: Brewing a new bag of coffee
+date: 2025-01-19
 ---
 
 ## Goal
