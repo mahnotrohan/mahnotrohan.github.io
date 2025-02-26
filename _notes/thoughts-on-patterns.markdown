@@ -1,6 +1,7 @@
 ---
 layout: notes
 title: Thoughts On Patterns
+date: 2025-02-26
 ---
 Every morning, a chicken on a poultry farm is fed at 9 AM. After weeks of this routine, the chicken becomes absolutely certain of one thing: being fed at 9 AM is just how the world works. Until one day, the farmer arrives - not with food, but with a different purpose.
 
