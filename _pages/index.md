@@ -5,7 +5,8 @@ id: home
 permalink: /
 ---
 ### Rohan Mahnot
-I work as a Data Scientist at Microsoft in Bangalore, focusing on Audience Targeting for Microsoft Advertising.
+I’m a Product Manager at Meesho, working on Valmo - Meesho’s in-house logistics network.
+Previously, I was a Data Scientist at Microsoft in Bangalore, where I focused on Audience Targeting for Microsoft Advertising.
 
 Before that, I spent four years at IIT Kanpur - learning a lot, getting confused even more, and somehow making it through.
 
