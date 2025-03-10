@@ -1,6 +1,7 @@
 ---
 layout: notes
 title: Jan'25
+date: 2025-01-07
 ---
 To Lady Tanu of House Agrawal,
 
