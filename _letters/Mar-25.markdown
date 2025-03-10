@@ -1,6 +1,7 @@
 ---
 layout: notes
 title: Mar'25
+date: 2025-03-10
 ---
 ![WhatsApp Image 2025-03-10 at 8 35 21 PM](https://github.com/user-attachments/assets/c9512626-1a44-43af-b4b6-a8be5c6de09f)
 
