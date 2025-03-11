@@ -15,6 +15,4 @@ For cooking, it's the process of creation—putting together ingredients to crea
 
 This relationship with took on new meaning when I moved to a new house with three flatmates who had been acquaintances and friends before. I began cooking for everyone regularly and preparing meals in advance. It became more than just personal satisfaction - it transformed into a form of communication and care.
 
-I recently moved in with new flatmates—friends and acquaintances from before. I’ve been cooking a lot, planning meals for everyone. It’s fun. I get to do what I love, and they get to try new dishes.
-
 I like this harmony—the simple exchange of effort and appreciation, of making food and having it received with warmth.
