@@ -1,7 +1,8 @@
+---
 layout: notes
 title : Cooking and Being
 date: 2025-03-12
---------
+---
 I love being in my kitchen. As a child, I would always want to help - chopping, making sandwiches, or just stirring whatever was on the stove. 
 
 But in the last few months, I find myself enjoying every aspect of kitchen work: meal prep, cooking, cleaning, washing up, wiping dry the cups and plates. I've even started making notes on what went wrong and what went right with the food I made, creating doodles of dishes, or thinking about what kind of foods T might enjoy.
