@@ -1,7 +1,7 @@
 ---
 layout: notes
 title : Cooking and Being
-date: 2025-03-11
+date: 2025-03-12
 ---
 I love being in my kitchen. As a child, I would always want to help - chopping, making sandwiches, or just stirring whatever was on the stove. 
 
