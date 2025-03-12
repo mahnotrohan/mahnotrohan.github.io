@@ -11,8 +11,8 @@ My thoughts about food have become more fluid, more non-linear. How can I blend 
 
 But what do I love about it? What is it that draws me in?
 
-For cooking, it's the process of creation—putting together ingredients to create a balanced dish, striving for consistency while improving with every attempt. But more than that, it's the silence. Like how Murakami describes running - you're doing so much, yet your mind is still. Observing thoughts from a distance, like a tree in a quiet forest, watching the clouds drift by.
+For cooking, it's the process of creation - putting together ingredients to create a balanced dish, striving for consistency while improving with every attempt. But more than that, it's the silence. Like how Murakami describes running - you're doing so much, yet your mind is still. Observing thoughts from a distance, like a tree in a quiet forest, watching the clouds drift by.
 
 This relationship with took on new meaning when I moved to a new house with three flatmates who had been acquaintances and friends before. I began cooking for everyone regularly and preparing meals in advance. It became more than just personal satisfaction - it transformed into a form of communication and care.
 
-I like this harmony—the simple exchange of effort and appreciation, of making food and having it received with warmth.
+I like this harmony - the simple exchange of effort and appreciation, of making food and having it received with warmth.
