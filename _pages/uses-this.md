@@ -11,14 +11,13 @@ permalink: /uses-this
 
 *   MacBook Pro
 *   iPhone 15
-*   Apple Wired Earphones
+*   Airpods 4
 *   Garmin Forerunner 55
 *   StuffCool Power Bank
     
 ## Software
     
 *   Sublime
-*   Lithium - Ebook Reader
 *   Bitwarden
 *   Retro - Photo Journalling
 *   Nike Run Club
