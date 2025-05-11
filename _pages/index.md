@@ -5,7 +5,7 @@ id: home
 permalink: /
 ---
 ### Rohan Mahnot
-I’m part of Meesho’s Product team, working on Central Allocation in the Fulfillment & Experience team.
+I’m part of Meesho’s Product team, in the Fulfillment & Experience team.
 
 Previously, I was a Data Scientist at Microsoft in Bangalore, where I focused on Audience Targeting for Microsoft Advertising.
 
