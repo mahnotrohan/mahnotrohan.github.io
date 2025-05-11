@@ -10,3 +10,4 @@ A list of books I'm reading this year (2025)
 * A Mysterious Affair At Styles
 * What I Talk About When I Talk About Running
 * Recursion
+* The Power Law
