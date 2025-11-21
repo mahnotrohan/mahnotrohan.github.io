@@ -53,26 +53,28 @@ permalink: /trends
   }
 
   async function loadAndroid() {
-    try {
-      const r = await fetch(`${WORKER}/api/android?country=${COUNTRY}&collection=topselling_free&num=10`, { cache: "no-store" });
-      const d = await r.json();
-      const results = d.organic_results || d.items || [];
-      const list = byId("android-list");
-      list.innerHTML = "";
-      results.slice(0,10).forEach(a => {
-        const name = safe(a.title || a.app_name || a.name, "App");
-        const url  = safe(a.link || a.app_url || a.url, "#");
-        const dev  = safe(a.developer || a.developer_name, "");
-        const li = document.createElement("li");
-        li.innerHTML = `<a href="${url}" target="_blank" rel="noopener">${name}</a>` +
-                       (dev ? ` <span style="opacity:.7">${dev}</span>` : "");
-        list.appendChild(li);
-      });
-      if (!results.length) list.innerHTML = "<li>No data</li>";
-    } catch (e) {
-      console.error(e);
-      byId("android-list").innerHTML = "<li>Failed to load</li>";
-    }
+  const url = `${WORKER}/api/android?collection=topselling_free&gl=IN&hl=en&num=10`; // try gl=US to compare
+  const data = await fetchJSON(url, "android-list");
+  if (!data) return;
+
+  // Prefer explicit arrays SerpApi returns for charts; fall back to organic_results
+  let items = data.apps || data.app_results || data.organic_results || data.items || [];
+
+  // Keep only real app detail links
+  items = items.filter(x => (x.link || x.url || "").includes("/store/apps/details"));
+
+  const list = document.getElementById("android-list");
+  list.innerHTML = "";
+  items.slice(0,10).forEach(a => {
+    const name = a.title || a.app_name || a.name || "App";
+    const url  = a.link || a.url || a.app_url || "#";
+    const dev  = a.developer || a.developer_name || (a?.seller?.name) || "";
+    const li = document.createElement("li");
+    li.innerHTML = `<a href="${url}" target="_blank" rel="noopener">${name}</a>` +
+                   (dev ? ` <span style="opacity:.7">${dev}</span>` : "");
+    list.appendChild(li);
+  });
+  if (!items.length) list.innerHTML = "<li>No data</li>";
   }
 
   async function loadTrends() {
