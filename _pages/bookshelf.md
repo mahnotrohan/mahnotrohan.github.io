@@ -11,3 +11,7 @@ A list of books I'm reading this year (2025)
 * What I Talk About When I Talk About Running
 * Recursion
 * The Power Law
+* Courage To Be Disliked
+* The School of Life
+* Thinking in Bets
+* A Man's Search for Meaning
