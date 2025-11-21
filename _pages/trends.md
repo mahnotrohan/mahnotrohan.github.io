@@ -1,12 +1,11 @@
 ---
 layout: page
 title: "Trends"
-permalink: /trends/
+permalink: /trends
 ---
 
 # What’s Trending
 
-_Updates on page load (default: US)._
 
 ## Top iOS Apps
 <ol id="ios-list"><li>Loading…</li></ol>
@@ -20,7 +19,7 @@ _Updates on page load (default: US)._
 <script>
 (async () => {
   const COUNTRY = "in"; // set your default; use "us" if you prefer
-  const WORKER = "https://trends-proxy.<subdomain>.workers.dev"; // <-- your Worker URL
+  const WORKER = "https://trends-proxy.rohan-mahnot27.workers.dev"; // <-- your Worker URL
 
   // Generic helpers
   const byId = (id) => document.getElementById(id);
