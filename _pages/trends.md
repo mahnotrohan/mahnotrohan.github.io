@@ -37,8 +37,7 @@ permalink: /trends/
     } catch { document.getElementById("ios-list").innerHTML = "<li>Failed to load</li>"; }
   }
 
-  // Your Worker base URL (no trailing slash)
-  const WORKER = "https://YOUR-WORKER.workers.dev";
+  const WORKER = "https://trends-proxy.rohan-mahnot27.workers.dev";
 
   async function loadAndroid() {
     try {
