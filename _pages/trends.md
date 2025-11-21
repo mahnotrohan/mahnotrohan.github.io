@@ -1,3 +1,22 @@
+---
+layout: page
+title: "Trends"
+permalink: /trends/
+---
+
+# What’s Trending
+
+_Updates on page load (default: US)._
+
+## Top iOS Apps
+<ol id="ios-list"><li>Loading…</li></ol>
+
+## Top Android Apps
+<ol id="android-list"><li>Loading…</li></ol>
+
+## Google Trending Searches
+<ol id="trends-list"><li>Loading…</li></ol>
+
 <script>
 (async () => {
   const COUNTRY = "in"; // set your default; use "us" if you prefer
