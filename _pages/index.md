@@ -4,14 +4,12 @@ title: Home
 id: home
 permalink: /
 ---
-I’m part of Meesho’s Product team, in the Fulfillment & Experience team.
+Hi, I’m Rohan. I’m a Product Manager at Meesho, working in Fulfillment & Experience.
 
-Previously, I was a Data Scientist at Microsoft in Bangalore, where I focused on Audience Targeting for Microsoft Advertising.
+Previously, I was a Data Scientist at Microsoft, where I worked on audience targeting for Microsoft Advertising. 
 
-Before that, I spent four years at IIT Kanpur - learning a lot, getting confused even more, and somehow making it through.
+Before that, I studied at IIT Kanpur. I was born in Bikaner and raised in Delhi.
 
-I was born in Bikaner and raised in Delhi - two contrasting places that, in their own ways, shaped who I am. 
+Outside of work, I enjoy cooking, brewing coffee, reading memoirs, and going for long runs - I’ve been running regularly for the last five years.
 
-I love to brew coffee, cook and go for long runs.
-
-This website is my digital garden - a space to explore and share ideas as they take shape.
+This website is my digital garden: a place where I share ideas as I make meaning out of life, and thoughts as they slowly take shape.
