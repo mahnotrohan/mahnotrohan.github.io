@@ -9,7 +9,7 @@ It has been nothing short of character defining arc.
 
 Few things about the culture I really really admire:
 
-- **Pre-reads.** No fancy decks, no hiding behind data. You send a pre-read. If leaders have read it, they’ll ask questions. Come prepared
+- Pre-reads. No fancy decks, no hiding behind data. You send a pre-read. If leaders have read it, they’ll ask questions. Come prepared
 - Problem first mindset. Its a pain in the ass, but incredible
 - Thinking in systems. Scaffoldings of patch work, eventually falls, and hits hard.
 - People are smart. And not in pretentious  I-have-a-degree-I-am-smart.
