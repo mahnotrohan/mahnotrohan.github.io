@@ -14,4 +14,4 @@ Outside of work, I enjoy cooking, brewing coffee, reading memoirs, and going for
 
 This website is my digital garden: a place where I share ideas as I make meaning out of life, and thoughts as they slowly take shape.
 
-[https://docs.google.com/forms/d/e/1FAIpQLSchFvIxhmT7FFuzZ6BRSkVattfMPqpIk7w5P1QvUC_MsKwxnw/viewform](Write to me!)
+[*Write to me!*] (https://docs.google.com/forms/d/e/1FAIpQLSchFvIxhmT7FFuzZ6BRSkVattfMPqpIk7w5P1QvUC_MsKwxnw/viewform)
