@@ -1,4 +1,9 @@
-# My PKMS and Task management System
+---
+layout: notes
+title: My PKMS and Task management System
+date: 2026-02-04
+---
+({{ site.baseurl }}/assets/images/pkms.jpg)[]
 
 Every knowledge worker goes through a rite of passage while developing their personal knowledge management system (PKMS). I’ve been no different. Over the years, I’ve experimented extensively, ranging from Obsidian to a txt file on my desktop.
 
@@ -65,5 +70,3 @@ https://www.todoist.com/inspiration/how-to-plan-your-day
 https://www.todoist.com/productivity-methods/weekly-review
 
 https://www.todoist.com/productivity-methods/systemist
-
-[Rewrite #1](https://www.notion.so/Rewrite-1-2fd262a0990d80b79d7bc4416c388bfd?pvs=21)
