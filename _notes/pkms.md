@@ -3,7 +3,7 @@ layout: notes
 title: My PKMS and Task management System
 date: 2026-02-04
 ---
-![](mahnotrohan.github.io/assets/pkms.jpg)
+![]({{site.base_url}}/assets/pkms.jpg)
 
 Every knowledge worker goes through a rite of passage while developing their personal knowledge management system (PKMS). I’ve been no different. Over the years, I’ve experimented extensively, ranging from Obsidian to a txt file on my desktop.
 
