@@ -14,10 +14,9 @@ After chatting with my friend (and fellow nerd), Anmol, I discovered the PARA me
 Below are a few notes from my process of developing this system.
 
 ## Planning & Reflections
-
-- **Yearly** – Once a year
-- **Daily & Weekly**
-- **Personal and Professional**
+For both, Personal x Professional:
+- Yearly (largely based on the product roadmap)
+- Daily & Weekly
 
 ## Productivity Techniques
 
