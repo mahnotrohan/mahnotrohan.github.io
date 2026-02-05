@@ -14,9 +14,8 @@ After chatting with my friend (and fellow nerd), Anmol, I discovered the PARA me
 Below are a few notes from my process of developing this system.
 
 ## Planning & Reflections
-For both, Personal x Professional:
-- Yearly (largely based on the product roadmap)
-- Daily & Weekly
+- Daily plan and review of TTDs
+- Yearly - thematic points on areas I want to work on in the coming year
 
 ## Productivity Techniques
 
@@ -24,10 +23,10 @@ These are frameworks I borrow from, which work for me:
 
 - Time Boxing
 - Time Blocking
-- Get Shit Done / GTD /
+- Get Shit Done / GTD 
     - Get clear
     - Get current
-    - Get creative
+    - Stack Rank
 
 ## Task Management
 
@@ -35,18 +34,18 @@ Any *action* I need to take goes into Todoist. I’ve created sections that cove
 
 1. Work
 2. Personal
-3. Read Later
-4. Someday / Maybe
+3. To Read
+4. Later
 
 The sections are fairly self-explanatory. I follow this setup religiously, and that consistency matters more than anything else.
 
 ## Writing & Thought Capture
 
-I use a multi-pronged approach here because I think best both digitally and on paper.
+I use a multi-pronged approach here because I think on both digitally and paper.
 
 ### Paper
 
-- Running thoughts / active thinking go into dedicated notebooks. I maintain separate notebooks for work, dumps, and ideas.
+- Running thoughts / active thinking go into dedicated notebooks. I maintain three separate notebooks for work, fleeting thoughts and dumps, and thinking.
 - Ideas or seeds to explore use an index-card approach. One idea lives on one card. Whenever I come across something interesting, I write it down and add it to a growing stack. Every few days or once a month, I go through these cards to filter, expand, or revisit ideas worth pursuing.
 
 ### Digital
@@ -61,6 +60,4 @@ Over-engineering a system to serve every possible use case might look elegant, b
 Try to identify and build the leanest system with the fastest UX that fits your workflow. Something as simple as a spreadsheet or even a personal chat with yourself on Slack or WhatsApp can outperform 75% of productivity tools, if you use it consistently.
 
 ### Blogs & Resources
-- https://www.todoist.com/inspiration/how-to-plan-your-day
-- https://www.todoist.com/productivity-methods/systemist
-- https://coda.io/@shishir/to-do-list-philosophy
+- [1](https://www.todoist.com/inspiration/how-to-plan-your-day), [2](https://www.todoist.com/productivity-methods/systemist), [3](https://coda.io/@shishir/to-do-list-philosophy)
