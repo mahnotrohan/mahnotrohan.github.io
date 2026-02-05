@@ -9,7 +9,7 @@ It has been nothing short of character defining arc.
 
 Few things about the culture I really really admire:
 
-- Pre-reads. No fancy decks, no hiding behind data. You send a pre-read. If leaders have read it, they’ll ask questions. Come prepared
+- Pre-reads. Decisions start with writing. Everything starts with narrative doc that has the full context, data, and reasoning. Decision Meetings are for debate and decisions.
 - Problem first mindset. It can be irritating sometimes because ask a lot of questions, but this cultural aspect has led Meesho to challenge so many mental models and build new ones.
 - Thinking in systems. Specially in FnE, at this scale, patch works creates a scaffolding, which eventually breaks.
 - People are incredibly smart.
