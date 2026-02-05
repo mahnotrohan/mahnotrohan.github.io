@@ -15,7 +15,7 @@ Below are a few notes from my process of developing this system.
 
 ## Planning & Reflections
 - Daily plan and review of TTDs
-- Yearly - thematic points on areas I want to work on in the coming year
+- Yearly - areas where I want to spend time
 
 ## Productivity Techniques
 
