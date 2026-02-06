@@ -1,7 +1,7 @@
 ---
 layout: page
 title: "Thoughts"
-permalink: /commonplace-notes
+permalink: /thoughts
 ---
 
 About me, thoughts, and ideas I revisit often
