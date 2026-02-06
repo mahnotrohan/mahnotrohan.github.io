@@ -60,4 +60,4 @@ Over-engineering a system to serve every possible use case might look elegant, b
 Try to identify and build the leanest system with the fastest UX that fits your workflow. Something as simple as a spreadsheet or even a personal chat with yourself on Slack or WhatsApp can outperform 75% of productivity tools, if you use it consistently.
 
 ### Blogs & Resources
-- [1](https://www.todoist.com/inspiration/how-to-plan-your-day), [2](https://www.todoist.com/productivity-methods/systemist), [3](https://coda.io/@shishir/to-do-list-philosophy)
+- [1](https://www.todoist.com/inspiration/how-to-plan-your-day), [2](https://www.todoist.com/productivity-methods/systemist), [3](https://coda.io/@shishir/to-do-list-philosophy), [4](https://blog.samaltman.com/productivity), [5](https://pmarchive.com/guide_to_personal_productivity.html)
