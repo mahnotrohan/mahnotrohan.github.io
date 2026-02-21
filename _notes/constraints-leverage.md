@@ -2,6 +2,7 @@
 layout: notes
 title: Constraints Flow Down, Value Flows Up
 date: 2026-02-22
+permalink: /constraints-leverage/
 ---
 Every system that produces value has a similar hidden structure. Whether it is a company, a scientific field, an open source project, or a city, the same logic holds. Upstream decisions set the conditions for everything downstream. Constraints flow down, and value flows up. Leverage belongs to whoever sets constraints for others.
 
