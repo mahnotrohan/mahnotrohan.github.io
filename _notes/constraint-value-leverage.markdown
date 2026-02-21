@@ -5,8 +5,6 @@ date: 2026-02-22
 ---
 Every system that produces value has a similar hidden structure. Whether it is a company, a scientific field, an open source project, or a city, the same logic holds. Upstream decisions set the conditions for everything downstream. Constraints flow down, and value flows up. Leverage belongs to whoever sets constraints for others.
 
----
-
 **Layers**
 
 Any value-producing system can be understood as five layers.
@@ -21,8 +19,6 @@ Then come **builders**. Builders convert structure into output through executio
 
 Finally come **maintainers**. Maintainers fight entropy. Every system degrades without active preservation. Maintenance rarely creates new value, but without it, existing value erodes. The systems we rely on most are often running on maintenance work nobody notices until it stops.
 
----
-
 **How Constraints Flow**
 
 The stack is a description of dependency.
@@ -32,8 +28,6 @@ Consider an engineer at a major technology company who builds an exceptional alg
 Remove any of those upstream decisions and the algorithm either sits idle, gets built in the wrong direction, or never ships at all. Add a better algorithm, and the output improves at the margin. The ceiling on the engineer's impact was set before they started.
 
 Every layer inherits the decisions of the layers above it. The value any layer produces is real, but it is bounded. The higher a decision lives in the stack, the more of the system it shapes.
-
----
 
 **The System in Motion**
 
@@ -48,8 +42,6 @@ During growth, building dominates. Direction is set and structure holds. Perform
 In maturity, maintenance becomes critical. The primary risk is entropy, not growth. The survival of the system depends on maintainers most people never think about.
 
 This is what makes the framework a systems view rather than a simple hierarchy. The same layer that is critical in one phase becomes less important in the next. A person can move from a high-leverage position to a low-leverage one without changing anything about themselves. The system moved. They stayed.
-
----
 
 **The Principle**
 
