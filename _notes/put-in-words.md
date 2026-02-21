@@ -1,5 +1,8 @@
-On putting things in words
-
+---
+layout: notes
+title: On putting things in words
+date: 2026-02-21
+---
 I’ve been more active online lately, posting more pictures and writing more on Instagram and my personal website. I’ve noticed it myself and I’m aware of how it can look.
 
 What’s actually happening is this. I’m choosing what parts of my life I let exist outside my head.
