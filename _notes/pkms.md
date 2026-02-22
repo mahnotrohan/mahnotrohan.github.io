@@ -3,7 +3,7 @@ layout: notes
 title: My PKMS and Task management System
 date: 2026-02-04
 ---
-![](assets/pkms.png)
+![](/assets/pkms.png)
 Every knowledge worker goes through a rite of passage while developing their personal knowledge management system (PKMS). I’ve been no different. Over the years, I’ve experimented extensively, ranging from Obsidian to a txt file on my desktop.
 
 As, the breadth of things I was involved increase, my working memory was overloaded, and the switching cost between contexts became expensive.
