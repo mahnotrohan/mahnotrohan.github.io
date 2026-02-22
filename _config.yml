@@ -32,7 +32,7 @@ defaults:
       path: "**/*"
     values:
       layout: "default"
- - scope:
-    path: "_notes/**"
-  values:
-    layout: "notes"
+  - scope:
+      path: "_notes/**/*.md"
+    values:
+      layout: "notes" 
