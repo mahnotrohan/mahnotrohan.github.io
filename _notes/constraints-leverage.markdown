@@ -4,7 +4,7 @@ title: Where Leverage Lives
 date: 2026-02-22
 permalink: /constraints-leverage/
 ---
-![](/assets/leverage.png)
+![](assets/leverage.png)
 Every system that creates value, be it a company or a scientific innovation, has largely a similar structure. Upstream decisions that set the conditions for everything downstream. Constraints flow top down, and Leverage lies to whoever sets constraints for others.
 
 **The** **Layers**
