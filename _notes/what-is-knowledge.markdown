@@ -30,7 +30,7 @@ What I'm learning is that knowledge falls into two very different buckets:
 Most people worship the stock because it feels productive without any exposure to failure. You can always read one more book. But past a baseline, the rate matters far more. 
 
 ---
-![](/assets/knowledge.png)
+![]({{site.baseurl}}/assets/knowledge.png)
 
 **Why "making the 100% right decision" is the wrong goal**
 
