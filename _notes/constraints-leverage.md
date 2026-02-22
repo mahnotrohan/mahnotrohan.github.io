@@ -1,6 +1,6 @@
 ---
 layout: notes
-title: Constraints Flow Down, Value Flows Up
+title: Where Leverage Lives
 date: 2026-02-22
 permalink: /constraints-leverage/
 ---
