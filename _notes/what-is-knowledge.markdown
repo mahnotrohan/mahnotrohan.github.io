@@ -79,10 +79,10 @@ A lot of this can quietly become a trap, like overfitting to existing explanatio
 
 **A simple operating rule**
 
-Aim for a 70/30 split:
+Aim for a 30-70 split:
 
-- 70% - doing and getting feedback
 - 30% - targeted learning; enough to unblock the next step
+- 70% - doing and getting feedback
 
 If you find yourself flipping that ratio, ask honestly whether you're learning or hiding.
 
