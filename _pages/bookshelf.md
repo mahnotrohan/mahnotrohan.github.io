@@ -4,7 +4,14 @@ title: Bookshelf
 permalink: /bookshelf
 ---
 
-A list of books I'm reading this year (2025)
+A list of books I read this year (2026)
+* Everything I know about love (Dolly Alderton)
+* The Outsider: A Memoir for Misfits (Vir Das)
+* Notes on Heartbreak: A Memoir (Annie Lord)
+* Never Logged Out: How the Internet Created India's Gen Z (Ria Chopra)
+* Maybe You Should Talk to Someone (Lori Gottlieb)
+
+A list of books I read in the year - 2025
 
 * The Three Body Problem
 * A Mysterious Affair At Styles
