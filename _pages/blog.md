@@ -4,7 +4,7 @@ title: Blog
 permalink: /blog
 ---
 
-# Random Thoughts
+# Writing
 
 <div>
   {%- for note in site.notes reversed -%}
