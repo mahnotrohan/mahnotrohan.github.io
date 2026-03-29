@@ -1,7 +1,7 @@
 ---
 layout: notes
 title: Notes on March
-date: 2026-03-30
+date: 2026-03-29
 ---
 It’s March already
 
