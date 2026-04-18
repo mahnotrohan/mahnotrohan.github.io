@@ -1,3 +1,8 @@
+---
+layout: notes
+title: Who's at the Finish Line?
+date: 2026-04-18
+---
 Kilometer 17. My knees ached, my calves cramped, and I was sticky, smelling of sweat and caramel gel. The body was the easy part. 
 One part of my brain was telling me to collapse. Another refused, for reasons I couldn't name.
 
