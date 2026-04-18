@@ -8,8 +8,6 @@ permalink: /thoughts
 
 Ideas I'm currently interested in, threads I keep pulling on, and things I'm trying to figure out. I'm probably wrong about many of these, but thinking out loud is half the point.
 
----
-
 ## Threads I Keep Pulling On
 
 #### Agency and Control
@@ -42,11 +40,11 @@ I'm a year into product management and actively trying to sharpen the craft — 
 
 #### Coffee Brewing
 
-I've started logging my brews and I've grown consistent. For the last three months, I've been following a "dripper a month" challenge — picking one brewer from my daily drivers and going deep with it. More on my setup, favourites, and the people I learn from on the [coffee page](/pages/on-coffee).
+I've started logging my brews and I've grown consistent. For the last three months, I've been following a "dripper a month" challenge — picking one brewer from my daily drivers and going deep with it. More on my setup, favourites, and the people I learn from on the [coffee page](/thoughts/on-coffee).
 
 #### Food Experimentation
 
-I like to experiment with food conceptually — if almond milk tastes good, why not peanut milk? What happens if I try to roast green coffee beans at home? I'm less interested in perfecting recipes and more interested in understanding why certain combinations work. More on [what I eat and love](/pages/on-food).
+I like to experiment with food conceptually — if almond milk tastes good, why not peanut milk? What happens if I try to roast green coffee beans at home? I'm less interested in perfecting recipes and more interested in understanding why certain combinations work. More on [what I eat and love](/thoughts/on-food).
 
 #### Form Factor and Everyday Design
 
