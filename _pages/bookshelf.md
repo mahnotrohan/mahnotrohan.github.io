@@ -16,6 +16,7 @@ Books I've read recently. I tend to gravitate toward memoirs, decision-making, a
 - Never Logged Out — Ria Chopra
 - Maybe You Should Talk to Someone — Lori Gottlieb
 - Project Hail Mary — Andy Weir
+- The Book Of Clarity — Paras Chopra
 
 ## 2025
 
