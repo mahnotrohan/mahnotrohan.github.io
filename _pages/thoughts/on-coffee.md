@@ -28,9 +28,8 @@ My go-to is a cortado made with a SIF or an Aeropress. For pourovers, V60 and De
 - **Best pourover** — Baan 125, Phuket.
 
 #### People I Learn From
-
 James Hoffmann and Jonathan Gagné — their content on how to brew coffee has helped me build mental models for brewing, and debugging.
-Others include - Lance Hedrick, and Morgan Eckroth.
+
 ---
 
 [← Back to Thoughts](/thoughts)
