@@ -1,387 +1,363 @@
 ---
+title: Coffee Brew Log
 ---
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Coffee Brew Log — Rohan Mahnot</title>
 
-  <!-- Your site's compiled stylesheet — picks up all changes to _style.scss automatically -->
-  <link rel="stylesheet" href="/styles.css" />
+<style>
+  .brew-subtitle {
+    color: #8a8a8a;
+    margin-bottom: 2rem;
+  }
 
-  <!-- Only toggle-specific styles not covered by _style.scss -->
-  <style>
-    .brew-subtitle {
-      color: #8a8a8a;
-      margin-bottom: 2rem;
-    }
+  details {
+    border-top: 1px solid #2e2e2e;
+  }
 
-    details {
-      border-top: 1px solid #2e2e2e;
-    }
+  details:last-of-type {
+    border-bottom: 1px solid #2e2e2e;
+  }
 
-    details:last-of-type {
-      border-bottom: 1px solid #2e2e2e;
-    }
+  summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 0.85rem 0;
+  }
 
-    summary {
-      list-style: none;
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      gap: 1rem;
-      padding: 0.85rem 0;
-    }
+  summary::-webkit-details-marker { display: none; }
 
-    summary::-webkit-details-marker { display: none; }
+  .summary-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
 
-    .summary-text {
-      display: flex;
-      flex-direction: column;
-      gap: 0.15rem;
-    }
+  .recipe-name {
+    font-weight: 500;
+    color: #e8e6e3;
+  }
 
-    .recipe-name {
-      font-weight: 500;
-      color: #e8e6e3;
-    }
+  .recipe-meta {
+    font-size: 0.78rem;
+    color: #8a8a8a;
+  }
 
-    .recipe-meta {
-      font-size: 0.78rem;
-      color: #8a8a8a;
-    }
+  .chevron {
+    color: #8a8a8a;
+    font-size: 0.75rem;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+    user-select: none;
+  }
 
-    .chevron {
-      color: #8a8a8a;
-      font-size: 0.75rem;
-      flex-shrink: 0;
-      transition: transform 0.2s ease;
-      user-select: none;
-    }
+  details[open] .chevron {
+    transform: rotate(180deg);
+  }
 
-    details[open] .chevron {
-      transform: rotate(180deg);
-    }
+  .brew-content {
+    background: #252525;
+    border: 1px solid #2e2e2e;
+    border-radius: 4px;
+    padding: 1.2rem 1.4rem;
+    margin-bottom: 0.85rem;
+    font-size: 0.88em;
+  }
 
-    /* Reuses $color-box-background and $color-border from your _style.scss */
-    .brew-content {
-      background: #252525;
-      border: 1px solid #2e2e2e;
-      border-radius: 4px;
-      padding: 1.2rem 1.4rem;
-      margin-bottom: 0.85rem;
-      font-size: 0.88em;
-    }
+  .brew-section {
+    margin-bottom: 1.1rem;
+  }
 
-    .brew-section {
-      margin-bottom: 1.1rem;
-    }
+  .brew-section:last-child {
+    margin-bottom: 0;
+  }
 
-    .brew-section:last-child {
-      margin-bottom: 0;
-    }
+  .brew-label {
+    font-size: 0.7rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #8a8a8a;
+    margin-bottom: 0.5rem;
+  }
 
-    .brew-label {
-      font-size: 0.7rem;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: #8a8a8a;
-      margin-bottom: 0.5rem;
-    }
+  .brew-content table {
+    width: 100%;
+    border-collapse: collapse;
+  }
 
-    .brew-content table {
-      width: 100%;
-      border-collapse: collapse;
-    }
+  .brew-content th {
+    text-align: left;
+    font-size: 0.68rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #8a8a8a;
+    padding: 0.25rem 1rem 0.25rem 0;
+    border-bottom: 1px solid #2e2e2e;
+  }
 
-    .brew-content th {
-      text-align: left;
-      font-size: 0.68rem;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: #8a8a8a;
-      padding: 0.25rem 1rem 0.25rem 0;
-      border-bottom: 1px solid #2e2e2e;
-    }
+  .brew-content td {
+    padding: 0.3rem 1rem 0.3rem 0;
+    border-bottom: 1px solid #2e2e2e;
+    vertical-align: top;
+    line-height: 1.5;
+  }
 
-    .brew-content td {
-      padding: 0.3rem 1rem 0.3rem 0;
-      border-bottom: 1px solid #2e2e2e;
-      vertical-align: top;
-      line-height: 1.5;
-    }
+  .brew-content tr:last-child td {
+    border-bottom: none;
+  }
 
-    .brew-content tr:last-child td {
-      border-bottom: none;
-    }
+  ul.brew-notes {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
 
-    ul.brew-notes {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
+  ul.brew-notes li {
+    padding-left: 1.1rem;
+    position: relative;
+    line-height: 1.7;
+  }
 
-    ul.brew-notes li {
-      padding-left: 1.1rem;
-      position: relative;
-      line-height: 1.7;
-    }
+  ul.brew-notes li::before {
+    content: '–';
+    position: absolute;
+    left: 0;
+    color: #8a8a8a;
+  }
 
-    ul.brew-notes li::before {
-      content: '–';
-      position: absolute;
-      left: 0;
-      color: #8a8a8a;
-    }
+  .brew-verdict {
+    color: #8a8a8a;
+    font-style: italic;
+  }
+</style>
 
-    .brew-verdict {
-      color: #8a8a8a;
-      font-style: italic;
-    }
-  </style>
-</head>
-<body>
+<h1>Coffee Brew Log</h1>
+<p class="brew-subtitle">Recipes and tasting notes from my brewing experiments.</p>
 
-  <nav>
-    <a href="/">Home</a>
-    <a href="/bookshelf">Bookshelf</a>
-    <a href="/blog">Writing</a>
-    <a href="/thoughts">Thoughts</a>
-  </nav>
-
-  <h1>Coffee Brew Log</h1>
-  <p class="brew-subtitle">Recipes and tasting notes from my brewing experiments.</p>
-
-  <!-- 1 -->
-  <details>
-    <summary>
-      <div class="summary-text">
-        <span class="recipe-name">Genetics, Blossom Washed</span>
-        <span class="recipe-meta">Feb 25, 2026 · V60 · 20 clicks · 15:250 · 5 pours</span>
-      </div>
-      <span class="chevron">▾</span>
-    </summary>
-    <div class="brew-content">
-      <div class="brew-section">
-        <div class="brew-label">Pour Timeline</div>
-        <table>
-          <thead><tr><th>Time</th><th>Cumulative Weight</th></tr></thead>
-          <tbody>
-            <tr><td>0s</td><td>—</td></tr>
-            <tr><td>45s</td><td>50g (bloom)</td></tr>
-            <tr><td>—</td><td>100g</td></tr>
-            <tr><td>—</td><td>150g</td></tr>
-            <tr><td>—</td><td>200g</td></tr>
-            <tr><td>3 min</td><td>250g</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="brew-section">
-        <div class="brew-label">Notes</div>
-        <ul class="brew-notes">
-          <li>Heavier mouthfeel</li>
-          <li>Sweeter</li>
-          <li>Better extracted than yesterday</li>
-        </ul>
-      </div>
+<!-- 1 -->
+<details>
+  <summary>
+    <div class="summary-text">
+      <span class="recipe-name">Genetics, Blossom Washed</span>
+      <span class="recipe-meta">Feb 25, 2026 · V60 · 20 clicks · 15:250 · 5 pours</span>
     </div>
-  </details>
-
-  <!-- 2 -->
-  <details>
-    <summary>
-      <div class="summary-text">
-        <span class="recipe-name">Classic Coffees — Espresso Blend 80:20</span>
-        <span class="recipe-meta">Feb 25, 2026 · SIF · 10 clicks · 10:60 · 2 pours</span>
-      </div>
-      <span class="chevron">▾</span>
-    </summary>
-    <div class="brew-content">
-      <div class="brew-section">
-        <div class="brew-label">Pour Timeline</div>
-        <table>
-          <thead><tr><th>Time</th><th>Weight</th><th>Action</th></tr></thead>
-          <tbody>
-            <tr><td>0s</td><td>30g</td><td>Bloom + Swirl</td></tr>
-            <tr><td>45s</td><td>60g</td><td>Swirl + Drawdown</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="brew-section">
-        <div class="brew-label">Notes</div>
-        <ul class="brew-notes">
-          <li>~50g coffee + ~150g milk</li>
-        </ul>
-        <p class="brew-verdict" style="margin-top:0.5rem;">Beautiful.</p>
-      </div>
+    <span class="chevron">▾</span>
+  </summary>
+  <div class="brew-content">
+    <div class="brew-section">
+      <div class="brew-label">Pour Timeline</div>
+      <table>
+        <thead><tr><th>Time</th><th>Cumulative Weight</th></tr></thead>
+        <tbody>
+          <tr><td>0s</td><td>—</td></tr>
+          <tr><td>45s</td><td>50g (bloom)</td></tr>
+          <tr><td>—</td><td>100g</td></tr>
+          <tr><td>—</td><td>150g</td></tr>
+          <tr><td>—</td><td>200g</td></tr>
+          <tr><td>3 min</td><td>250g</td></tr>
+        </tbody>
+      </table>
     </div>
-  </details>
-
-  <!-- 3 -->
-  <details>
-    <summary>
-      <div class="summary-text">
-        <span class="recipe-name">Genetics, Blossom Washed</span>
-        <span class="recipe-meta">March 1, 2026 · V60 · 25 clicks · 15:250 · 3 pours</span>
-      </div>
-      <span class="chevron">▾</span>
-    </summary>
-    <div class="brew-content">
-      <div class="brew-section">
-        <div class="brew-label">Pour Timeline</div>
-        <table>
-          <thead><tr><th>Time</th><th>Cumulative Weight</th></tr></thead>
-          <tbody>
-            <tr><td>0s</td><td>50g (bloom)</td></tr>
-            <tr><td>45s</td><td>150g</td></tr>
-            <tr><td>1:25</td><td>250g</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="brew-section">
-        <div class="brew-label">Technique</div>
-        <ul class="brew-notes">
-          <li>Circular pours, near bed</li>
-        </ul>
-      </div>
-      <div class="brew-section">
-        <div class="brew-label">Observations</div>
-        <ul class="brew-notes">
-          <li>Subtle sweetness</li>
-          <li>Mellow</li>
-          <li>Balanced extraction, but low extraction</li>
-        </ul>
-      </div>
+    <div class="brew-section">
+      <div class="brew-label">Notes</div>
+      <ul class="brew-notes">
+        <li>Heavier mouthfeel</li>
+        <li>Sweeter</li>
+        <li>Better extracted than yesterday</li>
+      </ul>
     </div>
-  </details>
+  </div>
+</details>
 
-  <!-- 4 -->
-  <details>
-    <summary>
-      <div class="summary-text">
-        <span class="recipe-name">Espresso Blend — Classics Coffee</span>
-        <span class="recipe-meta">March 12, 2026 · Origami · 20 clicks · 12:200g · 3 pours</span>
-      </div>
-      <span class="chevron">▾</span>
-    </summary>
-    <div class="brew-content">
-      <div class="brew-section">
-        <div class="brew-label">Pour Timeline</div>
-        <table>
-          <thead><tr><th>Cumulative Weight</th></tr></thead>
-          <tbody>
-            <tr><td>50g (bloom for 45s)</td></tr>
-            <tr><td>150g</td></tr>
-            <tr><td>200g</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="brew-section">
-        <div class="brew-label">Technique</div>
-        <ul class="brew-notes">
-          <li>All pours: circular</li>
-        </ul>
-      </div>
+<!-- 2 -->
+<details>
+  <summary>
+    <div class="summary-text">
+      <span class="recipe-name">Classic Coffees — Espresso Blend 80:20</span>
+      <span class="recipe-meta">Feb 25, 2026 · SIF · 10 clicks · 10:60 · 2 pours</span>
     </div>
-  </details>
-
-  <!-- 5 -->
-  <details>
-    <summary>
-      <div class="summary-text">
-        <span class="recipe-name">Seethargundu Estate — Naivo</span>
-        <span class="recipe-meta">March 25, 2026 · Origami · 10 clicks · 12g:200g · 3 pours</span>
-      </div>
-      <span class="chevron">▾</span>
-    </summary>
-    <div class="brew-content">
-      <div class="brew-section">
-        <div class="brew-label">Pour Timeline</div>
-        <table>
-          <thead><tr><th>Cumulative Weight</th></tr></thead>
-          <tbody>
-            <tr><td>50g (bloom for 45s)</td></tr>
-            <tr><td>150g</td></tr>
-            <tr><td>200g</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="brew-section">
-        <div class="brew-label">Technique</div>
-        <ul class="brew-notes">
-          <li>Pour from height around chest level (cup at waist length)</li>
-        </ul>
-      </div>
-      <div class="brew-section">
-        <div class="brew-label">Observations</div>
-        <ul class="brew-notes">
-          <li>Balanced cup, with flavour towards end of sip</li>
-          <li>Higher extraction than preferred for a light roast</li>
-          <li>But can be used for ultra light coffees</li>
-        </ul>
-      </div>
+    <span class="chevron">▾</span>
+  </summary>
+  <div class="brew-content">
+    <div class="brew-section">
+      <div class="brew-label">Pour Timeline</div>
+      <table>
+        <thead><tr><th>Time</th><th>Weight</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr><td>0s</td><td>30g</td><td>Bloom + Swirl</td></tr>
+          <tr><td>45s</td><td>60g</td><td>Swirl + Drawdown</td></tr>
+        </tbody>
+      </table>
     </div>
-  </details>
-
-  <!-- 6 -->
-  <details>
-    <summary>
-      <div class="summary-text">
-        <span class="recipe-name">Yettu Coffee</span>
-        <span class="recipe-meta">April 10, 2026 · Deep27 · 20 clicks · 7g:120g · 3 pours</span>
-      </div>
-      <span class="chevron">▾</span>
-    </summary>
-    <div class="brew-content">
-      <div class="brew-section">
-        <div class="brew-label">Recipe — 30g + 60g + 30g</div>
-        <table>
-          <thead><tr><th>Cumulative Weight</th><th>Technique</th></tr></thead>
-          <tbody>
-            <tr><td>30g</td><td>Pour from height in circles</td></tr>
-            <tr><td>90g</td><td>Pour close to bed, centre only — introduces agitation</td></tr>
-            <tr><td>120g</td><td>Pour close to bed, centre only — introduces agitation</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="brew-section">
-        <p class="brew-verdict">Good brew.</p>
-      </div>
+    <div class="brew-section">
+      <div class="brew-label">Notes</div>
+      <ul class="brew-notes">
+        <li>~50g coffee + ~150g milk</li>
+      </ul>
+      <p class="brew-verdict" style="margin-top:0.5rem;">Beautiful.</p>
     </div>
-  </details>
+  </div>
+</details>
 
-  <!-- 7 -->
-  <details>
-    <summary>
-      <div class="summary-text">
-        <span class="recipe-name">Yettu Coffee — Quick Reference</span>
-        <span class="recipe-meta">Sticky note · 16 / 18 / 20 clicks · 10g:170g</span>
-      </div>
-      <span class="chevron">▾</span>
-    </summary>
-    <div class="brew-content">
-      <div class="brew-section">
-        <div class="brew-label">Pour Sequence</div>
-        <table>
-          <thead><tr><th>Step</th><th>Weight</th><th>Notes</th></tr></thead>
-          <tbody>
-            <tr><td>1</td><td>30g</td><td>Let water drain empty</td></tr>
-            <tr><td>2</td><td>130g</td><td>Wait for ~30% to flow out</td></tr>
-            <tr><td>3</td><td>170g</td><td>Then pour</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="brew-section">
-        <p class="brew-verdict">Lovely cup of coffee.</p>
-      </div>
+<!-- 3 -->
+<details>
+  <summary>
+    <div class="summary-text">
+      <span class="recipe-name">Genetics, Blossom Washed</span>
+      <span class="recipe-meta">March 1, 2026 · V60 · 25 clicks · 15:250 · 3 pours</span>
     </div>
-  </details>
+    <span class="chevron">▾</span>
+  </summary>
+  <div class="brew-content">
+    <div class="brew-section">
+      <div class="brew-label">Pour Timeline</div>
+      <table>
+        <thead><tr><th>Time</th><th>Cumulative Weight</th></tr></thead>
+        <tbody>
+          <tr><td>0s</td><td>50g (bloom)</td></tr>
+          <tr><td>45s</td><td>150g</td></tr>
+          <tr><td>1:25</td><td>250g</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="brew-section">
+      <div class="brew-label">Technique</div>
+      <ul class="brew-notes">
+        <li>Circular pours, near bed</li>
+      </ul>
+    </div>
+    <div class="brew-section">
+      <div class="brew-label">Observations</div>
+      <ul class="brew-notes">
+        <li>Subtle sweetness</li>
+        <li>Mellow</li>
+        <li>Balanced extraction, but low extraction</li>
+      </ul>
+    </div>
+  </div>
+</details>
 
-  <footer>© Rohan Mahnot</footer>
+<!-- 4 -->
+<details>
+  <summary>
+    <div class="summary-text">
+      <span class="recipe-name">Espresso Blend — Classics Coffee</span>
+      <span class="recipe-meta">March 12, 2026 · Origami · 20 clicks · 12:200g · 3 pours</span>
+    </div>
+    <span class="chevron">▾</span>
+  </summary>
+  <div class="brew-content">
+    <div class="brew-section">
+      <div class="brew-label">Pour Timeline</div>
+      <table>
+        <thead><tr><th>Cumulative Weight</th></tr></thead>
+        <tbody>
+          <tr><td>50g (bloom for 45s)</td></tr>
+          <tr><td>150g</td></tr>
+          <tr><td>200g</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="brew-section">
+      <div class="brew-label">Technique</div>
+      <ul class="brew-notes">
+        <li>All pours: circular</li>
+      </ul>
+    </div>
+  </div>
+</details>
 
-</body>
-</html>
+<!-- 5 -->
+<details>
+  <summary>
+    <div class="summary-text">
+      <span class="recipe-name">Seethargundu Estate — Naivo</span>
+      <span class="recipe-meta">March 25, 2026 · Origami · 10 clicks · 12g:200g · 3 pours</span>
+    </div>
+    <span class="chevron">▾</span>
+  </summary>
+  <div class="brew-content">
+    <div class="brew-section">
+      <div class="brew-label">Pour Timeline</div>
+      <table>
+        <thead><tr><th>Cumulative Weight</th></tr></thead>
+        <tbody>
+          <tr><td>50g (bloom for 45s)</td></tr>
+          <tr><td>150g</td></tr>
+          <tr><td>200g</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="brew-section">
+      <div class="brew-label">Technique</div>
+      <ul class="brew-notes">
+        <li>Pour from height around chest level (cup at waist length)</li>
+      </ul>
+    </div>
+    <div class="brew-section">
+      <div class="brew-label">Observations</div>
+      <ul class="brew-notes">
+        <li>Balanced cup, with flavour towards end of sip</li>
+        <li>Higher extraction than preferred for a light roast</li>
+        <li>But can be used for ultra light coffees</li>
+      </ul>
+    </div>
+  </div>
+</details>
+
+<!-- 6 -->
+<details>
+  <summary>
+    <div class="summary-text">
+      <span class="recipe-name">Yettu Coffee</span>
+      <span class="recipe-meta">April 10, 2026 · Deep27 · 20 clicks · 7g:120g · 3 pours</span>
+    </div>
+    <span class="chevron">▾</span>
+  </summary>
+  <div class="brew-content">
+    <div class="brew-section">
+      <div class="brew-label">Recipe — 30g + 60g + 30g</div>
+      <table>
+        <thead><tr><th>Cumulative Weight</th><th>Technique</th></tr></thead>
+        <tbody>
+          <tr><td>30g</td><td>Pour from height in circles</td></tr>
+          <tr><td>90g</td><td>Pour close to bed, centre only — introduces agitation</td></tr>
+          <tr><td>120g</td><td>Pour close to bed, centre only — introduces agitation</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="brew-section">
+      <p class="brew-verdict">Good brew.</p>
+    </div>
+  </div>
+</details>
+
+<!-- 7 -->
+<details>
+  <summary>
+    <div class="summary-text">
+      <span class="recipe-name">Yettu Coffee — Quick Reference</span>
+      <span class="recipe-meta">Sticky note · 16 / 18 / 20 clicks · 10g:170g</span>
+    </div>
+    <span class="chevron">▾</span>
+  </summary>
+  <div class="brew-content">
+    <div class="brew-section">
+      <div class="brew-label">Pour Sequence</div>
+      <table>
+        <thead><tr><th>Step</th><th>Weight</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>30g</td><td>Let water drain empty</td></tr>
+          <tr><td>2</td><td>130g</td><td>Wait for ~30% to flow out</td></tr>
+          <tr><td>3</td><td>170g</td><td>Then pour</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="brew-section">
+      <p class="brew-verdict">Lovely cup of coffee.</p>
+    </div>
+  </div>
+</details>
