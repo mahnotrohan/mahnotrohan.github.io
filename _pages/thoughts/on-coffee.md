@@ -7,6 +7,8 @@ permalink: /thoughts/on-coffee
 # On Coffee
 
 I love to drink coffee, and I enjoying the process of making it. And I love to do it for my close ones. I'll never say no to you if you ask me to brew you a cup.
+Here's my [brew log](https://mahnotrohan.github.io/coffee-log/) with some of the favorite recipes
+and a few snippets from learning [latte art](https://mahnotrohan.github.io/latte-art/).
 
 #### My Setup
 
