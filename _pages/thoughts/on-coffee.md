@@ -6,19 +6,21 @@ permalink: /thoughts/on-coffee
 
 # On Coffee
 
-I love to drink coffee, but I love to make it more — and I love to do it for my close ones. I'll never say no to you if you ask me to brew one.
+I love to drink coffee, and I enjoying the process of making it. And I love to do it for my close ones. I'll never say no to you if you ask me to brew you a cup.
 
 #### My Setup
 
-I brew with an Aeropress, V60, Origami, Deep 27, SIF, French Press, and Phin Filter. I grind with a Timemore C2.
+I grind with a Timemore C2, and I brew with an Aeropress, V60, Origami, Deep 27, SIF, French Press, and Phin Filter.
 
-My go-to is a cortado made with the Aeropress. For pourovers, V60 and Deep 27 are my favourites.
+My go-to is a cortado made with a SIF or an Aeropress. For pourovers, V60 and Deep 27 are my favourites.
 
-#### Coffees I've Loved
+#### Some Coffees I've Loved
 
-- Aceh Gayo Naturals from Tanamera Coffee — brought back from Singapore.
-- % Arabica's coffee — a friend got it from Singapore.
-- Vithai Coffee's chamomile and 2026 blend.
+- Aceh Gayo Naturals, Tanamera Coffee, Singapore.
+- Guatemelan washed, % Arabica, Singapore.
+- 2026 blend, Vithai Coffee.
+- Project Pearl - 2024, Subko Coffee.
+- Shinzo & Eskobar, Kokoro Coffee. 
 
 #### Best I've Had Out
 
@@ -27,8 +29,8 @@ My go-to is a cortado made with the Aeropress. For pourovers, V60 and Deep 27 ar
 
 #### People I Learn From
 
-James Hoffmann and Jonathan Gagné — their content on how to brew good coffee has shaped how I think about the craft.
-
+James Hoffmann and Jonathan Gagné — their content on how to brew coffee has helped me build mental models for brewing, and debugging.
+Others include - Lance Hedrick, and Morgan Eckroth.
 ---
 
 [← Back to Thoughts](/thoughts)
