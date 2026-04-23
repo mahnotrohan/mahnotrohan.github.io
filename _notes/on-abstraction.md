@@ -1,5 +1,8 @@
-# On Abstraction
-
+---
+layout: notes
+title: On Abstraction
+date: 2026-04-23
+---
 Abstraction is the process of compressing broad, deep structures into something simpler. Something you can operate from with speed, clarity, and confidence. It gives you the option to forgo details when you can function without them.
 
 This, however, is fallible. From the outside, abstraction looks similar to superficiality. Both appear to skim the surface. To someone used to operating superficially, the two are indistinguishable. But the difference becomes clear when you look at what lies underneath,  depth versus shallowness.
