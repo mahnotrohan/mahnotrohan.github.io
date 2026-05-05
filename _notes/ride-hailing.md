@@ -97,9 +97,6 @@ Why is there a skew between supply and demand? Wouldn't the reverse also be true
 Follow up Reads:
 
 - https://pages.stern.nyu.edu/~adamodar/pdfiles/blog/RideSharing.pdf
-- [Policy Mandala#34 Why You Can’t Get an Uber in Goa (and Why That Matters): Goa’s Gamble with Platform Policy You’re standing at the Dabolim airport exit, bags in hand, in vacation mode and eager to visit the beach. With the sea just 40 minutes away, you can almost hear the waves and feel the sand already…Read more10 months ago · 11 likes · Policy Mandala | India House](https://mandalapolicy.substack.com/p/34-why-you-cant-get-an-uber-in-goa?utm_source=substack&utm_campaign=post_embed&utm_medium=web)
-    
-    ![](https://substackcdn.com/image/fetch/$s_!UtST!,w_56,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F8ec068ee-874d-493d-9f95-f0ef578e5a87_400x400.png)
-    
+- https://mandalapolicy.substack.com/p/34-why-you-cant-get-an-uber-in-goa
 - https://the-ken.com/newsletters/two-by-two/rapido-broke-the-uber-ola-duopoly-can-it-now-break-the-swiggy-zomato-one/
 - https://the-ken.com/story/rapido-rips-up-the-uber-ola-playbook-for-cabs/
