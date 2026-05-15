@@ -66,7 +66,7 @@ The shape of the problem depends a lot on what *kind* of supply you're dealing w
 
 Each calls for a different playbook. A fixed-node business has to forecast demand for one specific polygon. A dynamic-node business has to forecast *and* route in real time. Either way, planning and forecasting become paramount and it's a Sisyphean task. You can never be in a state of reliable predictions.
 
-## Two ways to respond: ration the demand, or expand the supply
+## Ration the demand, or expand the supply
 
 Faced with this constraint, modern businesses essentially do one of two things.
 
@@ -75,8 +75,6 @@ Faced with this constraint, modern businesses essentially do one of two things.
 1. Surge pricing algorithms
 2. Minimum basket value during peak hours
 3. Serviceability switch-off, sometimes partial, based on payment mode
-
-These aren't really *solutions*. They're admissions that supply couldn't keep up, dressed up nicely for the user.
 
 **Expand the effective supply.** This is where the more interesting innovation happens:
 
