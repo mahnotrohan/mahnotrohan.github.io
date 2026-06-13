@@ -17,6 +17,7 @@ Books I've read recently. I tend to gravitate toward memoirs, decision-making, a
 - Maybe You Should Talk to Someone — Lori Gottlieb
 - Project Hail Mary — Andy Weir
 - The Book Of Clarity — Paras Chopra
+- The Hard Thing About Hard Things — Ben Horowitz
 - Why we sleep — Matthew Walker
 - Famous Last Questions — Sanjana Ramachandran
 - Fluke: Chance, Chaos, and Why Everything We Do Matters - Brian Klaas
