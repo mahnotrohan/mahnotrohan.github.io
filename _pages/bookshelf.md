@@ -22,6 +22,8 @@ Books I've read recently. I tend to gravitate toward memoirs, decision-making, a
 - Famous Last Questions — Sanjana Ramachandran
 - Fluke: Chance, Chaos, and Why Everything We Do Matters - Brian Klaas
 - The Year of Magical Thinking - Joan Didion
+- Dear Dolly - Dolly Alderton
+- How to Know a Person - David Brooks
 
 ## 2025
 
