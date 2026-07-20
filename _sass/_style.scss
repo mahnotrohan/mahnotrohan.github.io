@@ -30,8 +30,6 @@ footer {
   margin: 2em 0;
   font-size: 0.8em;
   color: $color-subtext;
-  padding-top: 1em;
-  border-top: 1px solid $color-border;
 }
 
 img {
@@ -114,15 +112,16 @@ nav a:hover {
 }
 
 #notes-entry-container {
-  display: grid;
-  grid-gap: 2em;
-  grid-template-areas:
-    "content"
-    "side";
+  // Essays span the full site width (same as the home page).
+  // Any side content (e.g. backlinks) stacks below the essay text.
+  display: block;
 
-  @media (min-width: 700px) {
-    grid-template-columns: 3fr 1fr;
-    grid-template-areas: "content side";
+  content {
+    display: block;
+  }
+
+  .backlink-box {
+    margin-top: 2em;
   }
 }
 
