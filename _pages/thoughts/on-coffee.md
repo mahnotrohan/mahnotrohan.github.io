@@ -6,8 +6,8 @@ permalink: /thoughts/on-coffee
 
 # On Coffee
 
-I love to drink coffee, and I enjoying the process of making it. And I love to do it for my close ones. I'll never say no to you if you ask me to brew you a cup.
-Here's my [brew log](https://mahnotrohan.github.io/coffee-log/) with some of the favorite recipes
+I love drinking coffee, but what I really love is the process of making it — especially for the people close to me. If you ever want a cup, I'll never say no.
+Here's [Bloom](https://bloom.rohanmahnot.space), a little library of my recipes I enjoy. And here's my latte art project, [Project Monet](https://www.are.na/rohan-mahnot-rh85hxg6yum/project-monet-oeekarcnrdy).
 
 #### My Setup
 
@@ -27,10 +27,5 @@ My go-to is a cortado made with a SIF or an Aeropress. For pourovers, V60 and De
 
 - **Best cortado** — Shades of Coffee, HSR.
 - **Best pourover** — Baan 125, Phuket.
-
-#### People I Learn From
-James Hoffmann and Jonathan Gagné — their content on how to brew coffee has helped me build mental models for brewing, and debugging.
-
----
 
 [← Back to Thoughts](/thoughts)
