@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chaos, Luck & Ergodicity — a first-principles map</title>
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel2:#1c2129; --line:#30363d;
+    --text:#e6edf3; --dim:#8b949e; --faint:#484f58;
+    --axiom:#d29922; --phenomenon:#58a6ff; --mechanism:#39c5cf;
+    --principle:#bc8cff; --simulation:#3fb950; --story:#f0883e; --tension:#f85149;
+    --edge:#4d5866; --hl:#e3b341;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{height:100%; overflow:hidden; background:var(--bg); color:var(--text);
+    font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;}
+  #toolbar{position:fixed; top:0; left:0; right:0; height:52px; z-index:20;
+    display:flex; align-items:center; gap:14px; padding:0 16px;
+    background:linear-gradient(180deg, rgba(13,17,23,.96), rgba(13,17,23,.75), transparent); pointer-events:none;}
+  #toolbar *{pointer-events:auto;}
+  #toolbar h1{font-size:15px; font-weight:600; letter-spacing:.2px;}
+  #toolbar .sub{font-size:11px; color:var(--dim);}
+  #toolbar .spacer{flex:1;}
+  .btn{background:var(--panel); border:1px solid var(--line); color:var(--text);
+    font-size:12px; padding:6px 12px; border-radius:6px; cursor:pointer; white-space:nowrap;}
+  .btn:hover{border-color:var(--dim);}
+  .btn.primary{background:#1f6feb; border-color:#1f6feb;}
+  .btn.primary:hover{background:#388bfd;}
+  #progress{font-size:11px; color:var(--dim);}
+  #breadcrumb{position:fixed; top:56px; left:16px; z-index:19; font-size:11px; color:var(--dim);
+    background:rgba(22,27,34,.85); border:1px solid var(--line); border-radius:6px; padding:5px 10px;
+    max-width:60vw; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  #breadcrumb b{color:var(--text); font-weight:500;}
+  svg#canvas{position:fixed; inset:0; width:100%; height:100%; cursor:grab;}
+  svg#canvas.dragging{cursor:grabbing;}
+  .node{cursor:pointer;}
+  .node text{fill:#c9d1d9; font-size:13px; text-anchor:middle; pointer-events:none;}
+  .node .check{fill:var(--simulation); font-size:11px;}
+  .node.dimmed{opacity:.13;}
+  .node.focused .shape{stroke-width:3;}
+  .edge{stroke:var(--edge); fill:none;}
+  .edge.dimmed{opacity:.08;}
+  .edgehit{stroke:transparent; stroke-width:16; fill:none; cursor:pointer;}
+  .edgeglyph{font-size:11px; fill:var(--dim); text-anchor:middle; pointer-events:none;}
+  .edgeglyph.dimmed{opacity:.08;}
+  .trace-node .shape{stroke:var(--hl) !important; stroke-width:3.5 !important;
+    filter:drop-shadow(0 0 6px rgba(227,179,65,.6));}
+  .edge.trace{stroke:var(--hl); stroke-width:2.5; opacity:1 !important;}
+  .branchlabel{fill:var(--faint); font-size:20px; font-weight:700; letter-spacing:2px;
+    text-anchor:middle; pointer-events:none; text-transform:uppercase;}
+  #minimap{position:fixed; right:14px; bottom:14px; z-index:18; background:rgba(22,27,34,.92);
+    border:1px solid var(--line); border-radius:8px; cursor:pointer;}
+  #panel{position:fixed; top:0; right:-440px; width:420px; height:100%; z-index:25;
+    background:var(--panel); border-left:1px solid var(--line);
+    display:flex; flex-direction:column; transition:right .25s ease;}
+  #panel.open{right:0;}
+  #panel header{padding:16px 18px 10px; border-bottom:1px solid var(--line);}
+  #panel .chip{display:inline-block; font-size:10px; font-weight:600; letter-spacing:1px;
+    text-transform:uppercase; padding:2px 8px; border-radius:10px; margin-bottom:8px;}
+  #panel h2{font-size:18px; font-weight:600; line-height:1.3;}
+  #panel .close{position:absolute; top:12px; right:14px; background:none; border:none;
+    color:var(--dim); font-size:20px; cursor:pointer;}
+  #tabs{display:flex; border-bottom:1px solid var(--line);}
+  #tabs button{flex:1; background:none; border:none; color:var(--dim); font-size:11px;
+    padding:9px 4px; cursor:pointer; border-bottom:2px solid transparent;}
+  #tabs button.active{color:var(--text); border-bottom-color:var(--hl);}
+  #tabs button:disabled{opacity:.25; cursor:default;}
+  #levelbody{flex:1; overflow-y:auto; padding:16px 18px; font-size:13.5px; line-height:1.65; color:#d5dde5;}
+  #levelbody .lvl-name{font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--dim); margin-bottom:8px;}
+  #simwrap{padding:0 18px 8px;}
+  #simwrap canvas{width:100%; border:1px solid var(--line); border-radius:8px; background:#0a0d12; display:block;}
+  #simcontrols{display:flex; flex-wrap:wrap; gap:6px; padding:8px 0 4px; align-items:center;}
+  #simcontrols .btn{font-size:11px; padding:4px 9px;}
+  #simcontrols input[type=range]{flex:1; min-width:120px; accent-color:var(--hl);}
+  #simnote{font-size:11px; color:var(--dim); padding:2px 0 6px; line-height:1.5;}
+  #panelfoot{padding:10px 18px 14px; border-top:1px solid var(--line); display:flex; gap:8px;}
+  #panelfoot .btn{flex:1;}
+  .deeper{margin-top:16px; width:100%; background:var(--panel2); border:1px dashed var(--line);
+    color:var(--dim); padding:9px; border-radius:8px; cursor:pointer; font-size:12px;}
+  .deeper:hover{color:var(--text); border-color:var(--dim);}
+  #tourbar{position:fixed; left:50%; bottom:16px; transform:translateX(-50%); z-index:22;
+    background:rgba(22,27,34,.95); border:1px solid var(--line); border-radius:10px;
+    padding:9px 14px; display:none; align-items:center; gap:12px; max-width:82vw;}
+  #tourbar.on{display:flex;}
+  #tourbar .step{font-size:11px; color:var(--dim); white-space:nowrap;}
+  #tourbar .cap{font-size:12.5px; max-width:420px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  #tooltip{position:fixed; z-index:40; background:#21262d; border:1px solid var(--line);
+    border-radius:6px; padding:8px 11px; font-size:11.5px; color:#d5dde5; max-width:280px;
+    pointer-events:none; display:none; line-height:1.5; box-shadow:0 4px 16px rgba(0,0,0,.5);}
+  #tooltip .ttype{color:var(--hl); font-weight:600; margin-bottom:2px; font-size:10.5px; letter-spacing:.5px;}
+  #legend{position:fixed; left:14px; bottom:14px; z-index:18; background:rgba(22,27,34,.94);
+    border:1px solid var(--line); border-radius:8px; padding:12px 14px; font-size:11px;
+    color:var(--dim); display:none; line-height:1.9;}
+  #legend.on{display:block;}
+  #legend .sw{display:inline-block; width:10px; height:10px; border-radius:3px; margin-right:6px; vertical-align:-1px;}
+  #legend .row{white-space:nowrap;}
+  #hint{position:fixed; left:50%; bottom:16px; transform:translateX(-50%); z-index:15;
+    font-size:11px; color:var(--faint); pointer-events:none;}
+</style>
+</head>
+<body>
+
+<div id="toolbar">
+  <div>
+    <h1>Chaos, Luck &amp; Ergodicity</h1>
+    <div class="sub">a first-principles map · click any idea, then go deeper</div>
+  </div>
+  <div class="spacer"></div>
+  <span id="progress"></span>
+  <button class="btn" id="legendBtn">Legend</button>
+  <button class="btn" id="fitBtn">Fit map</button>
+  <button class="btn primary" id="tourBtn">▶ Guided tour</button>
+</div>
+<div id="breadcrumb"></div>
+<svg id="canvas"></svg>
+<svg id="minimap" width="190" height="141"></svg>
+
+<div id="panel">
+  <header>
+    <span class="chip" id="pChip"></span>
+    <h2 id="pTitle"></h2>
+    <button class="close" id="pClose">✕</button>
+  </header>
+  <div id="tabs">
+    <button data-l="l0">L0 · Essence</button>
+    <button data-l="l1">L1 · Intuition</button>
+    <button data-l="l2">L2 · Mechanism</button>
+    <button data-l="l3">L3 · Formalism</button>
+  </div>
+  <div id="simwrap"></div>
+  <div id="levelbody"></div>
+  <div id="panelfoot">
+    <button class="btn" id="traceBtn">Why is this true? — trace to axioms</button>
+  </div>
+</div>
+
+<div id="tourbar">
+  <button class="btn" id="tPrev">‹ Prev</button>
+  <div>
+    <div class="step" id="tStep"></div>
+    <div class="cap" id="tCap"></div>
+  </div>
+  <button class="btn" id="tNext">Next ›</button>
+  <button class="btn" id="tExit">Exit</button>
+</div>
+
+<div id="tooltip"></div>
+<div id="legend">
+  <div style="color:var(--text); font-weight:600; margin-bottom:4px;">Nodes</div>
+  <div class="row"><span class="sw" style="background:var(--axiom)"></span>Axiom — irreducible starting point</div>
+  <div class="row"><span class="sw" style="background:var(--phenomenon)"></span>Phenomenon — thing to explain</div>
+  <div class="row"><span class="sw" style="background:var(--mechanism)"></span>Mechanism — how it works</div>
+  <div class="row"><span class="sw" style="background:var(--principle)"></span>Principle — compressed takeaway</div>
+  <div class="row"><span class="sw" style="background:var(--simulation)"></span>Simulation — poke it yourself</div>
+  <div class="row"><span class="sw" style="background:var(--story)"></span>Story — real-world anchor</div>
+  <div class="row"><span class="sw" style="background:var(--tension)"></span>Tension — live disagreement</div>
+  <div style="color:var(--text); font-weight:600; margin:6px 0 4px;">Edges (hover any edge)</div>
+  <div class="row">→ causes &nbsp; ⇢ enables &nbsp; ⊂ instance of</div>
+  <div class="row">⚡ breaks &nbsp; ≈ mirrors &nbsp; ? tension</div>
+</div>
+<div id="hint">scroll to zoom · drag to pan · Esc to close</div>
+
+<script>
+'use strict';
+/* ============================================================
+   TOPIC DATA — the engine below is topic-agnostic (spec P10)
+   ============================================================ */
+const TOPIC = {
+  title: "Chaos, Luck & Ergodicity",
+  world: {w: 2300, h: 1700},
+  branches: [
+    {label: "Axioms", x: 1120, y: 500},
+    {label: "I · The Broken Promise", x: 440, y: 90},
+    {label: "II · Order Hidden in Chaos", x: 1800, y: 90},
+    {label: "III · The Fluke View of Life", x: 470, y: 930},
+    {label: "IV · Reading the Domain", x: 1760, y: 890}
+  ],
+  nodes: [
+  // ---- AXIOMS ----
+  {id:"a1", type:"axiom", label:"Rules govern change", x:1120, y:600, levels:{
+    l0:"The universe runs on rules: the same setup, run again, unfolds the same way.",
+    l1:"A billiard break looks wild — but rerun it with every atom in an identical place and every collision repeats exactly. Nothing in the physics rolls dice.",
+    l2:"Determinism: the state now plus the laws of motion fully fix the state next. No randomness is needed anywhere in the chain — chaos will emerge without it."}},
+  {id:"a2", type:"axiom", label:"Measurement is imperfect", x:960, y:730, levels:{
+    l0:"You can never know the present exactly — only to some number of decimal places.",
+    l1:"Measure a pendulum's angle. 30°? 30.1°? 30.1002°? Every instrument stops somewhere. Below that line, the world keeps its secrets.",
+    l2:"Any measurement has finite precision, so a model's starting point always differs from reality by some ε > 0. Everything in Branch I is about the fate of that ε."}},
+  {id:"a3", type:"axiom", label:"Everything touches everything", x:1280, y:730, levels:{
+    l0:"No part of the world evolves in isolation; systems are coupled.",
+    l1:"The atmosphere over Japan in August 1945 was 'weather'. It was also the deciding variable in which city was bombed. Systems don't respect our category boundaries.",
+    l2:"Coupled systems pass disturbances along: a perturbation in one variable becomes an input to others. Coupling is the transmission line along which small causes travel far."}},
+  {id:"a4", type:"axiom", label:"You live one path, once", x:1120, y:865, levels:{
+    l0:"You are not a crowd averaging out. You are one person on one sequential path.",
+    l1:"A hundred strangers each take one risk: wins and losses cancel across them. You take a hundred risks in a row: each loss follows you into the next round. Same odds — different universe.",
+    l2:"This is the hinge of the whole map. Fluke's contingency (history is walked once) and ergodicity economics (your time-average ≠ the crowd's average) are the same fact, seen from physics and from decision-making."}},
+
+  // ---- BRANCH I : THE BROKEN PROMISE ----
+  {id:"b1-laplace", type:"phenomenon", label:"Laplace's Demon", x:330, y:210, levels:{
+    l0:"The old dream: know everything now, predict everything forever.",
+    l1:"1814 — Laplace imagines an intellect that knows every particle's position and momentum. To it, 'the future, like the past, would be present before its eyes.' Perfect rules seemed to promise perfect forecasts.",
+    l2:"The demon needs two things: the rules (granted by Axiom 1) and the exact present state. The second is the fatal requirement — 'exact' means infinitely many decimal places, and Axiom 2 says no observer ever gets them.",
+    l3:"It fails even in principle: for chaotic systems the initial precision required grows exponentially with the forecast horizon, quickly exceeding any physically possible information storage. The demon isn't impractical — it's impossible."}},
+  {id:"b1-pendulum", type:"simulation", label:"Double pendulum", x:650, y:180, sim:"pendulum", levels:{
+    l0:"Two identical pendulums, started a hair apart. Watch them.",
+    l1:"For the first seconds they move as one. Then the copies drift, disagree, and finally live entirely different lives. Nothing random happened — replay it and it does the exact same thing again.",
+    l2:"Attach one pendulum to another and the equations turn nonlinear: each arm's motion feeds back into the other's. Nonlinearity is what lets a microscopic gap grow instead of fading away."}},
+  {id:"b1-sensitive", type:"mechanism", label:"Sensitive dependence", x:510, y:390, levels:{
+    l0:"Small errors don't add — they multiply.",
+    l1:"Photocopy a photocopy a hundred times: each generation's tiny distortion feeds the next until the page is noise. A chaotic system photocopies its own state every instant.",
+    l2:"Each step stretches nearby states apart by some factor: error ε becomes ε·k, then ε·k², ... Exponential growth means even absurd precision buys little: measure 1000× better and you extend a weather forecast by only a few days.",
+    l3:"Lyapunov exponent λ: |δ(t)| ≈ |δ₀|·e^{λt}. Prediction horizon ≈ (1/λ)·ln(tolerance/δ₀) — logarithmic in precision. That log is the brutal economics of forecasting: better instruments pay ever-diminishing returns."}},
+  {id:"b1-lorenz-story", type:"story", label:"Lorenz's rounding error", x:225, y:430, levels:{
+    l0:"1961: a shortcut of 0.000127 rewrote the weather.",
+    l1:"Ed Lorenz reran a weather simulation from midway, typing 0.506 instead of the stored 0.506127. He returned to find a forecast that had diverged into a completely different climate. The butterfly effect began as a typing shortcut.",
+    l2:"The computer was deterministic — same numbers in, same numbers out. So the divergence proved the model itself amplified sub-measurable differences. Weather isn't hard to predict because we're bad at it; it is structurally resistant."}},
+  {id:"b1-principle", type:"principle", label:"Determinism ≠ predictability", x:660, y:575, levels:{
+    l0:"The rules can be perfect and the future still unknowable.",
+    l1:"We used to assume unpredictability meant hidden randomness or missing knowledge — improve the science and forecasts follow. Chaos broke that: a perfectly known, perfectly deterministic system can still hide its own future from any finite observer.",
+    l2:"The chain: rules are deterministic (A1) + your starting data is off by ε (A2) + the system multiplies ε exponentially (sensitive dependence) ⇒ beyond some horizon, model and reality part ways. Each link is unremarkable; together they kill the demon."}},
+
+  // ---- BRANCH II : ORDER HIDDEN IN CHAOS ----
+  {id:"b2-logistic", type:"simulation", label:"Logistic map", x:1620, y:180, sim:"logistic", levels:{
+    l0:"One tiny equation. Slide r and watch order shatter into chaos — then reappear.",
+    l1:"x → r·x·(1−x), a toy model of a population. At r=2.8 it settles. At 3.2 it oscillates between two values. Past 3.57: chaos. And at 3.83, out of nowhere — an island of perfect order inside the storm.",
+    l2:"The route into chaos is structured: stable point → period 2 → 4 → 8 → ... doubling faster and faster until the periods pile up to infinity at r≈3.5699. Chaos arrives by a universal staircase, shared by dripping taps, heartbeats, and lasers.",
+    l3:"Feigenbaum's constant: the ratio of successive period-doubling intervals converges to 4.6692... for an enormous class of maps. Even the onset of chaos is quantitatively universal."}},
+  {id:"b2-lorenz-attractor", type:"simulation", label:"Lorenz attractor", x:1950, y:210, sim:"lorenz", levels:{
+    l0:"Never repeats. Never leaves the butterfly.",
+    l1:"Two trajectories from almost the same point separate quickly — yet both keep tracing the same two-winged shape, forever. Detail: unpredictable. Shape: inevitable.",
+    l2:"The trajectory is pulled onto an attractor — a shape living in the space of all possible states. On the attractor, nearby paths still diverge (that's the chaos), but no path ever exits (that's the structure). Chaos is confined unpredictability."}},
+  {id:"b2-attractors", type:"mechanism", label:"Attractors & phase space", x:1770, y:395, levels:{
+    l0:"Chaos has a home address — you just can't predict the room.",
+    l1:"Think of a whirlpool: no leaf's exact route can be forecast, yet every leaf ends up circling the same funnel. The funnel is knowable even when the paths are not.",
+    l2:"Plot every variable of a system as one point in 'phase space'; its whole life becomes a curve. Dissipative systems collapse onto attractors — points, loops, or 'strange' fractal sets. Strange attractors reconcile determinism, boundedness, and never-repeating motion.",
+    l3:"Strange attractors have fractal dimension (Lorenz ≈ 2.06) and zero volume: infinite surface for trajectories to wander without ever intersecting themselves — the geometry behind 'never repeats, never leaves'."}},
+  {id:"b2-tension-random", type:"tension", label:"Is chaos just randomness?", x:2030, y:490, levels:{
+    l0:"It looks like noise. It isn't. The difference is the whole point.",
+    l1:"Dice have no memory and no shape — averages are all you can ever know about them. A chaotic system is the opposite: total memory, rigid structure, and if you replayed it exactly, it would do the exact same thing again.",
+    l2:"Distinguishers: chaos is deterministic (replayable), bounded (attractor), short-term predictable (before ε grows), and structured (period-doubling, fractal geometry). True randomness has none of these. Confusing them makes you fatalistic about structure — or falsely confident about detail."}},
+  {id:"b2-principle", type:"principle", label:"Unpredictable in detail, patterned in shape", x:1640, y:580, levels:{
+    l0:"You can't forecast the path. You can often trust the shape.",
+    l1:"Nobody can say whether it will rain on this date next year — a path question. Everyone knows July in Delhi is hotter than January — a shape question. Weather is chaos; climate is its attractor.",
+    l2:"This is the license the second half of the map runs on: even where prediction fails, domains keep stable statistical shapes — and shapes can be read, compared, and acted on. Without attractors, 'reading the domain' would be astrology."}},
+
+  // ---- BRANCH III : THE FLUKE VIEW OF LIFE ----
+  {id:"b3-kokura", type:"story", label:"The cloud over Kokura", x:265, y:1040, levels:{
+    l0:"Clouds saved one city and doomed another. Nobody chose.",
+    l1:"August 9, 1945: Bockscar circles Kokura three times — too much cloud and smoke to aim. It diverts to the secondary target: Nagasaki. Years earlier Kyoto had been struck off the list because the US Secretary of War had honeymooned there and loved the city. Weather-scale noise; history-scale consequence.",
+    l2:"Axioms 2 and 3 in the wild: an unmeasurable atmospheric detail, coupled through a bombing protocol to the fates of hundreds of thousands. The chain from 'small' to 'vast' needed no amplifier beyond the world's ordinary connectedness."}},
+  {id:"b3-contingency", type:"tension", label:"Contingency vs convergence", x:500, y:1155, levels:{
+    l0:"Do small changes wash out — or write history?",
+    l1:"Rewind life's tape and replay it, asked Stephen Jay Gould: do you get humans again (convergence — the attractor wins) or something unrecognizable (contingency — the perturbation wins)? Fluke's answer: both are real, and wisdom is knowing which regime you're standing in.",
+    l2:"Convergent processes carry restoring forces — deviations decay (markets clearing, evolution re-inventing the eye). Contingent processes carry amplifying forces — deviations compound (which city was bombed, whom you married). Same world, two regimes, most systems mixing both at different scales."}},
+  {id:"b3-timeline", type:"simulation", label:"Branching timelines", x:270, y:1300, sim:"timeline", levels:{
+    l0:"Perturb one event. Replay 120 histories. Watch when they reconverge — and when they scatter.",
+    l1:"Slide toward 'converging': the perturbed timelines snap back to the baseline — the nudge didn't matter. Slide toward 'compounding': the same nudge fans out into permanently different worlds.",
+    l2:"A single parameter — do deviations decay or feed themselves? — flips the answer to 'did that small thing matter?'. This is the contingency/convergence debate rendered as a dial instead of an argument."}},
+  {id:"b3-principle", type:"principle", label:"Control nothing, influence everything", x:730, y:1050, levels:{
+    l0:"Every action is an initial condition.",
+    l1:"Fluke's strange consolation: you can't steer outcomes — chaos took that away — but nothing you do is inert. In a coupled, amplifying world your smallest acts are inputs to everything downstream. Snoozing an alarm once has, occasionally, redirected a life.",
+    l2:"From coupling (A3) + sensitive dependence: influence propagates, but its endpoint is uncomputable. The posture that follows: humility about outcomes, seriousness about inputs. The control you lose over results, you regain as weight on actions."}},
+  {id:"b3-plan", type:"tension", label:"Why we still plan", x:745, y:1295, levels:{
+    l0:"If prediction fails, why isn't planning pointless?",
+    l1:"Because chaos bounds the horizon; it doesn't erase structure. You can't plan the path, but you can position within the shape — pack for the climate, not for the weather.",
+    l2:"Attractors (Branch II) guarantee stable statistics, so planning shifts from 'predict, then commit' to 'position, hedge, re-read'. Taken seriously, this question becomes the third reading of Branch IV."}},
+
+  // ---- BRANCH IV : READING THE DOMAIN ----
+  {id:"b4-coinflip", type:"simulation", label:"The coin-flip split", x:1430, y:990, sim:"coinflip", levels:{
+    l0:"Same coin, same odds. The crowd is fine. The individual is ruined.",
+    l1:"Left: 100 people each bet their savings on one flip — half double, half bust, and the average is unchanged. Right: one person takes the same bet repeatedly — one tails ends the game, permanently. The math never changed. The situation did.",
+    l2:"The crowd averages across people; you average across time. Ruin makes those two averages permanently different: a busted player can't join future rounds, so losses stop cancelling. Then try the 'gentler' variant — no single flip is fatal, yet almost every individual path still decays while the crowd average grows."}},
+  {id:"b4-ergodicity", type:"mechanism", label:"Ergodicity", x:1625, y:1095, levels:{
+    l0:"When does the crowd's average equal your experience over time? Mostly: it doesn't.",
+    l1:"'This surgery succeeds 95% of the time' is a crowd number. Your question is a time question: what happens to the one path that is me? When the domain contains ruin, those two questions have different answers.",
+    l2:"A process is ergodic when ensemble average = time average. Absorbing barriers — death, bankruptcy, a burned reputation — break ergodicity: paths that hit them stop exploring, so losses no longer cancel. Expected-value reasoning silently assumes ergodicity. That's the buried assumption in most advice.",
+    l3:"Multiplicative wealth: the ensemble grows like E[m]ⁿ while a single path grows like e^{n·E[ln m]}. E[m]>1 with E[ln m]<0 is common — positive expected value, near-certain individual decline. (×1.5 / ×0.6 coin: E[m]=1.05, E[ln m]≈−0.053.)"}},
+  {id:"b4-domains", type:"mechanism", label:"Resetting vs compounding domains", x:1850, y:1005, levels:{
+    l0:"Does failure here reset the game — or foreclose the next one?",
+    l1:"A bad cup of coffee, a bad draft, a botched chord: tomorrow starts clean. A ruined credit score, a blown reputation, a serious health event: tomorrow starts smaller. One kind of domain forgives; the other remembers.",
+    l2:"The reading is about error propagation. Resetting domains have independent rounds — errors die with the attempt. Compounding domains carry state — errors constrain the option set that follows. Same effort, same discipline, different physics. 'Fail fast' is a resetting-domain tool."}},
+  {id:"b4-survive", type:"principle", label:"Survive first, optimize second", x:2065, y:1100, levels:{
+    l0:"In compounding domains, staying in the game outranks winning it.",
+    l1:"Not timidity — arithmetic. The best strategy you will ever discover is worthless on a path that has already hit zero. You can't run the next experiment if the last one took you out.",
+    l2:"Traces to A4 + ergodicity: on a single sequential path with absorbing barriers, maximizing expected value is the wrong objective. You maximize time-average growth subject to never hitting the barrier. In resetting domains the constraint is free — there, optimize boldly."}},
+  {id:"b4-signal", type:"mechanism", label:"Signal = speed × clarity", x:1440, y:1245, levels:{
+    l0:"How fast does this domain tell you you're wrong — and how clearly?",
+    l1:"A stove burn: instant and unambiguous. A chess blunder: instant but murky — which move was it? Marathon training: clear, but months too late. Bad coffee: instant, yet four variables could be the culprit. Two independent dials; all four combinations exist.",
+    l2:"Speed = the delay between decision and consequence. Clarity = how directly the outcome points at its cause. They fail independently and need different fixes: slow signal needs records that outlive your memory; ambiguous signal needs isolating one variable at a time."}},
+  {id:"b4-danger", type:"mechanism", label:"The danger zone", x:1655, y:1310, levels:{
+    l0:"Compounding stakes + slow, murky signal: where default advice fails.",
+    l1:"Careers, marriages, chronic health, institutional trust. By the time the domain announces something is wrong, the error has been compounding for years. 'Fail fast, learn from mistakes' assumed failure would be cheap and legible — here it is neither.",
+    l2:"This is chaos's territory: sensitive dependence surfaces consequences far from their causes (slow) and entangled with everything else (ambiguous). The chain: Branch I explains why such domains exist; ergodicity explains why they're dangerous; process — next node — is the countermeasure."}},
+  {id:"b4-process", type:"mechanism", label:"Process: log, review, outside eye", x:1455, y:1470, levels:{
+    l0:"When the domain won't keep score, build the scoreboard yourself.",
+    l1:"A log: the decision as it actually was — not as memory retells it, which is always tidier. A review ritual: sitting with the record to split signal from noise. An outside eye: a coach or peer with no stake in flattering you, for the places your own brain shortcuts.",
+    l2:"Kierkegaard: life is lived forward but understood backward. These tools are prosthetic feedback — they manufacture the speed and clarity the domain refuses to provide. Not generic best practices: the specific response to compounding stakes plus poor signal. Elsewhere, skip the overhead and let the loops teach."}},
+  {id:"b4-destination", type:"mechanism", label:"Defined vs open destination", x:1915, y:1250, levels:{
+    l0:"Do you know where you're going — or are you finding out?",
+    l1:"Half marathon by October: work backward — the endpoint and timeline dictate the plan, and tell you in advance which signals to watch. A new creative practice: build upward — small cheap experiments, letting the destination emerge from what you learn.",
+    l2:"Working backward converts a vague intention into a decision sequence with known logic. Imposing it on genuinely open work means optimizing hard toward the wrong thing; refusing it on defined work is drift. Navigation is downstream — answerable only after stakes and signal are read."}},
+  {id:"b4-explore", type:"tension", label:"Explore vs exploit", x:2100, y:1345, levels:{
+    l0:"Stay with what works, or try something new? Look forward, not back.",
+    l1:"The tempting frame is sunk cost: 'I've already invested so much in this path.' Wrong direction — spent resources don't get a vote. The right question: from here, does the alternative carry more expected value?",
+    l2:"What the first two readings contribute is the exploration budget. Resetting domain with clear signal → a failed experiment is one cheap data point; explore boldly. Compounding domain with slow signal → some experiments don't stay contained; the budget is set by what the domain can absorb, not by curiosity."}},
+  {id:"b4-fence", type:"mechanism", label:"Fence the exploration", x:1945, y:1470, levels:{
+    l0:"Keep experiments in a space where their failures stay cheap.",
+    l1:"A separate account for speculative bets. A side project that can't touch production. A rehearsal before the real negotiation. The fence isn't tidiness — it keeps you honest about which errors reset and which compound.",
+    l2:"Mixing exploration into working systems destroys the stakes-reading: you lose track of which failures are data and which are damage. Fenced, you get both regimes at once — genuinely bold where the game resets, genuinely careful where it doesn't."}},
+  {id:"b4-principle", type:"principle", label:"Read the domain first", x:1700, y:1590, levels:{
+    l0:"Before choosing your tools, read the game: stakes, then signal, then destination.",
+    l1:"'Fail fast, iterate, learn from mistakes' isn't wrong — it's advice for one specific domain: resetting, fast clear feedback, defined goal. Applied everywhere, it quietly breaks in exactly the domains that matter most.",
+    l2:"The sequence matters. Stakes determine what everything else is for (survive vs optimize). Signal only matters relative to stakes (the danger zone demands process). Destination is navigation across terrain the first two readings mapped. Skip a reading, and the later ones cannot be done correctly."}}
+  ],
+  edges: [
+    {from:"a1", to:"b1-laplace", type:"enables", why:"Perfect rules are what make perfect prediction imaginable at all."},
+    {from:"a2", to:"b1-sensitive", type:"enables", why:"There is always an ε of error waiting to be amplified."},
+    {from:"b1-sensitive", to:"b1-laplace", type:"breaks", why:"Exponential error growth makes the demon's requirement impossible."},
+    {from:"b1-pendulum", to:"b1-sensitive", type:"instance", why:"Two arms, a hair apart, total divergence — sensitivity made visible."},
+    {from:"b1-lorenz-story", to:"b1-sensitive", type:"instance", why:"0.000127 of rounding rewrote the forecast."},
+    {from:"b1-sensitive", to:"b1-principle", type:"causes", why:"Amplified ε is why knowing the rules isn't knowing the future."},
+    {from:"a1", to:"b1-principle", type:"enables", why:"Determinism is half the paradox — perfect rules, unknowable future."},
+    {from:"a1", to:"b2-attractors", type:"enables", why:"Attractors are what deterministic rules carve into bounded systems — no randomness could hold a shape."},
+    {from:"b2-logistic", to:"b2-attractors", type:"instance", why:"The period-doubling staircase is structure inside chaos."},
+    {from:"b2-lorenz-attractor", to:"b2-attractors", type:"instance", why:"Never repeats, never leaves — an attractor drawn live."},
+    {from:"b2-attractors", to:"b2-principle", type:"causes", why:"Attractors are the 'shape' that stays trustworthy."},
+    {from:"b2-attractors", to:"b2-tension-random", type:"tension", why:"Structure is exactly what separates chaos from noise."},
+    {from:"b1-sensitive", to:"b3-contingency", type:"mirrors", why:"Compounding deviations — in physics, and in history."},
+    {from:"b3-kokura", to:"b3-contingency", type:"instance", why:"One cloud, two cities — contingency at full scale."},
+    {from:"b3-timeline", to:"b3-contingency", type:"instance", why:"The debate rendered as a dial: decay or compound."},
+    {from:"a3", to:"b3-principle", type:"enables", why:"Coupling is what carries your actions everywhere."},
+    {from:"b3-contingency", to:"b3-principle", type:"causes", why:"If deviations can compound, no act is inert."},
+    {from:"b2-principle", to:"b3-plan", type:"enables", why:"Stable shapes are why positioning still works."},
+    {from:"b3-plan", to:"b4-destination", type:"enables", why:"Taking the question seriously becomes the third reading."},
+    {from:"a4", to:"b3-contingency", type:"mirrors", why:"History walked once = a life lived once."},
+    {from:"a4", to:"b4-ergodicity", type:"enables", why:"One sequential path is what makes time-averages yours."},
+    {from:"b4-coinflip", to:"b4-ergodicity", type:"instance", why:"Crowd vs path — the split made visible."},
+    {from:"b4-ergodicity", to:"b4-domains", type:"causes", why:"Ruin breaks averaging; domains differ in whether ruin exists."},
+    {from:"b4-domains", to:"b4-survive", type:"causes", why:"Where errors carry forward, survival is the binding constraint."},
+    {from:"b1-sensitive", to:"b4-danger", type:"causes", why:"Chaos surfaces consequences far from causes — slow, murky signal."},
+    {from:"b4-signal", to:"b4-danger", type:"enables", why:"The zone is defined by where both signal dials fail."},
+    {from:"b4-domains", to:"b4-danger", type:"causes", why:"Poor signal only turns dangerous when errors compound."},
+    {from:"b4-danger", to:"b4-process", type:"causes", why:"Prosthetic feedback is the specific countermeasure."},
+    {from:"b4-survive", to:"b4-explore", type:"enables", why:"Stakes set the exploration budget."},
+    {from:"b4-destination", to:"b4-explore", type:"enables", why:"Open destinations raise the explore question constantly."},
+    {from:"b4-explore", to:"b4-fence", type:"causes", why:"A budget needs a container to stay legible."},
+    {from:"b4-survive", to:"b4-principle", type:"causes", why:"Reading 1: stakes first."},
+    {from:"b4-process", to:"b4-principle", type:"causes", why:"Reading 2: build the scoreboard where it's missing."},
+    {from:"b4-destination", to:"b4-principle", type:"causes", why:"Reading 3: navigate last."},
+    {from:"b2-principle", to:"b4-principle", type:"enables", why:"Shapes are what a 'reading' reads."}
+  ],
+  tour: ["b1-laplace","b1-pendulum","b1-sensitive","b1-lorenz-story","b1-principle",
+         "b2-logistic","b2-attractors","b2-tension-random","b2-principle",
+         "b3-kokura","b3-contingency","b3-timeline","b3-principle",
+         "a4","b4-coinflip","b4-ergodicity","b4-domains","b4-survive",
+         "b4-signal","b4-danger","b4-process","b4-destination","b4-explore","b4-fence","b4-principle"]
+};
+
+/* ============================================================
+   ENGINE
+   ============================================================ */
+const COLORS = {axiom:"#d29922", phenomenon:"#58a6ff", mechanism:"#39c5cf",
+  principle:"#bc8cff", simulation:"#3fb950", story:"#f0883e", tension:"#f85149"};
+const GLYPH = {causes:"→", enables:"⇢", instance:"⊂", breaks:"⚡", mirrors:"≈", tension:"?"};
+const DASH  = {causes:"", enables:"7,5", instance:"", breaks:"2,4", mirrors:"", tension:"2,7"};
+const LVLNAMES = {l0:"Essence", l1:"Intuition", l2:"Mechanism", l3:"Formalism"};
+
+const svg = document.getElementById('canvas');
+const NS = "http://www.w3.org/2000/svg";
+const nodesById = {}; TOPIC.nodes.forEach(n => nodesById[n.id] = n);
+const visited = new Set();
+let focusId = null, curLevel = 'l0', tracing = false;
+let tourOn = false, tourIdx = 0;
+let activeSim = null;
+
+/* ---------- camera ---------- */
+const cam = {x:0, y:0, w:TOPIC.world.w, h:TOPIC.world.h};
+function applyCam(){
+  const ar = innerWidth/innerHeight, car = cam.w/cam.h;
+  let w = cam.w, h = cam.h;
+  if (car < ar) w = h*ar; else h = w/ar;
+  svg.setAttribute('viewBox', `${cam.x - (w-cam.w)/2} ${cam.y - (h-cam.h)/2} ${w} ${h}`);
+  drawMiniViewport();
+}
+function fitAll(){ cam.x=0; cam.y=0; cam.w=TOPIC.world.w; cam.h=TOPIC.world.h; applyCam(); }
+let camAnim = null;
+function panTo(x, y, w){
+  if (camAnim) cancelAnimationFrame(camAnim);
+  const s = {x:cam.x, y:cam.y, w:cam.w, h:cam.h};
+  const targetW = w || 950, targetH = targetW * (TOPIC.world.h/TOPIC.world.w);
+  const e = {x: x - targetW/2, y: y - targetH/2, w: targetW, h: targetH};
+  const t0 = performance.now(), dur = 420;
+  function step(t){
+    let p = Math.min(1, (t-t0)/dur); p = p<.5 ? 2*p*p : 1-Math.pow(-2*p+2,2)/2;
+    cam.x = s.x+(e.x-s.x)*p; cam.y = s.y+(e.y-s.y)*p;
+    cam.w = s.w+(e.w-s.w)*p; cam.h = s.h+(e.h-s.h)*p;
+    applyCam();
+    if (p<1) camAnim = requestAnimationFrame(step);
+  }
+  camAnim = requestAnimationFrame(step);
+}
+
+/* ---------- render graph ---------- */
+function el(tag, attrs, parent){
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function wrapLabel(textEl, label, maxChars){
+  const words = label.split(' '); let line = '', lines = [];
+  for (const w of words){
+    if ((line+' '+w).trim().length > maxChars){ lines.push(line.trim()); line = w; }
+    else line += ' '+w;
+  }
+  lines.push(line.trim());
+  lines.forEach((ln,i)=>{
+    const ts = el('tspan', {x:0, dy: i===0 ? 0 : 15}, textEl);
+    ts.textContent = ln;
+  });
+  return lines.length;
+}
+const edgeEls = [], nodeEls = {};
+function edgePath(e){
+  const a = nodesById[e.from], b = nodesById[e.to];
+  const mx=(a.x+b.x)/2, my=(a.y+b.y)/2;
+  const dx=b.x-a.x, dy=b.y-a.y, d=Math.hypot(dx,dy)||1;
+  const off = 0.12*d;
+  const cx = mx - dy/d*off, cy = my + dx/d*off;
+  return {d:`M ${a.x} ${a.y} Q ${cx} ${cy} ${b.x} ${b.y}`,
+          gx: .25*a.x+.5*cx+.25*b.x, gy: .25*a.y+.5*cy+.25*b.y};
+}
+function render(){
+  svg.innerHTML = '';
+  const defs = el('defs', {}, svg);
+  const mk = el('marker', {id:'arrow', viewBox:'0 0 10 10', refX:9, refY:5,
+    markerWidth:7, markerHeight:7, orient:'auto-start-reverse'}, defs);
+  el('path', {d:'M 0 1 L 9 5 L 0 9 z', fill:'#6a7482'}, mk);
+  const mkh = el('marker', {id:'arrowHl', viewBox:'0 0 10 10', refX:9, refY:5,
+    markerWidth:7, markerHeight:7, orient:'auto-start-reverse'}, defs);
+  el('path', {d:'M 0 1 L 9 5 L 0 9 z', fill:'#e3b341'}, mkh);
+
+  const gEdges = el('g', {id:'gEdges'}, svg);
+  const gGlyphs = el('g', {}, svg);
+  const gNodes = el('g', {id:'gNodes'}, svg);
+
+  TOPIC.branches.forEach(b=>{
+    const t = el('text', {class:'branchlabel', x:b.x, y:b.y}, svg);
+    t.textContent = b.label;
+  });
+
+  TOPIC.edges.forEach((e,i)=>{
+    const p = edgePath(e);
+    const path = el('path', {class:'edge', d:p.d, 'stroke-width':1.6,
+      'marker-end': e.type==='mirrors' ? '' : 'url(#arrow)'}, gEdges);
+    if (DASH[e.type]) path.setAttribute('stroke-dasharray', DASH[e.type]);
+    if (e.type==='mirrors') path.setAttribute('stroke-width', 3.5);
+    const glyphBg = el('circle', {cx:p.gx, cy:p.gy, r:9, fill:'#0d1117', class:'edgeglyph'}, gGlyphs);
+    const glyph = el('text', {class:'edgeglyph', x:p.gx, y:p.gy+3.5}, gGlyphs);
+    glyph.textContent = GLYPH[e.type];
+    const hit = el('path', {class:'edgehit', d:p.d}, gEdges);
+    hit.addEventListener('mousemove', ev=>showTip(ev, e));
+    hit.addEventListener('mouseleave', hideTip);
+    edgeEls.push({e, path, glyph, glyphBg});
+  });
+
+  TOPIC.nodes.forEach(n=>{
+    const g = el('g', {class:'node', transform:`translate(${n.x},${n.y})`}, gNodes);
+    const c = COLORS[n.type];
+    let shape;
+    const common = {class:'shape', fill:c+'2b', stroke:c, 'stroke-width':2};
+    if (n.type==='axiom'){
+      const r=26, pts=[];
+      for(let i=0;i<6;i++){const a=Math.PI/180*(60*i-90); pts.push((r*Math.cos(a)).toFixed(1)+','+(r*Math.sin(a)).toFixed(1));}
+      shape = el('polygon', {...common, points:pts.join(' '), fill:c+'44'}, g);
+    } else if (n.type==='phenomenon'){ shape = el('circle', {...common, r:22}, g); }
+    else if (n.type==='mechanism'){ shape = el('rect', {...common, x:-24, y:-19, width:48, height:38, rx:10}, g); }
+    else if (n.type==='principle'){ shape = el('rect', {...common, x:-18, y:-18, width:36, height:36, transform:'rotate(45)'}, g); }
+    else if (n.type==='simulation'){
+      shape = el('circle', {...common, r:22}, g);
+      el('path', {d:'M -5 -8 L 9 0 L -5 8 z', fill:c}, g);
+    }
+    else if (n.type==='story'){
+      shape = el('rect', {...common, x:-24, y:-18, width:48, height:32, rx:8}, g);
+      el('path', {d:'M -8 14 L 0 26 L 2 14 z', fill:c+'2b', stroke:c, 'stroke-width':2}, g);
+    }
+    else { // tension
+      shape = el('ellipse', {...common, rx:27, ry:20, 'stroke-dasharray':'5,4'}, g);
+    }
+    const label = el('text', {y: n.type==='story'? 44 : 40, transform:'translate(0,0)'}, g);
+    wrapLabel(label, n.label, 18);
+    const check = el('text', {class:'check', x:20, y:-18, style:'display:none'}, g);
+    check.textContent = '✓';
+    g.addEventListener('click', ev=>{ ev.stopPropagation(); focusNode(n.id); });
+    nodeEls[n.id] = {g, shape, check};
+  });
+  drawMinimap();
+}
+
+/* ---------- tooltip ---------- */
+const tip = document.getElementById('tooltip');
+const TYPENAMES = {causes:'causes', enables:'enables', instance:'is an instance of',
+  breaks:'breaks', mirrors:'mirrors', tension:'in tension with'};
+function showTip(ev, e){
+  tip.innerHTML = `<div class="ttype">${nodesById[e.from].label} ${GLYPH[e.type]} ${TYPENAMES[e.type]} ${GLYPH[e.type]==='→'?'':''} ${nodesById[e.to].label}</div>${e.why}`;
+  tip.style.display = 'block';
+  tip.style.left = Math.min(innerWidth-300, ev.clientX+14)+'px';
+  tip.style.top = (ev.clientY+14)+'px';
+}
+function hideTip(){ tip.style.display='none'; }
+
+/* ---------- focus & dimming ---------- */
+function neighborsOf(id){
+  const s = new Set([id]);
+  TOPIC.edges.forEach(e=>{ if(e.from===id) s.add(e.to); if(e.to===id) s.add(e.from); });
+  return s;
+}
+function focusNode(id, level){
+  clearTrace();
+  focusId = id;
+  visited.add(id);
+  updateProgress();
+  const nb = neighborsOf(id);
+  TOPIC.nodes.forEach(n=>{
+    nodeEls[n.id].g.classList.toggle('dimmed', !nb.has(n.id));
+    nodeEls[n.id].g.classList.toggle('focused', n.id===id);
+    nodeEls[n.id].check.style.display = visited.has(n.id) ? '' : 'none';
+  });
+  edgeEls.forEach(({e, path, glyph, glyphBg})=>{
+    const on = e.from===id || e.to===id;
+    path.classList.toggle('dimmed', !on);
+    glyph.classList.toggle('dimmed', !on);
+    glyphBg.classList.toggle('dimmed', !on);
+  });
+  const n = nodesById[id];
+  panTo(n.x + 190, n.y); // offset for panel
+  openPanel(n, level || 'l0');
+}
+function clearFocus(){
+  focusId = null; clearTrace();
+  TOPIC.nodes.forEach(n=>{
+    nodeEls[n.id].g.classList.remove('dimmed','focused');
+  });
+  edgeEls.forEach(({path, glyph, glyphBg})=>{
+    path.classList.remove('dimmed'); glyph.classList.remove('dimmed'); glyphBg.classList.remove('dimmed');
+  });
+  closePanel();
+}
+
+/* ---------- panel ---------- */
+const panel = document.getElementById('panel');
+const tabs = [...document.querySelectorAll('#tabs button')];
+function openPanel(n, level){
+  stopSim();
+  document.getElementById('pChip').textContent = n.type;
+  const chip = document.getElementById('pChip');
+  chip.style.background = COLORS[n.type]+'33'; chip.style.color = COLORS[n.type];
+  document.getElementById('pTitle').textContent = n.label;
+  const simwrap = document.getElementById('simwrap');
+  simwrap.innerHTML = '';
+  if (n.sim) mountSim(n.sim, simwrap);
+  setLevel(n, level);
+  panel.classList.add('open');
+}
+function setLevel(n, level){
+  if (!n.levels[level]) level = 'l0';
+  curLevel = level;
+  tabs.forEach(b=>{
+    const l = b.dataset.l;
+    b.disabled = !n.levels[l];
+    b.classList.toggle('active', l===level);
+    b.onclick = ()=>setLevel(n, l);
+  });
+  const body = document.getElementById('levelbody');
+  const keys = ['l0','l1','l2','l3'].filter(k=>n.levels[k]);
+  const idx = keys.indexOf(level);
+  let html = `<div class="lvl-name">L${level[1]} · ${LVLNAMES[level]}</div><div>${n.levels[level]}</div>`;
+  if (idx < keys.length-1){
+    html += `<button class="deeper" id="deeperBtn">Go deeper ↓ &nbsp; L${keys[idx+1][1]} · ${LVLNAMES[keys[idx+1]]}</button>`;
+  } else {
+    html += `<button class="deeper" id="deeperBtn">↑ Back to essence</button>`;
+  }
+  body.innerHTML = html;
+  document.getElementById('deeperBtn').onclick = ()=>
+    setLevel(n, idx < keys.length-1 ? keys[idx+1] : 'l0');
+  updateBreadcrumb();
+}
+function closePanel(){ panel.classList.remove('open'); stopSim(); updateBreadcrumb(); }
+document.getElementById('pClose').onclick = ()=>{ tourOn ? exitTour() : clearFocus(); };
+
+/* ---------- breadcrumb & progress ---------- */
+function branchOf(id){
+  if (id.startsWith('a')) return 'Axioms';
+  const map = {'b1':'I · The Broken Promise','b2':'II · Order Hidden in Chaos',
+    'b3':'III · The Fluke View of Life','b4':'IV · Reading the Domain'};
+  return map[id.slice(0,2)];
+}
+function updateBreadcrumb(){
+  const bc = document.getElementById('breadcrumb');
+  if (!focusId){ bc.innerHTML = `<b>${TOPIC.title}</b> — click any idea`; return; }
+  const n = nodesById[focusId];
+  bc.innerHTML = `${TOPIC.title} › ${branchOf(focusId)} › <b>${n.label}</b> › L${curLevel[1]} ${LVLNAMES[curLevel]}`;
+}
+function updateProgress(){
+  document.getElementById('progress').textContent =
+    `explored ${visited.size}/${TOPIC.nodes.length} · ${Math.round(visited.size/TOPIC.nodes.length*100)}%`;
+}
+
+/* ---------- trace to axioms ---------- */
+function clearTrace(){
+  if (!tracing) return;
+  tracing = false;
+  document.querySelectorAll('.trace-node').forEach(e=>e.classList.remove('trace-node'));
+  edgeEls.forEach(({path})=>path.classList.remove('trace'));
+}
+document.getElementById('traceBtn').onclick = ()=>{
+  if (!focusId) return;
+  if (tracing){ clearTrace(); focusNode(focusId, curLevel); return; }
+  // BFS backwards: follow edges pointing INTO the chain
+  const chainNodes = new Set([focusId]), chainEdges = new Set();
+  let frontier = [focusId];
+  while (frontier.length){
+    const next = [];
+    for (const id of frontier){
+      TOPIC.edges.forEach((e,i)=>{
+        if (e.to===id && !chainEdges.has(i)){
+          chainEdges.add(i);
+          if (!chainNodes.has(e.from)){ chainNodes.add(e.from); next.push(e.from); }
+        }
+      });
+    }
+    frontier = next;
+  }
+  tracing = true;
+  TOPIC.nodes.forEach(n=>{
+    nodeEls[n.id].g.classList.toggle('dimmed', !chainNodes.has(n.id));
+    if (chainNodes.has(n.id)) nodeEls[n.id].g.classList.add('trace-node');
+  });
+  edgeEls.forEach(({path, glyph, glyphBg}, i)=>{
+    const on = chainEdges.has(i);
+    path.classList.toggle('trace', on);
+    path.classList.toggle('dimmed', !on);
+    glyph.classList.toggle('dimmed', !on);
+    glyphBg.classList.toggle('dimmed', !on);
+  });
+  fitAll();
+};
+
+/* ---------- guided tour ---------- */
+const tourbar = document.getElementById('tourbar');
+function startTour(){ tourOn = true; tourIdx = 0; tourbar.classList.add('on');
+  document.getElementById('tourBtn').textContent = '■ Stop tour'; tourStep(); }
+function exitTour(){ tourOn = false; tourbar.classList.remove('on');
+  document.getElementById('tourBtn').textContent = '▶ Guided tour'; clearFocus(); }
+function tourStep(){
+  const id = TOPIC.tour[tourIdx];
+  focusNode(id);
+  document.getElementById('tStep').textContent = `Step ${tourIdx+1} / ${TOPIC.tour.length} · ${branchOf(id)}`;
+  document.getElementById('tCap').textContent = nodesById[id].levels.l0;
+  document.getElementById('tPrev').disabled = tourIdx===0;
+  document.getElementById('tNext').textContent = tourIdx===TOPIC.tour.length-1 ? 'Finish' : 'Next ›';
+}
+document.getElementById('tourBtn').onclick = ()=> tourOn ? exitTour() : startTour();
+document.getElementById('tExit').onclick = exitTour;
+document.getElementById('tPrev').onclick = ()=>{ if(tourIdx>0){tourIdx--; tourStep();} };
+document.getElementById('tNext').onclick = ()=>{
+  if (tourIdx < TOPIC.tour.length-1){ tourIdx++; tourStep(); } else exitTour();
+};
+
+/* ---------- pan / zoom ---------- */
+let dragging = false, dstart = null;
+svg.addEventListener('mousedown', e=>{
+  dragging = true; svg.classList.add('dragging');
+  dstart = {mx:e.clientX, my:e.clientY, cx:cam.x, cy:cam.y};
+});
+addEventListener('mousemove', e=>{
+  if (!dragging) return;
+  const scale = cam.w / innerWidth;
+  cam.x = dstart.cx - (e.clientX - dstart.mx)*scale;
+  cam.y = dstart.cy - (e.clientY - dstart.my)*scale;
+  applyCam();
+});
+addEventListener('mouseup', e=>{
+  if (dragging && dstart && Math.hypot(e.clientX-dstart.mx, e.clientY-dstart.my) < 4){
+    if (!tourOn) clearFocus();
+  }
+  dragging = false; svg.classList.remove('dragging');
+});
+svg.addEventListener('wheel', e=>{
+  e.preventDefault();
+  const f = e.deltaY > 0 ? 1.1 : 1/1.1;
+  const rect = svg.getBoundingClientRect();
+  const px = cam.x + (e.clientX-rect.left)/rect.width * cam.w;
+  const py = cam.y + (e.clientY-rect.top)/rect.height * cam.h;
+  cam.w = Math.min(4000, Math.max(300, cam.w*f));
+  cam.h = cam.w * TOPIC.world.h/TOPIC.world.w;
+  cam.x = px - (px-cam.x)*f; cam.y = py - (py-cam.y)*f;
+  applyCam();
+}, {passive:false});
+addEventListener('keydown', e=>{
+  if (e.key==='Escape'){ tourOn ? exitTour() : clearFocus(); }
+  if (tourOn && e.key==='ArrowRight') document.getElementById('tNext').click();
+  if (tourOn && e.key==='ArrowLeft') document.getElementById('tPrev').click();
+});
+addEventListener('resize', applyCam);
+document.getElementById('fitBtn').onclick = fitAll;
+document.getElementById('legendBtn').onclick = ()=>document.getElementById('legend').classList.toggle('on');
+
+/* ---------- minimap ---------- */
+const mini = document.getElementById('minimap');
+const MSCALE = 190/TOPIC.world.w;
+let miniVp = null;
+function drawMinimap(){
+  mini.innerHTML = '';
+  TOPIC.nodes.forEach(n=>{
+    el('circle', {cx:n.x*MSCALE, cy:n.y*MSCALE, r:2.4, fill:COLORS[n.type]}, mini);
+  });
+  miniVp = el('rect', {fill:'none', stroke:'#e3b341', 'stroke-width':1, rx:2}, mini);
+  drawMiniViewport();
+}
+function drawMiniViewport(){
+  if (!miniVp) return;
+  const vb = svg.getAttribute('viewBox');
+  if (!vb) return;
+  const [x,y,w,h] = vb.split(' ').map(Number);
+  miniVp.setAttribute('x', x*MSCALE); miniVp.setAttribute('y', y*MSCALE);
+  miniVp.setAttribute('width', w*MSCALE); miniVp.setAttribute('height', h*MSCALE);
+}
+mini.addEventListener('click', e=>{
+  const r = mini.getBoundingClientRect();
+  const wx = (e.clientX-r.left)/MSCALE, wy = (e.clientY-r.top)/MSCALE;
+  panTo(wx, wy, cam.w);
+});
+
+/* ============================================================
+   SIMULATIONS
+   ============================================================ */
+function stopSim(){ if (activeSim){ activeSim.stop(); activeSim = null; } }
+function simUI(container, html){
+  const c = document.createElement('canvas');
+  c.width = 760; c.height = 560; // retina-ish, CSS scales
+  container.appendChild(c);
+  const controls = document.createElement('div'); controls.id = 'simcontrols';
+  controls.innerHTML = html;
+  container.appendChild(controls);
+  const note = document.createElement('div'); note.id = 'simnote';
+  container.appendChild(note);
+  return {ctx: c.getContext('2d'), canvas: c, controls, note};
+}
+function mulberry32(a){ return function(){ a|=0; a=a+0x6D2B79F5|0;
+  let t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t;
+  return ((t^t>>>14)>>>0)/4294967296; }; }
+
+/* --- double pendulum --- */
+function simPendulum(container){
+  const ui = simUI(container,
+    `<span style="font-size:11px;color:var(--dim)">start gap:</span>
+     <button class="btn" data-d="0">identical</button>
+     <button class="btn" data-d="0.0000175">0.001°</button>
+     <button class="btn" data-d="0.0175">1°</button>`);
+  const g=9.81, L=1;
+  let A, B, trailA, trailB, t;
+  function reset(delta){
+    A=[2.1, 0, 2.5, 0]; B=[2.1+delta, 0, 2.5, 0];
+    trailA=[]; trailB=[]; t=0;
+  }
+  reset(0.0000175);
+  function deriv(s){
+    const [t1,w1,t2,w2]=s, d=t1-t2;
+    const den=2+1-Math.cos(2*d)*1; // m1=m2=1
+    const a1=(-g*3*Math.sin(t1)-g*Math.sin(t1-2*t2)-2*Math.sin(d)*(w2*w2*L+w1*w1*L*Math.cos(d)))/(L*den);
+    const a2=(2*Math.sin(d)*(w1*w1*L*2+g*2*Math.cos(t1)+w2*w2*L*Math.cos(d)))/(L*den);
+    return [w1,a1,w2,a2];
+  }
+  function rk4(s, dt){
+    const k1=deriv(s);
+    const k2=deriv(s.map((v,i)=>v+dt/2*k1[i]));
+    const k3=deriv(s.map((v,i)=>v+dt/2*k2[i]));
+    const k4=deriv(s.map((v,i)=>v+dt*k3[i]));
+    return s.map((v,i)=>v+dt/6*(k1[i]+2*k2[i]+2*k3[i]+k4[i]));
+  }
+  const ctx=ui.ctx, W=760, H=560, ox=W/2, oy=150, len=110;
+  function bob(s){ return [
+    [ox+len*Math.sin(s[0]), oy+len*Math.cos(s[0])],
+    [ox+len*Math.sin(s[0])+len*Math.sin(s[2]), oy+len*Math.cos(s[0])+len*Math.cos(s[2])]];
+  }
+  let raf;
+  function frame(){
+    for(let i=0;i<6;i++){ A=rk4(A,0.009); B=rk4(B,0.009); t+=0.009; }
+    const [a1,a2]=bob(A), [b1,b2]=bob(B);
+    trailA.push(a2); trailB.push(b2);
+    if(trailA.length>500){trailA.shift(); trailB.shift();}
+    ctx.fillStyle='#0a0d12'; ctx.fillRect(0,0,W,H);
+    const drawTrail=(tr,col)=>{ ctx.beginPath();
+      tr.forEach((p,i)=>{ i? ctx.lineTo(p[0],p[1]) : ctx.moveTo(p[0],p[1]); });
+      ctx.strokeStyle=col; ctx.globalAlpha=.45; ctx.lineWidth=1.6; ctx.stroke(); ctx.globalAlpha=1; };
+    drawTrail(trailA,'#39c5cf'); drawTrail(trailB,'#f0883e');
+    const drawPend=(p1,p2,col)=>{
+      ctx.strokeStyle=col; ctx.lineWidth=3; ctx.beginPath();
+      ctx.moveTo(ox,oy); ctx.lineTo(p1[0],p1[1]); ctx.lineTo(p2[0],p2[1]); ctx.stroke();
+      ctx.fillStyle=col;
+      [[p1],[p2]].forEach(([p])=>{ctx.beginPath();ctx.arc(p[0],p[1],8,0,7);ctx.fill();});
+    };
+    drawPend(a1,a2,'#39c5cf'); drawPend(b1,b2,'#f0883e');
+    const div=Math.hypot(a2[0]-b2[0],a2[1]-b2[1]);
+    ctx.fillStyle='#8b949e'; ctx.font='22px sans-serif';
+    ctx.fillText(`t = ${t.toFixed(1)}s   separation: ${div<1?div.toFixed(3):div.toFixed(0)} px`, 20, H-24);
+    raf=requestAnimationFrame(frame);
+  }
+  raf=requestAnimationFrame(frame);
+  ui.controls.querySelectorAll('button').forEach(b=>
+    b.onclick=()=>reset(parseFloat(b.dataset.d)));
+  ui.note.textContent = "Teal and orange start almost identically. Same physics, no randomness — replaying gives the exact same divergence. That's sensitive dependence.";
+  return {stop:()=>cancelAnimationFrame(raf)};
+}
+
+/* --- logistic map --- */
+function simLogistic(container){
+  const ui = simUI(container,
+    `<input type="range" id="rSlider" min="2.5" max="4" step="0.001" value="3.2">
+     <button class="btn" data-r="2.8">2.8</button><button class="btn" data-r="3.2">3.2</button>
+     <button class="btn" data-r="3.5">3.5</button><button class="btn" data-r="3.57">3.57</button>
+     <button class="btn" data-r="3.83">3.83</button><button class="btn" data-r="4">4.0</button>`);
+  const ctx=ui.ctx, W=760, H=560, BH=380;
+  const off=document.createElement('canvas'); off.width=W; off.height=BH;
+  const octx=off.getContext('2d');
+  octx.fillStyle='#0a0d12'; octx.fillRect(0,0,W,BH);
+  octx.fillStyle='rgba(88,166,255,0.18)';
+  for(let px=0; px<W; px++){
+    const r=2.5+px/W*1.5; let x=0.4;
+    for(let i=0;i<300;i++) x=r*x*(1-x);
+    for(let i=0;i<130;i++){ x=r*x*(1-x); octx.fillRect(px, BH-x*BH, 1.2, 1.2); }
+  }
+  let r=3.2;
+  function behavior(r){
+    if(r<3) return "settles to one stable value";
+    if(r<3.449) return "period 2 — flips between two values";
+    if(r<3.544) return "period 4";
+    if(r<3.5699) return "period 8, 16, ... doubling toward chaos";
+    if(r>3.828&&r<3.858) return "island of order — period 3 inside chaos";
+    return "chaos — never repeats";
+  }
+  function draw(){
+    ctx.fillStyle='#0a0d12'; ctx.fillRect(0,0,W,H);
+    ctx.drawImage(off,0,0);
+    const px=(r-2.5)/1.5*W;
+    ctx.strokeStyle='#f85149'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(px,0); ctx.lineTo(px,BH); ctx.stroke();
+    // time series
+    ctx.strokeStyle='#30363d'; ctx.beginPath(); ctx.moveTo(0,BH+4); ctx.lineTo(W,BH+4); ctx.stroke();
+    let x=0.4; const pts=[];
+    for(let i=0;i<90;i++){ x=r*x*(1-x); pts.push(x); }
+    ctx.strokeStyle='#3fb950'; ctx.lineWidth=2; ctx.beginPath();
+    pts.forEach((v,i)=>{ const X=i/89*W, Y=H-8-v*(H-BH-24);
+      i?ctx.lineTo(X,Y):ctx.moveTo(X,Y); });
+    ctx.stroke();
+    ctx.fillStyle='#8b949e'; ctx.font='22px sans-serif';
+    ctx.fillText(`r = ${r.toFixed(3)} — ${behavior(r)}`, 16, BH+34);
+  }
+  draw();
+  const slider=ui.controls.querySelector('#rSlider');
+  slider.oninput=()=>{ r=parseFloat(slider.value); draw(); };
+  ui.controls.querySelectorAll('button').forEach(b=>
+    b.onclick=()=>{ r=parseFloat(b.dataset.r); slider.value=r; draw(); });
+  ui.note.textContent = "Top: every long-run value the system visits, for each r (the bifurcation diagram). Bottom: the actual sequence at your chosen r. Try 3.83 — order reappears inside chaos.";
+  return {stop:()=>{}};
+}
+
+/* --- lorenz attractor --- */
+function simLorenz(container){
+  const ui = simUI(container, `<button class="btn" id="lzReset">Restart (Δ = 0.0001)</button>`);
+  const ctx=ui.ctx, W=760, H=560;
+  const s=10, rho=28, beta=8/3, dt=0.006;
+  let A, B, trA, trB, raf;
+  function reset(){ A=[1,1,20]; B=[1.0001,1,20]; trA=[]; trB=[]; }
+  reset();
+  function step(p){
+    const [x,y,z]=p;
+    return [x+dt*s*(y-x), y+dt*(x*(rho-z)-y), z+dt*(x*y-beta*z)];
+  }
+  const px=p=>[W/2 + p[0]*13, H-40-p[2]*10];
+  function frame(){
+    for(let i=0;i<5;i++){
+      A=step(A); B=step(B);
+      trA.push(px(A)); trB.push(px(B));
+      if(trA.length>2600){trA.shift(); trB.shift();}
+    }
+    ctx.fillStyle='#0a0d12'; ctx.fillRect(0,0,W,H);
+    const draw=(tr,col)=>{ ctx.strokeStyle=col; ctx.globalAlpha=.7; ctx.lineWidth=1.3;
+      ctx.beginPath(); tr.forEach((p,i)=>{ i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]); });
+      ctx.stroke(); ctx.globalAlpha=1;
+      const last=tr[tr.length-1];
+      if(last){ ctx.fillStyle=col; ctx.beginPath(); ctx.arc(last[0],last[1],5,0,7); ctx.fill(); } };
+    draw(trA,'#39c5cf'); draw(trB,'#f0883e');
+    const a=trA[trA.length-1], b=trB[trB.length-1];
+    if(a&&b){ const d=Math.hypot(a[0]-b[0],a[1]-b[1]);
+      ctx.fillStyle='#8b949e'; ctx.font='22px sans-serif';
+      ctx.fillText(`separation: ${d.toFixed(0)} px — same butterfly, different wings`, 20, 34); }
+    raf=requestAnimationFrame(frame);
+  }
+  raf=requestAnimationFrame(frame);
+  ui.controls.querySelector('#lzReset').onclick=reset;
+  ui.note.textContent = "Two trajectories, 0.0001 apart at start. They diverge fast (chaos) yet neither ever leaves the two-winged shape (the attractor). Unpredictable in detail, patterned in shape.";
+  return {stop:()=>cancelAnimationFrame(raf)};
+}
+
+/* --- coin-flip split --- */
+function simCoinflip(container){
+  const ui = simUI(container,
+    `<button class="btn" id="cfA">Double or nothing</button>
+     <button class="btn" id="cfB">Gentle (×1.5 / ×0.6)</button>
+     <button class="btn" id="cfGo">Replay ↻</button>`);
+  const ctx=ui.ctx, W=760, H=560;
+  let mode='A', raf, frameN=0, data=null;
+  const rnd = mulberry32(42);
+  function buildA(){
+    const crowd = Array.from({length:100}, ()=> Math.random()<.5 ? 2 : 0);
+    let w=1; const path=[1];
+    while(path[path.length-1]>0 && path.length<12){
+      w = Math.random()<.5 ? w*2 : 0; path.push(w);
+    }
+    return {crowd, path};
+  }
+  function buildB(){
+    const R = mulberry32(Math.floor(Math.random()*1e9));
+    const paths=[];
+    for(let p=0;p<36;p++){
+      let w=1; const arr=[1];
+      for(let t=0;t<100;t++){ w *= R()<.5 ? 1.5 : 0.6; arr.push(w); }
+      paths.push(arr);
+    }
+    return {paths};
+  }
+  function start(){
+    frameN=0; data = mode==='A'? buildA() : buildB();
+    cancelAnimationFrame(raf); raf=requestAnimationFrame(frame);
+  }
+  function frame(){
+    frameN++;
+    ctx.fillStyle='#0a0d12'; ctx.fillRect(0,0,W,H);
+    ctx.font='20px sans-serif';
+    if (mode==='A'){
+      const round = Math.min(11, Math.floor(frameN/40));
+      // left: crowd
+      ctx.fillStyle='#8b949e'; ctx.fillText('100 people · one flip each', 30, 34);
+      const flipped = frameN>40;
+      data.crowd.forEach((v,i)=>{
+        const cx=45+(i%10)*30, cy=70+Math.floor(i/10)*30;
+        ctx.fillStyle = !flipped ? '#484f58' : (v>0 ? '#3fb950' : '#f85149');
+        ctx.beginPath(); ctx.arc(cx,cy,9,0,7); ctx.fill();
+      });
+      const mean = data.crowd.reduce((a,b)=>a+b,0)/100;
+      ctx.fillStyle='#e6edf3';
+      ctx.fillText(flipped? `crowd average: ${mean.toFixed(2)}× — fine` : 'about to flip...', 30, 410);
+      // right: one path
+      ctx.fillStyle='#8b949e'; ctx.fillText('1 person · flip after flip', 420, 34);
+      const shown = data.path.slice(0, Math.max(1,round));
+      ctx.strokeStyle='#f0883e'; ctx.lineWidth=3; ctx.beginPath();
+      shown.forEach((v,i)=>{
+        const X=420+i*28, Y = v>0 ? 330-Math.log2(Math.max(v,1))*38 : 380;
+        i?ctx.lineTo(X,Y):ctx.moveTo(X,Y);
+        ctx.fillStyle = v>0?'#f0883e':'#f85149';
+        ctx.fillRect(X-3,Y-3,6,6);
+      });
+      ctx.stroke();
+      const last=shown[shown.length-1];
+      ctx.fillStyle = last>0 ? '#e6edf3' : '#f85149';
+      ctx.fillText(last>0 ? `wealth: ${last}×  (one tails ends it)` : 'RUINED — permanently', 420, 410);
+      ctx.fillStyle='#8b949e'; ctx.font='17px sans-serif';
+      ctx.fillText('Same coin. Same expected value. The crowd averages across people;', 30, 480);
+      ctx.fillText('the person averages across time — and ruin ends the averaging.', 30, 506);
+      if (round>=11 && data.path[data.path.length-1]===0 && frameN%200===0) start();
+    } else {
+      const round = Math.min(100, Math.floor(frameN/3));
+      ctx.fillStyle='#8b949e'; ctx.fillText('36 individuals (orange) vs the crowd average (amber) — log scale', 30, 34);
+      const y = v => 300 - Math.log10(Math.max(v,1e-4))*55;
+      // gridline at 1
+      ctx.strokeStyle='#30363d'; ctx.setLineDash([4,4]);
+      ctx.beginPath(); ctx.moveTo(30,y(1)); ctx.lineTo(W-20,y(1)); ctx.stroke(); ctx.setLineDash([]);
+      ctx.fillStyle='#484f58'; ctx.font='16px sans-serif'; ctx.fillText('start = 1×', W-110, y(1)-8);
+      data.paths.forEach(p=>{
+        ctx.strokeStyle='rgba(240,136,62,0.35)'; ctx.lineWidth=1.2; ctx.beginPath();
+        for(let t=0;t<=round;t++){ const X=30+t/100*(W-60), Y=Math.min(H-40, y(p[t]));
+          t?ctx.lineTo(X,Y):ctx.moveTo(X,Y); }
+        ctx.stroke();
+      });
+      // ensemble mean 1.05^n
+      ctx.strokeStyle='#e3b341'; ctx.lineWidth=3.5; ctx.beginPath();
+      for(let t=0;t<=round;t++){ const X=30+t/100*(W-60), Y=y(Math.pow(1.05,t));
+        t?ctx.lineTo(X,Y):ctx.moveTo(X,Y); }
+      ctx.stroke();
+      // median path e^{n ln-avg}
+      ctx.strokeStyle='#e6edf3'; ctx.setLineDash([6,5]); ctx.lineWidth=2; ctx.beginPath();
+      for(let t=0;t<=round;t++){ const X=30+t/100*(W-60), Y=Math.min(H-40,y(Math.pow(0.9487,t)));
+        t?ctx.lineTo(X,Y):ctx.moveTo(X,Y); }
+      ctx.stroke(); ctx.setLineDash([]);
+      ctx.font='20px sans-serif';
+      ctx.fillStyle='#e3b341'; ctx.fillText(`crowd average after ${round}: ${Math.pow(1.05,round).toFixed(1)}× ↑`, 30, 460);
+      ctx.fillStyle='#e6edf3'; ctx.fillText(`typical individual: ${Math.pow(0.9487,round).toFixed(3)}× ↓ (dashed median)`, 30, 490);
+      ctx.fillStyle='#8b949e'; ctx.font='17px sans-serif';
+      ctx.fillText('No single flip is fatal here — yet almost every path still decays', 30, 530);
+      ctx.fillText('while the average grows. Positive EV, negative time-average.', 30, 552);
+    }
+    raf=requestAnimationFrame(frame);
+  }
+  ui.controls.querySelector('#cfA').onclick=()=>{mode='A'; start();};
+  ui.controls.querySelector('#cfB').onclick=()=>{mode='B'; start();};
+  ui.controls.querySelector('#cfGo').onclick=start;
+  start();
+  ui.note.textContent = "Two versions of the same trap. Double-or-nothing: ruin is instant. Gentle: EV is +5% per round, no flip is fatal — and you still lose. The crowd's number was never about you.";
+  return {stop:()=>cancelAnimationFrame(raf)};
+}
+
+/* --- branching timelines --- */
+function simTimeline(container){
+  const ui = simUI(container,
+    `<span style="font-size:11px;color:var(--dim)">converging</span>
+     <input type="range" id="kSlider" min="-0.08" max="0.08" step="0.005" value="0.04">
+     <span style="font-size:11px;color:var(--dim)">compounding</span>`);
+  const ctx=ui.ctx, W=760, H=560;
+  const NP=120, NT=140;
+  function draw(k){
+    const R = mulberry32(7);
+    const base=[], pert=[];
+    for(let p=0;p<NP;p++){
+      let xb=0, xp=2.6; const tb=[0], tp=[2.6];
+      for(let t=0;t<NT;t++){
+        const n1=(R()-.5)*1.7, n2=(R()-.5)*1.7;
+        xb += k*xb + n1; xp += k*xp + n2;
+        tb.push(xb); tp.push(xp);
+      }
+      base.push(tb); pert.push(tp);
+    }
+    let mx=4;
+    base.concat(pert).forEach(p=>p.forEach(v=>{ if(Math.abs(v)>mx) mx=Math.abs(v); }));
+    const y=v=> H/2 - v/mx*(H/2-50);
+    ctx.fillStyle='#0a0d12'; ctx.fillRect(0,0,W,H);
+    const drawSet=(set,col)=>{ ctx.strokeStyle=col; ctx.lineWidth=1;
+      set.forEach(p=>{ ctx.beginPath();
+        for(let t=0;t<=NT;t++){ const X=t/NT*W, Y=y(p[t]); t?ctx.lineTo(X,Y):ctx.moveTo(X,Y); }
+        ctx.stroke(); }); };
+    drawSet(base,'rgba(88,166,255,0.07)'); drawSet(pert,'rgba(240,136,62,0.07)');
+    const mean=set=>{ const m=[]; for(let t=0;t<=NT;t++){ let s=0;
+      set.forEach(p=>s+=p[t]); m.push(s/set.length);} return m; };
+    const drawMean=(m,col)=>{ ctx.strokeStyle=col; ctx.lineWidth=3.5; ctx.beginPath();
+      for(let t=0;t<=NT;t++){ const X=t/NT*W, Y=y(m[t]); t?ctx.lineTo(X,Y):ctx.moveTo(X,Y); }
+      ctx.stroke(); };
+    const mb=mean(base), mp=mean(pert);
+    drawMean(mb,'#58a6ff'); drawMean(mp,'#f0883e');
+    const gap=Math.abs(mp[NT]-mb[NT]);
+    ctx.fillStyle='#8b949e'; ctx.font='20px sans-serif';
+    ctx.fillText('blue: baseline histories · orange: same histories, one small event changed at t=0', 20, 30);
+    ctx.font='22px sans-serif'; ctx.fillStyle='#e6edf3';
+    let verdict;
+    if (k < -0.01) verdict = `gap at end: ${gap.toFixed(2)} — the nudge washed out. Convergent world: the small thing didn't matter.`;
+    else if (k > 0.01) verdict = `gap at end: ${gap.toFixed(2)} — the nudge compounded. Contingent world: permanently different histories.`;
+    else verdict = `gap at end: ${gap.toFixed(2)} — pure drift. The nudge neither dies nor grows.`;
+    ctx.fillText(verdict, 20, H-24);
+  }
+  draw(0.04);
+  ui.controls.querySelector('#kSlider').oninput=e=>draw(parseFloat(e.target.value));
+  ui.note.textContent = "One dial — do deviations decay or feed themselves? — flips the answer to 'did that small event matter?'. Gould's replay-the-tape debate, as a slider.";
+  return {stop:()=>{}};
+}
+
+const SIMS = {pendulum:simPendulum, logistic:simLogistic, lorenz:simLorenz,
+  coinflip:simCoinflip, timeline:simTimeline};
+function mountSim(kind, container){ stopSim(); activeSim = SIMS[kind](container); }
+
+/* ---------- boot ---------- */
+render();
+fitAll();
+updateProgress();
+updateBreadcrumb();
+</script>
+</body>
+</html>
