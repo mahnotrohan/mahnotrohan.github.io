@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chaos, Luck & Ergodicity — Orrery</title>
+<title>Chaos, Luck & Ergodicity — parchment atlas</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 :root{
-  --ground:#1a1a1a; --surface-sunk:#202020; --surface-raised:#252525;
-  --border:#2e2e2e; --border-strong:#3a3a3a;
-  --ink:#e8e6e3; --ink-strong:#f0ede8; --ink-muted:#8a8a8a; --ink-faint:#5a5a5a;
-  --accent:#c9a36a; --accent-dim:#8a744f; --accent-wash:rgba(201,163,106,0.08);
+  --ground:#f2ecdf; --surface-sunk:#ece4d2; --surface-raised:#faf6ec;
+  --border:#ddd2bc; --border-strong:#c9bda1;
+  --ink:#26221d; --ink-strong:#14110e; --ink-muted:#5b5343; --ink-faint:#83765b;
+  --accent:#96702f; --accent-dim:#b08d4f; --accent-wash:rgba(150,112,47,0.08);
   --font:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
   --r:4px; --reader-w:min(760px, 58vw); --move-fast:150ms ease;
 }
@@ -21,87 +21,95 @@ h1,h2,h3{color:var(--ink-strong); font-weight:600; line-height:1.3;}
 .kicker{font-size:11px; letter-spacing:.14em; text-transform:uppercase;
   color:var(--ink-muted); font-weight:500;}
 
-/* header */
-#hdr{position:fixed; top:0; left:0; right:0; z-index:40; height:52px;
-  transition:right .3s cubic-bezier(.25,.7,.3,1);
-  display:flex; align-items:center; gap:1.3rem; padding:0 1.4rem;
-  background:linear-gradient(180deg, rgba(26,26,26,.95), rgba(26,26,26,.7), transparent);
-  pointer-events:none;}
+/* header — all navigation lives top right */
+#hdr{position:fixed; top:0; left:0; right:0; z-index:40; height:56px;
+  display:flex; align-items:center; gap:1.1rem; padding:0 1.4rem;
+  background:linear-gradient(180deg, rgba(242,236,223,.96), rgba(242,236,223,.75), transparent);
+  pointer-events:none; transition:right .3s cubic-bezier(.25,.7,.3,1);}
+body.reader-open #hdr{right:var(--reader-w);}
 #hdr>*{pointer-events:auto;}
 #hdr .t{font-size:15px; font-weight:600; color:var(--ink-strong);}
 #hdr .sub{font-size:11.5px; color:var(--ink-muted);}
 #hdr .spacer{flex:1;}
 #count{font-size:12px; color:var(--ink-faint); white-space:nowrap;}
-.hbtn{background:rgba(37,37,37,.9); border:1px solid var(--border-strong); color:var(--ink-muted);
-  font-family:var(--font); font-size:12px; padding:5px 13px; border-radius:var(--r); cursor:pointer;
-  transition:all var(--move-fast);}
+.hbtn{background:rgba(250,246,236,.92); border:1px solid var(--border-strong); color:var(--ink-muted);
+  font-family:var(--font); font-size:12.5px; padding:6px 13px; border-radius:var(--r); cursor:pointer;
+  transition:all var(--move-fast); white-space:nowrap;}
 .hbtn:hover{color:var(--ink); border-color:var(--ink-muted);}
+.hbtn:disabled{opacity:.35; cursor:default;}
 #nudge{border-color:var(--accent-dim); color:var(--accent);}
 #nudge:hover{background:var(--accent-wash);}
+#navcluster{display:flex; align-items:center; gap:5px; background:none; border:none; padding:0;}
+#navcluster .hbtn{background:rgba(250,246,236,.92); border:1px solid var(--border-strong); color:var(--ink-muted);
+  font-size:15px; width:30px; height:30px; padding:0; display:flex; align-items:center; justify-content:center;}
+#navcluster.idle #navPrev, #navcluster.idle #navNext{display:none;}
+#navStep{font-size:13px; color:var(--ink); background:rgba(250,246,236,.92); border:1px solid var(--border-strong);
+  border-radius:var(--r); padding:6px 14px; text-align:center; cursor:default; white-space:nowrap;
+  transition:all var(--move-fast);}
+#navcluster.idle #navStep{cursor:pointer;}
+#navcluster.idle #navStep:hover{border-color:var(--ink-muted); color:var(--ink-strong);}
+#navStep .tot{color:var(--ink-faint);}
 
-body.reader-open #hdr{right:var(--reader-w);}
-
-/* viewport & world */
+/* viewport & sky */
 #vp{position:fixed; inset:0; cursor:grab; touch-action:none;
-  background:radial-gradient(ellipse at 50% 40%, #171a21 0%, #12141a 55%, #0d0f13 100%);}
+  background:radial-gradient(ellipse at 50% 40%, #f6f1e4 0%, #f2ecdf 55%, #e9e0cb 100%);}
 #vp.dragging{cursor:grabbing;}
 #vp.dragging, #vp.dragging *{user-select:none;}
-#world{position:absolute; top:0; left:0; width:4400px; height:2760px;
+#world{position:absolute; top:0; left:0; width:2750px; height:1750px;
   transform-origin:0 0; will-change:transform;}
 #world::before{content:''; position:absolute; inset:0; pointer-events:none;
-  background-image:radial-gradient(circle, rgba(232,230,227,.32) 1.2px, transparent 1.2px),
-                   radial-gradient(circle, rgba(232,230,227,.16) 1px, transparent 1px),
-                   radial-gradient(circle, rgba(125,147,171,.2) 1.5px, transparent 1.5px);
-  background-size:420px 420px, 130px 130px, 640px 640px;
-  background-position:0 0, 60px 90px, 200px 300px; opacity:.7;}
+  background-image:radial-gradient(circle, rgba(110,95,65,.14) 1.2px, transparent 1.2px),
+                   radial-gradient(circle, rgba(110,95,65,.08) 1px, transparent 1px);
+  background-size:380px 380px, 150px 150px;
+  background-position:0 0, 70px 100px; opacity:.8;}
 
-/* territories */
+/* constellation names */
 .tlab{position:absolute; pointer-events:auto; cursor:pointer; user-select:none; text-align:center;}
 .tlab .big{font-size:40px; font-weight:500; letter-spacing:.5em; line-height:1.3;
   text-transform:uppercase; white-space:nowrap;}
-.tlab .sum{font-size:19px; color:#585550; margin-top:.5em; letter-spacing:.18em; text-transform:uppercase;}
+.tlab .sum{text-shadow:0 0 5px #f2ecdf,0 0 5px #f2ecdf,0 0 3px #f2ecdf;
+  font-size:19px; color:#665c44; margin-top:.5em; letter-spacing:.18em; text-transform:uppercase;}
 .tlab:hover .big{filter:brightness(1.35);}
 
-/* markers — stars with names, like a star chart */
+/* stars */
 .mk{position:absolute; cursor:pointer; user-select:none;
   display:flex; gap:14px; width:330px; align-items:flex-start;}
-@keyframes twinkle{0%,100%{filter:brightness(1);} 50%{filter:brightness(.82);}}
-.mk .dot{border-radius:50%; flex-shrink:0; border:none;
-  animation:twinkle 4.5s ease-in-out infinite;
-  transition:transform .2s ease, box-shadow .4s ease, opacity .4s ease;}
+.mk .dot{border-radius:50%; flex-shrink:0;
+  transition:transform .2s ease, box-shadow .4s ease, opacity .4s ease, background .4s ease;}
 .mk:hover .dot{transform:scale(1.3);}
 .mk .dtext{min-width:0; padding-top:1px;}
-.mk .lbl{font-size:19px; color:#b5b2ad; font-weight:500; line-height:1.3;}
-.mk .lbl .seq{font-size:12px; color:#565350; font-weight:400; margin-right:.5em;}
-.mk .ess{font-size:14px; color:#6e6b66; line-height:1.45; margin-top:4px; max-width:290px;
+.mk .lbl{text-shadow:0 0 5px #f2ecdf,0 0 5px #f2ecdf,0 0 3px #f2ecdf,0 0 3px #f2ecdf;
+  font-size:19px; color:#26221d; font-weight:500; line-height:1.3;}
+.mk .lbl .seq{font-size:12px; color:#83765b; font-weight:400; margin-right:.5em;}
+.mk .ess{text-shadow:0 0 5px #f2ecdf,0 0 5px #f2ecdf,0 0 3px #f2ecdf,0 0 3px #f2ecdf;
+  font-size:14px; color:#584f3e; line-height:1.45; margin-top:4px; max-width:290px;
   opacity:0; transition:opacity .3s ease;}
 .mk.showess .ess{opacity:1;}
 .mk .sims-badge{font-size:12px; color:var(--accent-dim); margin-top:3px; display:none;}
 .mk.hasim .sims-badge{display:block;}
-.mk.fading .dot{opacity:.35;}
-.mk.fading .lbl{color:#6e6b66;}
-#flowsvg, #astsvg{position:absolute; top:0; left:0; pointer-events:none; overflow:visible;}
+.mk.fading .dot{opacity:.55;}
+.mk.fading .lbl{color:#75684f;}
 .mk.focused .dot{transform:scale(1.35);}
 .mk.focused .lbl{color:var(--ink-strong);}
-.mk.neighbor .lbl{color:#d5d2cd;}
-.mk.dimmed{opacity:.28;}
+.mk.neighbor .lbl{color:#14110e;}
+.mk.dimmed{opacity:.35;}
 
-/* threads overlay */
-#tsvg{position:absolute; top:0; left:0; pointer-events:none; overflow:visible;}
+/* connection overlay — few, directional, labeled plainly */
+#tsvg, #astsvg, #flowsvg{position:absolute; top:0; left:0; pointer-events:none; overflow:visible;}
 @keyframes dashdrift{to{stroke-dashoffset:-64;}}
-.tline{animation:dashdrift 5.5s linear infinite;}
+.tline{animation:dashdrift 6s linear infinite;}
 .tlabel{position:absolute; transform:translate(-50%,-50%); background:var(--ground);
   border:1px solid var(--accent-dim); color:var(--accent); border-radius:12px;
-  font-size:13px; padding:2px 12px; white-space:nowrap; cursor:pointer; pointer-events:auto;
-  transition:background var(--move-fast);}
+  font-size:12px; letter-spacing:.06em; padding:2px 11px; white-space:nowrap; cursor:pointer;
+  pointer-events:auto; transition:background var(--move-fast); text-transform:uppercase;}
 .tlabel:hover{background:var(--accent-wash);}
 
-/* ---------- READER: fixed home for reading (C) ---------- */
+/* ---------- READER ---------- */
 #reader{position:fixed; top:0; right:calc(-1 * var(--reader-w) - 20px); width:var(--reader-w);
   height:100%; z-index:45; background:var(--surface-raised);
   border-left:1px solid var(--border); display:flex; flex-direction:column;
   transition:right .3s cubic-bezier(.25,.7,.3,1);
-  box-shadow:-24px 0 70px rgba(0,0,0,.35);}
+  box-shadow:-24px 0 70px rgba(90,75,50,.18);}
 #reader.open{right:0;}
 #reader .top{padding:1.5em 2.2em 1em; border-bottom:1px solid var(--border); position:relative;}
 #reader .close{position:absolute; top:14px; right:16px; background:none; border:none;
@@ -109,36 +117,55 @@ body.reader-open #hdr{right:var(--reader-w);}
 #reader .close:hover{color:var(--ink);}
 #reader h2{font-size:24px; margin:.45em 0 .3em;}
 #reader .terrline{font-size:11.5px; color:var(--ink-faint); margin-top:2px;}
-#rbody{flex:1; overflow-y:auto; padding:1.5em 2.2em 2.5em;}
-#rbody>.l0, #rbody>.l1{max-width:64ch;}
+#rbody{flex:1; overflow-y:auto; padding:1.6em 2.2em 2.5em;}
 #rbody::-webkit-scrollbar{width:6px;}
 #rbody::-webkit-scrollbar-thumb{background:var(--border-strong); border-radius:3px;}
-#rbody .l0{font-size:18px; color:var(--ink-strong); line-height:1.6; margin-bottom:.7em;}
-#rbody .l1{font-size:15.5px; color:#d0cec9;}
-#rbody .seen{font-size:11.5px; color:var(--ink-faint); margin-top:1.1em;}
-#rbody .seen b{color:var(--accent-dim); font-weight:500;}
+#rbody>*{max-width:66ch;}
+.hook{font-size:18.5px; color:var(--ink-strong); line-height:1.65;
+  padding-left:1em; border-left:2px solid var(--accent-dim); margin-bottom:1.1em;}
+.story{font-size:15.5px; color:#2b2620;}
 .typechip{display:inline-block; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase;
   color:var(--ink-muted); border:1px solid var(--border-strong); border-radius:3px; padding:1px 8px;}
-details.fold{margin:1.1em 0 0; border:1px solid var(--border); border-radius:var(--r); background:var(--surface-sunk);}
+details.fold{margin:1.2em 0 0; border:1px solid var(--border); border-radius:var(--r); background:var(--surface-sunk);}
 details.fold summary{cursor:pointer; padding:.6em 1.05em; color:var(--ink-muted);
   font-size:13px; list-style:none; user-select:none;}
 details.fold summary::-webkit-details-marker{display:none;}
 details.fold summary::before{content:'+  '; color:var(--accent); font-weight:500;}
 details.fold[open] summary::before{content:'−  ';}
 details.fold summary:hover{color:var(--ink);}
-details.fold .inner{padding:0 1.05em .9em; font-size:14px; color:#cfcdc8;}
-.thread{border-top:1px solid var(--border); padding-top:.75em; margin-top:1.3em;}
-.thread .kicker{display:block; margin-bottom:.25em;}
-.thread a{display:block; font-size:14px; padding:.24em 0; color:#d0cec9; cursor:pointer; text-decoration:none;}
-.thread a .t{border-bottom:1px dotted transparent; transition:border-color var(--move-fast);}
-.thread a:hover .t{border-bottom-color:var(--accent);}
-.thread .rel{color:var(--ink-faint); font-size:10.5px; text-transform:uppercase;
-  letter-spacing:.1em; margin-right:.55em;}
-.thread.back a, .thread.back .rel{color:#a5a29d;}
-.threadrow{display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:0 2.5em;}
+details.fold .inner{padding:0 1.05em .9em; font-size:14.5px; color:#332e25;}
+.named{margin-top:1.5em; background:var(--surface-sunk); border:1px solid var(--border);
+  border-radius:8px; padding:1em 1.3em;}
+.named .kicker{display:block; margin-bottom:.35em;}
+.named b{color:var(--ink-strong); font-weight:600; font-size:16px;}
+.named .def{font-size:14.5px; color:#332e25; margin-top:.2em;}
+.sowhat{margin-top:1.4em; font-size:15px; color:#2b2620;}
+.sowhat .kicker{display:block; margin-bottom:.3em;}
+.closure{margin-top:1.5em; border:1px solid var(--accent-dim); border-radius:8px;
+  background:var(--accent-wash); padding:1em 1.3em;}
+.closure .kicker{color:var(--accent); display:block; margin-bottom:.3em;}
+.closure .txt{font-size:14.5px; color:#4a443c; line-height:1.65;}
+.linkrow{margin-top:1.6em; border-top:1px solid var(--border); padding-top:1em;
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:.6em 2em;}
+.lgroup .kicker{display:block; margin-bottom:.25em;}
+.lgroup a{display:block; font-size:14px; padding:.2em 0 .45em; color:#332e25; cursor:pointer; text-decoration:none;}
+.lgroup a .t{border-bottom:1px dotted transparent; transition:border-color var(--move-fast); color:var(--ink);}
+.lgroup a:hover .t{border-bottom-color:var(--accent);}
+.lgroup a .why{display:block; font-size:12px; color:var(--ink-faint); line-height:1.5;}
+.nextbtn{margin-top:1.8em; width:100%; max-width:66ch; text-align:left;
+  background:var(--surface-sunk); border:1px solid var(--border-strong); border-radius:8px;
+  color:var(--ink); font-family:var(--font); font-size:14.5px; padding:.9em 1.3em; cursor:pointer;
+  transition:all var(--move-fast);}
+.nextbtn:hover{border-color:var(--accent-dim); background:var(--accent-wash);}
+.nextbtn .k{color:var(--ink-faint); font-size:11px; letter-spacing:.12em; text-transform:uppercase;
+  display:block; margin-bottom:.15em;}
+.nextbtn .arr{color:var(--accent); float:right;}
+.seen{font-size:11.5px; color:var(--ink-faint); margin-top:1.2em;}
+.seen b{color:var(--accent-dim); font-weight:500;}
 
+/* sim figure */
 figure.frame{background:var(--surface-sunk); border:1px solid var(--border); border-radius:var(--r);
-  margin:1.2em 0 0; overflow:hidden;}
+  margin:1.3em 0 0; overflow:hidden;}
 figure.frame canvas{width:100%; display:block;}
 figure.frame .controls{display:flex; gap:8px; padding:8px 12px; border-top:1px solid var(--border);
   align-items:center; flex-wrap:wrap;}
@@ -151,23 +178,6 @@ figure.frame figcaption{padding:7px 13px 10px; font-size:12.5px; color:var(--ink
 .ghost.active{color:var(--accent); border-color:var(--accent-dim); background:var(--accent-wash);}
 figure.frame input[type=range]{flex:1; min-width:100px; accent-color:var(--accent);}
 
-/* flow bar */
-#flowbar{position:fixed; left:1.2rem; bottom:1.2rem; z-index:35;
-  background:rgba(37,37,37,.96); border:1px solid var(--border-strong); border-radius:10px;
-  padding:9px 13px; display:none; align-items:center; gap:11px; max-width:min(560px, 60vw);}
-#flowbar.on{display:flex;}
-#flowbar .step{font-size:11px; color:var(--ink-faint); white-space:nowrap;}
-#flowbar .cap{font-size:12.5px; color:var(--ink); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
-
-/* welcome */
-#welcome{position:fixed; inset:0; z-index:50; background:rgba(26,26,26,.82);
-  display:flex; align-items:center; justify-content:center; backdrop-filter:blur(3px);}
-#welcome .box{max-width:470px; padding:2.1em 2.4em; background:var(--surface-raised);
-  border:1px solid var(--border-strong); border-radius:10px;}
-#welcome h1{font-size:21px; margin-bottom:.5em;}
-#welcome p{font-size:14.5px; color:#cfcdc8; margin:.5em 0;}
-#welcome .k{color:var(--accent);}
-#welcome .go{margin-top:1.2em; text-align:center;}
 @media(max-width:760px){ :root{--reader-w:100vw;} }
 </style>
 </head>
@@ -176,23 +186,20 @@ figure.frame input[type=range]{flex:1; min-width:100px; accent-color:var(--accen
 <div id="hdr">
   <div>
     <div class="t">Chaos, Luck &amp; Ergodicity</div>
-    <div class="sub"><a href="/orrery" style="color:#8a8a8a; text-decoration:none; border-bottom:1px dotted #3a3a3a;">Orrery</a> · a night sky of ideas — stars brighten as you reinforce them, dim as you forget</div>
+    <div class="sub">a celestial chart on paper · ideas ink themselves in as you revisit</div>
   </div>
   <div class="spacer"></div>
   <span id="count"></span>
-  <button class="hbtn" id="flowBtn">▶ Flow</button>
   <button class="hbtn" id="nudge" style="display:none"></button>
+  <div id="navcluster">
+    <button class="hbtn" id="navPrev" title="previous idea">‹</button>
+    <span id="navStep">▶ Begin the tour</span>
+    <button class="hbtn" id="navNext" title="next idea">›</button>
+  </div>
   <button class="hbtn" id="overviewBtn">Overview&nbsp;·&nbsp;Esc</button>
 </div>
 
 <div id="vp"><div id="world"></div></div>
-
-<div id="flowbar">
-  <button class="hbtn" id="fPrev">‹</button>
-  <div><div class="step" id="fStep"></div><div class="cap" id="fCap"></div></div>
-  <button class="hbtn" id="fNext">›</button>
-  <button class="hbtn" id="fExit">✕</button>
-</div>
 
 <div id="reader">
   <div class="top">
@@ -204,191 +211,329 @@ figure.frame input[type=range]{flex:1; min-width:100px; accent-color:var(--accen
   <div id="rbody"></div>
 </div>
 
-<div id="welcome">
-  <div class="box">
-    <span class="kicker">a first-principles atlas</span>
-    <h1>A sky you return to</h1>
-    <p>Five constellations: four figures of ideas around a pole-star diamond of axioms. <span class="k">Stars brighten</span> each time you reinforce them and <span class="k">dim when neglected</span> — your understanding, drawn as a night sky. Click a star to read it; its connections glow.</p>
-    <p>A faint line threads the board — the <span class="k">default flow</span>. Press ▶ and it walks you dot to dot in order; wander off it anytime, it will wait. Ideas you visit are remembered; ideas you neglect fade.</p>
-    <p class="go"><button class="hbtn" style="font-size:13px; padding:8px 22px; margin-right:8px;" id="enterFlowBtn">▶ Begin the flow</button><button class="hbtn" style="font-size:13px; padding:8px 22px;" id="enterBtn">Just wander</button></p>
-  </div>
-</div>
-
 <script>
 'use strict';
 /* ============================================================
-   CONTENT — same 30 ideas; map = dots, reading = reader
+   CONTENT v2 — every idea: hook → story → (sim) → mechanism
+   fold → the idea named → where it bites → you can now explain.
+   Connections: ≤4 per idea, in three plain buckets.
    ============================================================ */
 const N = {
-a1:{type:"axiom", title:"Rules govern change", x:2000, y:700,
-  l0:"Same setup, run again, unfolds the same way. The world keeps its word.",
-  l1:"Rack the balls and break, atom for atom, and the wildest scatter repeats exactly. The chaos we're chasing needs no dice — the rules alone will hide the future.",
-  l2:"Determinism: the present plus the rules fixes the next instant, with nothing left over for chance. Hold onto this — everything unpredictable ahead grows out of rules this rigid.",
-  threads:[["what it invites","b1-laplace"],["the shape it carves","b2-attractors"]]},
-a2:{type:"axiom", title:"Measurement is imperfect", x:1650, y:950,
-  l0:"You can never know the present exactly — only to a few decimal places.",
-  l1:"Is the angle 30°? 30.1°? 30.1002°? Every instrument stops somewhere, and below that line the world keeps a secret. Better tools move the line; they never erase it.",
-  l2:"Your picture of 'now' always differs from the real now by some sliver. The entire drama of chaos is what the world does to that sliver over time.",
-  threads:[["the flaw it guarantees","b1-sensitive"]]},
-a3:{type:"axiom", title:"Everything touches everything", x:2350, y:950,
-  l0:"Nothing evolves alone. Every part of the world is wired to the rest.",
-  l1:"A cloud over one Japanese city in 1945 was 'just weather' — and also the switch that chose which city a bomb erased. The world ignores our tidy category walls.",
-  l2:"Coupling is the wire along which a small cause travels far: a nudge here becomes an input everywhere downstream. It's how the microscopic reaches the historic.",
-  threads:[["witnessed in","b3-kokura"],["what follows","b3-principle"]]},
-a4:{type:"axiom", title:"You live one path, once", x:2000, y:1200,
-  l0:"You are not a crowd averaging out. You are one person, one path, walked once.",
-  l1:"A hundred strangers each take one gamble and their luck cancels out. You take a hundred gambles in a row and each loss rides into the next. Same odds — different universe.",
-  l2:"This is the hinge of the whole sky. Contingency (history runs once) and ergodicity (your lived average isn't the crowd's) are one fact seen from physics and from your own life.",
-  threads:[["rhymes with","b3-contingency"],["what it changes","b4-ergodicity"]]},
 
-"b1-laplace":{type:"story · phenomenon", title:"Laplace's Demon", x:300, y:320,
-  l0:"The old dream: know everything now, predict everything forever.",
-  l1:"In 1814 Laplace imagined a mind that knew every particle's place and speed — to it 'the future, like the past, would be present before its eyes.' Perfect rules seemed to promise perfect foresight.",
-  l2:"The demon needs two things: the rules, and the exact present. The second is fatal — 'exact' means infinite decimals, and no measurement ever delivers them. The dream dies on that one word.",
-  threads:[["rests on","a1"],["breaks against","b1-sensitive"],["see the break live","b1-pendulum"]]},
-"b1-pendulum":{type:"simulation", title:"The double pendulum", sim:"pendulum", x:900, y:250,
-  l0:"Two identical pendulums, a hair apart at the start. Watch them divorce.",
-  l1:"For a few seconds they swing as one. Then they drift, disagree, and end up in different worlds — with nothing random anywhere. Replay it and the exact same betrayal happens again.",
-  l2:"Hang one pendulum off another and each arm feeds the other's motion back on itself. That feedback is the engine that lets a hair's-width gap grow instead of fading.",
-  threads:[["the mechanism behind it","b1-sensitive"],["the dream it breaks","b1-laplace"]]},
-"b1-lorenz-story":{type:"story", title:"Lorenz's rounding error", x:260, y:780,
-  l0:"1961: a shortcut of 0.000127 rewrote the weather.",
-  l1:"Lorenz restarted a weather run from a midpoint, typing 0.506 for the stored 0.506127. He came back to a completely different forecast. The butterfly effect was born as a typo.",
-  l2:"The machine was deterministic — same numbers in, same out — so the split proved the model itself was amplifying a difference too small to measure. Weather isn't hard to forecast; it's built to resist it.",
-  threads:[["the mechanism","b1-sensitive"],["what follows","b1-principle"]]},
-"b1-sensitive":{type:"mechanism", title:"Sensitive dependence", x:720, y:570,
-  l0:"Small errors don't add up. They multiply.",
-  l1:"Photocopy a photocopy a hundred times and the page dissolves into noise — each copy's flaw feeds the next. A chaotic system photocopies its own state every instant.",
-  l2:"Each step stretches the gap between what you measured and what's real, so error compounds like interest. Measure a thousand times better and you buy only a few more days of forecast. Precision is a losing race.",
-  threads:[["rests on","a2"],["seen live in","b1-pendulum"],["witnessed in","b1-lorenz-story"],["what follows","b1-principle"],["a far echo","b4-danger"]]},
-"b1-principle":{type:"principle", title:"Determinism ≠ predictability", x:1060, y:840,
-  l0:"The rules can be perfect and the future still unknowable.",
-  l1:"We used to think unpredictability meant hidden randomness or missing facts — learn more, forecast better. Chaos broke that: a fully known, fully determined system can still wall its own future off from any finite mind.",
-  l2:"Fixed rules, a starting picture off by a sliver, a system that multiplies the sliver — past some horizon, model and world part ways. Every link is boring; together they bury the demon.",
-  threads:[["rests on","b1-sensitive"],["and yet — chaos has shape","b2-attractors"],["rhymes with","b3-contingency"]]},
+a1:{type:"axiom", title:"Rules govern change", x:1259, y:512,
+  ess:"Same setup, same unfolding — the universe doesn't roll dice.",
+  hook:"Flip a coin. Feels random? Now imagine placing every atom of coin, thumb, and air exactly where it was, and flipping again. Would it land differently?",
+  story:"It wouldn't. A billiard break looks wild, but rerun it with every atom in an identical place and every collision repeats exactly. What we call 'random' in daily life is almost always rule-bound motion we can't track — loaded with physics all the way down.",
+  mech:"Determinism means: the state of things now, plus the laws of motion, fully fixes what happens next. Nothing extra is needed — no dice anywhere in the chain. The astonishing part, coming up, is that chaos emerges anyway.",
+  term:"Determinism", def:"what things are like now, plus the rules, fully fixes what happens next.",
+  sowhat:"Traffic, markets, moods — most 'randomness' in your life is hidden clockwork. The surprise you feel is real, but it comes from somewhere else entirely (the next axiom).",
+  explain:"why a coin flip is physics rather than magic — and why 'random' usually means 'rules we can't track', not 'no rules'.",
+  builds:[], leads:[["b1-laplace","if the rules are perfect, prediction should be too… right?"]], live:[]},
 
-"b2-logistic":{type:"simulation", title:"The logistic map", sim:"logistic", x:3000, y:270,
-  l0:"One line of math. Turn one dial and watch order shatter — then re-form.",
-  l1:"A toy population under pressure. At 2.8 it settles; at 3.2 it flickers between two values; past 3.57 it's chaos — and then at 3.83, out of the storm, an island of perfect order.",
-  l2:"Push growth up and the system splits: one value, then two, then four, doubling faster and faster until order runs out. Dripping taps, firing neurons and lasers all climb the same staircase into chaos.",
-  threads:[["the idea it shows","b2-attractors"],["in tension with","b2-tension-random"]]},
-"b2-lorenz-attractor":{type:"simulation", title:"The Lorenz butterfly", sim:"lorenz", x:3660, y:230,
-  l0:"Never repeats. Never leaves.",
-  l1:"Two near-identical weather-worlds split apart within seconds, yet both trace the same two-winged shape forever. The path is unpredictable; the shape is inevitable.",
-  l2:"The motion is pulled onto an attractor — the set of states the system keeps returning to. On it, neighbours still fly apart (the chaos) but nothing ever escapes (the structure). Chaos on a leash.",
-  threads:[["the idea it shows","b2-attractors"]]},
-"b2-attractors":{type:"mechanism", title:"Attractors", x:3400, y:530,
-  l0:"Chaos has a home address. You just can't predict which room.",
-  l1:"No one can forecast a single leaf's path into a whirlpool — yet every leaf ends up circling the same funnel. The funnel is knowable even when the routes are not.",
-  l2:"Left to run, a system settles into a repertoire of states it visits and revisits without ever exactly repeating. The repertoire is fixed and knowable; the step-by-step path through it isn't. That gap is the whole trick.",
-  threads:[["rests on","a1"],["seen live in","b2-logistic"],["also live in","b2-lorenz-attractor"],["settles","b2-tension-random"],["what follows","b2-principle"]]},
-"b2-tension-random":{type:"tension", title:"Is chaos just randomness?", x:3960, y:650,
-  l0:"It looks like noise. It isn't — and the difference is everything.",
-  l1:"A die has no memory and no shape; averages are all you can ever say. Chaos is the opposite — total memory, rigid structure, and if you replayed it exactly it would do the exact same thing.",
-  l2:"Chaos can be replayed, stays inside its shape, is briefly predictable, and reaches chaos by orderly steps. Randomness has none of these. Blur the two and you're either fatalist about structure or overconfident about detail.",
-  threads:[["settled by","b2-attractors"],["what follows","b2-principle"]]},
-"b2-principle":{type:"principle", title:"Unpredictable in detail, patterned in shape", x:3100, y:850,
-  l0:"You can't forecast the path. You can often trust the shape.",
-  l1:"No one can tell you if it rains a year from Tuesday — a path question. Everyone knows July in Delhi beats January — a shape question. Weather is the chaos; climate is its attractor.",
-  l2:"This is the licence the rest of the sky runs on: even where forecasting fails, domains hold a stable shape you can read and act on. Without that shape, 'reading the domain' would just be astrology.",
-  threads:[["rests on","b2-attractors"],["why we still plan","b3-plan"],["what a reading reads","b4-principle"]]},
+a2:{type:"axiom", title:"Measurement is imperfect", x:1057, y:627,
+  ess:"You only ever know the present to a few decimal places.",
+  hook:"What's the temperature right now? 24°? 24.3°? 24.3172…°? At some digit you have to shrug. That shrug, it turns out, runs the world.",
+  story:"Measure a pendulum's angle: 30°? 30.1°? 30.1002°? Every instrument ever built stops at some decimal place, and below that line the world keeps its secrets. Better instruments push the line down; nothing removes it.",
+  mech:"However carefully you look, your picture of 'now' differs from the real 'now' by some sliver. It seems harmless — surely the fifth decimal can't matter? The entire story of chaos is what the world does to that assumption.",
+  term:"The sliver", def:"the gap between the world as it is and the world as you measured it. Never zero.",
+  sowhat:"Every plan you make rests on measured guesses — your calendar, your budget, your read on other people. All of them carry the sliver.",
+  explain:"why 'just measure better' can never fully work, no matter how good the technology gets.",
+  builds:[], leads:[["b1-sensitive","what the world does to that sliver"]], live:[]},
 
-"b3-kokura":{type:"story", title:"The cloud over Kokura", x:290, y:1530,
-  l0:"A cloud spared one city and doomed another. No one chose.",
-  l1:"9 August 1945: the bomber circles Kokura three times, too much cloud to aim, and diverts to its backup — Nagasaki. Years earlier Kyoto was struck off the list because a US official had honeymooned there. Weather-scale noise, history-scale stakes.",
-  l2:"An unmeasurable wisp of cloud, wired through a targeting rule to the fate of hundreds of thousands. The jump from 'small' to 'vast' needed no special amplifier — just the world's ordinary connectedness.",
-  threads:[["rests on","a3"],["the debate it opens","b3-contingency"]]},
-"b3-contingency":{type:"tension", title:"Contingency vs convergence", x:860, y:1610,
-  l0:"Do small changes wash out — or write history?",
-  l1:"Rewind life's tape and replay it, said Gould: do you get humans again (convergence — the attractor wins) or something unrecognisable (contingency — the nudge wins)? The honest answer is both, and wisdom is knowing which one you're standing in.",
-  l2:"Convergent systems have restoring forces that shrink a deviation; contingent ones have amplifying forces that grow it. Same world, two regimes — and most things are a mix that switches between them.",
-  threads:[["witnessed in","b3-kokura"],["try it yourself","b3-timeline"],["rhymes with","a4"],["what follows","b3-principle"]]},
-"b3-timeline":{type:"simulation", title:"Branching timelines", sim:"timeline", x:360, y:1960,
-  l0:"Change one small thing. Replay 120 histories. Did it matter?",
-  l1:"Slide toward 'converging' and the nudged timelines snap back to the baseline — it didn't matter. Slide toward 'compounding' and the same nudge fans out into permanently different worlds.",
-  l2:"One dial — do deviations shrink or feed themselves? — flips the answer to 'did that little thing matter?'. Gould's replay-the-tape debate, turned from an argument into a slider.",
-  threads:[["the debate it settles","b3-contingency"]]},
-"b3-principle":{type:"principle", title:"Control nothing, influence everything", x:1160, y:1860,
-  l0:"You steer no outcomes. Yet nothing you do is inert.",
-  l1:"Chaos took away the steering wheel — you can't aim your life at a result. But in a wired, amplifying world your smallest acts are inputs to everything downstream. A single hit of the snooze button has, now and then, rerouted a life.",
-  l2:"Coupling plus compounding means influence always propagates but its endpoint stays uncomputable. The posture that follows: humble about outcomes, serious about inputs. What you lose over results you regain as weight on actions.",
-  threads:[["rests on","a3"],["and yet we plan","b3-plan"]]},
-"b3-plan":{type:"tension", title:"Why we still plan", x:760, y:2160,
-  l0:"If prediction fails, why isn't planning pointless?",
-  l1:"Because chaos caps the horizon; it doesn't erase the shape. You can't plan the path, but you can position inside the shape — pack for the climate, not next Tuesday's weather.",
-  l2:"Stable shapes turn planning from 'predict then commit' into 'position, hedge, re-read'. Take that seriously and it becomes a discipline: read the domain before you act in it.",
-  threads:[["rests on","b2-principle"],["becomes the third reading","b4-destination"]]},
+a3:{type:"axiom", title:"Everything touches everything", x:1462, y:627,
+  ess:"No part of the world evolves in isolation.",
+  hook:"Could the weather over one Japanese city in 1945 have changed whether your grandparents ever met?",
+  story:"More plausibly than you'd think. The atmosphere over Japan that August was 'just weather' — and also the deciding variable in which city was bombed, who lived, who fled where, who met whom. Systems don't respect the neat boundaries we draw between them.",
+  mech:"Coupled systems pass disturbances along: a nudge in one place becomes an input everywhere downstream. Connection is the transmission line along which small causes travel far — no amplifier needed beyond the wiring itself.",
+  term:"Coupling", def:"systems feed into each other; nothing evolves alone.",
+  sowhat:"Your smallest actions are inputs to systems you will never see the end of. That's not mysticism — it's plumbing.",
+  explain:"how 'small' causes reach 'vast' effects with no amplifier beyond ordinary connection.",
+  builds:[], leads:[], live:[["b3-kokura","the day this decided two cities' fates"]]},
 
-"b4-coinflip":{type:"simulation", title:"The coin-flip split", sim:"coinflip", x:2560, y:1560,
-  l0:"Same coin, same odds. The crowd is fine. You are ruined.",
-  l1:"Left: 100 people each stake it all on one flip — half double, half bust, the average untouched. Right: one person takes that bet again and again — one tails ends the game for good. The maths never changed. The situation did.",
-  l2:"The crowd averages across people; you average across time. Ruin splits those forever — a busted player never rejoins, so losses stop cancelling. Then try the gentle version: no flip is fatal, and almost everyone still sinks.",
-  threads:[["the idea it shows","b4-ergodicity"]]},
-"b4-ergodicity":{type:"mechanism", title:"Ergodicity", x:3110, y:1500,
-  l0:"Does the crowd's average equal your life over time? Usually not.",
-  l1:"'This surgery works 95% of the time' is a crowd number. Your question is a time question: what happens on the one path that is me? When ruin is on the table, those two answers come apart.",
-  l2:"If nothing can knock you out, your long-run experience matches the crowd average and statistics tell your fate. But bankruptcy, death, a burned name end paths early, so their losses never cancel. Most advice quietly assumes they can't happen.",
-  threads:[["rests on","a4"],["seen live in","b4-coinflip"],["what follows","b4-domains"]]},
-"b4-domains":{type:"mechanism", title:"Resetting vs compounding domains", x:3660, y:1560,
-  l0:"Does failure here reset the game — or foreclose the next one?",
-  l1:"A bad brew, a bad draft, a fluffed chord: tomorrow starts clean. A wrecked credit score, a blown reputation, a serious diagnosis: tomorrow starts smaller. One kind of world forgives; the other remembers.",
-  l2:"It comes down to how errors travel. In resetting domains they die with the attempt; in compounding ones they carry forward and shrink your options. Same effort, different physics — and 'fail fast' is a resetting-domain tool.",
-  threads:[["rests on","b4-ergodicity"],["what follows","b4-survive"],["turns dangerous when","b4-danger"]]},
-"b4-survive":{type:"principle", title:"Survive first, optimize second", x:4040, y:1760,
-  l0:"Where failure compounds, staying in the game beats winning it.",
-  l1:"Not timidity — arithmetic. The best strategy you'll ever find is worthless on a path that already hit zero. You can't run the next experiment if the last one took you out.",
-  l2:"On one path where ruin exists, maximising the average outcome is the wrong target — you protect the right to keep playing, then optimise inside that. In resetting domains the constraint is free, so there you go bold.",
-  threads:[["rests on","b4-domains"],["sets the budget for","b4-explore"],["part of","b4-principle"]]},
-"b4-signal":{type:"mechanism", title:"Signal: speed and clarity", x:2610, y:1910,
-  l0:"How fast does this game tell you you're wrong — and how clearly?",
-  l1:"A stove burn: instant and obvious. A chess blunder: instant but murky — which move? Marathon training: clear, but months too late. Bad coffee: instant, yet four suspects. Two dials, and all four corners exist.",
-  l2:"Speed is the lag between choice and consequence; clarity is how straight the outcome points back at its cause. They fail separately: slow signal needs records that outlast memory, murky signal needs changing one thing at a time.",
-  threads:[["what it creates","b4-danger"]]},
-"b4-danger":{type:"mechanism", title:"The danger zone", x:3210, y:1860,
-  l0:"Compounding stakes plus slow, murky signal — where the usual advice fails.",
-  l1:"Careers, marriages, chronic health, trust. By the time the domain admits something's wrong, the error has compounded for years. 'Fail fast, learn from mistakes' assumed failure was cheap and legible — here it's neither.",
-  l2:"This is chaos's home turf: sensitive dependence surfaces consequences far from their cause (slow) and tangled with everything else (murky). Chaos says why these domains exist; ergodicity says why they bite; process is the answer.",
-  threads:[["rests on","b4-domains"],["and on","b4-signal"],["an echo of","b1-sensitive"],["the countermeasure","b4-process"]]},
-"b4-process":{type:"mechanism", title:"Process: log, review, outside eye", x:2810, y:2210,
-  l0:"When the game won't keep score, build the scoreboard yourself.",
-  l1:"A log: the decision as it really was, before memory tidies it. A review: sitting with that record to sort signal from noise. An outside eye: someone with no stake in flattering you.",
-  l2:"Life is lived forwards but understood backwards. These tools manufacture the speed and clarity the domain refuses to give — the specific fix for compounding stakes plus poor signal. Elsewhere they're just overhead; skip them.",
-  threads:[["the zone it answers","b4-danger"],["part of","b4-principle"]]},
-"b4-destination":{type:"mechanism", title:"Defined vs open destination", x:3710, y:2010,
-  l0:"Do you know where you're going — or are you finding out?",
-  l1:"Half-marathon by October: work backward — the finish line writes the plan and names the signals to watch. A new craft: build forward — cheap experiments, letting the destination surface as you learn.",
-  l2:"Working backward turns a wish into a chain of decisions with known logic. Force it onto open work and you optimise hard toward the wrong thing; refuse it on defined work and you drift. Navigation comes last — after stakes and signal.",
-  threads:[["grew out of","b3-plan"],["raises","b4-explore"],["part of","b4-principle"]]},
-"b4-explore":{type:"tension", title:"Explore vs exploit", x:4050, y:2220,
-  l0:"Stick with what works or try something new? Look forward, not back.",
-  l1:"The tempting frame is sunk cost — 'I've put so much into this path.' Wrong direction: spent effort gets no vote. The only question is forward — from here, does the alternative hold more promise?",
-  l2:"Stakes and signal set your exploration budget. Resetting domain, clear signal: a failed try is one cheap data point, so roam. Compounding domain, slow signal: some tries don't stay contained, so the budget is what the domain can absorb — not your curiosity.",
-  threads:[["budget set by","b4-survive"],["needs","b4-fence"]]},
-"b4-fence":{type:"mechanism", title:"Fence the exploration", x:3510, y:2410,
-  l0:"Keep experiments somewhere their failures stay cheap.",
-  l1:"A separate pot for speculative bets. A side project that can't touch the main thing. A rehearsal before the real negotiation. The fence isn't tidiness — it keeps you honest about which errors reset and which compound.",
-  l2:"Blend exploration into your working systems and you lose the plot: you can't tell data from damage. Fence it and you get both at once — bold where the game resets, careful where it doesn't.",
-  threads:[["keeps honest","b4-explore"]]},
-"b4-principle":{type:"principle", title:"Read the domain first", x:3010, y:2560,
-  l0:"Before you pick your tools, read the game: stakes, then signal, then destination.",
-  l1:"'Fail fast, iterate, learn from mistakes' isn't wrong — it's advice for one kind of game: resetting, fast clear feedback, a fixed goal. Bolted onto every game, it quietly breaks in exactly the ones that matter most.",
-  l2:"Order matters. Stakes decide what everything's for; signal only matters relative to stakes; destination is navigation across ground the first two already mapped. Skip a reading and the ones after it can't be done right.",
-  threads:[["reading one","b4-survive"],["reading two","b4-process"],["reading three","b4-destination"],["rhymes with","b2-principle"]]}
+a4:{type:"axiom", title:"You live one path, once", x:1259, y:771,
+  ess:"You are not a crowd averaging out. You are one path.",
+  hook:"A treatment works for 95% of patients, and your doctor smiles at the odds. Why might that number mean almost nothing for you?",
+  story:"Because it describes a crowd, and you are not a crowd. A hundred strangers each take one risk: wins and losses cancel across them. You take a hundred risks in a row: each loss follows you into the next round. Same odds on paper — entirely different universe.",
+  mech:"This is the hinge of the whole sky. History's contingency (the tape runs once) and the economics of ruin (your time-average isn't the crowd's average) are the same fact, seen from physics and from decision-making.",
+  term:"One-path life", def:"your experience over time is not the crowd's average — especially where losses carry forward.",
+  sowhat:"Every statistic you'll ever read — success rates, average returns, divorce rates — describes crowds. Reading them as personal predictions is a category error.",
+  explain:"why 'the odds are good' and 'this is good for me' are two different sentences.",
+  builds:[], leads:[["b4-ergodicity","the idea, in full"]], live:[["b4-coinflip","watch the crowd win while the person loses"]]},
+
+"b1-laplace":{type:"story · phenomenon", title:"Laplace's Demon", x:404, y:355,
+  ess:"The old dream: know everything now, predict everything forever.",
+  hook:"If the universe runs on perfect rules, a big enough computer could print tomorrow's newspaper today. What, exactly, is stopping it?",
+  story:"1814 — Laplace imagines an intellect that knows the position of every particle in the universe. To it, 'the future, like the past, would be present before its eyes.' For two centuries this felt inevitable: perfect rules promise perfect forecasts; we just need better machines.",
+  mech:"The demon needs two ingredients: the rules (granted — axiom one) and the exact present state. The second is the fatal one. 'Exact' means infinitely many decimal places, and no measurement ever delivers them. The demon starves not for compute, but for decimals.",
+  term:"Laplace's Demon", def:"the thought experiment of perfect prediction from perfect knowledge.",
+  sowhat:"Every 'with enough data we'll predict X' pitch — markets, elections, your health — is this demon wearing a startup hoodie. Now you know which ingredient they can't buy.",
+  explain:"what perfect prediction would actually require — and which requirement is impossible in principle, not just in practice.",
+  builds:[["a1","the perfect rules the dream needs"]], leads:[["b1-sensitive","the flaw that kills it"]], live:[["b1-pendulum","watch the dream break in 20 seconds"]]},
+
+"b1-pendulum":{type:"simulation", title:"The double pendulum", sim:"pendulum", x:884, y:309,
+  ess:"Two identical pendulums, a hair apart. Watch them.",
+  hook:"Below are two pendulums released a hair's breadth apart — 0.001° of difference. Before you watch: how long do you think they stay in sync?",
+  story:"A few seconds. They move as one, then drift, disagree, and finally live entirely different lives — and nothing random happened. Replay it and the divergence repeats exactly, beat for beat. Perfect rules, unrepeatable-looking motion.",
+  mech:"Attach one pendulum to another and each arm's motion feeds back into the other's. That feedback loop is the whole trick: it takes a microscopic gap and works on it every instant, instead of letting it fade.",
+  term:"Chaos", def:"perfectly rule-bound motion that separates from any near-copy of itself.",
+  sowhat:"This toy is a life: same person, one tiny difference in one morning, two futures that never re-meet.",
+  explain:"how motion can be 100% determined and still impossible to keep track of.",
+  builds:[["b1-laplace","the dream this kills"]], leads:[["b1-sensitive","why the gap explodes"]], live:[]},
+
+"b1-sensitive":{type:"mechanism", title:"Sensitive dependence", x:520, y:522,
+  ess:"Small errors don't add — they multiply.",
+  hook:"Weather agencies own satellites, supercomputers, and armies of physicists. Why do forecasts still fall apart around day ten?",
+  story:"Photocopy a photocopy a hundred times: each generation's tiny distortion feeds the next, until the page is noise. A chaotic system photocopies its own state every instant — and your measurement error is the smudge on the original.",
+  mech:"Each step stretches the gap between 'what you measured' and 'what is' by some factor, so the gap grows like compound interest. That's why heroic precision buys almost nothing: measure a thousand times better and the forecast extends by only a few days. The horizon is a law, not a budget problem.",
+  term:"Sensitive dependence", def:"small differences don't stay small — the system multiplies them at every step.",
+  sowhat:"It's why tiny habits compound, tiny lies snowball, and 'I'll fix it later' quietly gets expensive.",
+  explain:"why better instruments buy days rather than decades — and why the ten-day wall isn't an engineering failure.",
+  builds:[["a2","the sliver that gets amplified"]], leads:[["b1-principle","the punchline"]], live:[["b1-lorenz-story","the day 0.000127 rewrote the weather"]]},
+
+"b1-lorenz-story":{type:"story", title:"Lorenz's rounding error", x:254, y:656,
+  ess:"1961: a shortcut of 0.000127 rewrote the weather.",
+  hook:"In 1961 a meteorologist went for coffee while his computer re-ran a weather simulation. He came back to a different climate. What had he typed wrong?",
+  story:"Almost nothing. Ed Lorenz restarted the run from midway, typing 0.506 instead of the stored 0.506127 — a difference below anything a weather instrument could even detect. The two forecasts agreed for a while, drifted, then described unrecognizably different weather.",
+  mech:"The computer was perfectly deterministic — same numbers in, same numbers out. So the divergence proved something enormous: the model itself amplifies sub-measurable differences. Weather isn't hard to predict because we're bad at it. It is structurally resistant.",
+  term:"The butterfly effect", def:"Lorenz's discovery that differences too small to measure can rewrite outcomes.",
+  sowhat:"The version of your life where you left the house five minutes later is this exact experiment — running once, with no printout to compare.",
+  explain:"where 'the butterfly effect' actually comes from: a rounding shortcut, not a poem.",
+  builds:[["b1-sensitive","the mechanism caught in the act"]], leads:[["b1-principle","what it proved"]], live:[]},
+
+"b1-principle":{type:"principle", title:"Determinism ≠ predictability", x:716, y:679,
+  ess:"The rules can be perfect and the future still unknowable.",
+  hook:"The rules are perfect, and computers double in power every couple of years. So do we eventually predict everything — or is something deeper in the way?",
+  story:"For centuries the assumption was: unpredictability = ignorance. Learn the rules, sharpen the instruments, and forecasts follow. Chaos broke that equation. A perfectly known, perfectly deterministic system can hide its own future from any finite observer — knowledge was never the bottleneck.",
+  mech:"The chain has three links: the rules are fixed (axiom one); your starting picture is off by a sliver (axiom two); the system multiplies that sliver relentlessly (sensitive dependence). Each link is unremarkable. Together they end the demon — beyond some horizon, model and reality part ways, always.",
+  term:"Determinism ≠ predictability", def:"knowing the rules does not grant knowing the future. The two come apart.",
+  sowhat:"Anyone selling confident long-range predictions about complex systems — pundits, market seers, ten-year roadmaps — is selling the demon. You now know the three links they'd have to break.",
+  explain:"the three-step argument that ends perfect prediction — each step obvious, the conclusion not.",
+  builds:[["b1-sensitive","the engine of the argument"]], leads:[["b2-attractors","and yet — chaos has a shape"]], live:[]},
+
+"b2-logistic":{type:"simulation", title:"The logistic map", sim:"logistic", x:1837, y:233,
+  ess:"One tiny rule. Order shatters into chaos — then reappears.",
+  hook:"Below is one line of arithmetic about next year's population. How does something this small become one of the wildest objects in mathematics?",
+  story:"Drag the pressure dial. At r=2.8 the population settles politely. At 3.2 it flips between two values. Then four, then eight, doubling faster and faster — until past 3.57, chaos. And then at 3.83, out of nowhere: an island of perfect order inside the storm. One knob did all of that.",
+  mech:"The rule says: grow with r, shrink with crowding. The road into chaos is a structured staircase — period 2, 4, 8, 16… piling up to infinity at a precise point. Dripping taps, heart cells, and lasers walk the same staircase. Even the onset of chaos has order in it.",
+  term:"Period-doubling", def:"chaos arrives by a staircase — steady, then 2, 4, 8 values — not by a slide.",
+  sowhat:"Systems around you rarely drift into chaos; they step into it. The flip from one steady state to two is the staircase's first stair — worth noticing when you see it.",
+  explain:"how order shatters on a schedule — and why there's an island of calm at 3.83 that nobody expected.",
+  builds:[["b2-attractors","the shape behind the storm"]], leads:[["b2-tension-random","it looks like noise — is it?"]], live:[]},
+
+"b2-lorenz-attractor":{type:"simulation", title:"The Lorenz butterfly", sim:"lorenz", x:2300, y:282,
+  ess:"Never repeats. Never leaves.",
+  hook:"Two weather-worlds below start a breath apart. They separate fast and never sync again — yet neither ever leaves the same two-winged shape. How can both be true?",
+  story:"Watch: the gray and amber trajectories disagree almost immediately — that's the chaos you already know. But keep watching. Both keep tracing the same butterfly, forever. Detail: unpredictable. Shape: inevitable.",
+  mech:"The trajectory is pulled onto an attractor — the set of states the system keeps returning near. On the attractor, nearby paths still fly apart (chaos), but no path ever exits (structure). Chaos turns out to be confined unpredictability.",
+  term:"Strange attractor", def:"the shape a chaotic system is confined to, even while never repeating itself.",
+  sowhat:"You can't predict a person's Tuesday; you can know their character. Same geometry.",
+  explain:"how 'never repeats' and 'never leaves' coexist in one system.",
+  builds:[["b2-attractors","the idea this draws live"]], leads:[], live:[]},
+
+"b2-attractors":{type:"mechanism", title:"Attractors", x:2069, y:401,
+  ess:"Chaos has a home address — you just can't predict the room.",
+  hook:"No one on earth can forecast the path of a single leaf in a whirlpool. Anyone can point to where the leaves end up. What's the difference between those two questions?",
+  story:"The whirlpool is the answer. The leaf's route: chaotic, hopeless. The funnel: stable, knowable, right there. Systems that look lawless in detail are often loyal to a shape — visiting and revisiting a repertoire of states without ever exactly repeating.",
+  mech:"Plot every possible state of a system as a point in an abstract space; its life becomes a wandering curve. Many systems' curves collapse onto attractors — points, loops, or strange fractal shapes. The repertoire is stable even though the moment-to-moment path through it isn't.",
+  term:"Attractor", def:"the repertoire of states a system keeps returning near, even without repeating.",
+  sowhat:"It's why climate is knowable while weather isn't, and character while moods aren't — a distinction you'll use everywhere.",
+  explain:"which questions about a chaotic system are answerable (shape questions) and which never will be (path questions).",
+  builds:[["a1","rules are what carve the shape"]], leads:[["b2-principle","what this licenses"]], live:[["b2-logistic","the staircase"],["b2-lorenz-attractor","the butterfly"]]},
+
+"b2-tension-random":{type:"tension", title:"Is chaos just randomness?", x:2392, y:470,
+  ess:"It looks like noise. It isn't. The difference is everything.",
+  hook:"Print a chaotic readout next to TV static. They look identical. One of them hides total order. How would you ever tell them apart?",
+  story:"Interrogate them. Dice have no memory and no shape — averages are all you can ever know about dice. A chaotic system is the opposite: total memory (replay it exactly and it repeats exactly), rigid structure (the attractor), even short-term predictability before the sliver explodes.",
+  mech:"The tells: chaos is replayable, stays inside its shape, is predictable for a short window, and walks a structured staircase into disorder. True randomness has none of these. They look alike for exactly one reason — both defeat long-range prediction. Everything else differs.",
+  term:"Chaos vs randomness", def:"chaos = memory + structure + short-horizon predictability. Randomness = none of these.",
+  sowhat:"Confuse them and you'll either trust averages where your path matters, or see meaningful patterns in genuine noise. Both errors are expensive.",
+  explain:"the three tells that separate hidden order from true noise.",
+  builds:[["b2-attractors","the structure noise lacks"]], leads:[["b2-principle","what you can still trust"]], live:[]},
+
+"b2-principle":{type:"principle", title:"Unpredictable in detail, patterned in shape", x:1895, y:598,
+  ess:"You can't forecast the path. You can trust the shape.",
+  hook:"Nobody can predict the future — and yet winter coats sell out every November. What do the coat-buyers know that the forecasters don't?",
+  story:"They're answering a different question. Whether it rains on this date next year is a path question — unanswerable; chaos owns it. Whether July in Delhi beats January for heat is a shape question — easy. Weather is chaos; climate is its attractor. Different questions, different physics.",
+  mech:"This is the license everything downstream runs on: even where prediction fails, domains keep stable statistical shapes — and shapes can be read, compared, and positioned within. Without attractors, 'reading a domain' would be astrology.",
+  term:"Shape-trust", def:"path questions are unanswerable; shape questions often aren't. Ask which one you're asking.",
+  sowhat:"Careers, markets, relationships — all have climates worth trusting under their unpredictable weather. Most bad decisions ask a path question and act on a shape answer, or vice versa.",
+  explain:"which half of the future chaos actually took from you — and which half it left on the table.",
+  builds:[["b2-attractors","why shapes stay stable"]], leads:[["b3-plan","why we still plan"],["b4-principle","what a 'reading' reads"]], live:[]},
+
+"b3-kokura":{type:"story", title:"The cloud over Kokura", x:271, y:962,
+  ess:"Clouds saved one city and doomed another. Nobody chose.",
+  hook:"August 9, 1945. A bomber circles a city three times, then flies away. What saved a hundred thousand people that morning?",
+  story:"Clouds and smoke. Bockscar's orders required visual targeting; Kokura was overcast, so the crew diverted to the secondary target — Nagasaki. Years earlier, Kyoto had been quietly struck off the target list because the US Secretary of War had honeymooned there and loved the city. Weather and a memory, deciding cities.",
+  mech:"This is the axioms working together in the open: an unmeasurable atmospheric detail (the sliver), coupled through a bombing protocol (connection) to the fates of hundreds of thousands. The chain from small to vast needed no amplifier beyond the world's ordinary wiring.",
+  term:"Historical contingency", def:"history turning on details too small for anyone to measure — or intend.",
+  sowhat:"Your own biggest turns — the job, the partner, the city — likely pivoted on details this small. Sit with that for a moment.",
+  explain:"how weather-scale noise became history-scale consequence, step by traceable step.",
+  builds:[["a3","the coupling that carried it"]], leads:[["b3-contingency","does it always work like this?"]], live:[]},
+
+"b3-contingency":{type:"tension", title:"Contingency vs convergence", x:601, y:1008,
+  ess:"Do small changes wash out — or write history?",
+  hook:"Rewind your life ten years and press play. Do you end up where you're sitting right now?",
+  story:"Biology asked first. Rewind life's tape, said Stephen Jay Gould, and replay it: do you get humans again? Convergence says yes — deviations decay, the attractor wins, eyes and wings get re-invented. Contingency says no — deviations compound, and you get a world with no one in it to ask. Fluke's answer: both are real, in different regimes.",
+  mech:"Convergent processes carry restoring forces: markets clear, evolution re-finds good designs, your fitness returns after a bad month. Contingent processes carry amplifying forces: which city was bombed, whom you married. Same world — two regimes, and most systems mix both at different scales.",
+  term:"Contingency vs convergence", def:"two regimes: deviations decay (convergent) or compound (contingent).",
+  sowhat:"Some parts of life snap back — habits, savings, fitness. Some never do — reputations, marriages, that one email. Know which regime you're standing in before you experiment there.",
+  explain:"why 'did that small thing matter?' has two honest answers — and what decides between them.",
+  builds:[["b3-kokura","the case for contingency"]], leads:[["b3-principle","what follows for you"]], live:[["b3-timeline","run the tape yourself, 120 times"]]},
+
+"b3-timeline":{type:"simulation", title:"Branching timelines", sim:"timeline", x:312, y:1210,
+  ess:"Change one small event. Replay 120 histories. Did it matter?",
+  hook:"If you could re-run history 120 times with one tiny change at the start — would the worlds drift back together, or apart forever?",
+  story:"You can, below. One slider decides whether deviations decay or feed themselves. Push it toward 'converging' and the amber histories snap back to gray — the nudge didn't matter. Push it toward 'compounding' and the same nudge fans out into permanently different worlds.",
+  mech:"That's the entire contingency debate, compressed into one dial. Nothing else changes between the runs — not the noise, not the starting nudge. Only whether the system feeds its deviations or starves them.",
+  term:"The regime dial", def:"whether deviations decay or compound decides whether small things matter.",
+  sowhat:"Before agonizing over a small decision, ask which way the dial points in that part of your life. Most anxiety is contingency-fear in convergent territory.",
+  explain:"what single property separates 'it'll wash out' from 'this changes everything'.",
+  builds:[["b3-contingency","the debate this settles"]], leads:[], live:[]},
+
+"b3-principle":{type:"principle", title:"Control nothing, influence everything", x:774, y:1152,
+  ess:"Every action is an initial condition.",
+  hook:"If chaos runs everything and outcomes can't be steered — why bother acting carefully at all?",
+  story:"Because the same physics that takes your control gives your actions reach. In a coupled, amplifying world, nothing you do is inert: every act is an initial condition for everything downstream. Snoozing an alarm once has, occasionally, redirected a life — you just never know which time.",
+  mech:"From coupling plus sensitive dependence: influence always propagates, but its endpoint is uncomputable. You are permanently consequential and permanently unable to aim it precisely. Both halves are true at once.",
+  term:"Influence without control", def:"outcomes can't be steered; inputs always propagate.",
+  sowhat:"The posture that fits the physics: humility about results, seriousness about actions. The control you lose over outcomes returns as weight on everything you do.",
+  explain:"why losing control of outcomes makes your actions matter more, not less.",
+  builds:[["a3","your actions travel"]], leads:[["b3-plan","then why plan anything?"]], live:[]},
+
+"b3-plan":{type:"tension", title:"Why we still plan", x:543, y:1326,
+  ess:"If prediction fails, why isn't planning pointless?",
+  hook:"Weather forecasts die at day ten. Your five-year plan is 1,800 days long. Is planning a scam?",
+  story:"Only if planning means predicting. Chaos bounds the horizon but doesn't erase structure: you can't plan the path, but you can position within the shape. Nobody knows whether it'll rain on trek day — everybody packs for the mountain's climate anyway.",
+  mech:"Because attractors guarantee stable shapes, planning changes meaning: from 'predict, then commit' to 'position, hedge, re-read'. The plan isn't a forecast of the path; it's a posture toward the shape.",
+  term:"Positioning", def:"planning re-founded: stand well within a trustworthy shape instead of predicting a path.",
+  sowhat:"Don't predict the market — be positioned for its moods. Don't script the career — stand where good surprises tend to land.",
+  explain:"what planning is actually for in a world where prediction provably fails.",
+  builds:[["b2-principle","the shapes you can trust"]], leads:[["b4-destination","this becomes the third reading"]], live:[]},
+
+"b4-coinflip":{type:"simulation", title:"The coin-flip split", sim:"coinflip", x:1583, y:979,
+  ess:"Same coin, same odds. Crowd fine. Individual ruined.",
+  hook:"A casino offers a fair-feeling game: heads doubles your money, tails takes it all. The math says the average player breaks even. So why does everyone who keeps playing go broke?",
+  story:"Watch both panels below. Left: a hundred people each play once — half double, half bust, and the crowd average sits calmly at 1.0. Right: one person plays again and again — and one tails ends the game, permanently. The math never changed between the panels. The situation did.",
+  mech:"The crowd averages across people; you average across time. Ruin breaks the equivalence: a busted player can't rejoin future rounds, so losses stop cancelling. Then try the 'gentle' variant — no single flip is fatal, the average still grows — and almost every individual path still decays. That one deserves a minute of staring.",
+  term:"The ensemble/time split", def:"the crowd's average and your experience over time are different quantities. Ruin splits them forever.",
+  sowhat:"'Positive expected value' has bankrupted a lot of smart people. The number wasn't wrong — it just wasn't about them.",
+  explain:"why a fair-on-paper game destroys every individual who keeps playing it.",
+  builds:[["a4","one path, once"]], leads:[["b4-ergodicity","the idea, named"]], live:[]},
+
+"b4-ergodicity":{type:"mechanism", title:"Ergodicity", x:1901, y:945,
+  ess:"When does the crowd's average equal your experience? Mostly: it doesn't.",
+  hook:"'This surgery succeeds 95% of the time.' Whose time?",
+  story:"The crowd's. Ninety-five of a hundred patients walk out well — that's what the number measures. Your question is different: what happens to the one path that is me, over my one life? When the domain contains ruin — death, bankruptcy, a burned reputation — those two questions stop having the same answer.",
+  mech:"A situation is ergodic when the crowd's average does equal your long-run experience — coin flips for pennies you can always afford, say. Absorbing barriers break ergodicity: paths that hit them stop exploring, losses stop cancelling, and the surviving average flatters everyone still standing. Most advice silently assumes no barriers exist.",
+  term:"Ergodicity", def:"a domain is ergodic when the crowd's average equals your long-run experience. Ruin breaks it.",
+  sowhat:"Before trusting any statistic, one question: does this domain contain ruin? If yes, the average isn't about you.",
+  explain:"when statistics genuinely apply to you — and when they quietly describe someone else.",
+  builds:[["a4","the one-path fact underneath"]], leads:[["b4-domains","which domains break it"]], live:[["b4-coinflip","the split, live"]]},
+
+"b4-domains":{type:"mechanism", title:"Resetting vs compounding domains", x:2219, y:979,
+  ess:"Does failure reset the game — or foreclose the next one?",
+  hook:"Bad coffee this morning; a drunk email to your CEO last night. Both are 'mistakes'. Why is only one of them gone by tomorrow?",
+  story:"Because the domains keep different books. A bad cup, a bad draft, a botched chord — tomorrow starts clean; the error died with the attempt. A ruined credit score, a blown reputation, a serious health event — tomorrow starts smaller; the error came along. One kind of domain forgives. The other remembers.",
+  mech:"The reading is about how errors travel. Resetting domains have independent rounds. Compounding domains carry state — each failure constrains the options that follow. Same effort, same discipline, different physics. 'Fail fast, iterate' is a resetting-domain tool being sold as universal wisdom.",
+  term:"Resetting vs compounding", def:"domains differ in whether errors die with the attempt or carry forward into every next round.",
+  sowhat:"'Fail fast' is brilliant in the kitchen and catastrophic with your reputation. The advice was never wrong — it came with an unlabeled domain requirement.",
+  explain:"the first question to ask of any domain before acting in it: does failure here reset, or follow me?",
+  builds:[["b4-ergodicity","why ruin changes the books"]], leads:[["b4-survive","the rule where errors carry"],["b4-danger","where it turns dangerous"]], live:[]},
+
+"b4-survive":{type:"principle", title:"Survive first, optimize second", x:2438, y:1094,
+  ess:"Where errors compound, staying in the game outranks winning it.",
+  hook:"Two investors: one chases the best possible returns, one refuses ever to be wiped out. Twenty years on, who's usually richer?",
+  story:"The refuser, and it isn't close. Not because caution beats ambition — because the best strategy ever discovered is worth nothing on a path that already hit zero. You can't run the next experiment if the last one took you out. This is arithmetic wearing the costume of timidity.",
+  mech:"On a single sequential path with ruin in it, maximizing the average outcome is simply the wrong objective — the average includes crowds of parallel yous who don't exist. The right objective: protect the ability to keep playing, then optimize hard within that. In resetting domains the constraint costs nothing; there, swing freely.",
+  term:"Survival first", def:"in compounding domains, protect the ability to keep playing before optimizing anything else.",
+  sowhat:"Boring emergency fund, guarded burnout line, clean reputation — then bold everywhere the game resets. That split is the whole art.",
+  explain:"why 'don't get knocked out' mathematically beats 'win more' wherever losses carry forward.",
+  builds:[["b4-domains","where this rule binds"]], leads:[["b4-explore","how bold can you afford to be?"]], live:[]},
+
+"b4-signal":{type:"mechanism", title:"Signal: speed and clarity", x:1612, y:1181,
+  ess:"How fast does this domain tell you you're wrong — and how clearly?",
+  hook:"Touch a hot stove and you learn in one second. Choose the wrong career and you learn in a decade. What exactly is different about the information coming back?",
+  story:"Two dials, not one. Speed: how long between decision and consequence. Clarity: how directly the outcome points at its cause. A stove burn is fast and clear. A chess blunder is fast but murky — which move was it? Marathon training is slow but eventually clear. Bad coffee is instant — and any of four variables could be the culprit.",
+  mech:"The dials fail independently, and each failure needs a different fix. Slow signal needs records that outlive your memory of why you decided. Murky signal needs isolating one variable at a time. Knowing which dial is broken tells you which tool to reach for.",
+  term:"Signal speed × clarity", def:"how fast consequences arrive, and how directly they point at their cause — two independent dials.",
+  sowhat:"Domains that keep score badly quietly train you badly — you'll 'learn' confident nonsense from them for years.",
+  explain:"the four combinations of fast/slow and clear/murky — and which combination should scare you.",
+  builds:[], leads:[["b4-danger","when both dials fail at once"]], live:[]},
+
+"b4-danger":{type:"mechanism", title:"The danger zone", x:1959, y:1152,
+  ess:"Compounding stakes + slow, murky signal: where default advice fails.",
+  hook:"Careers, marriages, long-term health. Why do life's highest-stakes domains give the worst feedback?",
+  story:"That pairing isn't bad luck. By the time a career, a marriage, or a body announces something is wrong, the error has been compounding for years behind slow, entangled signals. 'Fail fast, learn from mistakes' assumed failure would be cheap and legible. Here it is neither — and this is precisely where people apply it most confidently.",
+  mech:"Chaos built this zone: sensitive dependence surfaces consequences far from their causes (slow) and tangled with everything else that happened meanwhile (murky). Chaos explains why such domains exist; ergodicity explains why they're lethal; the next star is the countermeasure.",
+  term:"The danger zone", def:"compounding stakes plus slow, murky signal — the combination that defeats default advice.",
+  sowhat:"The domains that matter most keep score worst. Expect no rescue from experience alone there — experience is exactly what's compromised.",
+  explain:"why 'learn from your mistakes' structurally fails exactly where mistakes cost the most.",
+  builds:[["b4-domains","the stakes half"],["b4-signal","the signal half"]], leads:[["b4-process","the countermeasure"]], live:[]},
+
+"b4-process":{type:"mechanism", title:"Process: log, review, outside eye", x:1650, y:1330,
+  ess:"When the domain won't keep score, build the scoreboard yourself.",
+  hook:"Your memory rewrites the past to flatter you, and the domain won't grade your decisions for years. How are you supposed to learn anything?",
+  story:"You manufacture the feedback. A log: the decision as it actually was, reasons and doubts included — not as memory will retell it, which is always tidier. A review ritual: sitting with the record, separating signal from noise. An outside eye: a coach or peer with no stake in flattering you, for the places your own perspective can't be trusted.",
+  mech:"Kierkegaard: life is lived forward but understood backward. These tools create the speed and clarity the domain refuses to provide — a prosthetic scoreboard. They are not generic 'good habits': they're the specific response to compounding stakes plus poor signal. Where the game resets and the signal is clear, skip the overhead and let the loops teach.",
+  term:"Manufactured feedback", def:"log, review ritual, outside eye — scorekeeping you build where the domain provides none.",
+  sowhat:"A decision journal feels bureaucratic right up until the day it catches your memory lying to you. One catch pays for years of entries.",
+  explain:"which situations genuinely require process — and where it's just productivity theater.",
+  builds:[["b4-danger","the zone this answers"]], leads:[["b4-destination","one question left: where are you going?"]], live:[]},
+
+"b4-destination":{type:"mechanism", title:"Defined vs open destination", x:2330, y:1255,
+  ess:"Do you know where you're going — or are you finding out?",
+  hook:"Training for a marathon and 'getting into writing' are both goals. Why should you plan them in opposite directions?",
+  story:"The marathon has a finish line and a date: work backward from it. The endpoint dictates the training blocks, the weekly build, and — crucially — which signals to watch, so you're not reading your body blind. The writing has no endpoint yet: build upward instead. Small pieces, cheap experiments, and let the destination emerge from what keeps pulling you.",
+  mech:"Working backward converts a vague intention into a sequence of decisions with known logic. But imposed on genuinely open work, it means optimizing hard toward the wrong thing. Refusing it on defined work is drift. Navigation is the third reading, downstream of stakes and signal — you can only plan a route across terrain you've already read.",
+  term:"Backward vs upward", def:"known endpoints are planned backward; open ones are grown forward from cheap experiments.",
+  sowhat:"Most goal advice assumes a finish line. Half your life doesn't have one — stop planning it as if it did.",
+  explain:"which of your current projects should be planned backward, and which should be grown.",
+  builds:[["b3-plan","where this question came from"]], leads:[["b4-explore","stay the course, or switch?"]], live:[]},
+
+"b4-explore":{type:"tension", title:"Explore vs exploit", x:2470, y:1430,
+  ess:"Stay with what works, or try something new? Look forward, not back.",
+  hook:"You've given three years to this path — and that's exactly why you can't tell whether to leave it. What question cuts through?",
+  story:"Not 'how much have I invested?' — that looks backward, and spent resources don't get a vote. The question is forward-only: from right here, does the alternative carry more promise than the path I'm on? Sunk cost is the gravity you have to consciously switch off.",
+  mech:"What the first two readings contribute is the exploration budget. Resetting domain with clear signal: a failed experiment is one cheap data point — explore boldly. Compounding domain with slow signal: some experiments don't stay contained — the budget is set by what the domain can absorb, not by how curious you feel.",
+  term:"Forward-looking choice", def:"explore/exploit is decided from here onward. The past has no vote.",
+  sowhat:"Your boldness budget isn't a personality trait. It's a property of the domain you're standing in — read it first.",
+  explain:"how stakes and signal size your experiments — and why sunk cost is the wrong lens entirely.",
+  builds:[["b4-survive","the budget-setter"]], leads:[["b4-fence","keeping experiments cheap"]], live:[]},
+
+"b4-fence":{type:"mechanism", title:"Fence the exploration", x:2090, y:1430,
+  ess:"Keep experiments where their failures stay cheap.",
+  hook:"Chefs taste in a side pan, never the serving dish. What's the life version of that move?",
+  story:"A separate account for the speculative bets. A side project that can't touch production. A rehearsal before the real negotiation. The fence isn't tidiness — it's what keeps you honest about which of your errors reset and which compound.",
+  mech:"Mix exploration into working systems and you destroy your own stakes-reading: you can no longer tell which failures are data and which are damage. Fenced, you get both regimes at once — genuinely bold inside the fence where everything resets, genuinely careful outside it where things remember.",
+  term:"Fencing", def:"a dedicated space where experimental failures stay cheap and legible.",
+  sowhat:"One fenced sandbox per serious domain — money, work, craft — buys you boldness without ruin. Cheap to build, priceless to have.",
+  explain:"why mixing experiments into working systems ruins your ability to read either one.",
+  builds:[["b4-explore","what needs the fence"]], leads:[["b4-principle","the full method"]], live:[]},
+
+"b4-principle":{type:"principle", title:"Read the domain first", x:1830, y:1560,
+  ess:"Stakes, then signal, then destination — in that order.",
+  hook:"'Fail fast.' 'Trust the process.' 'Follow your passion.' Why does every famous piece of advice work brilliantly for some people and quietly wreck others?",
+  story:"Because all of it is domain-specific advice sold as universal. 'Fail fast' assumes failure resets. 'Trust the process' assumes the process gets feedback. 'Follow your passion' assumes an open destination. Each is excellent — inside its domain. The wreckage happens where advice crosses a border without a passport.",
+  mech:"So read before you act, in order. Stakes first: does failure compound here? — that decides what everything else is for. Signal second: will I know when I'm wrong? — only meaningful once you know the stakes. Destination last: backward or upward? — navigation across terrain the first two readings mapped. Skip one, and the later readings can't be done correctly.",
+  term:"Reading the domain", def:"three questions, in order, before committing: does failure compound? will I know I'm wrong? is the destination defined?",
+  sowhat:"This is the checklist. Three questions before any serious commitment — a job, an investment, a public bet, a life change. It fits on a sticky note.",
+  explain:"why the readings are a sequence rather than a menu — and how to run all three on a decision you're facing right now.",
+  builds:[["b4-survive","reading one"],["b4-process","reading two"],["b4-destination","reading three"]], leads:[["b2-principle","the license it all rests on"]], live:[]}
 };
 
 const TERRITORIES = [
-  {label:"I · The Broken Promise", sum:"perfect rules, unknowable future", hue:"#7d93ab", lx:700, ly:120, rx:140, ry:140, rw:1290, rh:1020},
-  {label:"II · Order Hidden in Chaos", sum:"the path lies; the shape doesn't", hue:"#87a087", lx:3480, ly:120, rx:2830, ry:140, rw:1290, rh:1020},
-  {label:"The Bedrock", sum:"four assumptions beneath everything", hue:"#9a938a", lx:2010, ly:560, rx:1490, ry:620, rw:1250, rh:760},
-  {label:"III · The Fluke View of Life", sum:"history runs once", hue:"#ab8d8d", lx:720, ly:1370, rx:140, ry:1330, rw:1290, rh:1020},
-  {label:"IV · Reading the Domain", sum:"stakes, then signal, then destination", hue:"#c9a36a", lx:3300, ly:1330, rx:2380, ry:1370, rw:1850, rh:1290}
+  {label:"I · The Broken Promise", sum:"perfect rules, unknowable future", hue:"#4a6684", lx:508, ly:100, rx:184, ry:158, rw:745, rh:590},
+  {label:"II · Order Hidden in Chaos", sum:"the path lies; the shape doesn't", hue:"#4f7050", lx:2114, ly:100, rx:1739, ry:158, rw:745, rh:590},
+  {label:"The Bedrock", sum:"four assumptions beneath everything", hue:"#6f6455", lx:1265, ly:352, rx:964, ry:436, rw:722, rh:439},
+  {label:"III · The Fluke View of Life", sum:"history runs once", hue:"#8a5c5c", lx:520, ly:869, rx:184, ry:846, rw:745, rh:590},
+  {label:"IV · Reading the Domain", sum:"stakes, then signal, then destination", hue:"#96702f", lx:2011, ly:820, rx:1479, ry:869, rw:1069, rh:745}
 ];
 const ASTERISMS = [
-  ["#7d93ab", [["b1-laplace","b1-pendulum"],["b1-pendulum","b1-sensitive"],["b1-sensitive","b1-lorenz-story"],["b1-sensitive","b1-principle"]]],
-  ["#87a087", [["b2-logistic","b2-attractors"],["b2-lorenz-attractor","b2-attractors"],["b2-attractors","b2-tension-random"],["b2-attractors","b2-principle"]]],
-  ["#9a938a", [["a1","a2"],["a1","a3"],["a2","a4"],["a3","a4"]]],
-  ["#ab8d8d", [["b3-kokura","b3-contingency"],["b3-contingency","b3-timeline"],["b3-contingency","b3-principle"],["b3-principle","b3-plan"]]],
-  ["#c9a36a", [["b4-coinflip","b4-ergodicity"],["b4-ergodicity","b4-domains"],["b4-domains","b4-survive"],
+  ["#4a6684", [["b1-laplace","b1-pendulum"],["b1-pendulum","b1-sensitive"],["b1-sensitive","b1-lorenz-story"],["b1-sensitive","b1-principle"]]],
+  ["#4f7050", [["b2-logistic","b2-attractors"],["b2-lorenz-attractor","b2-attractors"],["b2-attractors","b2-tension-random"],["b2-attractors","b2-principle"]]],
+  ["#6f6455", [["a1","a2"],["a1","a3"],["a2","a4"],["a3","a4"]]],
+  ["#8a5c5c", [["b3-kokura","b3-contingency"],["b3-contingency","b3-timeline"],["b3-contingency","b3-principle"],["b3-principle","b3-plan"]]],
+  ["#96702f", [["b4-coinflip","b4-ergodicity"],["b4-ergodicity","b4-domains"],["b4-domains","b4-survive"],
     ["b4-signal","b4-danger"],["b4-domains","b4-danger"],["b4-danger","b4-process"],
     ["b4-survive","b4-explore"],["b4-destination","b4-explore"],["b4-explore","b4-fence"],
     ["b4-process","b4-principle"],["b4-fence","b4-principle"],["b4-destination","b4-principle"]]]
@@ -396,33 +541,42 @@ const ASTERISMS = [
 const ALL = Object.keys(N);
 const TERRNAME = {b1:"I · The Broken Promise", b2:"II · Order Hidden in Chaos",
   b3:"III · The Fluke View of Life", b4:"IV · Reading the Domain", a:"The Bedrock"};
-const HUES = {b1:"#7d93ab", b2:"#87a087", b3:"#ab8d8d", b4:"#c9a36a", a:"#9a938a"};
+const HUES = {b1:"#4a6684", b2:"#4f7050", b3:"#8a5c5c", b4:"#96702f", a:"#6f6455"};
 const hueOf = id => id.startsWith('a') ? HUES.a : HUES[id.slice(0,2)];
 const terrOf = id => id.startsWith('a') ? TERRNAME.a : TERRNAME[id.slice(0,2)];
 
-/* backlinks: who points INTO each idea (Roam's linked references) */
-const BACK = {};
-ALL.forEach(id => N[id].threads.forEach(([lab,t])=>{
-  (BACK[t] = BACK[t]||[]).push([lab, id]);
-}));
-/* degree → dot size */
+const TOUR = ["b1-laplace","b1-pendulum","b1-sensitive","b1-lorenz-story","b1-principle",
+  "b2-logistic","b2-attractors","b2-tension-random","b2-principle",
+  "b3-kokura","b3-contingency","b3-timeline","b3-principle","b3-plan",
+  "a4","b4-coinflip","b4-ergodicity","b4-domains","b4-survive","b4-signal",
+  "b4-danger","b4-process","b4-destination","b4-explore","b4-fence","b4-principle"];
+const SEQ = {}; TOUR.forEach((id,i)=>SEQ[id]=i+1);
+
+/* degree from curated links (for star size) */
 const DEG = {};
-ALL.forEach(id => DEG[id] = N[id].threads.length + (BACK[id]||[]).length);
+ALL.forEach(id=>DEG[id]=0);
+ALL.forEach(id=>{
+  const n = N[id];
+  [...n.builds, ...n.leads, ...n.live].forEach(([t])=>{ DEG[id]++; DEG[t]=(DEG[t]||0)+1; });
+});
+const dotSize = id => 16 + Math.min(DEG[id],8)*2.2;
+const dotCenter = id => ({x:N[id].x+dotSize(id)/2, y:N[id].y+dotSize(id)/2});
 
 /* ============================================================
    CAMERA
    ============================================================ */
 const vp = document.getElementById('vp');
 const world = document.getElementById('world');
-const WW = 4400, WH = 2760;
+const reader = document.getElementById('reader');
+const WW = 2750, WH = 1750;
 let cam = {s:0.12, tx:0, ty:0};
 let anim = null;
 function apply(){
   world.style.transform = `translate(${cam.tx}px, ${cam.ty}px) scale(${cam.s})`;
   lod();
 }
-function visW(){ return reader.classList.contains('open') ? innerWidth - readerW() : innerWidth; }
-function readerW(){ return reader.getBoundingClientRect().width || 430; }
+function readerW(){ return reader.classList.contains('open') ? (reader.getBoundingClientRect().width||430) : 0; }
+function visW(){ return innerWidth - readerW(); }
 function centerOn(cx, cy, s){
   cam.s = s;
   cam.tx = visW()/2 - cx*s;
@@ -500,19 +654,21 @@ vp.addEventListener('dblclick', e=>{
 });
 addEventListener('keydown', e=>{
   if (e.key==='Escape'){ closeReader(); overviewCam(); }
+  if (e.key==='ArrowRight') navStep(1);
+  if (e.key==='ArrowLeft') navStep(-1);
 });
 document.getElementById('overviewBtn').onclick = ()=>{ closeReader(); overviewCam(); };
 addEventListener('resize', ()=>apply());
 
 /* ============================================================
-   MAP LAYER — territories + dot markers only
+   SKY — constellation names, asterisms, ecliptic, stars
    ============================================================ */
 TERRITORIES.forEach(t=>{
   const rgb = [parseInt(t.hue.slice(1,3),16), parseInt(t.hue.slice(3,5),16), parseInt(t.hue.slice(5,7),16)].join(',');
   const l = document.createElement('div');
   l.className = 'tlab';
   l.style.cssText = `left:${t.lx}px; top:${t.ly}px; transform:translateX(-50%);`;
-  l.innerHTML = `<div class="big" style="color:rgba(${rgb},0.5)">${t.label}</div>
+  l.innerHTML = `<div class="big" style="color:rgba(${rgb},0.92)">${t.label}</div>
     <div class="sum">${t.sum}</div>`;
   l.addEventListener('click', ()=>{
     flyTo(t.rx+t.rw/2, t.ry+Math.min(t.rh/2, 1000), Math.min(visW()/(t.rw+300), 0.5));
@@ -520,17 +676,45 @@ TERRITORIES.forEach(t=>{
   world.appendChild(l);
 });
 
-const TOUR = ["b1-laplace","b1-pendulum","b1-sensitive","b1-lorenz-story","b1-principle",
-  "b2-logistic","b2-attractors","b2-tension-random","b2-principle",
-  "b3-kokura","b3-contingency","b3-timeline","b3-principle","b3-plan",
-  "a4","b4-coinflip","b4-ergodicity","b4-domains","b4-survive","b4-signal",
-  "b4-danger","b4-process","b4-destination","b4-explore","b4-fence","b4-principle"];
-const SEQ = {}; TOUR.forEach((id,i)=>SEQ[id]=i+1);
-const dotSize = id => 16 + Math.min(DEG[id],7)*2.5;
-const dotCenter = id => ({x:N[id].x+dotSize(id)/2, y:N[id].y+dotSize(id)/2});
+
+
+/* minor stars — small nameless flecks inside each figure */
+{
+  const R = mulberry32(11);
+  TERRITORIES.forEach(t=>{
+    for (let i=0;i<16;i++){
+      const d=document.createElement('div');
+      const sz=(2.5+R()*3).toFixed(1);
+      d.style.cssText=`position:absolute; left:${Math.round(t.rx+40+R()*(t.rw-80))}px;`+
+        `top:${Math.round(t.ry+40+R()*(t.rh-80))}px; width:${sz}px; height:${sz}px;`+
+        `border-radius:50%; background:${t.hue}; opacity:${(0.18+R()*0.22).toFixed(2)}; pointer-events:none;`;
+      world.appendChild(d);
+    }
+  });
+}
 
 const flowsvg = document.createElementNS('http://www.w3.org/2000/svg','svg');
-flowsvg.id='flowsvg'; flowsvg.setAttribute('width',WW); flowsvg.setAttribute('height',WH);
+flowsvg.setAttribute('width',WW); flowsvg.setAttribute('height',WH);
+flowsvg.style.cssText='position:absolute;top:0;left:0;pointer-events:none;overflow:visible;';
+world.appendChild(flowsvg);
+
+const astsvg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+astsvg.id='astsvg'; astsvg.setAttribute('width',WW); astsvg.setAttribute('height',WH);
+ASTERISMS.forEach(([hue, pairs])=>{
+  pairs.forEach(([a,b])=>{
+    const pa=dotCenter(a), pb=dotCenter(b);
+    const dx=pb.x-pa.x, dy=pb.y-pa.y, L=Math.hypot(dx,dy)||1;
+    const ux=dx/L, uy=dy/L, off=30;
+    const ln = document.createElementNS('http://www.w3.org/2000/svg','line');
+    ln.setAttribute('x1',pa.x+ux*off); ln.setAttribute('y1',pa.y+uy*off);
+    ln.setAttribute('x2',pb.x-ux*off); ln.setAttribute('y2',pb.y-uy*off);
+    ln.setAttribute('stroke',hue); ln.setAttribute('stroke-opacity','0.38');
+    ln.setAttribute('stroke-width','1.6');
+    astsvg.appendChild(ln);
+  });
+});
+world.appendChild(astsvg);
+
 {
   const pts = TOUR.map(id=>dotCenter(id));
   let d = `M ${pts[0].x} ${pts[0].y}`;
@@ -541,28 +725,16 @@ flowsvg.id='flowsvg'; flowsvg.setAttribute('width',WW); flowsvg.setAttribute('he
   }
   const p = document.createElementNS('http://www.w3.org/2000/svg','path');
   p.setAttribute('d',d); p.setAttribute('fill','none');
-  p.setAttribute('stroke','rgba(232,230,227,0.04)'); p.setAttribute('stroke-width','4'); p.setAttribute('stroke-dasharray','2,14');
+  p.setAttribute('stroke','rgba(61,56,51,0.08)'); p.setAttribute('stroke-width','4');
+  p.setAttribute('stroke-dasharray','2,14');
   flowsvg.appendChild(p);
 }
-world.appendChild(flowsvg);
-
-const astsvg = document.createElementNS('http://www.w3.org/2000/svg','svg');
-astsvg.id='astsvg'; astsvg.setAttribute('width',WW); astsvg.setAttribute('height',WH);
-ASTERISMS.forEach(([hue, pairs])=>{
-  pairs.forEach(([a,b])=>{
-    const pa=dotCenter(a), pb=dotCenter(b);
-    const ln = document.createElementNS('http://www.w3.org/2000/svg','line');
-    ln.setAttribute('x1',pa.x); ln.setAttribute('y1',pa.y);
-    ln.setAttribute('x2',pb.x); ln.setAttribute('y2',pb.y);
-    ln.setAttribute('stroke',hue); ln.setAttribute('stroke-opacity','0.22');
-    ln.setAttribute('stroke-width','1.6');
-    astsvg.appendChild(ln);
-  });
-});
-world.appendChild(astsvg);
 
 const tsvg = document.createElementNS('http://www.w3.org/2000/svg','svg');
 tsvg.id='tsvg'; tsvg.setAttribute('width',WW); tsvg.setAttribute('height',WH);
+const defs = document.createElementNS('http://www.w3.org/2000/svg','defs');
+defs.innerHTML = `<marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="#96702f" opacity="0.8"/></marker>`;
+tsvg.appendChild(defs);
 world.appendChild(tsvg);
 const tlabels = [];
 
@@ -576,11 +748,10 @@ ALL.forEach(id=>{
   m.style.cssText = `left:${n.x}px; top:${n.y}px;`;
   m.dataset.id = id;
   m.innerHTML = `
-    <div class="dot" style="width:${size}px; height:${size}px; background:${hue};
-      animation-delay:${(id.length*137)%4000}ms;"></div>
+    <div class="dot" style="width:${size}px; height:${size}px; background:${hue};"></div>
     <div class="dtext">
       <div class="lbl">${SEQ[id]?`<span class="seq">${SEQ[id]}</span>`:''}${n.title}</div>
-      <div class="ess">${n.l0}</div>
+      <div class="ess">${n.ess}</div>
       <div class="sims-badge">▸ live model</div>
     </div>`;
   world.appendChild(m);
@@ -592,7 +763,6 @@ ALL.forEach(id=>{
   });
 });
 
-/* semantic zoom: essences appear close-up, territory labels fade */
 function lod(){
   const ess = cam.s > 0.55;
   if (lod._k===ess) return;
@@ -601,9 +771,9 @@ function lod(){
 }
 
 /* ============================================================
-   MEMORY
+   MEMORY (visit patina — no quiz mechanics)
    ============================================================ */
-const MEMKEY = 'chaos-atlas-memory';
+const MEMKEY = 'chaos-constellation-memory';
 let MEM = {};
 try{ MEM = JSON.parse(localStorage.getItem(MEMKEY)||'{}'); }catch(e){}
 const FADE_MS = 3*24*3600*1000;
@@ -624,9 +794,10 @@ function refreshMemory(){
     mkEls[id].classList.toggle('fading', isFading);
     if (isFading) fading.push(id);
     const hue = hueOf(id), dot = mkEls[id].querySelector('.dot');
-    if (isFading)      dot.style.boxShadow = `0 0 8px 0 ${hue}33`;
-    else if (rec)      dot.style.boxShadow = `0 0 ${14+Math.min(rec.n,6)*4}px ${2+Math.min(rec.n,6)}px ${hue}77, 0 0 3px 1px #fff3`;
-    else               dot.style.boxShadow = `0 0 10px 1px ${hue}44`;
+    if (isFading){ dot.style.background='transparent'; dot.style.border=`2px solid ${hue}99`; dot.style.boxShadow='none'; }
+    else if (rec){ dot.style.background=hue; dot.style.border='none';
+      dot.style.boxShadow = `0 0 0 ${2+Math.min(rec.n,6)*1.5}px ${hue}22`; }
+    else { dot.style.background=hue+'59'; dot.style.border=`2px solid ${hue}`; dot.style.boxShadow='none'; }
   });
   document.getElementById('count').textContent =
     `${Object.keys(MEM).length} of ${ALL.length} ideas visited`;
@@ -639,10 +810,17 @@ function refreshMemory(){
 }
 
 /* ============================================================
-   READER — the fixed home for reading
+   READER
    ============================================================ */
-const reader = document.getElementById('reader');
 let focusId = null, stopSim = null;
+
+function linkGroup(kicker, items){
+  if (!items.length) return '';
+  return `<div class="lgroup"><span class="kicker">${kicker}</span>
+    ${items.map(([t,why])=>`<a data-t="${t}"><span class="t">${N[t].title}</span>
+      <span class="why">${why}</span></a>`).join('')}
+  </div>`;
+}
 
 function openIdea(id){
   const n = N[id];
@@ -650,42 +828,42 @@ function openIdea(id){
   rec.n++; rec.last = Date.now(); saveMem();
   if (stopSim){ stopSim(); stopSim=null; }
   focusId = id;
-  // reader content
   const chip = document.getElementById('rChip');
   chip.textContent = n.type;
   chip.style.borderColor = hueOf(id)+'66'; chip.style.color = hueOf(id);
   document.getElementById('rTitle').textContent = n.title;
-  document.getElementById('rTerr').textContent = terrOf(id);
-  const backs = BACK[id]||[];
+  document.getElementById('rTerr').textContent = terrOf(id) + (SEQ[id]?` · step ${SEQ[id]} of ${TOUR.length}`:'');
+  const nextId = SEQ[id] && SEQ[id] < TOUR.length ? TOUR[SEQ[id]] : null;
   document.getElementById('rbody').innerHTML = `
-    <div class="l0">${n.l0}</div>
-    <div class="l1">${n.l1}</div>
+    <div class="hook">${n.hook}</div>
+    <div class="story">${n.story}</div>
     ${n.sim ? simHTML(n.sim) : ''}
-    ${n.l2 ? `<details class="fold"><summary>How it actually works</summary><div class="inner">${n.l2}</div></details>` : ''}
-    <div class="threadrow">
-    <div class="thread">
-      <span class="kicker">follow the thread</span>
-      ${n.threads.map(([lab,t])=>`<a data-t="${t}"><span class="rel">${lab}</span><span class="t">${N[t].title}</span></a>`).join('')}
+    ${n.mech ? `<details class="fold"><summary>How it actually works</summary><div class="inner">${n.mech}</div></details>` : ''}
+    <div class="named"><span class="kicker">the idea, named</span>
+      <b>${n.term}</b><div class="def">${n.def}</div></div>
+    <div class="sowhat"><span class="kicker">where it bites</span>${n.sowhat}</div>
+    <div class="linkrow">
+      ${linkGroup('builds on', n.builds)}
+      ${linkGroup('leads to', n.leads)}
+      ${linkGroup('see it live', n.live)}
     </div>
-    ${backs.length?`<div class="thread back">
-      <span class="kicker">linked from</span>
-      ${backs.map(([lab,src])=>`<a data-t="${src}"><span class="rel">${lab} ·</span><span class="t">${N[src].title}</span></a>`).join('')}
-    </div>`:''}
-    </div>
-    <div class="seen">reinforced <b>${rec.n}×</b> · last ${ago(rec.last)}</div>`;
+    ${nextId ? `<button class="nextbtn" data-t="${nextId}"><span class="k">next in the flow · ${SEQ[nextId]} of ${TOUR.length}</span>${N[nextId].title}<span class="arr">→</span></button>`
+             : (SEQ[id]===TOUR.length ? `<button class="nextbtn" id="finishBtn"><span class="k">end of the flow</span>Back to the sky<span class="arr">↑</span></button>` : '')}
+    <div class="seen">visited <b>${rec.n}×</b> · last ${ago(rec.last)}</div>`;
   document.querySelectorAll('#rbody [data-t]').forEach(a=>
     a.addEventListener('click', ()=>openIdea(a.dataset.t)));
+  const fin = document.getElementById('finishBtn');
+  if (fin) fin.onclick = ()=>{ closeReader(); overviewCam(); };
   const fig = document.querySelector('#rbody figure.frame');
   if (fig) stopSim = SIMS[fig.dataset.sim](fig);
+  document.getElementById('rbody').scrollTop = 0;
   reader.classList.add('open');
   document.body.classList.add('reader-open');
-  // map: highlight focus + neighbors, dim the rest, glow local threads
   highlight(id);
   refreshMemory();
-  // camera: keep the focused dot centered in the visible (non-reader) area
+  syncNav();
   const rs = Math.min(0.95, Math.max(0.62, cam.s));
-  setTimeout(()=>flyTo(n.x+250, n.y+70, rs), 60);
-  if (flowOn) syncFlowbar();
+  setTimeout(()=>flyTo(n.x+180, n.y+60, rs), 60);
 }
 function closeReader(){
   if (stopSim){ stopSim(); stopSim=null; }
@@ -693,51 +871,95 @@ function closeReader(){
   document.body.classList.remove('reader-open');
   focusId = null;
   clearHighlight();
+  syncNav();
 }
 document.getElementById('rClose').onclick = closeReader;
 
+/* map highlight: few directional lines with plain labels */
 function highlight(id){
   clearHighlight();
+  const n = N[id];
   const nb = new Set([id]);
-  N[id].threads.forEach(([l,t])=>nb.add(t));
-  (BACK[id]||[]).forEach(([l,s])=>nb.add(s));
+  const conns = [
+    ...n.builds.map(([t])=>({t, lab:'builds on', into:true})),
+    ...n.leads.map(([t])=>({t, lab:'leads to', into:false})),
+    ...n.live.map(([t])=>({t, lab:'see it live', into:false}))
+  ];
+  conns.forEach(c=>nb.add(c.t));
   ALL.forEach(x=>{
     mkEls[x].classList.toggle('dimmed', !nb.has(x));
     mkEls[x].classList.toggle('neighbor', nb.has(x) && x!==id);
     mkEls[x].classList.toggle('focused', x===id);
   });
-  const from = dotCenter(id);
-  N[id].threads.forEach(([lab,t])=>{
-    const to = dotCenter(t);
+  const here = dotCenter(id);
+  conns.forEach(c=>{
+    const there = dotCenter(c.t);
+    let from = c.into ? {...there} : {...here};
+    let to   = c.into ? {...here} : {...there};
+    {
+      const ddx=to.x-from.x, ddy=to.y-from.y, LL=Math.hypot(ddx,ddy)||1;
+      const ux=ddx/LL, uy=ddy/LL, off=30;
+      from = {x:from.x+ux*off, y:from.y+uy*off};
+      to   = {x:to.x-ux*off,   y:to.y-uy*off};
+    }
     const dx=to.x-from.x, dy=to.y-from.y, dist=Math.hypot(dx,dy)||1;
-    const cx=(from.x+to.x)/2 - dy/dist*dist*0.13, cy=(from.y+to.y)/2 + dx/dist*dist*0.13;
+    const cx=(from.x+to.x)/2 - dy/dist*dist*0.12, cy=(from.y+to.y)/2 + dx/dist*dist*0.12;
     const p = document.createElementNS('http://www.w3.org/2000/svg','path');
     p.setAttribute('d',`M ${from.x} ${from.y} Q ${cx} ${cy} ${to.x} ${to.y}`);
     p.setAttribute('fill','none');
-    p.setAttribute('stroke','rgba(201,163,106,0.32)');
+    p.setAttribute('stroke','rgba(150,112,47,0.45)');
     p.setAttribute('stroke-width','2.5');
     p.setAttribute('stroke-dasharray','9,8');
     p.setAttribute('class','tline');
+    p.setAttribute('marker-end','url(#arr)');
     tsvg.appendChild(p);
     const lbl = document.createElement('div');
     lbl.className='tlabel';
     lbl.style.left = (.25*from.x+.5*cx+.25*to.x)+'px';
     lbl.style.top = (.25*from.y+.5*cy+.25*to.y)+'px';
-    lbl.textContent = lab;
-    lbl.addEventListener('click', e=>{ e.stopPropagation(); openIdea(t); });
+    lbl.textContent = c.lab;
+    lbl.addEventListener('click', e=>{ e.stopPropagation(); openIdea(c.t); });
     world.appendChild(lbl);
     tlabels.push(lbl);
   });
 }
 function clearHighlight(){
   ALL.forEach(x=>mkEls[x].classList.remove('dimmed','neighbor','focused'));
-  tsvg.innerHTML=''; tlabels.forEach(l=>l.remove()); tlabels.length=0;
+  [...tsvg.querySelectorAll('path')].forEach(p=>p.remove());
+  tlabels.forEach(l=>l.remove()); tlabels.length=0;
 }
 
 /* ============================================================
-   SIMULATIONS (in the reader)
+   NAV — top-right cluster drives the default flow
    ============================================================ */
-const INKC='#e8e6e3', GRAY='#8a8a8a', FAINT='#5a5a5a', AMBER='#c9a36a', SUNK='#202020', BRD='#2e2e2e';
+function syncNav(){
+  const cl = document.getElementById('navcluster');
+  const lbl = document.getElementById('navStep');
+  const i = focusId ? TOUR.indexOf(focusId) : -1;
+  if (i < 0){
+    cl.classList.add('idle');
+    lbl.innerHTML = '▶ Begin the tour';
+  } else {
+    cl.classList.remove('idle');
+    lbl.innerHTML = `Step ${i+1} <span class="tot">/ ${TOUR.length}</span>`;
+    document.getElementById('navPrev').disabled = i<=0;
+    document.getElementById('navNext').disabled = i===TOUR.length-1;
+  }
+}
+document.getElementById('navStep').onclick = ()=>{ if(TOUR.indexOf(focusId)<0) openIdea(TOUR[0]); };
+function navStep(dir){
+  const i = focusId ? TOUR.indexOf(focusId) : -1;
+  if (i<0){ openIdea(TOUR[0]); return; }
+  const j = i+dir;
+  if (j>=0 && j<TOUR.length) openIdea(TOUR[j]);
+}
+document.getElementById('navPrev').onclick = ()=>navStep(-1);
+document.getElementById('navNext').onclick = ()=>navStep(1);
+
+/* ============================================================
+   SIMULATIONS
+   ============================================================ */
+const INKC='#3d3833', GRAY='#8a8069', FAINT='#b0a68c', AMBER='#96702f', SUNK='#ece4d2', BRD='#d5c9ae';
 function mulberry32(a){ return function(){ a|=0; a=a+0x6D2B79F5|0;
   let t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t;
   return ((t^t>>>14)>>>0)/4294967296; }; }
@@ -821,7 +1043,7 @@ SIMS.logistic = fig=>{
   const off=document.createElement('canvas');off.width=W;off.height=BH;
   const octx=off.getContext('2d');
   octx.fillStyle=SUNK;octx.fillRect(0,0,W,BH);
-  octx.fillStyle='rgba(232,230,227,0.13)';
+  octx.fillStyle='rgba(61,56,51,0.15)';
   for(let px=0;px<W;px++){
     const r=2.5+px/W*1.5;let x=0.4;
     for(let i=0;i<300;i++)x=r*x*(1-x);
@@ -944,7 +1166,7 @@ SIMS.coinflip = fig=>{
       ctx.beginPath();ctx.moveTo(24,y(1));ctx.lineTo(W-14,y(1));ctx.stroke();ctx.setLineDash([]);
       ctx.fillStyle=FAINT;ctx.font='12px Inter, sans-serif';ctx.fillText('start = 1×',W-84,y(1)-6);
       data.paths.forEach(p=>{
-        ctx.strokeStyle='rgba(138,138,138,0.3)';ctx.lineWidth=1;ctx.beginPath();
+        ctx.strokeStyle='rgba(138,128,105,0.4)';ctx.lineWidth=1;ctx.beginPath();
         for(let t=0;t<=round;t++){const X=24+t/100*(W-46),Y=Math.min(H-56,y(p[t]));
           t?ctx.lineTo(X,Y):ctx.moveTo(X,Y);}
         ctx.stroke();});
@@ -992,7 +1214,7 @@ SIMS.timeline = fig=>{
       S.forEach(p=>{ctx.beginPath();
         for(let t=0;t<=NT;t++){const X=t/NT*W,Y=y(p[t]);t?ctx.lineTo(X,Y):ctx.moveTo(X,Y);}
         ctx.stroke();});};
-    set(base,'rgba(138,138,138,0.06)');set(pert,'rgba(201,163,106,0.07)');
+    set(base,'rgba(138,128,105,0.1)');set(pert,'rgba(150,112,47,0.12)');
     const mean=S=>{const m=[];for(let t=0;t<=NT;t++){let s=0;S.forEach(p=>s+=p[t]);m.push(s/S.length);}return m;};
     const line=(m,col)=>{ctx.strokeStyle=col;ctx.lineWidth=3;ctx.beginPath();
       for(let t=0;t<=NT;t++){const X=t/NT*W,Y=y(m[t]);t?ctx.lineTo(X,Y):ctx.moveTo(X,Y);}
@@ -1011,56 +1233,12 @@ SIMS.timeline = fig=>{
 };
 
 /* ============================================================
-   FLOW MODE — the default sequence, dot to dot
-   ============================================================ */
-let flowOn = false, flowIdx = 0;
-const flowbar = document.getElementById('flowbar');
-function startFlow(at=0){
-  flowOn = true; flowIdx = at;
-  flowbar.classList.add('on');
-  document.getElementById('flowBtn').textContent = '■ Stop flow';
-  openIdea(TOUR[flowIdx]);
-}
-function exitFlow(){
-  flowOn = false; flowbar.classList.remove('on');
-  document.getElementById('flowBtn').textContent = '▶ Flow';
-}
-function syncFlowbar(){
-  const onPath = TOUR.indexOf(focusId);
-  if (onPath >= 0) flowIdx = onPath;
-  document.getElementById('fStep').textContent =
-    onPath>=0 ? `flow · step ${flowIdx+1} of ${TOUR.length}` : 'off the path — next returns you';
-  document.getElementById('fCap').textContent = N[TOUR[flowIdx]] ? N[TOUR[flowIdx]].title : '';
-  document.getElementById('fPrev').disabled = flowIdx===0;
-  document.getElementById('fNext').textContent = flowIdx===TOUR.length-1 ? '✓' : '›';
-}
-document.getElementById('flowBtn').onclick = ()=> flowOn ? exitFlow() : startFlow(TOUR.indexOf(focusId)>=0 ? TOUR.indexOf(focusId) : 0);
-document.getElementById('fExit').onclick = exitFlow;
-document.getElementById('fPrev').onclick = ()=>{ if(flowIdx>0){ flowIdx--; openIdea(TOUR[flowIdx]); } };
-document.getElementById('fNext').onclick = ()=>{
-  if (TOUR.indexOf(focusId)<0){ openIdea(TOUR[flowIdx]); return; }
-  if (flowIdx<TOUR.length-1){ flowIdx++; openIdea(TOUR[flowIdx]); }
-  else { exitFlow(); closeReader(); overviewCam(); }
-};
-addEventListener('keydown', e=>{
-  if (!flowOn) return;
-  if (e.key==='ArrowRight') document.getElementById('fNext').click();
-  if (e.key==='ArrowLeft') document.getElementById('fPrev').click();
-});
-
-/* ============================================================
    BOOT
    ============================================================ */
 refreshMemory();
+syncNav();
 overviewCam(false);
-document.getElementById('enterBtn').onclick = ()=>{
-  document.getElementById('welcome').remove();
-  overviewCam();
-};
-document.getElementById('enterFlowBtn').onclick = ()=>{
-  document.getElementById('welcome').remove();
-  startFlow(0);
-};
+
 </script>
 </body>
 </html>
