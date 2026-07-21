@@ -16,3 +16,4 @@ Start anywhere. Follow the guided flow, or just wander.
 
 - [Chaos, Luck & Ergodicity](/orrery/chaos-luck-ergodicity.html) — why perfect rules can't buy you the future, why chaos isn't randomness, and how to act when you only get one run of the tape.
 - [Thinking, Fast and Slow](/orrery/thinking-fast-and-slow.html) — the two minds in your head, the biases they breed, and the two selves quietly fighting over your choices.
+- [How to Know a Person](/orrery/how-to-know-a-person.html) — the art of seeing others deeply and being deeply seen: the gaze, the skills of presence, and the deep structures of a person.
