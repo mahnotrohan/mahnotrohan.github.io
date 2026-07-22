@@ -7,10 +7,10 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 :root{
-  --ground:#f2ecdf; --surface-sunk:#ece4d2; --surface-raised:#faf6ec;
-  --border:#ddd2bc; --border-strong:#c9bda1;
-  --ink:#26221d; --ink-strong:#14110e; --ink-muted:#5b5343; --ink-faint:#83765b;
-  --accent:#96702f; --accent-dim:#b08d4f; --accent-wash:rgba(150,112,47,0.08);
+  --ground:#1a1a1a; --surface-sunk:#202020; --surface-raised:#252525;
+  --border:#2e2e2e; --border-strong:#3a3a3a;
+  --ink:#e8e6e3; --ink-strong:#f0ede8; --ink-muted:#8a8a8a; --ink-faint:#5a5a5a;
+  --accent:#c9a36a; --accent-dim:#8a744f; --accent-wash:rgba(201,163,106,0.08);
   --font:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
   --r:4px; --reader-w:min(760px, 58vw); --move-fast:150ms ease;
 }
@@ -21,95 +21,85 @@ h1,h2,h3{color:var(--ink-strong); font-weight:600; line-height:1.3;}
 .kicker{font-size:11px; letter-spacing:.14em; text-transform:uppercase;
   color:var(--ink-muted); font-weight:500;}
 
-/* header — all navigation lives top right */
-#hdr{position:fixed; top:0; left:0; right:0; z-index:40; height:56px;
-  display:flex; align-items:center; gap:1.1rem; padding:0 1.4rem;
-  background:linear-gradient(180deg, rgba(242,236,223,.96), rgba(242,236,223,.75), transparent);
-  pointer-events:none; transition:right .3s cubic-bezier(.25,.7,.3,1);}
-body.reader-open #hdr{right:var(--reader-w);}
+/* header */
+#hdr{position:fixed; top:0; left:0; right:0; z-index:40; height:52px;
+  transition:right .3s cubic-bezier(.25,.7,.3,1);
+  display:flex; align-items:center; gap:1.3rem; padding:0 1.4rem;
+  background:linear-gradient(180deg, rgba(26,26,26,.95), rgba(26,26,26,.7), transparent);
+  pointer-events:none;}
 #hdr>*{pointer-events:auto;}
 #hdr .t{font-size:15px; font-weight:600; color:var(--ink-strong);}
 #hdr .sub{font-size:11.5px; color:var(--ink-muted);}
 #hdr .spacer{flex:1;}
 #count{font-size:12px; color:var(--ink-faint); white-space:nowrap;}
-.hbtn{background:rgba(250,246,236,.92); border:1px solid var(--border-strong); color:var(--ink-muted);
-  font-family:var(--font); font-size:12.5px; padding:6px 13px; border-radius:var(--r); cursor:pointer;
-  transition:all var(--move-fast); white-space:nowrap;}
+.hbtn{background:rgba(37,37,37,.9); border:1px solid var(--border-strong); color:var(--ink-muted);
+  font-family:var(--font); font-size:12px; padding:5px 13px; border-radius:var(--r); cursor:pointer;
+  transition:all var(--move-fast);}
 .hbtn:hover{color:var(--ink); border-color:var(--ink-muted);}
-.hbtn:disabled{opacity:.35; cursor:default;}
 #nudge{border-color:var(--accent-dim); color:var(--accent);}
 #nudge:hover{background:var(--accent-wash);}
-#navcluster{display:flex; align-items:center; gap:5px; background:none; border:none; padding:0;}
-#navcluster .hbtn{background:rgba(250,246,236,.92); border:1px solid var(--border-strong); color:var(--ink-muted);
-  font-size:15px; width:30px; height:30px; padding:0; display:flex; align-items:center; justify-content:center;}
-#navcluster.idle #navPrev, #navcluster.idle #navNext{display:none;}
-#navStep{font-size:13px; color:var(--ink); background:rgba(250,246,236,.92); border:1px solid var(--border-strong);
-  border-radius:var(--r); padding:6px 14px; text-align:center; cursor:default; white-space:nowrap;
-  transition:all var(--move-fast);}
-#navcluster.idle #navStep{cursor:pointer;}
-#navcluster.idle #navStep:hover{border-color:var(--ink-muted); color:var(--ink-strong);}
-#navStep .tot{color:var(--ink-faint);}
 
-/* viewport & sky */
+body.reader-open #hdr{right:var(--reader-w);}
+
+/* viewport & world */
 #vp{position:fixed; inset:0; cursor:grab; touch-action:none;
-  background:radial-gradient(ellipse at 50% 40%, #f6f1e4 0%, #f2ecdf 55%, #e9e0cb 100%);}
+  background:radial-gradient(ellipse at 50% 40%, #171a21 0%, #12141a 55%, #0d0f13 100%);}
 #vp.dragging{cursor:grabbing;}
 #vp.dragging, #vp.dragging *{user-select:none;}
-#world{position:absolute; top:0; left:0; width:2750px; height:1750px;
+#world{position:absolute; top:0; left:0; width:4400px; height:2760px;
   transform-origin:0 0; will-change:transform;}
 #world::before{content:''; position:absolute; inset:0; pointer-events:none;
-  background-image:radial-gradient(circle, rgba(110,95,65,.14) 1.2px, transparent 1.2px),
-                   radial-gradient(circle, rgba(110,95,65,.08) 1px, transparent 1px);
-  background-size:380px 380px, 150px 150px;
-  background-position:0 0, 70px 100px; opacity:.8;}
+  background-image:radial-gradient(circle, rgba(232,230,227,.32) 1.2px, transparent 1.2px),
+                   radial-gradient(circle, rgba(232,230,227,.16) 1px, transparent 1px),
+                   radial-gradient(circle, rgba(125,147,171,.2) 1.5px, transparent 1.5px);
+  background-size:420px 420px, 130px 130px, 640px 640px;
+  background-position:0 0, 60px 90px, 200px 300px; opacity:.7;}
 
-/* constellation names */
+/* territories */
 .tlab{position:absolute; pointer-events:auto; cursor:pointer; user-select:none; text-align:center;}
 .tlab .big{font-size:40px; font-weight:500; letter-spacing:.5em; line-height:1.3;
   text-transform:uppercase; white-space:nowrap;}
-.tlab .sum{text-shadow:0 0 5px #f2ecdf,0 0 5px #f2ecdf,0 0 3px #f2ecdf;
-  font-size:19px; color:#665c44; margin-top:.5em; letter-spacing:.18em; text-transform:uppercase;}
+.tlab .sum{font-size:19px; color:#585550; margin-top:.5em; letter-spacing:.18em; text-transform:uppercase;}
 .tlab:hover .big{filter:brightness(1.35);}
 
-/* stars */
+/* markers — stars with names, like a star chart */
 .mk{position:absolute; cursor:pointer; user-select:none;
   display:flex; gap:14px; width:330px; align-items:flex-start;}
-.mk .dot{border-radius:50%; flex-shrink:0;
-  transition:transform .2s ease, box-shadow .4s ease, opacity .4s ease, background .4s ease;}
+@keyframes twinkle{0%,100%{filter:brightness(1);} 50%{filter:brightness(.82);}}
+.mk .dot{border-radius:50%; flex-shrink:0; border:none;
+  animation:twinkle 4.5s ease-in-out infinite;
+  transition:transform .2s ease, box-shadow .4s ease, opacity .4s ease;}
 .mk:hover .dot{transform:scale(1.3);}
 .mk .dtext{min-width:0; padding-top:1px;}
-.mk .lbl{text-shadow:0 0 5px #f2ecdf,0 0 5px #f2ecdf,0 0 3px #f2ecdf,0 0 3px #f2ecdf;
-  font-size:19px; color:#26221d; font-weight:500; line-height:1.3;}
-.mk .lbl .seq{font-size:12px; color:#83765b; font-weight:400; margin-right:.5em;}
-.mk .ess{text-shadow:0 0 5px #f2ecdf,0 0 5px #f2ecdf,0 0 3px #f2ecdf,0 0 3px #f2ecdf;
-  font-size:14px; color:#584f3e; line-height:1.45; margin-top:4px; max-width:290px;
+.mk .lbl{font-size:19px; color:#b5b2ad; font-weight:500; line-height:1.3;}
+.mk .lbl .seq{font-size:12px; color:#565350; font-weight:400; margin-right:.5em;}
+.mk .ess{font-size:14px; color:#6e6b66; line-height:1.45; margin-top:4px; max-width:290px;
   opacity:0; transition:opacity .3s ease;}
 .mk.showess .ess{opacity:1;}
 .mk .sims-badge{font-size:12px; color:var(--accent-dim); margin-top:3px; display:none;}
 .mk.hasim .sims-badge{display:block;}
-.mk.fading .dot{opacity:.55;}
-.mk.fading .lbl{color:#75684f;}
+#flowsvg, #astsvg{position:absolute; top:0; left:0; pointer-events:none; overflow:visible;}
 .mk.focused .dot{transform:scale(1.35);}
 .mk.focused .lbl{color:var(--ink-strong);}
-.mk.neighbor .lbl{color:#14110e;}
-.mk.dimmed{opacity:.35;}
+.mk.neighbor .lbl{color:#d5d2cd;}
+.mk.dimmed{opacity:.28;}
 
-/* connection overlay — few, directional, labeled plainly */
-#tsvg, #astsvg, #flowsvg{position:absolute; top:0; left:0; pointer-events:none; overflow:visible;}
+/* threads overlay */
+#tsvg{position:absolute; top:0; left:0; pointer-events:none; overflow:visible;}
 @keyframes dashdrift{to{stroke-dashoffset:-64;}}
-.tline{animation:dashdrift 6s linear infinite;}
+.tline{animation:dashdrift 5.5s linear infinite;}
 .tlabel{position:absolute; transform:translate(-50%,-50%); background:var(--ground);
   border:1px solid var(--accent-dim); color:var(--accent); border-radius:12px;
-  font-size:12px; letter-spacing:.06em; padding:2px 11px; white-space:nowrap; cursor:pointer;
-  pointer-events:auto; transition:background var(--move-fast); text-transform:uppercase;}
+  font-size:13px; padding:2px 12px; white-space:nowrap; cursor:pointer; pointer-events:auto;
+  transition:background var(--move-fast);}
 .tlabel:hover{background:var(--accent-wash);}
 
-/* ---------- READER ---------- */
+/* ---------- READER: fixed home for reading (C) ---------- */
 #reader{position:fixed; top:0; right:calc(-1 * var(--reader-w) - 20px); width:var(--reader-w);
   height:100%; z-index:45; background:var(--surface-raised);
   border-left:1px solid var(--border); display:flex; flex-direction:column;
   transition:right .3s cubic-bezier(.25,.7,.3,1);
-  box-shadow:-24px 0 70px rgba(90,75,50,.18);}
+  box-shadow:-24px 0 70px rgba(0,0,0,.35);}
 #reader.open{right:0;}
 #reader .top{padding:1.5em 2.2em 1em; border-bottom:1px solid var(--border); position:relative;}
 #reader .close{position:absolute; top:14px; right:16px; background:none; border:none;
@@ -117,55 +107,36 @@ body.reader-open #hdr{right:var(--reader-w);}
 #reader .close:hover{color:var(--ink);}
 #reader h2{font-size:24px; margin:.45em 0 .3em;}
 #reader .terrline{font-size:11.5px; color:var(--ink-faint); margin-top:2px;}
-#rbody{flex:1; overflow-y:auto; padding:1.6em 2.2em 2.5em;}
+#rbody{flex:1; overflow-y:auto; padding:1.5em 2.2em 2.5em;}
+#rbody>.l0, #rbody>.l1{max-width:64ch;}
 #rbody::-webkit-scrollbar{width:6px;}
 #rbody::-webkit-scrollbar-thumb{background:var(--border-strong); border-radius:3px;}
-#rbody>*{max-width:66ch;}
-.hook{font-size:18.5px; color:var(--ink-strong); line-height:1.65;
-  padding-left:1em; border-left:2px solid var(--accent-dim); margin-bottom:1.1em;}
-.story{font-size:15.5px; color:#2b2620;}
+#rbody .l0{font-size:18px; color:var(--ink-strong); line-height:1.6; margin-bottom:.7em;}
+#rbody .l1{font-size:15.5px; color:#d0cec9;}
+#rbody .seen{font-size:11.5px; color:var(--ink-faint); margin-top:1.1em;}
+#rbody .seen b{color:var(--accent-dim); font-weight:500;}
 .typechip{display:inline-block; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase;
   color:var(--ink-muted); border:1px solid var(--border-strong); border-radius:3px; padding:1px 8px;}
-details.fold{margin:1.2em 0 0; border:1px solid var(--border); border-radius:var(--r); background:var(--surface-sunk);}
+details.fold{margin:1.1em 0 0; border:1px solid var(--border); border-radius:var(--r); background:var(--surface-sunk);}
 details.fold summary{cursor:pointer; padding:.6em 1.05em; color:var(--ink-muted);
   font-size:13px; list-style:none; user-select:none;}
 details.fold summary::-webkit-details-marker{display:none;}
 details.fold summary::before{content:'+  '; color:var(--accent); font-weight:500;}
 details.fold[open] summary::before{content:'−  ';}
 details.fold summary:hover{color:var(--ink);}
-details.fold .inner{padding:0 1.05em .9em; font-size:14.5px; color:#332e25;}
-.named{margin-top:1.5em; background:var(--surface-sunk); border:1px solid var(--border);
-  border-radius:8px; padding:1em 1.3em;}
-.named .kicker{display:block; margin-bottom:.35em;}
-.named b{color:var(--ink-strong); font-weight:600; font-size:16px;}
-.named .def{font-size:14.5px; color:#332e25; margin-top:.2em;}
-.sowhat{margin-top:1.4em; font-size:15px; color:#2b2620;}
-.sowhat .kicker{display:block; margin-bottom:.3em;}
-.closure{margin-top:1.5em; border:1px solid var(--accent-dim); border-radius:8px;
-  background:var(--accent-wash); padding:1em 1.3em;}
-.closure .kicker{color:var(--accent); display:block; margin-bottom:.3em;}
-.closure .txt{font-size:14.5px; color:#4a443c; line-height:1.65;}
-.linkrow{margin-top:1.6em; border-top:1px solid var(--border); padding-top:1em;
-  display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:.6em 2em;}
-.lgroup .kicker{display:block; margin-bottom:.25em;}
-.lgroup a{display:block; font-size:14px; padding:.2em 0 .45em; color:#332e25; cursor:pointer; text-decoration:none;}
-.lgroup a .t{border-bottom:1px dotted transparent; transition:border-color var(--move-fast); color:var(--ink);}
-.lgroup a:hover .t{border-bottom-color:var(--accent);}
-.lgroup a .why{display:block; font-size:12px; color:var(--ink-faint); line-height:1.5;}
-.nextbtn{margin-top:1.8em; width:100%; max-width:66ch; text-align:left;
-  background:var(--surface-sunk); border:1px solid var(--border-strong); border-radius:8px;
-  color:var(--ink); font-family:var(--font); font-size:14.5px; padding:.9em 1.3em; cursor:pointer;
-  transition:all var(--move-fast);}
-.nextbtn:hover{border-color:var(--accent-dim); background:var(--accent-wash);}
-.nextbtn .k{color:var(--ink-faint); font-size:11px; letter-spacing:.12em; text-transform:uppercase;
-  display:block; margin-bottom:.15em;}
-.nextbtn .arr{color:var(--accent); float:right;}
-.seen{font-size:11.5px; color:var(--ink-faint); margin-top:1.2em;}
-.seen b{color:var(--accent-dim); font-weight:500;}
+details.fold .inner{padding:0 1.05em .9em; font-size:14px; color:#cfcdc8;}
+.thread{border-top:1px solid var(--border); padding-top:.75em; margin-top:1.3em;}
+.thread .kicker{display:block; margin-bottom:.25em;}
+.thread a{display:block; font-size:14px; padding:.24em 0; color:#d0cec9; cursor:pointer; text-decoration:none;}
+.thread a .t{border-bottom:1px dotted transparent; transition:border-color var(--move-fast);}
+.thread a:hover .t{border-bottom-color:var(--accent);}
+.thread .rel{color:var(--ink-faint); font-size:10.5px; text-transform:uppercase;
+  letter-spacing:.1em; margin-right:.55em;}
+.thread.back a, .thread.back .rel{color:#a5a29d;}
+.threadrow{display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:0 2.5em;}
 
-/* sim figure */
 figure.frame{background:var(--surface-sunk); border:1px solid var(--border); border-radius:var(--r);
-  margin:1.3em 0 0; overflow:hidden;}
+  margin:1.2em 0 0; overflow:hidden;}
 figure.frame canvas{width:100%; display:block;}
 figure.frame .controls{display:flex; gap:8px; padding:8px 12px; border-top:1px solid var(--border);
   align-items:center; flex-wrap:wrap;}
@@ -178,6 +149,23 @@ figure.frame figcaption{padding:7px 13px 10px; font-size:12.5px; color:var(--ink
 .ghost.active{color:var(--accent); border-color:var(--accent-dim); background:var(--accent-wash);}
 figure.frame input[type=range]{flex:1; min-width:100px; accent-color:var(--accent);}
 
+/* flow bar */
+#flowbar{position:fixed; left:1.2rem; bottom:1.2rem; z-index:35;
+  background:rgba(37,37,37,.96); border:1px solid var(--border-strong); border-radius:10px;
+  padding:9px 13px; display:none; align-items:center; gap:11px; max-width:min(560px, 60vw);}
+#flowbar.on{display:flex;}
+#flowbar .step{font-size:11px; color:var(--ink-faint); white-space:nowrap;}
+#flowbar .cap{font-size:12.5px; color:var(--ink); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+
+/* welcome */
+#welcome{position:fixed; inset:0; z-index:50; background:rgba(26,26,26,.82);
+  display:flex; align-items:center; justify-content:center; backdrop-filter:blur(3px);}
+#welcome .box{max-width:470px; padding:2.1em 2.4em; background:var(--surface-raised);
+  border:1px solid var(--border-strong); border-radius:10px;}
+#welcome h1{font-size:21px; margin-bottom:.5em;}
+#welcome p{font-size:14.5px; color:#cfcdc8; margin:.5em 0;}
+#welcome .k{color:var(--accent);}
+#welcome .go{margin-top:1.2em; text-align:center;}
 @media(max-width:760px){ :root{--reader-w:100vw;} }
 </style>
 </head>
@@ -186,20 +174,23 @@ figure.frame input[type=range]{flex:1; min-width:100px; accent-color:var(--accen
 <div id="hdr">
   <div>
     <div class="t">Thinking, Fast and Slow</div>
-    <div class="sub">a night sky of ideas · stars brighten as you revisit them</div>
+    <div class="sub"><a href="/orrery" style="color:#8a8a8a; text-decoration:none; border-bottom:1px dotted #3a3a3a;">Orrery</a> · Kahneman, as a night sky — a sky to wander and return to</div>
   </div>
   <div class="spacer"></div>
   <span id="count"></span>
+  <button class="hbtn" id="flowBtn">▶ Flow</button>
   <button class="hbtn" id="nudge" style="display:none"></button>
-  <div id="navcluster">
-    <button class="hbtn" id="navPrev" title="previous idea">‹</button>
-    <span id="navStep">▶ Begin the tour</span>
-    <button class="hbtn" id="navNext" title="next idea">›</button>
-  </div>
   <button class="hbtn" id="overviewBtn">Overview&nbsp;·&nbsp;Esc</button>
 </div>
 
 <div id="vp"><div id="world"></div></div>
+
+<div id="flowbar">
+  <button class="hbtn" id="fPrev">‹</button>
+  <div><div class="step" id="fStep"></div><div class="cap" id="fCap"></div></div>
+  <button class="hbtn" id="fNext">›</button>
+  <button class="hbtn" id="fExit">✕</button>
+</div>
 
 <div id="reader">
   <div class="top">
@@ -211,164 +202,172 @@ figure.frame input[type=range]{flex:1; min-width:100px; accent-color:var(--accen
   <div id="rbody"></div>
 </div>
 
+<div id="welcome">
+  <div class="box">
+    <span class="kicker">a first-principles atlas</span>
+    <h1>The two minds in your head</h1>
+    <p>Kahneman's <i>Thinking, Fast and Slow</i>, laid out as five constellations around a pole-star diamond of axioms. Your understanding, drawn as a night sky. Click a star to read it; its connections glow.</p>
+    <p>A faint line threads the board — the <span class="k">default flow</span>. Press ▶ and it walks you dot to dot in order; wander off it anytime, it will wait.</p>
+    <p class="go"><button class="hbtn" style="font-size:13px; padding:8px 22px; margin-right:8px;" id="enterFlowBtn">▶ Begin the flow</button><button class="hbtn" style="font-size:13px; padding:8px 22px;" id="enterBtn">Just wander</button></p>
+  </div>
+</div>
+
 <script>
 'use strict';
 /* ============================================================
-   CONTENT v2 — every idea: hook → story → (sim) → mechanism
-   fold → the idea named → where it bites → you can now explain.
-   Connections: ≤4 per idea, in three plain buckets.
+   CONTENT — same 30 ideas; map = dots, reading = reader
    ============================================================ */
 const N = {
-a1:{type:"axiom", title:"Two minds share one head", x:1259, y:482,
+a1:{type:"axiom", title:"Two minds share one head", x:2000, y:700,
   l0:"Two minds share one head: one fast and automatic, one slow and effortful.",
   l1:"System 1 answers before you ask — 2+2, a hostile face, the word after 'bread and…'. System 2 is the one that grinds through 17×24, the effortful self you think of as you.",
   l2:"Almost everything you do begins as a System 1 impulse that System 2 merely endorses. The whole book is the story of that division of labour — and of where it quietly fools you.",
   threads:[["seen up close","s1-fast"],["the slow one","s1-slow"]]},
-a2:{type:"axiom", title:"Attention is a budget", x:1057, y:626,
+a2:{type:"axiom", title:"Attention is a budget", x:1650, y:950,
   l0:"Attention is a budget, and System 2 is lazy — most of life runs on autopilot.",
   l1:"Thinking hard costs real fuel: your pupils widen, your blood sugar drops, you go blind to everything else. So the mind spends as little as it can and lets System 1 drive.",
   l2:"Because effort is scarce and unpleasant, we wave through System 1's fast answers far more often than we should. The laziness isn't a bug — it's the design.",
   threads:[["why the mind coasts","s1-ease"],["the lazy controller","s1-lazy"]]},
-a3:{type:"axiom", title:"What you see is all there is", x:1462, y:626,
+a3:{type:"axiom", title:"What you see is all there is", x:2350, y:950,
   l0:"The mind builds a whole story from whatever it has — and ignores what it doesn't.",
   l1:"System 1 never asks what's missing; it makes the best story from the evidence in front of it. Kahneman's name for this is WYSIATI — what you see is all there is.",
   l2:"The goal is coherence, not completeness. This one habit powers overconfidence, framing, and most biases — the mind is a machine for jumping to conclusions.",
   threads:[["powers the biases","s2-substitution"],["breeds false confidence","s3-narrative"]]},
-a4:{type:"axiom", title:"Confidence is a feeling", x:1259, y:771,
+a4:{type:"axiom", title:"Confidence is a feeling", x:2000, y:1200,
   l0:"We feel certainty, not accuracy. The sense of knowing is manufactured, not earned.",
   l1:"A story that hangs together feels true whether or not it is. Confidence measures how neatly the pieces fit — not how much you actually know.",
   l2:"So subjective certainty is a terrible guide to correctness. Experts and amateurs alike feel sure, because the feeling comes from coherence, not evidence.",
   threads:[["the illusion it builds","s3-validity"],["why we trust the gut","s3-formulas"]]},
 
-"s1-fast":{type:"phenomenon", title:"System 1: the fast mind", x:277, y:262,
+"s1-fast":{type:"phenomenon", title:"System 1: the fast mind", x:300, y:320,
   l0:"The mind that answers before you ask — effortless, instant, always on.",
   l1:"It reads a word, senses a mood, completes 'bread and…', flinches from a snake. No sense of effort, no decision to engage — it simply delivers.",
   l2:"System 1 is brilliant and indispensable: it runs your skills and instincts. Its flaw is that it can't tell a good answer from a merely confident one.",
   threads:[["rests on","a1"],["the slow partner","s1-slow"],["how it stays fast","s1-ease"]]},
-"s1-slow":{type:"mechanism", title:"System 2: the slow mind", x:624, y:222,
+"s1-slow":{type:"mechanism", title:"System 2: the slow mind", x:900, y:250,
   l0:"The effortful self that grinds through 17×24 — capable, deliberate, easily tired.",
   l1:"System 2 is what you mean by 'I': it reasons, checks, holds focus. But it's slow and costly, and would rather rubber-stamp System 1 than do the work.",
   l2:"Its great power is the veto — it can override a fast impulse. Its great failing is that it rarely bothers, because catching System 1's errors costs effort it won't spend.",
   threads:[["rests on","a1"],["the fast partner","s1-fast"],["too lazy to check","s1-lazy"]]},
-"s1-ease":{type:"mechanism", title:"Cognitive ease", x:254, y:528,
+"s1-ease":{type:"mechanism", title:"Cognitive ease", x:260, y:780,
   l0:"Whatever is easy to process feels true, good, and familiar.",
   l1:"Clear fonts, repeated claims, rhyming slogans, a good mood — each makes an idea slide in without friction, and the mind reads that smoothness as truth.",
   l2:"Ease is System 1's shortcut for 'safe and familiar'. Strain flips System 2 on and makes you skeptical — which is why a hard-to-read font can actually cut errors.",
   threads:[["rests on","a2"],["exploited by","s2-anchor"],["repeats become truth","s1-priming"]]},
-"s1-priming":{type:"mechanism · story", title:"The associative machine", x:520, y:407,
+"s1-priming":{type:"mechanism · story", title:"The associative machine", x:720, y:570,
   l0:"One idea silently summons a crowd of others — and steers you without your knowing.",
   l1:"See EAT and you finish SO_P as SOUP; see WASH and you get SOAP. Words about the elderly make people leave the room walking slower. The mind primes, and the body follows.",
   l2:"System 1 links everything to everything — words, feelings, actions all cross-firing. You experience the result as your own free thought, never the nudge behind it.",
   threads:[["rests on","a1"],["rides on ease","s1-ease"]]},
-"s1-lazy":{type:"principle", title:"The lazy controller", x:716, y:563,
+"s1-lazy":{type:"principle", title:"The lazy controller", x:1060, y:840,
   l0:"You identify with System 2 — but System 1 writes most of the script.",
   l1:"The self you experience as reasoning is mostly a press secretary, endorsing conclusions System 1 already reached. Real control is knowing the few moments worth the effort to check.",
   l2:"From the two-system split plus scarce attention: since System 2 won't check everything, wisdom is spotting the high-stakes moments where it must. Naming the trap is the start of the cure.",
   threads:[["rests on","a2"],["the fast author","s1-fast"],["the reluctant editor","s1-slow"]]},
 
-"s2-substitution":{type:"mechanism", title:"The substitution trick", x:1837, y:233,
+"s2-substitution":{type:"mechanism", title:"The substitution trick", x:3000, y:270,
   l0:"Faced with a hard question, the mind quietly answers an easier one instead.",
   l1:"'How happy am I with life?' becomes 'what's my mood right now?'. 'Is this CEO any good?' becomes 'does he look the part?'. You answer the easy one and feel you answered the hard one.",
   l2:"This swap is the engine under most heuristics: the mind maps a difficult target onto a handy question it can answer fast. Cheap, usually fine, occasionally disastrous.",
   threads:[["rests on","a3"],["one swap","s2-anchor"],["another swap","s2-availability"],["and another","s2-represent"]]},
-"s2-anchor":{type:"mechanism", title:"Anchoring", sim:"anchoring", x:2219, y:210,
+"s2-anchor":{type:"mechanism", title:"Anchoring", sim:"anchoring", x:3660, y:230,
   l0:"Any number you just saw drags your next estimate toward it — even a random one.",
   l1:"Kahneman spun a rigged wheel, then asked what percent of UN nations are African. Wheel on 10 → people guessed 25%. Wheel on 65 → they guessed 45%. A number they knew was random moved them 20 points.",
   l2:"Anchors work by priming: the mind adjusts away from the starting value and stops too soon. It happens even when the anchor is obviously meaningless — which is why the first offer matters so much.",
   threads:[["a form of","s2-substitution"],["rides on priming","s1-priming"]]},
-"s2-availability":{type:"mechanism", title:"Availability", x:2069, y:384,
+"s2-availability":{type:"mechanism", title:"Availability", x:3400, y:530,
   l0:"We judge how likely something is by how easily examples come to mind.",
   l1:"Plane crashes feel common because they're vivid and on the news; quiet killers like diabetes feel rare. Ease of recall, not real frequency, sets the gut estimate.",
   l2:"It swaps 'how easily can I recall this?' for 'how often does it happen?'. Media, recency and drama all inflate the number — availability is why we fear the wrong things.",
   threads:[["a form of","s2-substitution"],["fed by vividness","s1-ease"]]},
-"s2-represent":{type:"mechanism", title:"Stereotypes vs base rates", x:2392, y:453,
+"s2-represent":{type:"mechanism", title:"Stereotypes vs base rates", x:3960, y:650,
   l0:"We match to a stereotype and ignore how common the thing actually is.",
   l1:"Told someone is shy and loves order, we cry 'librarian' — forgetting there are far more shy men in other jobs than there are librarians at all. The stereotype drowns out the base rate.",
   l2:"Judging by resemblance ignores prior odds, sample size, and regression. It's why a good story beats a boring statistic, and why we read tiny samples as if they were laws.",
   threads:[["a form of","s2-substitution"],["ignores","s2-regression"]]},
-"s2-regression":{type:"mechanism", title:"Regression to the mean", sim:"regression", x:1895, y:569,
+"s2-regression":{type:"mechanism", title:"Regression to the mean", sim:"regression", x:3100, y:850,
   l0:"After an extreme result, the next one is usually milder — no cause required.",
   l1:"The rookie who tore up his first season slumps; the pilot praised for a great landing does worse next time, the one scolded does better. We invent causes for what is just luck averaging out.",
   l2:"Any performance is skill plus luck. When luck spikes high or low it tends not to repeat, so extremes drift back toward average — and we credit praise or blame for what regression alone explains.",
   threads:[["ignored by","s2-represent"],["a cause we invent","s3-narrative"]]},
 
-"s3-narrative":{type:"mechanism", title:"Hindsight & the tidy story", x:271, y:962,
+"s3-narrative":{type:"mechanism", title:"Hindsight & the tidy story", x:290, y:1530,
   l0:"We turn the messy past into a clean story that felt inevitable all along.",
   l1:"Once we know how it ended we rewrite the start: 'of course that startup won.' Hindsight erases how uncertain it truly was, and the neat story quietly buries the luck.",
   l2:"The mind craves coherence, so it manufactures causes and forgets it was ever surprised. The world then looks far more predictable than it is — and confident storytellers get rewarded.",
   threads:[["rests on","a3"],["invents causes for","s2-regression"],["breeds","s3-validity"]]},
-"s3-validity":{type:"tension", title:"The illusion of validity", x:600, y:1008,
+"s3-validity":{type:"tension", title:"The illusion of validity", x:860, y:1610,
   l0:"Feeling sure about a judgment is no evidence that the judgment is any good.",
   l1:"Kahneman rated soldiers' leadership with great confidence; the ratings barely predicted anything — and the confidence survived untouched. The feeling of validity is about coherence, not accuracy.",
   l2:"Skill forms only where the world is regular and feedback is fast. Where it isn't — stock picks, long-range forecasts — confident experts do little better than chance, and know it least.",
   threads:[["rests on","a4"],["grows from","s3-narrative"],["so prefer","s3-formulas"]]},
-"s3-formulas":{type:"principle", title:"When formulas beat experts", x:311, y:1210,
+"s3-formulas":{type:"principle", title:"When formulas beat experts", x:360, y:1960,
   l0:"In noisy, low-feedback fields, a simple checklist usually beats the expert gut.",
   l1:"Decades of studies: plain formulas match or beat trained specialists at predicting parole, illness, even wine prices. Experts are inconsistent — the same case judged twice gets two answers. A formula never wavers.",
   l2:"Trust intuition only where skill can actually form: a regular world with fast, clear feedback — a chess master, a nurse. Everywhere else, discipline and rules beat the confident hunch.",
   threads:[["rests on","a4"],["answers","s3-validity"]]},
-"s3-planning":{type:"mechanism", title:"The planning fallacy", x:774, y:1152,
+"s3-planning":{type:"mechanism", title:"The planning fallacy", x:1160, y:1860,
   l0:"Plans are built from best-case stories, so projects run long, over budget, over hope.",
   l1:"The kitchen reno, the thesis, the software launch — each takes longer and costs more than anyone planned. We picture the smooth path and ignore the base rate of all that usually goes wrong.",
   l2:"The cure is the outside view: drop your specific plan and ask how long similar projects actually took. Real cases already include the delays your optimistic story left out.",
   threads:[["rests on","a3"],["a face of","s3-optimism"]]},
-"s3-optimism":{type:"principle", title:"Optimism & the inside view", x:543, y:1326,
+"s3-optimism":{type:"principle", title:"Optimism & the inside view", x:760, y:2160,
   l0:"We overrate our odds because we see our own case from the inside.",
   l1:"Most founders know the failure rate and still feel it won't apply to them. The inside view — our vivid, detailed plan — crowds out the dull statistics that actually predict the result.",
   l2:"Optimism fuels courage, so it isn't all bad — but unchecked it hides risk. The correction is cheap: deliberately take the outside view before you commit.",
   threads:[["rests on","a4"],["shows up as","s3-planning"]]},
 
-"s4-value":{type:"mechanism", title:"The value function", sim:"valuefunction", x:1583, y:979,
+"s4-value":{type:"mechanism", title:"The value function", sim:"valuefunction", x:2560, y:1560,
   l0:"We judge outcomes as gains and losses from where we stand — not as final wealth.",
   l1:"Winning $1M feels wonderful; but sliding from $2M to $1M feels like ruin. Same balance, opposite feeling — because the mind measures the change from a reference point, not the total.",
   l2:"The value curve bends: concave for gains, convex for losses, and steeper on the loss side. That single shape gives you loss aversion and most of prospect theory.",
   threads:[["rests on","a3"],["its steep side","s4-loss"],["measured from","s4-reference"]]},
-"s4-loss":{type:"principle", title:"Loss aversion", x:1901, y:944,
+"s4-loss":{type:"principle", title:"Loss aversion", x:3110, y:1500,
   l0:"Losses hurt about twice as much as the same-size gain feels good.",
   l1:"Most people refuse a coin flip that risks $100 to win $100 — you'd need nearer $200 upside to tempt them. The dread of losing simply outweighs the pleasure of winning.",
   l2:"Built into the value curve's steeper loss side, this one asymmetry drives the endowment effect, status-quo bias, and why we cling to losing bets. We are wired to defend what we hold.",
   threads:[["comes from","s4-value"],["explains","s4-endowment"]]},
-"s4-reference":{type:"mechanism", title:"Reference points", x:2219, y:979,
+"s4-reference":{type:"mechanism", title:"Reference points", x:3660, y:1560,
   l0:"The same outcome is a gain or a loss depending on what you compared it to.",
   l1:"A $5,000 bonus is a windfall if you expected nothing and a gut-punch if you expected $10,000. Expectations, not reality, set the zero line that decides how it feels.",
   l2:"Because the reference point moves, whoever sets it owns the feeling. Shift the baseline and the very same result flips from delight to disappointment.",
   threads:[["defines","s4-value"],["exploited by","s4-framing"]]},
-"s4-framing":{type:"tension", title:"Framing", sim:"framing", x:2439, y:1095,
+"s4-framing":{type:"tension", title:"Framing", sim:"framing", x:4040, y:1760,
   l0:"The same facts, worded two ways, produce two opposite choices.",
   l1:"'200 of 600 saved' and '400 of 600 die' describe the identical outcome — yet the first makes people play safe and the second makes them gamble. The words, not the facts, decide.",
   l2:"Framing works because System 1 accepts the description it's handed and never reframes it. '90% fat-free' sells; '10% fat' doesn't. Whoever writes the sentence tilts the choice.",
   threads:[["exploits","s4-reference"],["rests on","a3"]]},
-"s4-endowment":{type:"phenomenon", title:"The endowment effect", x:1612, y:1181,
+"s4-endowment":{type:"phenomenon", title:"The endowment effect", x:2610, y:1910,
   l0:"The moment something is yours, it's worth more — losing it now looms large.",
   l1:"Give people a mug and they demand about twice what buyers will pay for the identical mug. Owning it turned selling into a loss, and losses hurt double.",
   l2:"It's loss aversion applied to possessions: parting with what you have registers as a loss, not a foregone gain. It gums up trades, markets, and letting go of anything.",
   threads:[["comes from","s4-loss"]]},
-"s4-fourfold":{type:"mechanism", title:"Certainty and possibility", x:1959, y:1152,
+"s4-fourfold":{type:"mechanism", title:"Certainty and possibility", x:3210, y:1860,
   l0:"We crave dead certainty and overpay for tiny chances — so we misprice the extremes.",
   l1:"Going 95%→100% safe feels worth far more than 60%→65% — certainty commands a premium. And a 1-in-1000 jackpot feels much bigger than its odds, which is why lotteries sell.",
   l2:"We don't weigh probabilities straight: near-certain outcomes get shaved and near-impossible ones get inflated. That warped weighting drives insurance, gambling and courtroom settlements.",
   threads:[["rests on","a3"],["extreme case","s4-rare"]]},
-"s4-rare":{type:"mechanism", title:"Rare events loom large", x:1728, y:1355,
+"s4-rare":{type:"mechanism", title:"Rare events loom large", x:2810, y:2210,
   l0:"A vivid unlikely event gets overweighted the instant you can picture it.",
   l1:"One dramatic attack reshapes a nation's behaviour; a '1% risk' described in words scares more than a bare 1%. Give a rare event a vivid face and the mind treats it as bigger than it is.",
   l2:"Availability and probability weighting combine: the more easily you imagine it, the heavier it weighs. It's why we buy lottery tickets and fear the wrong, rarer dangers.",
   threads:[["a face of","s4-fourfold"],["fed by","s2-availability"]]},
-"s4-experiencing":{type:"phenomenon", title:"The experiencing self", x:2330, y:1255,
+"s4-experiencing":{type:"phenomenon", title:"The experiencing self", x:3710, y:2010,
   l0:"The self that actually lives your life, moment to moment — and is barely counted.",
   l1:"It's the one feeling the pain right now, tasting this bite, sitting in this meeting. Its currency is the sum of moments — yet almost no decision is made on its behalf.",
   l2:"The experiencing self has no voice in memory; once a moment passes it's gone. What survives to steer the next choice is a story told by someone else entirely.",
   threads:[["rests on","a1"],["overruled by","s4-remembering"]]},
-"s4-remembering":{type:"phenomenon", title:"The remembering self", x:2444, y:1361,
+"s4-remembering":{type:"phenomenon", title:"The remembering self", x:4050, y:2220,
   l0:"The self that keeps the story and makes the decisions — a biased narrator.",
   l1:"It doesn't tally every moment; it files a headline from the highs, the lows, and the ending. When you pick your next holiday, this narrator — not the one who lived the last — is at the wheel.",
   l2:"So we optimize for the memory, not the experience — choosing the trip that photographs well over the one that felt better. The narrator's shortcuts are the next star.",
   threads:[["overrules","s4-experiencing"],["files by","s4-peakend"]]},
-"s4-peakend":{type:"mechanism", title:"Peak-end & duration neglect", sim:"peakend", x:2132, y:1470,
+"s4-peakend":{type:"mechanism", title:"Peak-end & duration neglect", sim:"peakend", x:3510, y:2410,
   l0:"Memory scores an experience by its peak and its end — and ignores how long it lasted.",
   l1:"A shorter, sharper pain is remembered as worse than a longer one that eased off at the finish. Add extra mild discomfort after the peak and, absurdly, people recall the whole ordeal as better.",
   l2:"The remembering self averages the most intense moment with the final one and forgets duration entirely. So how something ends can matter more than how much of it there was.",
   threads:[["used by","s4-remembering"],["defies","s4-experiencing"]]},
-"s4-twoselves":{type:"principle", title:"Who are you living for?", x:1830, y:1560,
+"s4-twoselves":{type:"principle", title:"Who are you living for?", x:3010, y:2560,
   l0:"Live for the experience, or for the story you'll keep? They want different lives.",
   l1:"The remembering self books the dramatic trip; the experiencing self would have preferred the calm one. Most of us serve the narrator by default — and call it what we want.",
   l2:"Kahneman's unsettling close: neither self is the 'real' you, yet they pull apart, and whichever you favour reshapes which choices are worth making. Seeing the split is the point of the whole book.",
@@ -376,59 +375,53 @@ a4:{type:"axiom", title:"Confidence is a feeling", x:1259, y:771,
 };
 
 const TERRITORIES = [
-  {label:"I · The Two Systems", sum:"two minds, one head", hue:"#4a6684", lx:508, ly:147, rx:265, ry:199, rw:1318, rh:954},
-  {label:"II · Judgment & Heuristics", sum:"fast answers to hard questions", hue:"#4f7050", lx:2115, ly:147, rx:2115, ry:199, rw:1480, rh:1012},
-  {label:"The Bedrock", sum:"how the mind is built", hue:"#6f6455", lx:2010, ly:560, rx:1490, ry:620, rw:1250, rh:760, small:true},
-  {label:"III · Overconfidence & Illusions", sum:"sure, and often wrong", hue:"#8a5c5c", lx:520, ly:869, rx:288, ry:1447, rw:1306, rh:902},
-  {label:"IV · Choices & the Two Selves", sum:"how we value, decide, remember", hue:"#96702f", lx:2011, ly:846, rx:1479, ry:869, rw:1630, rh:1734}
+  {label:"I · The Two Systems", sum:"two minds, one head", hue:"#7d93ab", lx:700, ly:120, rx:280, ry:210, rw:2280, rh:1650},
+  {label:"II · Judgment & Heuristics", sum:"fast answers to hard questions", hue:"#87a087", lx:3480, ly:120, rx:3480, ry:210, rw:2560, rh:1750},
+  {label:"The Bedrock", sum:"how the mind is built", hue:"#9a938a", lx:2010, ly:560, rx:1490, ry:620, rw:1250, rh:760, small:true},
+  {label:"III · Overconfidence & Illusions", sum:"sure, and often wrong", hue:"#ab8d8d", lx:720, ly:1370, rx:320, ry:2370, rw:2260, rh:1560},
+  {label:"IV · Choices & the Two Selves", sum:"how we value, decide, remember", hue:"#c9a36a", lx:3300, ly:1330, rx:2380, ry:1370, rw:2820, rh:3000}
 ];
+
 const ASTERISMS = [
-  ["#4a6684", [["s1-fast","s1-slow"],["s1-fast","s1-ease"],["s1-ease","s1-priming"],["s1-slow","s1-lazy"],["s1-ease","s1-lazy"]]],
-  ["#4f7050", [["s2-substitution","s2-anchor"],["s2-substitution","s2-availability"],["s2-substitution","s2-represent"],["s2-represent","s2-regression"]]],
-  ["#6f6455", [["a1","a2"],["a1","a3"],["a2","a4"],["a3","a4"]]],
-  ["#8a5c5c", [["s3-narrative","s3-validity"],["s3-validity","s3-formulas"],["s3-narrative","s3-planning"],["s3-planning","s3-optimism"]]],
-  ["#96702f", [["s4-value","s4-loss"],["s4-value","s4-reference"],["s4-reference","s4-framing"],["s4-loss","s4-endowment"],
+  ["#7d93ab", [["s1-fast","s1-slow"],["s1-fast","s1-ease"],["s1-ease","s1-priming"],["s1-slow","s1-lazy"],["s1-ease","s1-lazy"]]],
+  ["#87a087", [["s2-substitution","s2-anchor"],["s2-substitution","s2-availability"],["s2-substitution","s2-represent"],["s2-represent","s2-regression"]]],
+  ["#9a938a", [["a1","a2"],["a1","a3"],["a2","a4"],["a3","a4"]]],
+  ["#ab8d8d", [["s3-narrative","s3-validity"],["s3-validity","s3-formulas"],["s3-narrative","s3-planning"],["s3-planning","s3-optimism"]]],
+  ["#c9a36a", [["s4-value","s4-loss"],["s4-value","s4-reference"],["s4-reference","s4-framing"],["s4-loss","s4-endowment"],
     ["s4-value","s4-fourfold"],["s4-fourfold","s4-rare"],["s4-experiencing","s4-remembering"],["s4-remembering","s4-peakend"],
     ["s4-experiencing","s4-twoselves"],["s4-remembering","s4-twoselves"],["s4-peakend","s4-twoselves"]]]
 ];
-const TOUR = ["s1-fast","s1-slow","s1-ease","s1-priming","s1-lazy",
-  "s2-substitution","s2-anchor","s2-availability","s2-represent","s2-regression",
-  "s3-narrative","s3-validity","s3-formulas","s3-planning","s3-optimism",
-  "s4-value","s4-loss","s4-reference","s4-framing","s4-endowment","s4-fourfold","s4-rare",
-  "s4-experiencing","s4-remembering","s4-peakend","s4-twoselves"];
 
 const ALL = Object.keys(N);
-const TERRNAME = {s1:"I · The Two Systems", s2:"II · Judgment & Heuristics", s3:"III · Overconfidence & Illusions", s4:"IV · Choices & the Two Selves", a:"The Bedrock"};
-const HUES = {s1:"#4a6684", s2:"#4f7050", s3:"#8a5c5c", s4:"#96702f", a:"#6f6455"};
-const hueOf = id => id.startsWith("a") ? HUES.a : HUES[id.slice(0,2)];
-const terrOf = id => id.startsWith("a") ? TERRNAME.a : TERRNAME[id.slice(0,2)];
-const SEQ = {}; TOUR.forEach((id,i)=>SEQ[id]=i+1);
+const TERRNAME = {b1:"I · The Broken Promise", b2:"II · Order Hidden in Chaos",
+  b3:"III · The Fluke View of Life", b4:"IV · Reading the Domain", a:"The Bedrock"};
+const HUES = {b1:"#7d93ab", b2:"#87a087", b3:"#ab8d8d", b4:"#c9a36a", a:"#9a938a"};
+const hueOf = id => id.startsWith('a') ? HUES.a : HUES[id.slice(0,2)];
+const terrOf = id => id.startsWith('a') ? TERRNAME.a : TERRNAME[id.slice(0,2)];
 
-/* degree from curated links (for star size) */
+/* backlinks: who points INTO each idea (Roam's linked references) */
+const BACK = {};
+ALL.forEach(id => N[id].threads.forEach(([lab,t])=>{
+  (BACK[t] = BACK[t]||[]).push([lab, id]);
+}));
+/* degree → dot size */
 const DEG = {};
-ALL.forEach(id=>DEG[id]=0);
-ALL.forEach(id=>{
-  const n = N[id];
-  connsList(n).forEach(c=>{ DEG[id]++; DEG[c.t]=(DEG[c.t]||0)+1; });
-});
-const dotSize = id => 16 + Math.min(DEG[id],8)*2.2;
-const dotCenter = id => ({x:N[id].x+dotSize(id)/2, y:N[id].y+dotSize(id)/2});
+ALL.forEach(id => DEG[id] = N[id].threads.length + (BACK[id]||[]).length);
 
 /* ============================================================
    CAMERA
    ============================================================ */
 const vp = document.getElementById('vp');
 const world = document.getElementById('world');
-const reader = document.getElementById('reader');
-const WW = 2750, WH = 1750;
+const WW = 4400, WH = 2760;
 let cam = {s:0.12, tx:0, ty:0};
 let anim = null;
 function apply(){
   world.style.transform = `translate(${cam.tx}px, ${cam.ty}px) scale(${cam.s})`;
   lod();
 }
-function readerW(){ return reader.classList.contains('open') ? (reader.getBoundingClientRect().width||430) : 0; }
-function visW(){ return innerWidth - readerW(); }
+function visW(){ return reader.classList.contains('open') ? innerWidth - readerW() : innerWidth; }
+function readerW(){ return reader.getBoundingClientRect().width || 430; }
 function centerOn(cx, cy, s){
   cam.s = s;
   cam.tx = visW()/2 - cx*s;
@@ -506,21 +499,19 @@ vp.addEventListener('dblclick', e=>{
 });
 addEventListener('keydown', e=>{
   if (e.key==='Escape'){ closeReader(); overviewCam(); }
-  if (e.key==='ArrowRight') navStep(1);
-  if (e.key==='ArrowLeft') navStep(-1);
 });
 document.getElementById('overviewBtn').onclick = ()=>{ closeReader(); overviewCam(); };
 addEventListener('resize', ()=>apply());
 
 /* ============================================================
-   SKY — constellation names, asterisms, ecliptic, stars
+   MAP LAYER — territories + dot markers only
    ============================================================ */
 TERRITORIES.forEach(t=>{
   const rgb = [parseInt(t.hue.slice(1,3),16), parseInt(t.hue.slice(3,5),16), parseInt(t.hue.slice(5,7),16)].join(',');
   const l = document.createElement('div');
   l.className = 'tlab';
   l.style.cssText = `left:${t.lx}px; top:${t.ly}px; transform:translateX(-50%);`;
-  l.innerHTML = `<div class="big" style="color:rgba(${rgb},0.92)">${t.label}</div>
+  l.innerHTML = `<div class="big" style="color:rgba(${rgb},0.5)">${t.label}</div>
     <div class="sum">${t.sum}</div>`;
   l.addEventListener('click', ()=>{
     flyTo(t.rx+t.rw/2, t.ry+Math.min(t.rh/2, 1000), Math.min(visW()/(t.rw+300), 0.5));
@@ -528,45 +519,18 @@ TERRITORIES.forEach(t=>{
   world.appendChild(l);
 });
 
+const TOUR = ["s1-fast","s1-slow","s1-ease","s1-priming","s1-lazy",
+  "s2-substitution","s2-anchor","s2-availability","s2-represent","s2-regression",
+  "s3-narrative","s3-validity","s3-formulas","s3-planning","s3-optimism",
+  "s4-value","s4-loss","s4-reference","s4-framing","s4-endowment","s4-fourfold","s4-rare",
+  "s4-experiencing","s4-remembering","s4-peakend","s4-twoselves"];
 
-
-/* minor stars — small nameless flecks inside each figure */
-{
-  const R = mulberry32(11);
-  TERRITORIES.forEach(t=>{
-    for (let i=0;i<16;i++){
-      const d=document.createElement('div');
-      const sz=(2.5+R()*3).toFixed(1);
-      d.style.cssText=`position:absolute; left:${Math.round(t.rx+40+R()*(t.rw-80))}px;`+
-        `top:${Math.round(t.ry+40+R()*(t.rh-80))}px; width:${sz}px; height:${sz}px;`+
-        `border-radius:50%; background:${t.hue}; opacity:${(0.18+R()*0.22).toFixed(2)}; pointer-events:none;`;
-      world.appendChild(d);
-    }
-  });
-}
+const SEQ = {}; TOUR.forEach((id,i)=>SEQ[id]=i+1);
+const dotSize = id => 16 + Math.min(DEG[id],7)*2.5;
+const dotCenter = id => ({x:N[id].x+dotSize(id)/2, y:N[id].y+dotSize(id)/2});
 
 const flowsvg = document.createElementNS('http://www.w3.org/2000/svg','svg');
-flowsvg.setAttribute('width',WW); flowsvg.setAttribute('height',WH);
-flowsvg.style.cssText='position:absolute;top:0;left:0;pointer-events:none;overflow:visible;';
-world.appendChild(flowsvg);
-
-const astsvg = document.createElementNS('http://www.w3.org/2000/svg','svg');
-astsvg.id='astsvg'; astsvg.setAttribute('width',WW); astsvg.setAttribute('height',WH);
-ASTERISMS.forEach(([hue, pairs])=>{
-  pairs.forEach(([a,b])=>{
-    const pa=dotCenter(a), pb=dotCenter(b);
-    const dx=pb.x-pa.x, dy=pb.y-pa.y, L=Math.hypot(dx,dy)||1;
-    const ux=dx/L, uy=dy/L, off=30;
-    const ln = document.createElementNS('http://www.w3.org/2000/svg','line');
-    ln.setAttribute('x1',pa.x+ux*off); ln.setAttribute('y1',pa.y+uy*off);
-    ln.setAttribute('x2',pb.x-ux*off); ln.setAttribute('y2',pb.y-uy*off);
-    ln.setAttribute('stroke',hue); ln.setAttribute('stroke-opacity','0.38');
-    ln.setAttribute('stroke-width','1.6');
-    astsvg.appendChild(ln);
-  });
-});
-world.appendChild(astsvg);
-
+flowsvg.id='flowsvg'; flowsvg.setAttribute('width',WW); flowsvg.setAttribute('height',WH);
 {
   const pts = TOUR.map(id=>dotCenter(id));
   let d = `M ${pts[0].x} ${pts[0].y}`;
@@ -577,16 +541,28 @@ world.appendChild(astsvg);
   }
   const p = document.createElementNS('http://www.w3.org/2000/svg','path');
   p.setAttribute('d',d); p.setAttribute('fill','none');
-  p.setAttribute('stroke','rgba(61,56,51,0.08)'); p.setAttribute('stroke-width','4');
-  p.setAttribute('stroke-dasharray','2,14');
+  p.setAttribute('stroke','rgba(232,230,227,0.04)'); p.setAttribute('stroke-width','4'); p.setAttribute('stroke-dasharray','2,14');
   flowsvg.appendChild(p);
 }
+world.appendChild(flowsvg);
+
+const astsvg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+astsvg.id='astsvg'; astsvg.setAttribute('width',WW); astsvg.setAttribute('height',WH);
+ASTERISMS.forEach(([hue, pairs])=>{
+  pairs.forEach(([a,b])=>{
+    const pa=dotCenter(a), pb=dotCenter(b);
+    const ln = document.createElementNS('http://www.w3.org/2000/svg','line');
+    ln.setAttribute('x1',pa.x); ln.setAttribute('y1',pa.y);
+    ln.setAttribute('x2',pb.x); ln.setAttribute('y2',pb.y);
+    ln.setAttribute('stroke',hue); ln.setAttribute('stroke-opacity','0.22');
+    ln.setAttribute('stroke-width','1.6');
+    astsvg.appendChild(ln);
+  });
+});
+world.appendChild(astsvg);
 
 const tsvg = document.createElementNS('http://www.w3.org/2000/svg','svg');
 tsvg.id='tsvg'; tsvg.setAttribute('width',WW); tsvg.setAttribute('height',WH);
-const defs = document.createElementNS('http://www.w3.org/2000/svg','defs');
-defs.innerHTML = `<marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="#96702f" opacity="0.8"/></marker>`;
-tsvg.appendChild(defs);
 world.appendChild(tsvg);
 const tlabels = [];
 
@@ -600,10 +576,11 @@ ALL.forEach(id=>{
   m.style.cssText = `left:${n.x}px; top:${n.y}px;`;
   m.dataset.id = id;
   m.innerHTML = `
-    <div class="dot" style="width:${size}px; height:${size}px; background:${hue};"></div>
+    <div class="dot" style="width:${size}px; height:${size}px; background:${hue};
+      animation-delay:${(id.length*137)%4000}ms;"></div>
     <div class="dtext">
       <div class="lbl">${SEQ[id]?`<span class="seq">${SEQ[id]}</span>`:''}${n.title}</div>
-      <div class="ess">${n.ess}</div>
+      <div class="ess">${n.l0}</div>
       <div class="sims-badge">▸ live model</div>
     </div>`;
   world.appendChild(m);
@@ -615,6 +592,7 @@ ALL.forEach(id=>{
   });
 });
 
+/* semantic zoom: essences appear close-up, territory labels fade */
 function lod(){
   const ess = cam.s > 0.55;
   if (lod._k===ess) return;
@@ -623,9 +601,9 @@ function lod(){
 }
 
 /* ============================================================
-   MEMORY (visit patina — no quiz mechanics)
+   MEMORY
    ============================================================ */
-const MEMKEY = 'chaos-constellation-memory';
+const MEMKEY = 'tfs-atlas-memory';
 let MEM = {};
 try{ MEM = JSON.parse(localStorage.getItem(MEMKEY)||'{}'); }catch(e){}
 const FADE_MS = 3*24*3600*1000;
@@ -638,56 +616,18 @@ function ago(t){
   return Math.round(d/(24*3600000))+'d ago';
 }
 function refreshMemory(){
-  let fading = [];
   ALL.forEach(id=>{
-    const rec = MEM[id];
-    mkEls[id].classList.toggle('visited', !!rec);
-    const isFading = !!rec && (Date.now()-rec.last > FADE_MS);
-    mkEls[id].classList.toggle('fading', isFading);
-    if (isFading) fading.push(id);
     const hue = hueOf(id), dot = mkEls[id].querySelector('.dot');
-    if (isFading){ dot.style.background='transparent'; dot.style.border=`2px solid ${hue}99`; dot.style.boxShadow='none'; }
-    else if (rec){ dot.style.background=hue; dot.style.border='none';
-      dot.style.boxShadow = `0 0 0 ${2+Math.min(rec.n,6)*1.5}px ${hue}22`; }
-    else { dot.style.background=hue+'59'; dot.style.border=`2px solid ${hue}`; dot.style.boxShadow='none'; }
+    dot.style.boxShadow = `0 0 12px 1px ${hue}55`;
   });
-  document.getElementById('count').textContent =
-    `${Object.keys(MEM).length} of ${ALL.length} ideas visited`;
-  const btn = document.getElementById('nudge');
-  if (fading.length){
-    btn.style.display='';
-    btn.textContent = `${fading.length} idea${fading.length>1?'s':''} fading — revisit`;
-    btn.onclick = ()=>openIdea(fading.sort((a,b)=>MEM[a].last-MEM[b].last)[0]);
-  } else btn.style.display='none';
+  const btn = document.getElementById('nudge'); if (btn) btn.style.display='none';
 }
 
 /* ============================================================
-   READER
+   READER — the fixed home for reading
    ============================================================ */
+const reader = document.getElementById('reader');
 let focusId = null, stopSim = null;
-
-function connsList(n){
-  if(n.builds||n.leads||n.live){
-    return [].concat(
-      (n.builds||[]).map(x=>({t:x[0],lab:'builds on',into:true})),
-      (n.leads||[]).map(x=>({t:x[0],lab:'leads to',into:false})),
-      (n.live||[]).map(x=>({t:x[0],lab:'see it live',into:false})));
-  }
-  return (n.threads||[]).map(x=>({t:x[1],lab:x[0],into:false}));
-}
-function renderLinks(n){
-  if(n.builds||n.leads||n.live){
-    return linkGroup('builds on', n.builds||[]) + linkGroup('leads to', n.leads||[]) + linkGroup('see it live', n.live||[]);
-  }
-  return linkGroup('connections', (n.threads||[]).map(x=>[x[1], x[0]]));
-}
-function linkGroup(kicker, items){
-  if (!items.length) return '';
-  return `<div class="lgroup"><span class="kicker">${kicker}</span>
-    ${items.map(([t,why])=>`<a data-t="${t}"><span class="t">${N[t].title}</span>
-      <span class="why">${why}</span></a>`).join('')}
-  </div>`;
-}
 
 function openIdea(id){
   const n = N[id];
@@ -695,37 +635,42 @@ function openIdea(id){
   rec.n++; rec.last = Date.now(); saveMem();
   if (stopSim){ stopSim(); stopSim=null; }
   focusId = id;
+  // reader content
   const chip = document.getElementById('rChip');
   chip.textContent = n.type;
   chip.style.borderColor = hueOf(id)+'66'; chip.style.color = hueOf(id);
   document.getElementById('rTitle').textContent = n.title;
-  document.getElementById('rTerr').textContent = terrOf(id) + (SEQ[id]?` · step ${SEQ[id]} of ${TOUR.length}`:'');
-  const nextId = SEQ[id] && SEQ[id] < TOUR.length ? TOUR[SEQ[id]] : null;
+  document.getElementById('rTerr').textContent = terrOf(id);
+  const backs = BACK[id]||[];
   document.getElementById('rbody').innerHTML = `
-    ${n.hook ? `<div class="hook">${n.hook}</div>` : `<div class="hook">${n.l0||''}</div>`}
-    <div class="story">${n.story||n.l1||''}</div>
+    <div class="l0">${n.l0}</div>
+    <div class="l1">${n.l1}</div>
     ${n.sim ? simHTML(n.sim) : ''}
-    ${(n.mech||n.l2) ? `<details class="fold"><summary>How it actually works</summary><div class="inner">${n.mech||n.l2}</div></details>` : ''}
-    ${n.term ? `<div class="named"><span class="kicker">the idea, named</span><b>${n.term}</b><div class="def">${n.def}</div></div>` : ''}
-    ${n.sowhat ? `<div class="sowhat"><span class="kicker">where it bites</span>${n.sowhat}</div>` : ''}
-    <div class="linkrow">${renderLinks(n)}</div>
-    ${nextId ? `<button class="nextbtn" data-t="${nextId}"><span class="k">next in the flow · ${SEQ[nextId]} of ${TOUR.length}</span>${N[nextId].title}<span class="arr">→</span></button>`
-             : (SEQ[id]===TOUR.length ? `<button class="nextbtn" id="finishBtn"><span class="k">end of the flow</span>Back to the sky<span class="arr">↑</span></button>` : '')}
-    <div class="seen">visited <b>${rec.n}×</b> · last ${ago(rec.last)}</div>`;
+    ${n.l2 ? `<details class="fold"><summary>How it actually works</summary><div class="inner">${n.l2}</div></details>` : ''}
+    <div class="threadrow">
+    <div class="thread">
+      <span class="kicker">follow the thread</span>
+      ${n.threads.map(([lab,t])=>`<a data-t="${t}"><span class="rel">${lab}</span><span class="t">${N[t].title}</span></a>`).join('')}
+    </div>
+    ${backs.length?`<div class="thread back">
+      <span class="kicker">linked from</span>
+      ${backs.map(([lab,src])=>`<a data-t="${src}"><span class="rel">${lab} ·</span><span class="t">${N[src].title}</span></a>`).join('')}
+    </div>`:''}
+    </div>
+    `;
   document.querySelectorAll('#rbody [data-t]').forEach(a=>
     a.addEventListener('click', ()=>openIdea(a.dataset.t)));
-  const fin = document.getElementById('finishBtn');
-  if (fin) fin.onclick = ()=>{ closeReader(); overviewCam(); };
   const fig = document.querySelector('#rbody figure.frame');
   if (fig) stopSim = SIMS[fig.dataset.sim](fig);
-  document.getElementById('rbody').scrollTop = 0;
   reader.classList.add('open');
   document.body.classList.add('reader-open');
+  // map: highlight focus + neighbors, dim the rest, glow local threads
   highlight(id);
   refreshMemory();
-  syncNav();
+  // camera: keep the focused dot centered in the visible (non-reader) area
   const rs = Math.min(0.95, Math.max(0.62, cam.s));
-  setTimeout(()=>flyTo(n.x+180, n.y+60, rs), 60);
+  setTimeout(()=>flyTo(n.x+250, n.y+70, rs), 60);
+  if (flowOn) syncFlowbar();
 }
 function closeReader(){
   if (stopSim){ stopSim(); stopSim=null; }
@@ -733,91 +678,51 @@ function closeReader(){
   document.body.classList.remove('reader-open');
   focusId = null;
   clearHighlight();
-  syncNav();
 }
 document.getElementById('rClose').onclick = closeReader;
 
-/* map highlight: few directional lines with plain labels */
 function highlight(id){
   clearHighlight();
-  const n = N[id];
   const nb = new Set([id]);
-  const conns = connsList(n);
-  conns.forEach(c=>nb.add(c.t));
+  N[id].threads.forEach(([l,t])=>nb.add(t));
+  (BACK[id]||[]).forEach(([l,s])=>nb.add(s));
   ALL.forEach(x=>{
     mkEls[x].classList.toggle('dimmed', !nb.has(x));
     mkEls[x].classList.toggle('neighbor', nb.has(x) && x!==id);
     mkEls[x].classList.toggle('focused', x===id);
   });
-  const here = dotCenter(id);
-  conns.forEach(c=>{
-    const there = dotCenter(c.t);
-    let from = c.into ? {...there} : {...here};
-    let to   = c.into ? {...here} : {...there};
-    {
-      const ddx=to.x-from.x, ddy=to.y-from.y, LL=Math.hypot(ddx,ddy)||1;
-      const ux=ddx/LL, uy=ddy/LL, off=30;
-      from = {x:from.x+ux*off, y:from.y+uy*off};
-      to   = {x:to.x-ux*off,   y:to.y-uy*off};
-    }
+  const from = dotCenter(id);
+  N[id].threads.forEach(([lab,t])=>{
+    const to = dotCenter(t);
     const dx=to.x-from.x, dy=to.y-from.y, dist=Math.hypot(dx,dy)||1;
-    const cx=(from.x+to.x)/2 - dy/dist*dist*0.12, cy=(from.y+to.y)/2 + dx/dist*dist*0.12;
+    const cx=(from.x+to.x)/2 - dy/dist*dist*0.13, cy=(from.y+to.y)/2 + dx/dist*dist*0.13;
     const p = document.createElementNS('http://www.w3.org/2000/svg','path');
     p.setAttribute('d',`M ${from.x} ${from.y} Q ${cx} ${cy} ${to.x} ${to.y}`);
     p.setAttribute('fill','none');
-    p.setAttribute('stroke','rgba(150,112,47,0.45)');
+    p.setAttribute('stroke','rgba(201,163,106,0.32)');
     p.setAttribute('stroke-width','2.5');
     p.setAttribute('stroke-dasharray','9,8');
     p.setAttribute('class','tline');
-    p.setAttribute('marker-end','url(#arr)');
     tsvg.appendChild(p);
     const lbl = document.createElement('div');
     lbl.className='tlabel';
     lbl.style.left = (.25*from.x+.5*cx+.25*to.x)+'px';
     lbl.style.top = (.25*from.y+.5*cy+.25*to.y)+'px';
-    lbl.textContent = c.lab;
-    lbl.addEventListener('click', e=>{ e.stopPropagation(); openIdea(c.t); });
+    lbl.textContent = lab;
+    lbl.addEventListener('click', e=>{ e.stopPropagation(); openIdea(t); });
     world.appendChild(lbl);
     tlabels.push(lbl);
   });
 }
 function clearHighlight(){
   ALL.forEach(x=>mkEls[x].classList.remove('dimmed','neighbor','focused'));
-  [...tsvg.querySelectorAll('path')].forEach(p=>p.remove());
-  tlabels.forEach(l=>l.remove()); tlabels.length=0;
+  tsvg.innerHTML=''; tlabels.forEach(l=>l.remove()); tlabels.length=0;
 }
 
 /* ============================================================
-   NAV — top-right cluster drives the default flow
+   SIMULATIONS (in the reader)
    ============================================================ */
-function syncNav(){
-  const cl = document.getElementById('navcluster');
-  const lbl = document.getElementById('navStep');
-  const i = focusId ? TOUR.indexOf(focusId) : -1;
-  if (i < 0){
-    cl.classList.add('idle');
-    lbl.innerHTML = '▶ Begin the tour';
-  } else {
-    cl.classList.remove('idle');
-    lbl.innerHTML = `Step ${i+1} <span class="tot">/ ${TOUR.length}</span>`;
-    document.getElementById('navPrev').disabled = i<=0;
-    document.getElementById('navNext').disabled = i===TOUR.length-1;
-  }
-}
-document.getElementById('navStep').onclick = ()=>{ if(TOUR.indexOf(focusId)<0) openIdea(TOUR[0]); };
-function navStep(dir){
-  const i = focusId ? TOUR.indexOf(focusId) : -1;
-  if (i<0){ openIdea(TOUR[0]); return; }
-  const j = i+dir;
-  if (j>=0 && j<TOUR.length) openIdea(TOUR[j]);
-}
-document.getElementById('navPrev').onclick = ()=>navStep(-1);
-document.getElementById('navNext').onclick = ()=>navStep(1);
-
-/* ============================================================
-   SIMULATIONS
-   ============================================================ */
-const INKC='#3d3833', GRAY='#8a8069', FAINT='#b0a68c', AMBER='#96702f', SUNK='#ece4d2', BRD='#d5c9ae';
+const INKC='#e8e6e3', GRAY='#8a8a8a', FAINT='#5a5a5a', AMBER='#c9a36a', SUNK='#202020', BRD='#2e2e2e';
 function mulberry32(a){ return function(){ a|=0; a=a+0x6D2B79F5|0;
   let t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t;
   return ((t^t>>>14)>>>0)/4294967296; }; }
@@ -862,28 +767,32 @@ SIMS.anchoring = fig=>{
   function frame(){
     const target=ANS[anchor];
     shown += (target-shown)*0.08;
-    ctx.fillStyle='#ece4d2'; ctx.fillRect(0,0,W,H);
+    ctx.fillStyle='#202020'; ctx.fillRect(0,0,W,H);
     ctx.font='15px Inter, sans-serif';
-    ctx.fillStyle='#6b6250';
+    ctx.fillStyle='#8a8a8a';
     ctx.fillText("What percent of UN nations are in Africa?", 40, 46);
-    ctx.fillStyle='#8a8069'; ctx.fillText("the rigged wheel stopped at", 40, 92);
-    ctx.fillStyle='#96702f'; ctx.font='40px Inter, sans-serif';
+    // the anchor
+    ctx.fillStyle='#5a5a5a'; ctx.fillText("the rigged wheel stopped at", 40, 92);
+    ctx.fillStyle='#c9a36a'; ctx.font='40px Inter, sans-serif';
     ctx.fillText(anchor, 320, 100);
+    // scale
     const bx=60, by=300, bw=W-120;
-    ctx.strokeStyle='#c9bda1'; ctx.lineWidth=1;
+    ctx.strokeStyle='#3a3a3a'; ctx.lineWidth=1;
     ctx.beginPath(); ctx.moveTo(bx,by); ctx.lineTo(bx+bw,by); ctx.stroke();
     for(let v=0;v<=100;v+=25){ const x=bx+bw*v/100;
-      ctx.fillStyle='#8a8069'; ctx.font='12px Inter, sans-serif';
-      ctx.fillText(v+"%", x-8, by+22);
+      ctx.fillStyle='#5a5a5a'; ctx.font='12px Inter, sans-serif';
+      ctx.fillText(v+"%", x-8, by+22); 
       ctx.beginPath(); ctx.moveTo(x,by-4); ctx.lineTo(x,by+4); ctx.stroke(); }
+    // anchor tick
     const ax=bx+bw*(+anchor)/100;
-    ctx.strokeStyle='#8a8069'; ctx.setLineDash([3,4]);
+    ctx.strokeStyle='#5a5a5a'; ctx.setLineDash([3,4]);
     ctx.beginPath(); ctx.moveTo(ax,by-140); ctx.lineTo(ax,by); ctx.stroke(); ctx.setLineDash([]);
-    ctx.fillStyle='#8a8069'; ctx.font='12px Inter, sans-serif'; ctx.fillText("anchor", ax-16, by-146);
+    ctx.fillStyle='#5a5a5a'; ctx.font='12px Inter, sans-serif'; ctx.fillText("anchor", ax-16, by-146);
+    // estimate bar
     const ex=bx+bw*shown/100;
-    ctx.fillStyle='#96702f';
+    ctx.fillStyle='#c9a36a';
     ctx.fillRect(bx, by-92, ex-bx, 34);
-    ctx.fillStyle='#26221d'; ctx.font='20px Inter, sans-serif';
+    ctx.fillStyle='#e8e6e3'; ctx.font='20px Inter, sans-serif';
     ctx.fillText("average guess: "+shown.toFixed(0)+"%", bx+6, by-102);
     raf=requestAnimationFrame(frame);
   }
@@ -908,30 +817,33 @@ SIMS.regression = fig=>{
   const px=40, py=30, pw=W-80, ph=H-90;
   const sx=v=>px+pw*(v+4)/8, sy=v=>py+ph*(4-v)/8;
   function draw(){
-    ctx.fillStyle='#ece4d2'; ctx.fillRect(0,0,W,H);
-    ctx.strokeStyle='#c9bda1'; ctx.lineWidth=1;
+    ctx.fillStyle='#202020'; ctx.fillRect(0,0,W,H);
+    // axes
+    ctx.strokeStyle='#3a3a3a'; ctx.lineWidth=1;
     ctx.beginPath(); ctx.moveTo(px,sy(0)); ctx.lineTo(px+pw,sy(0)); ctx.stroke();
     ctx.beginPath(); ctx.moveTo(sx(0),py); ctx.lineTo(sx(0),py+ph); ctx.stroke();
-    ctx.fillStyle='#8a8069'; ctx.font='12px Inter, sans-serif';
+    ctx.fillStyle='#5a5a5a'; ctx.font='12px Inter, sans-serif';
     ctx.fillText("round 1 →", px+pw-70, sy(0)+18);
     ctx.save(); ctx.translate(px-8, py+14); ctx.rotate(-Math.PI/2);
     ctx.fillText("round 2 →", 0,0); ctx.restore();
+    // threshold: top 18% of round1
     const sorted=[...pts].sort((a,b)=>b[0]-a[0]);
     const thr=sorted[Math.floor(n*0.18)][0];
     let starR2=0, starN=0;
     pts.forEach(([x,y])=>{
       const top=x>=thr;
-      ctx.fillStyle= top ? '#96702f' : 'rgba(107,98,80,0.5)';
+      ctx.fillStyle= top ? '#c9a36a' : 'rgba(138,138,138,0.5)';
       ctx.beginPath(); ctx.arc(sx(x),sy(y), top?4:3, 0, 7); ctx.fill();
       if(top){ starR2+=y; starN++; }
     });
     starR2/=starN;
     const starR1=sorted.slice(0,starN).reduce((a,p)=>a+p[0],0)/starN;
-    ctx.strokeStyle='#96702f'; ctx.setLineDash([5,4]); ctx.lineWidth=1.5;
+    // their means
+    ctx.strokeStyle='#c9a36a'; ctx.setLineDash([5,4]); ctx.lineWidth=1.5;
     ctx.beginPath(); ctx.moveTo(sx(thr),py); ctx.lineTo(sx(thr),py+ph); ctx.stroke(); ctx.setLineDash([]);
-    ctx.fillStyle='#26221d'; ctx.font='14px Inter, sans-serif';
+    ctx.fillStyle='#e8e6e3'; ctx.font='14px Inter, sans-serif';
     ctx.fillText("round-1 stars (amber): avg "+starR1.toFixed(1)+"  →  round 2: "+starR2.toFixed(1)+"  (sank toward 0)", 44, H-16);
-    ctx.fillStyle='#6b6250'; ctx.font='12px Inter, sans-serif';
+    ctx.fillStyle='#8a8a8a'; ctx.font='12px Inter, sans-serif';
     ctx.fillText("no coaching, no slump — just luck failing to repeat", 44, H-38);
   }
   draw();
@@ -946,24 +858,27 @@ SIMS.valuefunction = fig=>{
   const val=x=> x>=0 ? Math.pow(x,0.88) : -2.25*Math.pow(-x,0.88);
   let out=-50;
   function draw(){
-    ctx.fillStyle='#ece4d2'; ctx.fillRect(0,0,W,H);
-    ctx.strokeStyle='#c9bda1'; ctx.lineWidth=1;
+    ctx.fillStyle='#202020'; ctx.fillRect(0,0,W,H);
+    ctx.strokeStyle='#3a3a3a'; ctx.lineWidth=1;
     ctx.beginPath(); ctx.moveTo(20,cy); ctx.lineTo(W-20,cy); ctx.stroke();
     ctx.beginPath(); ctx.moveTo(cx,20); ctx.lineTo(cx,H-20); ctx.stroke();
-    ctx.fillStyle='#8a8069'; ctx.font='12px Inter, sans-serif';
+    ctx.fillStyle='#5a5a5a'; ctx.font='12px Inter, sans-serif';
     ctx.fillText("gain →", W-70, cy-8); ctx.fillText("← loss", 26, cy-8);
     ctx.fillText("value felt", cx+8, 30);
-    ctx.strokeStyle='#6b6250'; ctx.lineWidth=2; ctx.beginPath();
+    // curve
+    ctx.strokeStyle='#8a8a8a'; ctx.lineWidth=2; ctx.beginPath();
     for(let x=-100;x<=100;x++){ const X=cx+x*ux, Y=cy-val(x)*uy;
       x===-100?ctx.moveTo(X,Y):ctx.lineTo(X,Y); }
     ctx.stroke();
+    // marker
     const mx=cx+out*ux, my=cy-val(out)*uy;
-    ctx.strokeStyle='#96702f'; ctx.setLineDash([3,4]); ctx.lineWidth=1;
+    ctx.strokeStyle='#c9a36a'; ctx.setLineDash([3,4]); ctx.lineWidth=1;
     ctx.beginPath(); ctx.moveTo(mx,cy); ctx.lineTo(mx,my); ctx.stroke();
     ctx.beginPath(); ctx.moveTo(cx,my); ctx.lineTo(mx,my); ctx.stroke(); ctx.setLineDash([]);
-    ctx.fillStyle='#96702f'; ctx.beginPath(); ctx.arc(mx,my,5,0,7); ctx.fill();
+    ctx.fillStyle='#c9a36a'; ctx.beginPath(); ctx.arc(mx,my,5,0,7); ctx.fill();
+    // readout
     const g=val(Math.abs(out)), pain=val(out);
-    ctx.fillStyle='#26221d'; ctx.font='14px Inter, sans-serif';
+    ctx.fillStyle='#e8e6e3'; ctx.font='14px Inter, sans-serif';
     if(out<0){
       ctx.fillText("a loss of "+(-out)+" feels like "+pain.toFixed(0)+" ...", 30, H-42);
       ctx.fillText("...the same "+(-out)+" as a gain would feel only +"+g.toFixed(0), 30, H-22);
@@ -985,27 +900,28 @@ SIMS.framing = fig=>{
   const W=700,H=400;
   let fr="saved";
   function draw(){
-    ctx.fillStyle='#ece4d2'; ctx.fillRect(0,0,W,H);
-    ctx.fillStyle='#6b6250'; ctx.font='15px Inter, sans-serif';
+    ctx.fillStyle='#202020'; ctx.fillRect(0,0,W,H);
+    ctx.fillStyle='#8a8a8a'; ctx.font='15px Inter, sans-serif';
     ctx.fillText("An outbreak threatens 600 people. Two programmes:", 30, 40);
     const sure = fr==="saved" ? "Programme A: 200 people are saved" : "Programme A: 400 people die";
     const gamble = fr==="saved" ? "Programme B: 1/3 chance all 600 saved, 2/3 chance none saved"
                                  : "Programme B: 1/3 chance nobody dies, 2/3 chance all 600 die";
+    // A box
     const pref = fr==="saved" ? "A" : "B";
     const boxes=[["A",sure,90],["B",gamble,210]];
     boxes.forEach(([k,txt,y])=>{
       const on = k===pref;
-      ctx.fillStyle = on ? 'rgba(150,112,47,0.12)' : '#faf6ec';
-      ctx.strokeStyle = on ? '#b08d4f' : '#c9bda1'; ctx.lineWidth=on?2:1;
+      ctx.fillStyle = on ? 'rgba(201,163,106,0.12)' : '#252525';
+      ctx.strokeStyle = on ? '#8a744f' : '#3a3a3a'; ctx.lineWidth=on?2:1;
       ctx.fillRect(40,y,W-80,86); ctx.strokeRect(40,y,W-80,86);
-      ctx.fillStyle = on ? '#96702f' : '#443f33'; ctx.font='16px Inter, sans-serif';
+      ctx.fillStyle = on ? '#c9a36a' : '#c8c6c1'; ctx.font='16px Inter, sans-serif';
       ctx.fillText("Programme "+k, 58, y+30);
-      ctx.fillStyle='#443f33'; ctx.font='13.5px Inter, sans-serif';
+      ctx.fillStyle='#c8c6c1'; ctx.font='13.5px Inter, sans-serif';
       ctx.fillText(txt.replace("Programme "+k+": ",""), 58, y+56);
-      if(on){ ctx.fillStyle='#96702f'; ctx.font='12px Inter, sans-serif';
+      if(on){ ctx.fillStyle='#c9a36a'; ctx.font='12px Inter, sans-serif';
         ctx.fillText("← most people choose this", W-230, y+30); }
     });
-    ctx.fillStyle='#6b6250'; ctx.font='13px Inter, sans-serif';
+    ctx.fillStyle='#8a8a8a'; ctx.font='13px Inter, sans-serif';
     ctx.fillText("Both programmes are identical in the two framings. Only the wording changed —", 40, 355);
     ctx.fillText("yet 'saved' pulls people to the safe A, and 'die' pushes them to gamble on B.", 40, 375);
   }
@@ -1021,6 +937,7 @@ SIMS.peakend = fig=>{
   const cv=fig.querySelector('canvas'); cv.width=700; cv.height=400;
   const ctx=cv.getContext('2d');
   const W=700,H=400,bx=50,by=250,bw=W-90,bh=200;
+  // A: short (60), ends high. B: long (90), same peak, gentle end.
   const A=[], B=[];
   for(let t=0;t<=60;t++){ A.push([t, 3+5*Math.sin(t/60*Math.PI*0.9)+ (t>50? (t-50)*0.5:0)]); }
   for(let t=0;t<=90;t++){ let p=3+5*Math.sin(Math.min(t,60)/60*Math.PI*0.9); if(t>60)p=8-(t-60)*0.28; B.push([t,Math.max(1.5,p)]); }
@@ -1030,27 +947,27 @@ SIMS.peakend = fig=>{
   function stats(arr){ const peak=Math.max(...arr.map(p=>p[1])); const end=arr[arr.length-1][1];
     const total=arr.reduce((a,p)=>a+p[1],0); return {peak,end,total,rem:(peak+end)/2}; }
   function draw(){
-    ctx.fillStyle='#ece4d2'; ctx.fillRect(0,0,W,H);
-    ctx.strokeStyle='#c9bda1'; ctx.lineWidth=1;
+    ctx.fillStyle='#202020'; ctx.fillRect(0,0,W,H);
+    ctx.strokeStyle='#3a3a3a'; ctx.lineWidth=1;
     ctx.beginPath(); ctx.moveTo(bx,by); ctx.lineTo(bx+bw,by); ctx.stroke();
-    ctx.fillStyle='#8a8069'; ctx.font='12px Inter, sans-serif';
+    ctx.fillStyle='#5a5a5a'; ctx.font='12px Inter, sans-serif';
     ctx.fillText("pain", bx-4, Y(10)-6); ctx.fillText("time →", bx+bw-46, by+18);
     const curve=(arr,col,al)=>{ ctx.strokeStyle=col; ctx.globalAlpha=al; ctx.lineWidth=2.5;
       ctx.beginPath(); arr.forEach((p,i)=> i?ctx.lineTo(X(p[0]),Y(p[1])):ctx.moveTo(X(p[0]),Y(p[1])) ); ctx.stroke(); ctx.globalAlpha=1; };
     const sA=stats(A), sB=stats(B);
-    curve(A,'#6b6250',0.9); curve(B,'#96702f',0.9);
-    ctx.fillStyle='#6b6250'; ctx.font='13px Inter, sans-serif'; ctx.fillText("Ordeal A — short, ends sharp", X(20), Y(A[20][1])-12);
-    ctx.fillStyle='#96702f'; ctx.fillText("Ordeal B — longer, ends gently", X(72), Y(B[72][1])-10);
+    curve(A,'#8a8a8a',0.9); curve(B,'#c9a36a',0.9);
+    ctx.fillStyle='#8a8a8a'; ctx.font='13px Inter, sans-serif'; ctx.fillText("Ordeal A — short, ends sharp", X(20), Y(A[20][1])-12);
+    ctx.fillStyle='#c9a36a'; ctx.fillText("Ordeal B — longer, ends gently", X(72), Y(B[72][1])-10);
     ctx.font='15px Inter, sans-serif';
     if(view==="felt"){
-      ctx.fillStyle='#26221d';
+      ctx.fillStyle='#e8e6e3';
       ctx.fillText("Total pain endured:  A = "+sA.total.toFixed(0)+"   B = "+sB.total.toFixed(0)+"  →  B is worse (more seconds of pain)", 30, H-40);
-      ctx.fillStyle='#6b6250'; ctx.font='12px Inter, sans-serif';
+      ctx.fillStyle='#8a8a8a'; ctx.font='12px Inter, sans-serif';
       ctx.fillText("The experiencing self, adding up every moment, would pick A.", 30, H-20);
     } else {
-      ctx.fillStyle='#26221d';
+      ctx.fillStyle='#e8e6e3';
       ctx.fillText("Remembered pain (peak+end)/2:  A = "+sA.rem.toFixed(1)+"   B = "+sB.rem.toFixed(1)+"  →  A is worse", 30, H-40);
-      ctx.fillStyle='#96702f'; ctx.font='12px Inter, sans-serif';
+      ctx.fillStyle='#c9a36a'; ctx.font='12px Inter, sans-serif';
       ctx.fillText("The remembering self picks B — the longer ordeal — because it ended gently. Duration ignored.", 30, H-20);
     }
   }
@@ -1063,12 +980,56 @@ SIMS.peakend = fig=>{
 };
 
 /* ============================================================
+   FLOW MODE — the default sequence, dot to dot
+   ============================================================ */
+let flowOn = false, flowIdx = 0;
+const flowbar = document.getElementById('flowbar');
+function startFlow(at=0){
+  flowOn = true; flowIdx = at;
+  flowbar.classList.add('on');
+  document.getElementById('flowBtn').textContent = '■ Stop flow';
+  openIdea(TOUR[flowIdx]);
+}
+function exitFlow(){
+  flowOn = false; flowbar.classList.remove('on');
+  document.getElementById('flowBtn').textContent = '▶ Flow';
+}
+function syncFlowbar(){
+  const onPath = TOUR.indexOf(focusId);
+  if (onPath >= 0) flowIdx = onPath;
+  document.getElementById('fStep').textContent =
+    onPath>=0 ? `flow · step ${flowIdx+1} of ${TOUR.length}` : 'off the path — next returns you';
+  document.getElementById('fCap').textContent = N[TOUR[flowIdx]] ? N[TOUR[flowIdx]].title : '';
+  document.getElementById('fPrev').disabled = flowIdx===0;
+  document.getElementById('fNext').textContent = flowIdx===TOUR.length-1 ? '✓' : '›';
+}
+document.getElementById('flowBtn').onclick = ()=> flowOn ? exitFlow() : startFlow(TOUR.indexOf(focusId)>=0 ? TOUR.indexOf(focusId) : 0);
+document.getElementById('fExit').onclick = exitFlow;
+document.getElementById('fPrev').onclick = ()=>{ if(flowIdx>0){ flowIdx--; openIdea(TOUR[flowIdx]); } };
+document.getElementById('fNext').onclick = ()=>{
+  if (TOUR.indexOf(focusId)<0){ openIdea(TOUR[flowIdx]); return; }
+  if (flowIdx<TOUR.length-1){ flowIdx++; openIdea(TOUR[flowIdx]); }
+  else { exitFlow(); closeReader(); overviewCam(); }
+};
+addEventListener('keydown', e=>{
+  if (!flowOn) return;
+  if (e.key==='ArrowRight') document.getElementById('fNext').click();
+  if (e.key==='ArrowLeft') document.getElementById('fPrev').click();
+});
+
+/* ============================================================
    BOOT
    ============================================================ */
 refreshMemory();
-syncNav();
 overviewCam(false);
-
+document.getElementById('enterBtn').onclick = ()=>{
+  document.getElementById('welcome').remove();
+  overviewCam();
+};
+document.getElementById('enterFlowBtn').onclick = ()=>{
+  document.getElementById('welcome').remove();
+  startFlow(0);
+};
 </script>
 </body>
 </html>
