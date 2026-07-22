@@ -17,6 +17,6 @@ Roughly a lustrum back, I shared this very feeling with a friend, and I swear, I
 
 The third time I watched this movie was over a month back. And this time, I interpreted it in a completely different way. More than just sympathising with the characters, I could empathise. Life had happened, and I had grown to have a broader understanding of self and society — and most important of all, I had developed kindness for myself. And today, I feel very grateful, which is partly why I write as well. Someone's blog changed my entire life. The blog was the ripple that created the waves I am surfing today.
 
-All of our emotions, and our ability to feel — the good, bad, ugly, amazing - everything makes us who we are. Art, music, poetry, stories, food, this is what enriches our lives. I hope to enrich my life even more as the clock turns and the calendars flip to the months and years ahead. I hope to write a lot as well. To live life with a full cup.
+All of our emotions, and our ability to feel everything - the good, bad, ugly - makes us who we are. Art, music, poetry, stories, food, this is what enriches our lives. I hope to enrich my life even more as the clock turns and the calendars flip to the months and years ahead. I hope to write a lot as well. To live life with a full cup.
 
 godspeed.
