@@ -8,9 +8,9 @@ permalink: /orrery
 
 An orrery is a little clockwork model of the heavens — planets on brass arms, turning so you can *see* how the system moves.
 
-This is mine for ideas. Each entry below is a **constellation**: a subject I'm trying to understand from first principles, laid out as a night sky of connected ideas you can zoom into, read, and poke. They're built to be **revisited** — the stars you return to brighten, the ones you neglect fade. Reading builds the model once; coming back is how it sticks.
+This is mine for ideas. Each entry below is a **constellation**: a subject I'm trying to understand from first principles, drawn as a celestial chart of connected ideas you can zoom into, read, and poke. Every idea opens with a question, pays it off with a story, and names the concept so you can keep it.
 
-Start anywhere. Follow the guided flow, or just wander.
+Follow the guided flow, or just wander — every thread rejoins the chart.
 
 ## Constellations
 
