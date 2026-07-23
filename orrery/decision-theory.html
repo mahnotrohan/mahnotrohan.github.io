@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decision Theory — Orrery</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+:root{
+  --ground:#f2ecdf; --surface-sunk:#ece4d2; --surface-raised:#faf6ec;
+  --border:#ddd2bc; --border-strong:#c9bda1;
+  --ink:#26221d; --ink-strong:#14110e; --ink-muted:#5b5343; --ink-faint:#83765b;
+  --accent:#96702f; --accent-dim:#b08d4f; --accent-wash:rgba(150,112,47,0.08);
+  --font:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --r:4px; --reader-w:min(760px, 58vw); --move-fast:150ms ease;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{height:100%; overflow:hidden; background:var(--ground); color:var(--ink);
+  font-family:var(--font); font-size:15.5px; line-height:1.75; overscroll-behavior:none;}
+h1,h2,h3{color:var(--ink-strong); font-weight:600; line-height:1.3;}
+.kicker{font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-muted); font-weight:500;}
+
+/* header — all navigation lives top right */
+#hdr{position:fixed; top:0; left:0; right:0; z-index:40; height:56px;
+  display:flex; align-items:center; gap:1.1rem; padding:0 1.4rem;
+  background:linear-gradient(180deg, rgba(242,236,223,.96), rgba(242,236,223,.75), transparent);
+  pointer-events:none; transition:right .3s cubic-bezier(.25,.7,.3,1);}
+body.reader-open #hdr{right:var(--reader-w);}
+#hdr>*{pointer-events:auto;}
+#hdr .t{font-size:15px; font-weight:600; color:var(--ink-strong);}
+#hdr .sub{font-size:11.5px; color:var(--ink-muted);}
+#hdr .spacer{flex:1;}
+#count{font-size:12px; color:var(--ink-faint); white-space:nowrap;}
+.hbtn{background:rgba(250,246,236,.92); border:1px solid var(--border-strong); color:var(--ink-muted);
+  font-family:var(--font); font-size:12.5px; padding:6px 13px; border-radius:var(--r); cursor:pointer;
+  transition:all var(--move-fast); white-space:nowrap;}
+.hbtn:hover{color:var(--ink); border-color:var(--ink-muted);}
+.hbtn:disabled{opacity:.35; cursor:default;}
+#navcluster{display:flex; align-items:center; gap:10px; opacity:0; pointer-events:none; transition:opacity .2s ease;
+  background:rgba(37,37,37,.92); border:1px solid var(--border-strong); border-radius:8px; padding:3px 6px;}
+#navcluster.on{opacity:1; pointer-events:auto;}
+#navcluster .hbtn{background:none; border:none; font-size:24px; font-weight:300; color:var(--ink-faint); padding:0 6px; line-height:1;}
+#navcluster .hbtn:hover{color:var(--ink-muted);}
+#navcluster .hbtn:disabled{opacity:.25;}
+
+/* viewport & sky */
+#vp{position:fixed; inset:0; cursor:grab; touch-action:none;
+  background:radial-gradient(ellipse at 50% 40%, #f6f1e4 0%, #f2ecdf 55%, #e9e0cb 100%);}
+#vp.dragging{cursor:grabbing;}
+#vp.dragging, #vp.dragging *{user-select:none;}
+#world{position:absolute; top:0; left:0; width:2750px; height:1750px;
+  transform-origin:0 0; will-change:transform;}
+#world::before{content:''; position:absolute; inset:0; pointer-events:none;
+  background-image:radial-gradient(circle, rgba(110,95,65,.14) 1.2px, transparent 1.2px),
+                   radial-gradient(circle, rgba(110,95,65,.08) 1px, transparent 1px);
+  background-size:380px 380px, 150px 150px;
+  background-position:0 0, 70px 100px; opacity:.8;}
+
+/* constellation names */
+.tlab{position:absolute; pointer-events:auto; cursor:pointer; user-select:none; text-align:center;}
+.tlab .big{font-size:40px; font-weight:500; letter-spacing:.5em; line-height:1.3;
+  text-transform:uppercase; white-space:nowrap;}
+.tlab .sum{text-shadow:0 0 5px #f2ecdf,0 0 5px #f2ecdf,0 0 3px #f2ecdf;
+  font-size:19px; color:#665c44; margin-top:.5em; letter-spacing:.18em; text-transform:uppercase;}
+.tlab:hover .big{filter:brightness(1.35);}
+
+/* stars */
+.mk{position:absolute; cursor:pointer; user-select:none;
+  display:flex; gap:14px; width:330px; align-items:flex-start;}
+.mk .dot{border-radius:50%; flex-shrink:0;
+  transition:transform .2s ease, box-shadow .4s ease, opacity .4s ease, background .4s ease;}
+.mk:hover .dot{transform:scale(1.3);}
+.mk .dtext{min-width:0; padding-top:1px;}
+.mk .lbl{text-shadow:0 0 5px #f2ecdf,0 0 5px #f2ecdf,0 0 3px #f2ecdf,0 0 3px #f2ecdf;
+  font-size:19px; color:#26221d; font-weight:500; line-height:1.3;}
+.mk .lbl .seq{font-size:12px; color:#83765b; font-weight:400; margin-right:.5em;}
+.mk .ess{text-shadow:0 0 5px #f2ecdf,0 0 5px #f2ecdf,0 0 3px #f2ecdf,0 0 3px #f2ecdf;
+  font-size:14px; color:#584f3e; line-height:1.45; margin-top:4px; max-width:290px;
+  opacity:0; transition:opacity .3s ease;}
+.mk.showess .ess{opacity:1;}
+.mk .sims-badge{font-size:12px; color:var(--accent-dim); margin-top:3px; display:none;}
+.mk.hasim .sims-badge{display:block;}
+.mk.focused .dot{transform:scale(1.35);}
+.mk.focused .lbl{color:var(--ink-strong);}
+.mk.neighbor .lbl{color:#14110e;}
+.mk.dimmed{opacity:.35;}
+
+/* connection overlay — few, directional, labeled plainly */
+#tsvg, #astsvg, #flowsvg{position:absolute; top:0; left:0; pointer-events:none; overflow:visible;}
+@keyframes dashdrift{to{stroke-dashoffset:-64;}}
+.tline{animation:dashdrift 6s linear infinite;}
+.tlabel{position:absolute; transform:translate(-50%,-50%); background:var(--ground);
+  border:1px solid var(--accent-dim); color:var(--accent); border-radius:12px;
+  font-size:12px; letter-spacing:.06em; padding:2px 11px; white-space:nowrap; cursor:pointer;
+  pointer-events:auto; transition:background var(--move-fast); text-transform:uppercase;}
+.tlabel:hover{background:var(--accent-wash);}
+
+/* ---------- READER ---------- */
+#reader{position:fixed; top:0; right:calc(-1 * var(--reader-w) - 20px); width:var(--reader-w);
+  height:100%; z-index:45; background:var(--surface-raised);
+  border-left:1px solid var(--border); display:flex; flex-direction:column;
+  transition:right .3s cubic-bezier(.25,.7,.3,1);
+  box-shadow:-24px 0 70px rgba(90,75,50,.18);}
+#reader.open{right:0;}
+#reader .top{padding:1.5em 2.2em 1em; border-bottom:1px solid var(--border); position:relative;}
+#reader .close{position:absolute; top:14px; right:16px; background:none; border:none;
+  color:var(--ink-faint); font-size:18px; cursor:pointer;}
+#reader .close:hover{color:var(--ink);}
+#reader h2{font-size:24px; margin:.45em 0 .3em;}
+#reader .terrline{font-size:11.5px; color:var(--ink-faint); margin-top:2px;}
+#rbody{flex:1; overflow-y:auto; padding:1.6em 2.2em 2.5em;}
+#rbody::-webkit-scrollbar{width:6px;}
+#rbody::-webkit-scrollbar-thumb{background:var(--border-strong); border-radius:3px;}
+#rbody>*{max-width:66ch;}
+.hook{font-size:18.5px; color:var(--ink-strong); line-height:1.65;
+  padding-left:1em; border-left:2px solid var(--accent-dim); margin-bottom:1.1em;}
+.story{font-size:15.5px; color:#2b2620;}
+.typechip{display:inline-block; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-muted); border:1px solid var(--border-strong); border-radius:3px; padding:1px 8px;}
+details.fold{margin:1.2em 0 0; border:1px solid var(--border); border-radius:var(--r); background:var(--surface-sunk);}
+details.fold summary{cursor:pointer; padding:.6em 1.05em; color:var(--ink-muted);
+  font-size:13px; list-style:none; user-select:none;}
+details.fold summary::-webkit-details-marker{display:none;}
+details.fold summary::before{content:'+  '; color:var(--accent); font-weight:500;}
+details.fold[open] summary::before{content:'−  ';}
+details.fold summary:hover{color:var(--ink);}
+details.fold .inner{padding:0 1.05em .9em; font-size:14.5px; color:#332e25;}
+.named{margin-top:1.5em; background:var(--surface-sunk); border:1px solid var(--border);
+  border-radius:8px; padding:1em 1.3em;}
+.named .kicker{display:block; margin-bottom:.35em;}
+.named b{color:var(--ink-strong); font-weight:600; font-size:16px;}
+.named .def{font-size:14.5px; color:#332e25; margin-top:.2em;}
+.sowhat{margin-top:1.4em; font-size:15px; color:#2b2620;}
+.sowhat .kicker{display:block; margin-bottom:.3em;}
+.closure{margin-top:1.5em; border:1px solid var(--accent-dim); border-radius:8px;
+  background:var(--accent-wash); padding:1em 1.3em;}
+.closure .kicker{color:var(--accent); display:block; margin-bottom:.3em;}
+.closure .txt{font-size:14.5px; color:#4a443c; line-height:1.65;}
+.linkrow{margin-top:1.6em; border-top:1px solid var(--border); padding-top:1em;
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:.6em 2em;}
+.lgroup .kicker{display:block; margin-bottom:.25em;}
+.lgroup a{display:block; font-size:14px; padding:.2em 0 .45em; color:#332e25; cursor:pointer; text-decoration:none;}
+.lgroup a .t{border-bottom:1px dotted transparent; transition:border-color var(--move-fast); color:var(--ink);}
+.lgroup a:hover .t{border-bottom-color:var(--accent);}
+.lgroup a .why{display:block; font-size:12px; color:var(--ink-faint); line-height:1.5;}
+.nextbtn{margin-top:1.8em; width:100%; max-width:66ch; text-align:left;
+  background:var(--surface-sunk); border:1px solid var(--border-strong); border-radius:8px;
+  color:var(--ink); font-family:var(--font); font-size:14.5px; padding:.9em 1.3em; cursor:pointer;
+  transition:all var(--move-fast);}
+.nextbtn:hover{border-color:var(--accent-dim); background:var(--accent-wash);}
+.nextbtn .k{color:var(--ink-faint); font-size:11px; letter-spacing:.12em; text-transform:uppercase;
+  display:block; margin-bottom:.15em;}
+.nextbtn .arr{color:var(--accent); float:right;}
+
+/* sim figure */
+figure.frame{background:var(--surface-sunk); border:1px solid var(--border); border-radius:var(--r);
+  margin:1.3em 0 0; overflow:hidden;}
+figure.frame canvas{width:100%; display:block;}
+figure.frame .controls{display:flex; gap:8px; padding:8px 12px; border-top:1px solid var(--border);
+  align-items:center; flex-wrap:wrap;}
+figure.frame .controls .cl{font-size:11.5px; color:var(--ink-faint);}
+figure.frame figcaption{padding:7px 13px 10px; font-size:12.5px; color:var(--ink-muted); line-height:1.55;}
+.ghost{background:none; border:1px solid var(--border-strong); color:var(--ink-muted);
+  font-family:var(--font); font-size:12px; padding:3px 11px; border-radius:var(--r); cursor:pointer;
+  transition:all var(--move-fast);}
+.ghost:hover{color:var(--ink); border-color:var(--ink-muted);}
+.ghost.active{color:var(--accent); border-color:var(--accent-dim); background:var(--accent-wash);}
+figure.frame input[type=range]{flex:1; min-width:100px; accent-color:var(--accent);}
+
+@media(max-width:760px){ :root{--reader-w:100vw;} }
+</style>
+</head>
+<body>
+
+<div id="hdr">
+  <div>
+    <div class="t">Decision Theory</div>
+    <div class="sub">a celestial chart of ideas · follow the flow or wander freely</div>
+  </div>
+  <div class="spacer"></div>
+  <div id="navcluster">
+    <button class="hbtn" id="navPrev" title="previous idea">‹</button>
+    <button class="hbtn" id="navNext" title="next idea">›</button>
+  </div>
+  <button class="hbtn" id="overviewBtn">Overview&nbsp;·&nbsp;Esc</button>
+</div>
+
+<div id="vp"><div id="world"></div></div>
+
+<div id="reader">
+  <div class="top">
+    <button class="close" id="rClose">✕</button>
+    <span class="typechip" id="rChip"></span>
+    <h2 id="rTitle"></h2>
+    <div class="terrline" id="rTerr"></div>
+  </div>
+  <div id="rbody"></div>
+</div>
+
+<script>
+'use strict';
+/* ============================================================
+   CONTENT v2 — every idea: hook → story → (sim) → mechanism
+   fold → the idea named → where it bites → you can now explain.
+   Connections: ≤4 per idea, in three plain buckets.
+   ============================================================ */
+const N = {
+
+a1:{type:"axiom", title:"Life is repeated decisions under uncertainty", x:1259, y:512,
+  ess:"You decide again and again, with limited energy, partial information, and shifting wants.",
+  hook:"What if 'make the perfect choice' was never the game — and chasing it is why you feel stuck?",
+  story:"Life is repeated decision-making under uncertainty, with limited energy, imperfect information, and changing preferences. Perfect choices are a fantasy; you're playing a long, noisy, repeated game.",
+  mech:"So the goal isn't one flawless call. It's a system that helps you make robust, adaptive, low-regret choices over and over — one that survives being wrong and keeps learning.",
+  term:"Repeated decision-making", def:"life modeled as a long series of choices under uncertainty rather than a few decisive ones.",
+  sowhat:"Stop grading yourself on single outcomes. Build a process you can run a thousand times, not a perfect answer you'll never find.",
+  builds:[], leads:[["a2","what a decision is made of"],["b1-laplace","the model underneath"]], live:[]},
+a2:{type:"axiom", title:"Every decision has five parts", x:1057, y:627,
+  ess:"You, the world, your options, the consequences, and the learning that follows.",
+  hook:"When a choice goes wrong, which of the five parts actually failed — and would you even know?",
+  story:"Every decision has five pieces: you (an agent with needs, values, energy); the world (uncertain, partly knowable); your options; the consequences that may follow; and the feedback that reshapes your future beliefs.",
+  mech:"Naming the parts locates your errors. A bad outcome might be bad values, bad beliefs, a missing option, or no feedback loop — not just bad execution.",
+  term:"The five parts", def:"agent, world, options, consequences, learning — the anatomy of any decision.",
+  sowhat:"Next misfire, ask which part broke. You'll usually find it wasn't effort — it was a blind spot upstream.",
+  builds:[], leads:[["a3","how the parts combine"]], live:[]},
+a3:{type:"axiom", title:"Values, then beliefs, then execution", x:1462, y:627,
+  ess:"A good decision = clear values + accurate beliefs + good options + sane execution + feedback.",
+  hook:"Most people polish their execution. Where's the real leverage actually hiding?",
+  story:"The equation: good decision = clear values + accurate beliefs + good options + sane execution + feedback. Most people obsess over execution. Smart people improve their beliefs. Wise people clarify their values.",
+  mech:"The order is the lesson: execution is downstream of belief, which is downstream of values. Fix the top of the stack and the rest gets easier; fix only the bottom and you sprint efficiently in the wrong direction.",
+  term:"The decision equation", def:"values + beliefs + options + execution + feedback, in order of leverage.",
+  sowhat:"Before optimizing how you do it, get honest about what you're optimizing for. That's where the wise spend their attention.",
+  builds:[], leads:[["b2-logistic","start with values"],["b1-principle","the wrong-variable trap"]], live:[]},
+a4:{type:"axiom", title:"Survival before optimization", x:1259, y:771,
+  ess:"Never take a risk that can knock you out of the game. Averages can lie.",
+  hook:"A bet with a great average return and a small chance of ruin — good bet or trap?",
+  story:"Ergodicity: a strategy with a high average payoff but a small chance of ruin can still be terrible, because ruin ends the repeated game. Averages describe a crowd; you walk one path, once.",
+  mech:"So survival comes before optimization. Refuse risks of physical, financial, reputational, or spiritual ruin — even when the expected value looks good — because you can't play tomorrow if today wipes you out.",
+  term:"Ergodicity / no ruin", def:"avoiding any risk that can permanently remove you from the game, whatever its average payoff.",
+  sowhat:"Cap your downside first. No upside is worth a real chance of ruin — protect the ability to keep playing.",
+  builds:[], leads:[["b1-sensitive","the humanized model"],["b4-process","and keep slack"]], live:[]},
+
+"b1-laplace":{type:"mechanism", title:"Expected value", sim:"ev", x:404, y:355,
+  ess:"Judge an option by probability times payoff — not by likelihood alone.",
+  hook:"A 30% shot at something huge, or a 90% shot at something tiny. Which is the better bet?",
+  story:"Classical decision theory says choose the highest expected utility: expected value = probability of an outcome times its value. A low-probability, high-upside action can beat a near-sure small one.",
+  mech:"The move is to stop judging by likelihood alone. A rare big win, especially with capped downside, is often worth more than a frequent trivial one — the payoff size matters as much as the odds.",
+  term:"Expected value", def:"probability of an outcome multiplied by the value of that outcome.",
+  sowhat:"When the downside is small and capped, take more low-odds, high-upside swings — writing, applying, building, learning hard things.",
+  builds:[["a3","beliefs meet values"]], leads:[["b1-pendulum","where this breaks"]], live:[]},
+"b1-pendulum":{type:"tension", title:"Why expected value breaks", x:884, y:309,
+  ess:"Real life won't hand you clean probabilities or a fixed idea of what you value.",
+  hook:"The math says maximize expected utility. So why does it so often give the wrong answer for a life?",
+  story:"Reality complicates the tidy equation: you don't know the true probabilities, you may not know what you truly value, emotion distorts perception, some outcomes are irreversible, and some choices change who you become.",
+  mech:"Each of these breaks a hidden assumption of classical EV — known odds, stable preferences, reversibility, a fixed self. Used naively, the formula optimizes a world you don't actually live in.",
+  term:"The limits of EV", def:"the ways real decisions violate classical expected-value assumptions.",
+  sowhat:"Use expected value as a lens, not a verdict. Where odds are unknown or outcomes irreversible, it needs the human upgrades that follow.",
+  builds:[["b1-laplace","the classical model"]], leads:[["b1-sensitive","the upgrade"]], live:[]},
+"b1-sensitive":{type:"principle", title:"The humanized model", x:520, y:522,
+  ess:"Choose actions with good upside, limited downside, strong learning value, and alignment with who you want to become.",
+  hook:"If you could only remember one rule for real-life choices, what would it be?",
+  story:"The life version of expected value: choose actions that have good upside, limited downside, strong learning value, and alignment with the person you want to become. Four criteria, not one number.",
+  mech:"This keeps EV's wisdom (weigh upside) while adding what it ignores: cap the downside (survival), prize what teaches you (feedback), and honor that choices shape your identity. It's EV for a person, not a spreadsheet.",
+  term:"The humanized model", def:"favor options with capped downside, real upside, learning value, and identity alignment.",
+  sowhat:"Run big choices through the four: upside, downside, learning, becoming. It catches what a raw expected-value calc misses.",
+  builds:[["b1-pendulum","fixing EV's blind spots"],["a4","downside first"]], leads:[["b1-lorenz-story","the becoming part"]], live:[]},
+"b1-lorenz-story":{type:"mechanism", title:"Some choices change who you become", x:254, y:656,
+  ess:"A few decisions don't just have outcomes — they rewrite the person doing the deciding.",
+  hook:"Which of your past choices didn't just change your life, but changed you?",
+  story:"Most choices give you consequences; some quietly reshape your character, tastes, and defaults. The job you take, the people you keep, the habits you repeat slowly turn you into a different chooser.",
+  mech:"This is why identity alignment belongs in the model: a decision that pays off but corrodes who you are is a bad trade. Ask not just what you'll get, but who you'll become by choosing it repeatedly.",
+  term:"Self-shaping choices", def:"decisions that alter the values, tastes, or character of the person making future decisions.",
+  sowhat:"For repeated or defining choices, ask who this makes you. Some wins aren't worth the self they cost.",
+  builds:[["b1-sensitive","the becoming criterion"]], leads:[["b1-principle","so optimize the right thing"]], live:[]},
+"b1-principle":{type:"principle", title:"Optimize the right variable", x:716, y:679,
+  ess:"Most bad life decisions come from optimizing hard for the wrong thing.",
+  hook:"You're clearly winning at something. Are you sure it's the thing that matters?",
+  story:"Not every decision should maximize money, status, pleasure, or efficiency. Sometimes the right variable is health, peace, love, freedom, skill, reputation, or dignity. Strong opinion: most bad life decisions come from optimizing for the wrong variable.",
+  mech:"Traces to values-first: pick the wrong objective and flawless execution just gets you to the wrong place faster. The first question of any decision is what you're actually optimizing for.",
+  term:"Objective selection", def:"choosing which variable a decision should actually maximize.",
+  sowhat:"Before you optimize, name the variable. Half of unhappiness is winning a game you never should have entered.",
+  builds:[["a3","values sit at the top"],["b1-lorenz-story","the self is a variable too"]], leads:[["b2-logistic","the stack begins here"]], live:[]},
+
+"b2-logistic":{type:"mechanism", title:"Values: what am I optimizing for?", x:1837, y:233,
+  ess:"The first question in any decision — and the one most people skip.",
+  hook:"Before weighing options, can you say in one word what this choice is really for?",
+  story:"Step one of the stack: ask what you're optimizing for. Money, health, peace, love, freedom, skill, dignity — each points to a different 'best' option. Skip this and you'll optimize by default, usually for whatever's easiest to measure.",
+  mech:"Values convert a vague dilemma into a solvable one by naming the target. They're first in the stack because everything downstream — beliefs, options, payoffs — is judged against them.",
+  term:"The values question", def:"explicitly naming the variable a given decision should serve.",
+  sowhat:"Open every real decision with 'what am I optimizing for here?' The answer often makes the choice obvious.",
+  builds:[["a3","values lead the stack"]], leads:[["b2-attractors","then examine beliefs"]], live:[]},
+"b2-attractors":{type:"mechanism", title:"Beliefs: what would change my mind?", x:2069, y:401,
+  ess:"Hold beliefs as probabilities, and update them on evidence — Bayesian, not binary.",
+  hook:"Instead of 'am I right?', try asking 'what evidence would change my mind?' Notice the difference?",
+  story:"Step two: ask what you believe is true and how sure you are. Think like a Bayesian — start with a belief, gather evidence, update gradually. Don't ask 'am I right?'; ask 'what would change my mind?'",
+  mech:"Framing beliefs as updatable probabilities keeps you honest and open. A belief with no disconfirming evidence attached isn't a conviction — it's an attachment.",
+  term:"Bayesian updating", def:"holding beliefs as probabilities and revising them incrementally as evidence arrives.",
+  sowhat:"For any strong view, write down what would change it. If nothing would, you're not reasoning — you're defending.",
+  builds:[["b2-logistic","values framed the question"]], leads:[["b2-lorenz-attractor","then widen the options"]], live:[]},
+"b2-lorenz-attractor":{type:"mechanism", title:"Options: what am I not seeing?", x:2300, y:282,
+  ess:"Expand the choice set before you choose. The best move is often C, D, or 'wait.'",
+  hook:"You're torn between A and B. What if the right answer is a C you haven't imagined?",
+  story:"Step three: ask what choices you're not seeing. People agonize between two options when the real move is a third, a combination, or 'wait and gather more information.' A great decision-maker expands the option set before choosing.",
+  mech:"Premature framing as A-vs-B is a common trap; the constraint is usually in your imagination, not the world. Generating options is cheap and happens before, not during, the pick.",
+  term:"Option generation", def:"deliberately widening the set of possible actions before selecting one.",
+  sowhat:"When stuck between two options, force out three more — including 'do nothing yet.' The winner is often not on the original list.",
+  builds:[["b2-attractors","beliefs in hand"]], leads:[["b2-tension-random","then price the payoffs"]], live:[]},
+"b2-tension-random":{type:"mechanism", title:"Payoffs: first- and second-order", x:2392, y:470,
+  ess:"Weigh not just what happens now, but later, and who it makes you, and what it does to trust and health.",
+  hook:"The immediate payoff looks great. What does it cost you in a year — or in character?",
+  story:"Step four: map upside, downside, and hidden costs across layers. First-order (what happens now), second-order (what happens later because of this), identity (who you become), relationship (what it does to trust), and health (what it does to your baseline state).",
+  mech:"Most regret hides in the later-order effects the immediate payoff obscures. Scanning all five layers surfaces the costs that don't show up on the first glance.",
+  term:"Order effects", def:"the layered consequences of a choice — immediate, delayed, identity, relational, physical.",
+  sowhat:"For any tempting option, ask 'and then what?' three times. The hidden costs live in the second and third answers.",
+  builds:[["b2-lorenz-attractor","options to compare"]], leads:[["b2-principle","then check reversibility"]], live:[]},
+"b2-principle":{type:"principle", title:"Reversibility: one-way or two-way door?", sim:"doors", x:1895, y:598,
+  ess:"For reversible decisions, move fast. For irreversible ones, slow down. Most people do the opposite.",
+  hook:"You agonize over the dinner menu but rushed the job, the debt, the move. Why?",
+  story:"Step five: ask whether you can undo this. Bezos's model — a two-way door you can walk back through, versus a one-way door you can't. For reversible decisions, move fast; for irreversible ones, slow down. Most people agonize over restaurant orders and rush into jobs, partners, debt, and lifestyle commitments.",
+  mech:"Reversibility sets the right speed and rigor. Spending heavy deliberation on cheap reversible choices wastes the cognition that irreversible ones actually need.",
+  term:"One-way vs two-way doors", def:"classifying decisions by whether they can be reversed, to set deliberation speed.",
+  sowhat:"Sort each choice by the door it is. Speed through the two-way doors; save your care for the one-way ones.",
+  builds:[["b2-tension-random","payoffs, now weighed"]], leads:[["b3-kokura","now the wider models"]], live:[]},
+
+"b3-kokura":{type:"mechanism", title:"Opportunity cost", x:271, y:962,
+  ess:"Every yes is a no to everything else you could have done with that time.",
+  hook:"What did saying yes to your last commitment quietly cost you the chance to do?",
+  story:"Every 'yes' is a 'no' to something else. The true cost of an option isn't just its price — it's the best alternative you gave up to take it. Your calendar reveals your real values better than your self-image does.",
+  mech:"Ignoring opportunity cost makes everything look free. Counting it turns 'is this good?' into the sharper 'is this better than what it displaces?'",
+  term:"Opportunity cost", def:"the value of the best alternative forgone when you choose one option.",
+  sowhat:"Judge commitments against what they crowd out, not in isolation. And audit your calendar — it's your values, revealed.",
+  builds:[["a1","the repeated game has limited time"]], leads:[["b3-contingency","and information has value"]], live:[]},
+"b3-contingency":{type:"mechanism", title:"Value of information", x:601, y:1008,
+  ess:"Sometimes the best move isn't to choose — it's to buy cheap information first.",
+  hook:"Before the big leap, what's the smallest, cheapest thing you could learn that would change the call?",
+  story:"Sometimes the best decision is not choosing yet, but gathering cheap information. Before a big career move, talk to five people doing the job. Before starting a company, test demand. Before committing to a relationship, observe behavior under stress.",
+  mech:"Information has value when it can change your decision and costs less than being wrong. Buying it converts an irreversible gamble into a staged, better-informed one.",
+  term:"Value of information", def:"the worth of cheap evidence gathered before a costly, hard-to-reverse choice.",
+  sowhat:"Before any big commitment, ask what small test would most reduce your uncertainty — then run it first.",
+  builds:[["b2-lorenz-attractor","'wait' was an option"]], leads:[["b3-timeline","and mind your regrets"]], live:[]},
+"b3-timeline":{type:"mechanism", title:"Regret minimization", x:312, y:1210,
+  ess:"Ask which mistake you'd rather have made, looking back from ten years out.",
+  hook:"Ten years from now, which will sting more — the failure you risked, or the chance you ducked?",
+  story:"Ask: ten years from now, which mistake would I rather have made? Especially for career, love, creativity, and adventure, you'll usually regret cowardice more than failure — assuming the downside isn't catastrophic.",
+  mech:"Shifting to the long view quiets present fear and status-noise, exposing what you'll actually care about. The 'downside isn't catastrophic' clause keeps it married to survival-first.",
+  term:"Regret minimization", def:"choosing to minimize anticipated long-term regret rather than short-term discomfort.",
+  sowhat:"For bold, non-ruinous choices, run the ten-year test. Fear shrinks; the cost of cowardice comes into focus.",
+  builds:[["a4","only when downside is capped"]], leads:[["b3-principle","and invert"]], live:[]},
+"b3-principle":{type:"principle", title:"Inversion: avoid the ruiners", sim:"inversion", x:774, y:1152,
+  ess:"Instead of 'how do I live well?', ask 'how would I ruin my life?' — then avoid those things.",
+  hook:"What if the fastest route to a good life is just refusing to wreck it?",
+  story:"Invert the question. Rather than 'how do I live well?', ask 'how would I ruin my life?' The reliable ruiners: sleep deprivation, bad partners, addiction, chronic debt, resentment, no exercise, no close friends, a fragile ego, dishonest work, and environments that reward your worst traits. Then avoid them.",
+  mech:"Avoiding disaster is easier and higher-leverage than engineering excellence, and the ruiners are few and knowable. Subtracting them removes most catastrophic downside at once.",
+  term:"Inversion", def:"solving for what to avoid by studying failure, then steering clear of it.",
+  sowhat:"Write your personal list of ruiners and design them out of your life. Not losing is most of winning.",
+  builds:[["a4","ruin is the thing to dodge"]], leads:[["b3-plan","then balance explore and exploit"]], live:[]},
+"b3-plan":{type:"tension", title:"Explore vs exploit", sim:"explore", x:543, y:1326,
+  ess:"Explore when young, uncertain, or stuck; exploit when you've found what works.",
+  hook:"Are you still sampling when you should commit — or committing when you should still be sampling?",
+  story:"Life alternates between exploration and exploitation. Explore when young, uncertain, or stuck; exploit when you've found something that works. The mistake is exploring forever because commitment feels scary, or exploiting too early because uncertainty feels uncomfortable.",
+  mech:"The optimal mix shifts with your stage and information: more sampling early when you know little, more committing later once the payoffs are clear. Both errors — endless searching and premature settling — feel like comfort.",
+  term:"Explore-exploit", def:"the trade-off between sampling new options and committing to a known good one.",
+  sowhat:"Ask which mode this season calls for. Then notice if you're stalling in the comfortable one instead.",
+  builds:[["a1","stages of the repeated game"]], leads:[["b4-coinflip","now: decisions become a life"]], live:[]},
+
+"b4-coinflip":{type:"mechanism", title:"Health is the base layer", x:1583, y:979,
+  ess:"Your body isn't a side quest — it's the operating system every decision runs on.",
+  hook:"How good is your judgment on three hours of sleep? So which decision comes first?",
+  story:"Health is the base layer. Bad sleep makes you stupid, no movement makes you anxious, poor food makes your mood noisy, chronic stress blurs your values. Before deep philosophy, fix the primitives: sleep, movement, real food, sunlight, strength, protected attention, and people who regulate rather than dysregulate you.",
+  mech:"Every other decision is made by a brain and body in some state; degrade the state and you degrade every choice downstream. This is boring advice because it's load-bearing advice.",
+  term:"The base layer", def:"physical health as the substrate that determines the quality of all decisions.",
+  sowhat:"When your choices feel hard and your mood feels loud, check the primitives first. Fix the body before you philosophize.",
+  builds:[["a2","'you' is the first part"]], leads:[["b4-ergodicity","then guard your energy"]], live:[]},
+"b4-ergodicity":{type:"mechanism", title:"Energy before productivity", x:1901, y:945,
+  ess:"Don't only ask how to do more — ask what gives energy and what drains it.",
+  hook:"You could do more today. But could you do it again tomorrow, and the day after?",
+  story:"Don't ask only 'how do I do more?' Ask 'what gives me energy, and what drains it?' A good life isn't maximum output — it's sustainable aliveness: high agency without chronic depletion.",
+  mech:"Output run on depletion isn't productivity, it's borrowing against tomorrow. Managing energy — the renewable input — beats managing tasks, because it's what makes repeated effort possible.",
+  term:"Sustainable aliveness", def:"optimizing for renewable energy and agency rather than peak short-term output.",
+  sowhat:"Audit your week for energy, not just tasks. Cut the quiet drains; protect the genuine sources.",
+  builds:[["b4-coinflip","energy rests on health"]], leads:[["b4-domains","and your actions shape identity"]], live:[]},
+"b4-domains":{type:"mechanism", title:"Identity is a feedback loop", x:2219, y:979,
+  ess:"You become what you repeatedly do — every action casts a vote for who you are.",
+  hook:"Not 'what do I want?' but 'what kind of person does this action train me to become?'",
+  story:"You become what you repeatedly do. So alongside 'what do I want?', ask 'what kind of person does this action train me to become?' Every action casts a vote for an identity. Small habits matter — not because one workout changes your body, but because it reinforces 'I am someone who keeps promises to myself.'",
+  mech:"Behavior and identity form a loop: acts build the self-image, which makes the acts easier next time. Choosing actions by the identity they cast a vote for compounds into character.",
+  term:"Identity votes", def:"the idea that each action is evidence to yourself about the kind of person you are.",
+  sowhat:"Judge small choices by the identity they reinforce. Keeping tiny promises to yourself is how you become someone who does.",
+  builds:[["b1-lorenz-story","choices shape the chooser"]], leads:[["b4-survive","and environment makes it easy"]], live:[]},
+"b4-survive":{type:"principle", title:"Environment beats willpower", x:2438, y:1094,
+  ess:"Design your surroundings so good behavior is easy and bad behavior is annoying.",
+  hook:"You keep losing the willpower battle. What if you stopped fighting and moved the battlefield?",
+  story:"Willpower is overrated; environment design is king. Make good behaviors easy and bad ones annoying. Want to read more? Keep books visible. Use your phone less? Charge it outside the bedroom. Eat better? Don't keep junk at home. Want ambitious friends? Go where ambitious people are. You're not a brain floating in space — you're a creature shaped by surroundings.",
+  mech:"Willpower is a scarce, depletable resource; environment works for free, all day, without attention. Shaping the defaults means the easy path and the good path become the same path.",
+  term:"Environment design", def:"structuring surroundings so desired behaviors are the path of least resistance.",
+  sowhat:"Stop relying on discipline. Change the defaults — visible, easy, or absent — and let the environment do the work.",
+  builds:[["b4-domains","identity built by repeated acts"]], leads:[["b4-signal","and choose your people"]], live:[]},
+"b4-signal":{type:"mechanism", title:"Relationships compound", x:1612, y:1181,
+  ess:"A good life is impossible without good relationships — not difficult, impossible.",
+  hook:"Who in your life makes your nervous system calmer just by being there? Are you investing in them?",
+  story:"Relationships are compounding assets, and a good life is impossible without good ones. Invest early in people you can be honest with, who make you braver, who tell you the truth without cruelty, whose presence calms your nervous system. Avoid people who make you perform, shrink, lie, or constantly recover.",
+  mech:"Relationships accrue like any compounding asset — trust and depth build slowly and pay off over decades. Choosing who you're around is one of the highest-leverage repeated decisions you make.",
+  term:"Relational capital", def:"trusted relationships treated as slowly compounding, load-bearing assets.",
+  sowhat:"Invest early and deliberately in the people who regulate you — and gently exit the ones who dysregulate you.",
+  builds:[["a2","'you' exists among others"]], leads:[["b4-danger","and stay adaptable"]], live:[]},
+"b4-danger":{type:"principle", title:"Adaptability over certainty", x:1959, y:1152,
+  ess:"Hold direction and principles, not rigid predictions and scripts. Let plans stay alive.",
+  hook:"When reality contradicts your plan, do you update the plan — or defend the story?",
+  story:"The world changes, so your plans should be alive. A strong strategy has direction not rigid prediction, principles not scripts, experiments not fantasies, feedback not ego defense. The adaptive person asks 'what is reality telling me?'; the fragile person asks 'how do I protect my old story?'",
+  mech:"Certainty is brittle: a rigid plan shatters when the world diverges from it. Direction plus feedback bends and re-routes, which is what survives an uncertain, changing game.",
+  term:"Adaptive strategy", def:"steering by direction, principles, and feedback rather than fixed prediction.",
+  sowhat:"Hold your goals firmly and your plans loosely. When reality argues with you, let reality win.",
+  builds:[["a1","the world keeps changing"]], leads:[["b4-process","so bank optionality"]], live:[]},
+"b4-process":{type:"mechanism", title:"Optionality and slack", x:1650, y:1330,
+  ess:"Create options before you need them, and never run life at 100% capacity.",
+  hook:"When the unexpected hits, will you have room to respond — or are you already maxed out?",
+  story:"Create options before you need them: skills, savings, reputation, health, a broad network, calm under pressure — optionality is freedom stored in advance. And keep a margin of safety: slack in your health, money, calendar, emotions, and relationships. A life with no buffer isn't efficient, it's brittle.",
+  mech:"Optionality and slack both hedge an uncertain world — one gives you moves, the other gives you resilience. Running at full capacity maximizes output right up until the first shock breaks you.",
+  term:"Optionality / margin of safety", def:"pre-built options and spare capacity that make a life resilient and free.",
+  sowhat:"Bank options while you don't need them, and leave buffer everywhere. Slack isn't waste — it's what keeps you unbreakable.",
+  builds:[["a4","slack protects against ruin"]], leads:[["b4-destination","then take on something worthwhile"]], live:[]},
+"b4-destination":{type:"mechanism", title:"Meaning comes from responsibility", x:2330, y:1255,
+  ess:"Meaning usually comes from carrying something worthwhile — not from comfort.",
+  hook:"When have you felt most alive — while comfortable, or while carrying something hard that mattered?",
+  story:"Pleasure and comfort are nice, but meaning usually comes from carrying something worthwhile: a project, a family, a craft, a mission, a community, a promise, a standard. Strong opinion: a life optimized only for comfort eventually becomes depressing. Humans need chosen difficulty.",
+  mech:"Comfort removes friction, but meaning is made by voluntarily taking friction on. A worthwhile burden organizes energy and identity around something larger than momentary ease.",
+  term:"Chosen difficulty", def:"the voluntary responsibility that generates meaning beyond comfort.",
+  sowhat:"If life feels hollow despite being comfortable, you may need more chosen difficulty, not less. Take on something worth carrying.",
+  builds:[["b1-principle","meaning can be the variable"]], leads:[["b4-explore","and read your emotions well"]], live:[]},
+"b4-explore":{type:"mechanism", title:"Emotions are data, not commands", x:2470, y:1430,
+  ess:"Feelings are useful signals and terrible dictators. Feel fully, interpret carefully, act wisely.",
+  hook:"Your anxiety is screaming. Is it warning you of real risk — or just of growth and novelty?",
+  story:"Emotional truth is data, not command. Anxiety may signal risk or may signal growth. Excitement may signal opportunity or novelty addiction. Anger may signal violation or ego injury. The move: feel fully, interpret carefully, act wisely.",
+  mech:"Emotions carry real information about your state and situation, but they're noisy and easily misread. Treating them as signals to interpret — not orders to obey — keeps their wisdom without their tyranny.",
+  term:"Emotions as signals", def:"treating feelings as informative data to interpret rather than commands to follow.",
+  sowhat:"When a strong feeling hits, name it and ask what it might mean — before you let it choose for you.",
+  builds:[["a2","'you' includes emotions"]], leads:[["b4-fence","and let the good compound"]], live:[]},
+"b4-fence":{type:"principle", title:"Everything compounds", sim:"compounding", x:2090, y:1430,
+  ess:"The real question isn't 'is this good today?' but 'what does this become if repeated for five years?'",
+  hook:"This one choice barely matters. But what is it, multiplied by a thousand days?",
+  story:"Most good things compound slowly — fitness, skill, trust, taste, wealth, reputation, emotional regulation, wisdom. So do the bad ones — avoidance, debt, cynicism, resentment, sedentary habits, attention fragmentation. Don't ask 'is this choice good today?' Ask 'what does this become if repeated for five years?'",
+  mech:"Single instances look negligible, which is exactly why compounding is invisible until it's enormous. Judging a repeated choice by its five-year trajectory reveals stakes the single day hides.",
+  term:"Compounding", def:"the slow multiplication of small repeated choices, good and bad, over years.",
+  sowhat:"Grade your habits by their five-year trajectory, not today's payoff. The tiny daily vote is the whole election.",
+  builds:[["b4-domains","identity compounds too"]], leads:[["b4-principle","the good-life formula"]], live:[]},
+"b4-principle":{type:"principle", title:"The good life is a product, not a sum", sim:"formula", x:1830, y:1560,
+  ess:"Good life = health × agency × love × mastery × meaning × adaptability. If one hits zero, everything suffers.",
+  hook:"Which of your six factors is nearest to zero right now — and what is it dragging down with it?",
+  story:"The formula: a good life = health × agency × love × mastery × meaning × adaptability. Multiplication, not addition — because if any one goes to zero, everything suffers. Health without meaning feels empty; meaning without health becomes martyrdom; agency without love becomes ego; love without boundaries becomes self-erasure; mastery without adaptability becomes rigidity; adaptability without values becomes drifting. The master principle: build a life where your daily actions make you healthier, freer, more useful, more loving, and harder to break.",
+  mech:"Because the factors multiply, you can't compensate for a zero by maxing the others — a life brilliant on five and empty on the sixth still collapses. The work is tending the weakest factor, not perfecting the strongest.",
+  term:"The good-life product", def:"health × agency × love × mastery × meaning × adaptability — where any zero sinks the whole.",
+  sowhat:"Find your factor nearest zero and tend it. Balance across the six beats excellence in one — that's decision theory turned into a life.",
+  builds:[["b4-fence","tended daily, it compounds"],["a3","values hold it together"]], leads:[], live:[]}
+};
+const TERRITORIES = [
+  {label:"I · The Model", sum:"expected value, humanized", hue:"#4a6684", lx:508, ly:100, rx:184, ry:158, rw:745, rh:590},
+  {label:"II · The Decision Stack", sum:"six questions, in order", hue:"#4f7050", lx:2114, ly:100, rx:1739, ry:158, rw:745, rh:590},
+  {label:"The Bedrock", sum:"what a decision is", hue:"#6f6455", lx:1265, ly:352, rx:964, ry:436, rw:722, rh:439},
+  {label:"III · The Mental Models", sum:"tools for repeated choosing", hue:"#8a5c5c", lx:520, ly:869, rx:184, ry:846, rw:745, rh:590},
+  {label:"IV · The Life Stack", sum:"decisions become a life", hue:"#96702f", lx:2011, ly:820, rx:1479, ry:869, rw:1069, rh:745}
+];
+const ASTERISMS = [
+  ["#4a6684", [["b1-laplace","b1-pendulum"],["b1-pendulum","b1-sensitive"],["b1-sensitive","b1-lorenz-story"],["b1-sensitive","b1-principle"]]],
+  ["#4f7050", [["b2-logistic","b2-attractors"],["b2-lorenz-attractor","b2-attractors"],["b2-attractors","b2-tension-random"],["b2-attractors","b2-principle"]]],
+  ["#6f6455", [["a1","a2"],["a1","a3"],["a2","a4"],["a3","a4"]]],
+  ["#8a5c5c", [["b3-kokura","b3-contingency"],["b3-contingency","b3-timeline"],["b3-contingency","b3-principle"],["b3-principle","b3-plan"]]],
+  ["#96702f", [["b4-coinflip","b4-ergodicity"],["b4-ergodicity","b4-domains"],["b4-domains","b4-survive"],
+    ["b4-signal","b4-danger"],["b4-domains","b4-danger"],["b4-danger","b4-process"],
+    ["b4-survive","b4-explore"],["b4-destination","b4-explore"],["b4-explore","b4-fence"],
+    ["b4-process","b4-principle"],["b4-fence","b4-principle"],["b4-destination","b4-principle"]]]
+];
+const ALL = Object.keys(N);
+const TERRNAME = {b1:"I · The Model", b2:"II · The Decision Stack",
+  b3:"III · The Mental Models", b4:"IV · The Life Stack", a:"The Bedrock"};
+const HUES = {b1:"#4a6684", b2:"#4f7050", b3:"#8a5c5c", b4:"#96702f", a:"#6f6455"};
+const hueOf = id => id.startsWith('a') ? HUES.a : HUES[id.slice(0,2)];
+const terrOf = id => id.startsWith('a') ? TERRNAME.a : TERRNAME[id.slice(0,2)];
+
+const TOUR = ["b1-laplace","b1-pendulum","b1-sensitive","b1-lorenz-story","b1-principle",
+  "b2-logistic","b2-attractors","b2-lorenz-attractor","b2-tension-random","b2-principle",
+  "b3-kokura","b3-contingency","b3-timeline","b3-principle","b3-plan",
+  "b4-coinflip","b4-ergodicity","b4-domains","b4-survive","b4-signal","b4-danger","b4-process",
+  "b4-destination","b4-explore","b4-fence","b4-principle"];
+const SEQ = {}; TOUR.forEach((id,i)=>SEQ[id]=i+1);
+
+/* degree from curated links (for star size) */
+const DEG = {};
+ALL.forEach(id=>DEG[id]=0);
+ALL.forEach(id=>{
+  const n = N[id];
+  [...n.builds, ...n.leads, ...n.live].forEach(([t])=>{ DEG[id]++; DEG[t]=(DEG[t]||0)+1; });
+});
+const dotSize = id => 16 + Math.min(DEG[id],8)*2.2;
+const dotCenter = id => ({x:N[id].x+dotSize(id)/2, y:N[id].y+dotSize(id)/2});
+
+/* ============================================================
+   CAMERA
+   ============================================================ */
+const vp = document.getElementById('vp');
+const world = document.getElementById('world');
+const reader = document.getElementById('reader');
+const WW = 2750, WH = 1750;
+let cam = {s:0.12, tx:0, ty:0};
+let anim = null;
+function apply(){
+  world.style.transform = `translate(${cam.tx}px, ${cam.ty}px) scale(${cam.s})`;
+  lod();
+}
+function readerW(){ return reader.classList.contains('open') ? (reader.getBoundingClientRect().width||430) : 0; }
+function visW(){ return innerWidth - readerW(); }
+function centerOn(cx, cy, s){
+  cam.s = s;
+  cam.tx = visW()/2 - cx*s;
+  cam.ty = innerHeight/2 - cy*s;
+  apply();
+}
+function flyTo(cx, cy, s, dur=700){
+  if (anim) cancelAnimationFrame(anim);
+  const s0=cam.s, cx0=(visW()/2-cam.tx)/s0, cy0=(innerHeight/2-cam.ty)/s0;
+  const ls0=Math.log(s0), ls1=Math.log(s);
+  const t0=performance.now();
+  function step(t){
+    let p=Math.min(1,(t-t0)/dur);
+    p = p<.5 ? 4*p*p*p : 1-Math.pow(-2*p+2,3)/2;
+    centerOn(cx0+(cx-cx0)*p, cy0+(cy-cy0)*p, Math.exp(ls0+(ls1-ls0)*p));
+    if (p<1) anim=requestAnimationFrame(step);
+  }
+  anim=requestAnimationFrame(step);
+}
+function overviewCam(fly=true){
+  const s = Math.min(visW()/WW, innerHeight/WH)*0.92;
+  if (fly) flyTo(WW/2, WH/2, s, 800); else centerOn(WW/2, WH/2, s);
+}
+vp.addEventListener('wheel', e=>{
+  e.preventDefault();
+  if (anim) cancelAnimationFrame(anim);
+  const f = Math.exp(-e.deltaY*0.0016);
+  const s2 = Math.min(2.2, Math.max(0.06, cam.s*f));
+  const wx=(e.clientX-cam.tx)/cam.s, wy=(e.clientY-cam.ty)/cam.s;
+  cam.s=s2; cam.tx=e.clientX-wx*s2; cam.ty=e.clientY-wy*s2;
+  apply();
+}, {passive:false});
+const ptrs = new Map();
+let panStart=null, pinchStart=null, moved=0;
+vp.addEventListener('pointerdown', e=>{
+  if (e.target.closest('.tlabel')) return;
+  ptrs.set(e.pointerId, {x:e.clientX, y:e.clientY});
+  if (ptrs.size===1){
+    moved=0;
+    panStart={mx:e.clientX, my:e.clientY, tx:cam.tx, ty:cam.ty};
+    vp.classList.add('dragging');
+  } else if (ptrs.size===2){
+    const [p1,p2]=[...ptrs.values()];
+    pinchStart={d:Math.hypot(p1.x-p2.x,p1.y-p2.y), s:cam.s,
+      wx:((p1.x+p2.x)/2-cam.tx)/cam.s, wy:((p1.y+p2.y)/2-cam.ty)/cam.s};
+    panStart=null;
+  }
+});
+addEventListener('pointermove', e=>{
+  if (!ptrs.has(e.pointerId)) return;
+  ptrs.set(e.pointerId, {x:e.clientX, y:e.clientY});
+  if (ptrs.size===1 && panStart){
+    if (anim) cancelAnimationFrame(anim);
+    moved += Math.abs(e.movementX||0)+Math.abs(e.movementY||0);
+    cam.tx = panStart.tx + (e.clientX-panStart.mx);
+    cam.ty = panStart.ty + (e.clientY-panStart.my);
+    apply();
+  } else if (ptrs.size===2 && pinchStart){
+    if (anim) cancelAnimationFrame(anim);
+    const [p1,p2]=[...ptrs.values()];
+    const d=Math.hypot(p1.x-p2.x,p1.y-p2.y);
+    const s2=Math.min(2.2, Math.max(0.06, pinchStart.s*d/pinchStart.d));
+    const cx=(p1.x+p2.x)/2, cy=(p1.y+p2.y)/2;
+    cam.s=s2; cam.tx=cx-pinchStart.wx*s2; cam.ty=cy-pinchStart.wy*s2;
+    apply();
+  }
+});
+function ptrUp(e){ ptrs.delete(e.pointerId);
+  if (ptrs.size<2) pinchStart=null;
+  if (ptrs.size===0){ panStart=null; vp.classList.remove('dragging'); } }
+addEventListener('pointerup', ptrUp);
+addEventListener('pointercancel', ptrUp);
+vp.addEventListener('dblclick', e=>{
+  if (!e.target.closest('.mk')){ closeReader(); overviewCam(); }
+});
+addEventListener('keydown', e=>{
+  if (e.key==='Escape'){ closeReader(); overviewCam(); }
+  if (e.key==='ArrowRight') navStep(1);
+  if (e.key==='ArrowLeft') navStep(-1);
+});
+document.getElementById('overviewBtn').onclick = ()=>{ closeReader(); overviewCam(); };
+addEventListener('resize', ()=>apply());
+
+/* ============================================================
+   SKY — constellation names, asterisms, ecliptic, stars
+   ============================================================ */
+TERRITORIES.forEach(t=>{
+  const rgb = [parseInt(t.hue.slice(1,3),16), parseInt(t.hue.slice(3,5),16), parseInt(t.hue.slice(5,7),16)].join(',');
+  const l = document.createElement('div');
+  l.className = 'tlab';
+  l.style.cssText = `left:${t.lx}px; top:${t.ly}px; transform:translateX(-50%);`;
+  l.innerHTML = `<div class="big" style="color:rgba(${rgb},0.92)">${t.label}</div>
+    <div class="sum">${t.sum}</div>`;
+  l.addEventListener('click', ()=>{
+    flyTo(t.rx+t.rw/2, t.ry+Math.min(t.rh/2, 1000), Math.min(visW()/(t.rw+300), 0.5));
+  });
+  world.appendChild(l);
+});
+
+
+
+/* minor stars — small nameless flecks inside each figure */
+{
+  const R = mulberry32(11);
+  TERRITORIES.forEach(t=>{
+    for (let i=0;i<16;i++){
+      const d=document.createElement('div');
+      const sz=(2.5+R()*3).toFixed(1);
+      d.style.cssText=`position:absolute; left:${Math.round(t.rx+40+R()*(t.rw-80))}px;`+
+        `top:${Math.round(t.ry+40+R()*(t.rh-80))}px; width:${sz}px; height:${sz}px;`+
+        `border-radius:50%; background:${t.hue}; opacity:${(0.18+R()*0.22).toFixed(2)}; pointer-events:none;`;
+      world.appendChild(d);
+    }
+  });
+}
+
+const flowsvg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+flowsvg.setAttribute('width',WW); flowsvg.setAttribute('height',WH);
+flowsvg.style.cssText='position:absolute;top:0;left:0;pointer-events:none;overflow:visible;';
+world.appendChild(flowsvg);
+
+const astsvg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+astsvg.id='astsvg'; astsvg.setAttribute('width',WW); astsvg.setAttribute('height',WH);
+ASTERISMS.forEach(([hue, pairs])=>{
+  pairs.forEach(([a,b])=>{
+    const pa=dotCenter(a), pb=dotCenter(b);
+    const dx=pb.x-pa.x, dy=pb.y-pa.y, L=Math.hypot(dx,dy)||1;
+    const ux=dx/L, uy=dy/L, off=30;
+    const ln = document.createElementNS('http://www.w3.org/2000/svg','line');
+    ln.setAttribute('x1',pa.x+ux*off); ln.setAttribute('y1',pa.y+uy*off);
+    ln.setAttribute('x2',pb.x-ux*off); ln.setAttribute('y2',pb.y-uy*off);
+    ln.setAttribute('stroke',hue); ln.setAttribute('stroke-opacity','0.38');
+    ln.setAttribute('stroke-width','1.6');
+    astsvg.appendChild(ln);
+  });
+});
+world.appendChild(astsvg);
+
+{
+  const pts = TOUR.map(id=>dotCenter(id));
+  let d = `M ${pts[0].x} ${pts[0].y}`;
+  for (let i=1;i<pts.length;i++){
+    const a=pts[i-1], b=pts[i];
+    const mx=(a.x+b.x)/2, my=(a.y+b.y)/2;
+    d += ` Q ${mx + (b.y-a.y)*0.08} ${my - (b.x-a.x)*0.08} ${b.x} ${b.y}`;
+  }
+  const p = document.createElementNS('http://www.w3.org/2000/svg','path');
+  p.setAttribute('d',d); p.setAttribute('fill','none');
+  p.setAttribute('stroke','rgba(61,56,51,0.08)'); p.setAttribute('stroke-width','4');
+  p.setAttribute('stroke-dasharray','2,14');
+  flowsvg.appendChild(p);
+}
+
+const tsvg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+tsvg.id='tsvg'; tsvg.setAttribute('width',WW); tsvg.setAttribute('height',WH);
+const defs = document.createElementNS('http://www.w3.org/2000/svg','defs');
+defs.innerHTML = `<marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="#96702f" opacity="0.8"/></marker>`;
+tsvg.appendChild(defs);
+world.appendChild(tsvg);
+const tlabels = [];
+
+const mkEls = {};
+ALL.forEach(id=>{
+  const n = N[id];
+  const hue = hueOf(id);
+  const size = dotSize(id);
+  const m = document.createElement('div');
+  m.className = 'mk' + (n.sim ? ' hasim' : '');
+  m.style.cssText = `left:${n.x}px; top:${n.y}px;`;
+  m.dataset.id = id;
+  m.innerHTML = `
+    <div class="dot" style="width:${size}px; height:${size}px; background:${hue};"></div>
+    <div class="dtext">
+      <div class="lbl">${SEQ[id]?`<span class="seq">${SEQ[id]}</span>`:''}${n.title}</div>
+      <div class="ess">${n.ess}</div>
+      <div class="sims-badge">▸ live model</div>
+    </div>`;
+  world.appendChild(m);
+  mkEls[id] = m;
+  m.addEventListener('click', e=>{
+    if (moved>6) return;
+    e.stopPropagation();
+    openIdea(id);
+  });
+});
+
+function lod(){
+  const ess = cam.s > 0.55;
+  if (lod._k===ess) return;
+  lod._k = ess;
+  Object.values(mkEls).forEach(m=>m.classList.toggle('showess', ess));
+}
+
+/* ============================================================
+   READER
+   ============================================================ */
+let focusId = null, stopSim = null;
+
+function linkGroup(kicker, items){
+  if (!items.length) return '';
+  return `<div class="lgroup"><span class="kicker">${kicker}</span>
+    ${items.map(([t,why])=>`<a data-t="${t}"><span class="t">${N[t].title}</span>
+      <span class="why">${why}</span></a>`).join('')}
+  </div>`;
+}
+
+function openIdea(id){
+  const n = N[id];
+  if (stopSim){ stopSim(); stopSim=null; }
+  focusId = id;
+  const chip = document.getElementById('rChip');
+  chip.textContent = n.type;
+  chip.style.borderColor = hueOf(id)+'66'; chip.style.color = hueOf(id);
+  document.getElementById('rTitle').textContent = n.title;
+  document.getElementById('rTerr').textContent = terrOf(id) + (SEQ[id]?` · step ${SEQ[id]} of ${TOUR.length}`:'');
+  const nextId = SEQ[id] && SEQ[id] < TOUR.length ? TOUR[SEQ[id]] : null;
+  document.getElementById('rbody').innerHTML = `
+    <div class="hook">${n.hook}</div>
+    <div class="story">${n.story}</div>
+    ${n.sim ? simHTML(n.sim) : ''}
+    ${n.mech ? `<details class="fold"><summary>How it actually works</summary><div class="inner">${n.mech}</div></details>` : ''}
+    <div class="named"><span class="kicker">the idea, named</span>
+      <b>${n.term}</b><div class="def">${n.def}</div></div>
+    <div class="sowhat"><span class="kicker">where it bites</span>${n.sowhat}</div>
+    <div class="linkrow">
+      ${linkGroup('builds on', n.builds)}
+      ${linkGroup('leads to', n.leads)}
+      ${linkGroup('see it live', n.live)}
+    </div>
+    ${nextId ? `<button class="nextbtn" data-t="${nextId}"><span class="k">next in the flow · ${SEQ[nextId]} of ${TOUR.length}</span>${N[nextId].title}<span class="arr">→</span></button>`
+             : (SEQ[id]===TOUR.length ? `<button class="nextbtn" id="finishBtn"><span class="k">end of the flow</span>Back to the chart<span class="arr">↑</span></button>` : '')}`;
+  document.querySelectorAll('#rbody [data-t]').forEach(a=>
+    a.addEventListener('click', ()=>openIdea(a.dataset.t)));
+  const fin = document.getElementById('finishBtn');
+  if (fin) fin.onclick = ()=>{ closeReader(); overviewCam(); };
+  const fig = document.querySelector('#rbody figure.frame');
+  if (fig) stopSim = SIMS[fig.dataset.sim](fig);
+  document.getElementById('rbody').scrollTop = 0;
+  reader.classList.add('open');
+  document.body.classList.add('reader-open');
+  highlight(id);
+  syncNav();
+  const rs = Math.min(0.95, Math.max(0.62, cam.s));
+  setTimeout(()=>flyTo(n.x+180, n.y+60, rs), 60);
+}
+function closeReader(){
+  if (stopSim){ stopSim(); stopSim=null; }
+  reader.classList.remove('open');
+  document.body.classList.remove('reader-open');
+  focusId = null;
+  clearHighlight();
+  syncNav();
+}
+document.getElementById('rClose').onclick = closeReader;
+
+/* map highlight: few directional lines with plain labels */
+function highlight(id){
+  clearHighlight();
+  const n = N[id];
+  const nb = new Set([id]);
+  const conns = [
+    ...n.builds.map(([t])=>({t, lab:'builds on', into:true})),
+    ...n.leads.map(([t])=>({t, lab:'leads to', into:false})),
+    ...n.live.map(([t])=>({t, lab:'see it live', into:false}))
+  ];
+  conns.forEach(c=>nb.add(c.t));
+  ALL.forEach(x=>{
+    mkEls[x].classList.toggle('dimmed', !nb.has(x));
+    mkEls[x].classList.toggle('neighbor', nb.has(x) && x!==id);
+    mkEls[x].classList.toggle('focused', x===id);
+  });
+  const here = dotCenter(id);
+  conns.forEach(c=>{
+    const there = dotCenter(c.t);
+    let from = c.into ? {...there} : {...here};
+    let to   = c.into ? {...here} : {...there};
+    {
+      const ddx=to.x-from.x, ddy=to.y-from.y, LL=Math.hypot(ddx,ddy)||1;
+      const ux=ddx/LL, uy=ddy/LL, off=30;
+      from = {x:from.x+ux*off, y:from.y+uy*off};
+      to   = {x:to.x-ux*off,   y:to.y-uy*off};
+    }
+    const dx=to.x-from.x, dy=to.y-from.y, dist=Math.hypot(dx,dy)||1;
+    const cx=(from.x+to.x)/2 - dy/dist*dist*0.12, cy=(from.y+to.y)/2 + dx/dist*dist*0.12;
+    const p = document.createElementNS('http://www.w3.org/2000/svg','path');
+    p.setAttribute('d',`M ${from.x} ${from.y} Q ${cx} ${cy} ${to.x} ${to.y}`);
+    p.setAttribute('fill','none');
+    p.setAttribute('stroke','rgba(150,112,47,0.45)');
+    p.setAttribute('stroke-width','2.5');
+    p.setAttribute('stroke-dasharray','9,8');
+    p.setAttribute('class','tline');
+    p.setAttribute('marker-end','url(#arr)');
+    tsvg.appendChild(p);
+    const lbl = document.createElement('div');
+    lbl.className='tlabel';
+    lbl.style.left = (.25*from.x+.5*cx+.25*to.x)+'px';
+    lbl.style.top = (.25*from.y+.5*cy+.25*to.y)+'px';
+    lbl.textContent = c.lab;
+    lbl.addEventListener('click', e=>{ e.stopPropagation(); openIdea(c.t); });
+    world.appendChild(lbl);
+    tlabels.push(lbl);
+  });
+}
+function clearHighlight(){
+  ALL.forEach(x=>mkEls[x].classList.remove('dimmed','neighbor','focused'));
+  [...tsvg.querySelectorAll('path')].forEach(p=>p.remove());
+  tlabels.forEach(l=>l.remove()); tlabels.length=0;
+}
+
+/* ============================================================
+   NAV — top-right cluster drives the default flow
+   ============================================================ */
+function syncNav(){
+  const i = focusId ? TOUR.indexOf(focusId) : -1;
+  document.getElementById('navcluster').classList.toggle('on', !!focusId);
+  document.getElementById('navPrev').disabled = i===0;
+  document.getElementById('navNext').disabled = i===TOUR.length-1;
+}
+function navStep(dir){
+  const i = focusId ? TOUR.indexOf(focusId) : -1;
+  if (i<0){ openIdea(TOUR[0]); return; }
+  const j = i+dir;
+  if (j>=0 && j<TOUR.length) openIdea(TOUR[j]);
+}
+document.getElementById('navPrev').onclick = ()=>navStep(-1);
+document.getElementById('navNext').onclick = ()=>navStep(1);
+
+/* ============================================================
+   SIMULATIONS
+   ============================================================ */
+const INKC='#3d3833', GRAY='#8a8069', FAINT='#b0a68c', AMBER='#96702f', SUNK='#ece4d2', BRD='#d5c9ae';
+function mulberry32(a){ return function(){ a|=0; a=a+0x6D2B79F5|0;
+  let t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t;
+  return ((t^t>>>14)>>>0)/4294967296; }; }
+function setActive(fig, btn){
+  fig.querySelectorAll('.ghost').forEach(b=>{ if(b.dataset.d!==undefined||b.dataset.m!==undefined) b.classList.remove('active');});
+  if (btn) btn.classList.add('active');
+}
+function simHTML(kind){
+  const caps = {
+    ev:"Probability times payoff. Slide the odds and watch a rare, huge upside overtake a near-sure tiny one — the case for capped-downside swings.",
+    doors:"Two-way doors reverse; one-way doors don't. Match your speed to the door — fast for reversible, slow for the rest.",
+    inversion:"Don't engineer the good life — subtract the ruiners. Click each to see the disaster you're designing out.",
+    explore:"Early on, sample widely; once something works, commit. The cost of each mistake — searching forever, or settling too soon.",
+    compounding:"One choice barely moves the needle. Repeat it daily for five years and watch the two paths separate.",
+    formula:"Six factors, multiplied. Drag any toward zero and the whole good life collapses — balance beats a lone maximum."
+  };
+  const ctl = {
+    ev:`<span class="cl">chance of the big win</span><input type="range" min="5" max="95" step="5" value="30">`,
+    doors:`<button class="ghost active" data-d="two">a two-way door</button>
+      <button class="ghost" data-d="one">a one-way door</button>`,
+    inversion:`<span class="cl">ruiner</span>
+      <button class="ghost active" data-r="0">sleep debt</button>
+      <button class="ghost" data-r="1">chronic debt</button>
+      <button class="ghost" data-r="2">bad environment</button>`,
+    explore:`<span class="cl">life stage</span><input type="range" min="0" max="100" step="5" value="20">`,
+    compounding:`<span class="cl">daily choice</span>
+      <button class="ghost active" data-c="good">+1% better</button>
+      <button class="ghost" data-c="bad">-1% worse</button>`,
+    formula:`<span class="cl">your weakest factor</span><input type="range" min="0" max="100" step="5" value="10">`
+  };
+  return `<figure class="frame" data-sim="${kind}">
+    <canvas></canvas>
+    <div class="controls">${ctl[kind]}</div>
+    <figcaption>${caps[kind]}</figcaption>
+  </figure>`;
+}
+const SIMS = {};
+
+function wrapText(ctx, text, x, y, maxW, lh){
+  const words=text.split(' '); let line='', yy=y;
+  for(const w of words){ const t=line?line+' '+w:w;
+    if(ctx.measureText(t).width>maxW && line){ ctx.fillText(line,x,yy); line=w; yy+=lh; }
+    else line=t; }
+  if(line) ctx.fillText(line,x,yy); return yy;
+}
+
+SIMS.ev = fig=>{
+  const cv=fig.querySelector('canvas'); cv.width=700; cv.height=380;
+  const ctx=cv.getContext('2d'); const W=700,H=380; let p=30;
+  const bigPayoff=100, smallProb=90, smallPayoff=8;
+  function draw(){
+    ctx.fillStyle=SUNK; ctx.fillRect(0,0,W,H);
+    const evA=(p/100)*bigPayoff, evB=(smallProb/100)*smallPayoff;
+    const mx=Math.max(evA,evB,30);
+    const bx=120, bw=140, base=270, bh=180;
+    [["A: bold swing",evA,p,bigPayoff,bx],["B: safe bet",evB,smallProb,smallPayoff,bx+280]].forEach(([lab,ev,pr,pay,x])=>{
+      const h=bh*ev/mx;
+      const win = ev===Math.max(evA,evB);
+      ctx.fillStyle= win?'rgba(150,112,47,0.85)':'rgba(138,128,105,0.5)';
+      ctx.fillRect(x,base-h,bw,h);
+      ctx.fillStyle=INKC; ctx.font='15px Inter, sans-serif'; ctx.fillText(lab, x, base+24);
+      ctx.fillStyle=GRAY; ctx.font='12px Inter, sans-serif'; ctx.fillText(pr+"% × "+pay, x, base+42);
+      ctx.fillStyle=win?AMBER:GRAY; ctx.font='14px Inter, sans-serif'; ctx.fillText("EV "+ev.toFixed(1), x+bw/2-22, base-h-8);
+    });
+    ctx.fillStyle=GRAY; ctx.font='13px Inter, sans-serif';
+    wrapText(ctx, evA>=evB ? "Even at "+p+"% odds, the bold swing's huge payoff wins on expected value — and its downside is just the small stake."
+                           : "At "+p+"% the safe bet still wins. Slide the odds up and watch the bold swing overtake it.", 40, H-38, W-80, 20);
+  }
+  draw(); fig.querySelector('input').oninput=e=>{ p=+e.target.value; draw(); }; return ()=>{};
+};
+
+SIMS.doors = fig=>{
+  const cv=fig.querySelector('canvas'); cv.width=700; cv.height=380;
+  const ctx=cv.getContext('2d'); const W=700,H=380; let mode="two";
+  function draw(){
+    ctx.fillStyle=SUNK; ctx.fillRect(0,0,W,H);
+    const cx=W/2, cy=150;
+    // door
+    ctx.strokeStyle= mode==="two"?AMBER:'#8a5c5c'; ctx.lineWidth=3;
+    ctx.strokeRect(cx-55,cy-90,110,180);
+    ctx.fillStyle= mode==="two"?'rgba(150,112,47,0.10)':'rgba(138,92,92,0.10)'; ctx.fillRect(cx-55,cy-90,110,180);
+    ctx.fillStyle=INKC; ctx.beginPath(); ctx.arc(cx+38,cy,5,0,7); ctx.fill();
+    // arrows
+    ctx.strokeStyle=INKC; ctx.lineWidth=2;
+    const arrow=(x1,y,x2)=>{ ctx.beginPath(); ctx.moveTo(x1,y); ctx.lineTo(x2,y); ctx.stroke();
+      const d=Math.sign(x2-x1); ctx.beginPath(); ctx.moveTo(x2,y); ctx.lineTo(x2-8*d,y-5); ctx.lineTo(x2-8*d,y+5); ctx.closePath(); ctx.fill(); };
+    arrow(cx-140,cy-20,cx-60);
+    if(mode==="two") arrow(cx-60,cy+20,cx-140);
+    else { ctx.strokeStyle='#8a5c5c'; ctx.beginPath(); ctx.moveTo(cx-95,cy+8); ctx.lineTo(cx-80,cy+32); ctx.moveTo(cx-80,cy+8); ctx.lineTo(cx-95,cy+32); ctx.stroke(); }
+    ctx.fillStyle= mode==="two"?AMBER:'#8a5c5c'; ctx.font='18px Inter, sans-serif';
+    ctx.fillText(mode==="two"?"Two-way door — you can walk back":"One-way door — no going back", cx-150, cy+130);
+    ctx.fillStyle=INKC; ctx.font='15px Inter, sans-serif';
+    ctx.fillText(mode==="two"?"→ Decide fast. Reversible mistakes are cheap.":"→ Slow down. This one you live with.", cx-150, cy+160);
+    ctx.fillStyle=GRAY; ctx.font='13px Inter, sans-serif';
+    wrapText(ctx,"Most people invert this — agonizing over dinner orders (two-way) and rushing jobs, partners, and debt (one-way).",40,H-30,W-80,18);
+  }
+  draw();
+  fig.querySelectorAll('.ghost').forEach(b=>b.onclick=()=>{
+    fig.querySelectorAll('.ghost').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active'); mode=b.dataset.d; draw(); });
+  return ()=>{};
+};
+
+SIMS.inversion = fig=>{
+  const cv=fig.querySelector('canvas'); cv.width=700; cv.height=380;
+  const ctx=cv.getContext('2d'); const W=700,H=380; let r=0;
+  const items=[
+    {name:"Sleep deprivation",cost:"Blunts judgment, mood, and health — and quietly degrades every other decision you make."},
+    {name:"Chronic debt",cost:"Removes your options and slack, forcing bad short-term choices and foreclosing good long-term ones."},
+    {name:"An environment that rewards your worst traits",cost:"Slowly turns you into your worst self — no willpower survives a bad-enough environment."}];
+  function draw(){
+    ctx.fillStyle=SUNK; ctx.fillRect(0,0,W,H);
+    ctx.fillStyle=GRAY; ctx.font='14px Inter, sans-serif';
+    ctx.fillText("Instead of 'how do I live well?' — ask 'how would I ruin my life?'", 40, 44);
+    const it=items[r];
+    ctx.fillStyle='#8a5c5c'; ctx.font='20px Inter, sans-serif'; wrapText(ctx,"✗ "+it.name,40,90,W-80,26);
+    ctx.fillStyle=INKC; ctx.font='15px Inter, sans-serif'; wrapText(ctx,it.cost,40,150,W-80,24);
+    ctx.fillStyle=AMBER; ctx.font='14px Inter, sans-serif';
+    wrapText(ctx,"→ Design this out of your life. Not losing is most of winning.",40,H-70,W-80,20);
+    ctx.fillStyle=GRAY; ctx.font='12px Inter, sans-serif';
+    ctx.fillText("Other reliable ruiners: bad partners, addiction, resentment, no exercise, no close friends, a fragile ego, dishonest work.",40,H-24);
+  }
+  draw();
+  fig.querySelectorAll('.ghost').forEach(b=>b.onclick=()=>{
+    fig.querySelectorAll('.ghost').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active'); r=+b.dataset.r; draw(); });
+  return ()=>{};
+};
+
+SIMS.explore = fig=>{
+  const cv=fig.querySelector('canvas'); cv.width=700; cv.height=380;
+  const ctx=cv.getContext('2d'); const W=700,H=380; let stage=20;
+  function draw(){
+    ctx.fillStyle=SUNK; ctx.fillRect(0,0,W,H);
+    const px=50, py=50, pw=W-90, ph=H-130;
+    // explore fraction high early, low late
+    const X=t=>px+pw*t/100, Y=v=>py+ph*(1-v);
+    ctx.strokeStyle=BRD; ctx.beginPath(); ctx.moveTo(px,py+ph); ctx.lineTo(px+pw,py+ph); ctx.stroke();
+    ctx.fillStyle=FAINT; ctx.font='12px Inter, sans-serif';
+    ctx.fillText("young / uncertain / stuck", px, py+ph+20); ctx.fillText("settled / informed", px+pw-120, py+ph+20);
+    const expl=t=>Math.max(0.05,1-Math.pow(t/100,0.8));
+    ctx.strokeStyle=AMBER; ctx.lineWidth=2.5; ctx.beginPath();
+    for(let t=0;t<=100;t+=2){ t===0?ctx.moveTo(X(t),Y(expl(t))):ctx.lineTo(X(t),Y(expl(t))); } ctx.stroke();
+    ctx.fillStyle=AMBER; ctx.font='12px Inter, sans-serif'; ctx.fillText("time exploring", X(6), Y(expl(6))-8);
+    ctx.fillStyle=GRAY; ctx.fillText("time exploiting", X(70), Y(expl(70))+18);
+    ctx.strokeStyle=INKC; ctx.setLineDash([3,3]); ctx.beginPath(); ctx.moveTo(X(stage),py); ctx.lineTo(X(stage),py+ph); ctx.stroke(); ctx.setLineDash([]);
+    const e=Math.round(expl(stage)*100);
+    ctx.fillStyle=INKC; ctx.font='14px Inter, sans-serif';
+    ctx.fillText("At this stage: ~"+e+"% explore, "+(100-e)+"% exploit.", 40, H-42);
+    ctx.fillStyle=GRAY; ctx.font='13px Inter, sans-serif';
+    wrapText(ctx, stage<35 ? "Early or stuck: sample widely — the cost of a wrong turn is low and the information is priceless."
+                           : "Once something works: commit and compound. Exploring forever is just fear of commitment wearing a lab coat.", 40, H-20, W-80, 18);
+  }
+  draw(); fig.querySelector('input').oninput=e=>{ stage=+e.target.value; draw(); }; return ()=>{};
+};
+
+SIMS.compounding = fig=>{
+  const cv=fig.querySelector('canvas'); cv.width=700; cv.height=380;
+  const ctx=cv.getContext('2d'); const W=700,H=380; let good=true;
+  const days=365*5;
+  function draw(){
+    ctx.fillStyle=SUNK; ctx.fillRect(0,0,W,H);
+    const px=50, py=40, pw=W-90, ph=H-100;
+    const rate = good?0.0004:-0.0004; // ~ +/-1% per ~25 days feel; tuned for 5y drama
+    const X=d=>px+pw*d/days;
+    let vals=[]; let v=1; for(let d=0;d<=days;d+=5){ v=Math.pow(1+rate*2.5, d/5); vals.push(v); }
+    const mx = good ? vals[vals.length-1] : 1;
+    const mn = good ? 1 : vals[vals.length-1];
+    const rng=Math.max(0.5, mx-mn);
+    const Y=val=> py+ph*(mx-val)/rng;
+    ctx.strokeStyle=BRD; ctx.setLineDash([3,4]); ctx.beginPath(); ctx.moveTo(px,Y(1)); ctx.lineTo(px+pw,Y(1)); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle=FAINT; ctx.font='12px Inter, sans-serif'; ctx.fillText("today", px, Y(1)-6); ctx.fillText("5 years", px+pw-52, py+ph+18);
+    ctx.strokeStyle= good?AMBER:'#8a5c5c'; ctx.lineWidth=2.5; ctx.beginPath();
+    vals.forEach((val,i)=>{ const d=i*5; i?ctx.lineTo(X(d),Y(val)):ctx.moveTo(X(d),Y(val)); }); ctx.stroke();
+    const end=vals[vals.length-1];
+    ctx.fillStyle=INKC; ctx.font='15px Inter, sans-serif';
+    ctx.fillText(good ? "A 1%-better choice, daily, for 5 years → "+end.toFixed(1)+"× where you started."
+                      : "A 1%-worse choice, daily, for 5 years → "+end.toFixed(2)+"× — a slow erosion.", 40, H-38);
+    ctx.fillStyle=GRAY; ctx.font='13px Inter, sans-serif';
+    wrapText(ctx,"The single day is negligible — which is exactly why compounding is invisible until it's enormous.",40,H-18,W-80,18);
+  }
+  draw();
+  fig.querySelectorAll('.ghost').forEach(b=>b.onclick=()=>{
+    fig.querySelectorAll('.ghost').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active'); good=b.dataset.c==="good"; draw(); });
+  return ()=>{};
+};
+
+SIMS.formula = fig=>{
+  const cv=fig.querySelector('canvas'); cv.width=700; cv.height=380;
+  const ctx=cv.getContext('2d'); const W=700,H=380; let weak=10;
+  const factors=["health","agency","love","mastery","meaning","adaptability"];
+  function draw(){
+    ctx.fillStyle=SUNK; ctx.fillRect(0,0,W,H);
+    ctx.fillStyle=INKC; ctx.font='15px Inter, sans-serif';
+    ctx.fillText("good life = health × agency × love × mastery × meaning × adaptability", 40, 40);
+    const px=50, py=80, bw=90, gap=16, base=py+150;
+    const vals=[85,80,90,75,80,85]; vals[2]=weak; // treat 'love' slot as the weak one, or index 0
+    // actually make the FIRST factor the adjustable weak one
+    vals[0]=weak;
+    factors.forEach((f,i)=>{
+      const x=px+i*(bw+gap), v=vals[i], h=150*v/100;
+      ctx.fillStyle = i===0 ? (weak<25?'rgba(138,92,92,0.7)':'rgba(150,112,47,0.8)') : 'rgba(138,128,105,0.5)';
+      ctx.fillRect(x, base-h, bw, h);
+      ctx.fillStyle=FAINT; ctx.font='11px Inter, sans-serif'; ctx.fillText(f, x, base+16);
+      ctx.fillStyle=INKC; ctx.font='11px Inter, sans-serif'; ctx.fillText(v, x+bw/2-6, base-h-6);
+    });
+    const prod=vals.reduce((a,b)=>a*(b/100),1);
+    ctx.fillStyle= prod<0.15?'#8a5c5c':INKC; ctx.font='16px Inter, sans-serif';
+    ctx.fillText("good life score: "+(prod*100).toFixed(1)+" / 100", 40, base+60);
+    ctx.fillStyle=GRAY; ctx.font='13px Inter, sans-serif';
+    wrapText(ctx, weak<25 ? "One factor near zero drags the whole product down — five strong scores can't rescue a sixth that's collapsed."
+                          : "Balanced factors multiply well. Tend your weakest, not your strongest — that's where the whole life is lost or saved.", 40, H-30, W-80, 18);
+  }
+  draw(); fig.querySelector('input').oninput=e=>{ weak=+e.target.value; draw(); }; return ()=>{};
+};
+
+/* ============================================================
+   BOOT
+   ============================================================ */
+syncNav();
+overviewCam(false);
+
+</script>
+</body>
+</html>

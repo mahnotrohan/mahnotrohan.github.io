@@ -21,3 +21,4 @@ Follow the guided flow, or just wander — every thread rejoins the chart.
 - [Why We Sleep](/orrery/why-we-sleep.html) — the two timekeepers, what a night actually repairs, and the quiet cost of losing the sleep we skip.
 - [The Power Law](/orrery/the-power-law.html) — how a few extreme winners explain venture capital, and what a tail-driven world demands of anyone betting in it.
 - [The School of Life](/orrery/the-school-of-life.html) — the emotional education we never got: on being a bit broken, loving as a skill, and aiming for better, not perfect.
+- [Decision Theory](/orrery/decision-theory.html) — life as repeated choice under uncertainty: expected value humanized, a decision stack, and the models that turn choosing into a way of living.
