@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Why We Sleep — Orrery</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+:root{
+  --ground:#f2ecdf; --surface-sunk:#ece4d2; --surface-raised:#faf6ec;
+  --border:#ddd2bc; --border-strong:#c9bda1;
+  --ink:#26221d; --ink-strong:#14110e; --ink-muted:#5b5343; --ink-faint:#83765b;
+  --accent:#96702f; --accent-dim:#b08d4f; --accent-wash:rgba(150,112,47,0.08);
+  --font:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --r:4px; --reader-w:min(760px, 58vw); --move-fast:150ms ease;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{height:100%; overflow:hidden; background:var(--ground); color:var(--ink);
+  font-family:var(--font); font-size:15.5px; line-height:1.75; overscroll-behavior:none;}
+h1,h2,h3{color:var(--ink-strong); font-weight:600; line-height:1.3;}
+.kicker{font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-muted); font-weight:500;}
+
+/* header — all navigation lives top right */
+#hdr{position:fixed; top:0; left:0; right:0; z-index:40; height:56px;
+  display:flex; align-items:center; gap:1.1rem; padding:0 1.4rem;
+  background:linear-gradient(180deg, rgba(242,236,223,.96), rgba(242,236,223,.75), transparent);
+  pointer-events:none; transition:right .3s cubic-bezier(.25,.7,.3,1);}
+body.reader-open #hdr{right:var(--reader-w);}
+#hdr>*{pointer-events:auto;}
+#hdr .t{font-size:15px; font-weight:600; color:var(--ink-strong);}
+#hdr .sub{font-size:11.5px; color:var(--ink-muted);}
+#hdr .spacer{flex:1;}
+#count{font-size:12px; color:var(--ink-faint); white-space:nowrap;}
+.hbtn{background:rgba(250,246,236,.92); border:1px solid var(--border-strong); color:var(--ink-muted);
+  font-family:var(--font); font-size:12.5px; padding:6px 13px; border-radius:var(--r); cursor:pointer;
+  transition:all var(--move-fast); white-space:nowrap;}
+.hbtn:hover{color:var(--ink); border-color:var(--ink-muted);}
+.hbtn:disabled{opacity:.35; cursor:default;}
+#navcluster{display:flex; align-items:center; gap:10px; opacity:0; pointer-events:none; transition:opacity .2s ease;
+  background:rgba(37,37,37,.92); border:1px solid var(--border-strong); border-radius:8px; padding:3px 6px;}
+#navcluster.on{opacity:1; pointer-events:auto;}
+#navcluster .hbtn{background:none; border:none; font-size:24px; font-weight:300; color:var(--ink-faint); padding:0 6px; line-height:1;}
+#navcluster .hbtn:hover{color:var(--ink-muted);}
+#navcluster .hbtn:disabled{opacity:.25;}
+
+/* viewport & sky */
+#vp{position:fixed; inset:0; cursor:grab; touch-action:none;
+  background:radial-gradient(ellipse at 50% 40%, #f6f1e4 0%, #f2ecdf 55%, #e9e0cb 100%);}
+#vp.dragging{cursor:grabbing;}
+#vp.dragging, #vp.dragging *{user-select:none;}
+#world{position:absolute; top:0; left:0; width:2750px; height:1750px;
+  transform-origin:0 0; will-change:transform;}
+#world::before{content:''; position:absolute; inset:0; pointer-events:none;
+  background-image:radial-gradient(circle, rgba(110,95,65,.14) 1.2px, transparent 1.2px),
+                   radial-gradient(circle, rgba(110,95,65,.08) 1px, transparent 1px);
+  background-size:380px 380px, 150px 150px;
+  background-position:0 0, 70px 100px; opacity:.8;}
+
+/* constellation names */
+.tlab{position:absolute; pointer-events:auto; cursor:pointer; user-select:none; text-align:center;}
+.tlab .big{font-size:40px; font-weight:500; letter-spacing:.5em; line-height:1.3;
+  text-transform:uppercase; white-space:nowrap;}
+.tlab .sum{text-shadow:0 0 5px #f2ecdf,0 0 5px #f2ecdf,0 0 3px #f2ecdf;
+  font-size:19px; color:#665c44; margin-top:.5em; letter-spacing:.18em; text-transform:uppercase;}
+.tlab:hover .big{filter:brightness(1.35);}
+
+/* stars */
+.mk{position:absolute; cursor:pointer; user-select:none;
+  display:flex; gap:14px; width:330px; align-items:flex-start;}
+.mk .dot{border-radius:50%; flex-shrink:0;
+  transition:transform .2s ease, box-shadow .4s ease, opacity .4s ease, background .4s ease;}
+.mk:hover .dot{transform:scale(1.3);}
+.mk .dtext{min-width:0; padding-top:1px;}
+.mk .lbl{text-shadow:0 0 5px #f2ecdf,0 0 5px #f2ecdf,0 0 3px #f2ecdf,0 0 3px #f2ecdf;
+  font-size:19px; color:#26221d; font-weight:500; line-height:1.3;}
+.mk .lbl .seq{font-size:12px; color:#83765b; font-weight:400; margin-right:.5em;}
+.mk .ess{text-shadow:0 0 5px #f2ecdf,0 0 5px #f2ecdf,0 0 3px #f2ecdf,0 0 3px #f2ecdf;
+  font-size:14px; color:#584f3e; line-height:1.45; margin-top:4px; max-width:290px;
+  opacity:0; transition:opacity .3s ease;}
+.mk.showess .ess{opacity:1;}
+.mk .sims-badge{font-size:12px; color:var(--accent-dim); margin-top:3px; display:none;}
+.mk.hasim .sims-badge{display:block;}
+.mk.focused .dot{transform:scale(1.35);}
+.mk.focused .lbl{color:var(--ink-strong);}
+.mk.neighbor .lbl{color:#14110e;}
+.mk.dimmed{opacity:.35;}
+
+/* connection overlay — few, directional, labeled plainly */
+#tsvg, #astsvg, #flowsvg{position:absolute; top:0; left:0; pointer-events:none; overflow:visible;}
+@keyframes dashdrift{to{stroke-dashoffset:-64;}}
+.tline{animation:dashdrift 6s linear infinite;}
+.tlabel{position:absolute; transform:translate(-50%,-50%); background:var(--ground);
+  border:1px solid var(--accent-dim); color:var(--accent); border-radius:12px;
+  font-size:12px; letter-spacing:.06em; padding:2px 11px; white-space:nowrap; cursor:pointer;
+  pointer-events:auto; transition:background var(--move-fast); text-transform:uppercase;}
+.tlabel:hover{background:var(--accent-wash);}
+
+/* ---------- READER ---------- */
+#reader{position:fixed; top:0; right:calc(-1 * var(--reader-w) - 20px); width:var(--reader-w);
+  height:100%; z-index:45; background:var(--surface-raised);
+  border-left:1px solid var(--border); display:flex; flex-direction:column;
+  transition:right .3s cubic-bezier(.25,.7,.3,1);
+  box-shadow:-24px 0 70px rgba(90,75,50,.18);}
+#reader.open{right:0;}
+#reader .top{padding:1.5em 2.2em 1em; border-bottom:1px solid var(--border); position:relative;}
+#reader .close{position:absolute; top:14px; right:16px; background:none; border:none;
+  color:var(--ink-faint); font-size:18px; cursor:pointer;}
+#reader .close:hover{color:var(--ink);}
+#reader h2{font-size:24px; margin:.45em 0 .3em;}
+#reader .terrline{font-size:11.5px; color:var(--ink-faint); margin-top:2px;}
+#rbody{flex:1; overflow-y:auto; padding:1.6em 2.2em 2.5em;}
+#rbody::-webkit-scrollbar{width:6px;}
+#rbody::-webkit-scrollbar-thumb{background:var(--border-strong); border-radius:3px;}
+#rbody>*{max-width:66ch;}
+.hook{font-size:18.5px; color:var(--ink-strong); line-height:1.65;
+  padding-left:1em; border-left:2px solid var(--accent-dim); margin-bottom:1.1em;}
+.story{font-size:15.5px; color:#2b2620;}
+.typechip{display:inline-block; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-muted); border:1px solid var(--border-strong); border-radius:3px; padding:1px 8px;}
+details.fold{margin:1.2em 0 0; border:1px solid var(--border); border-radius:var(--r); background:var(--surface-sunk);}
+details.fold summary{cursor:pointer; padding:.6em 1.05em; color:var(--ink-muted);
+  font-size:13px; list-style:none; user-select:none;}
+details.fold summary::-webkit-details-marker{display:none;}
+details.fold summary::before{content:'+  '; color:var(--accent); font-weight:500;}
+details.fold[open] summary::before{content:'−  ';}
+details.fold summary:hover{color:var(--ink);}
+details.fold .inner{padding:0 1.05em .9em; font-size:14.5px; color:#332e25;}
+.named{margin-top:1.5em; background:var(--surface-sunk); border:1px solid var(--border);
+  border-radius:8px; padding:1em 1.3em;}
+.named .kicker{display:block; margin-bottom:.35em;}
+.named b{color:var(--ink-strong); font-weight:600; font-size:16px;}
+.named .def{font-size:14.5px; color:#332e25; margin-top:.2em;}
+.sowhat{margin-top:1.4em; font-size:15px; color:#2b2620;}
+.sowhat .kicker{display:block; margin-bottom:.3em;}
+.closure{margin-top:1.5em; border:1px solid var(--accent-dim); border-radius:8px;
+  background:var(--accent-wash); padding:1em 1.3em;}
+.closure .kicker{color:var(--accent); display:block; margin-bottom:.3em;}
+.closure .txt{font-size:14.5px; color:#4a443c; line-height:1.65;}
+.linkrow{margin-top:1.6em; border-top:1px solid var(--border); padding-top:1em;
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:.6em 2em;}
+.lgroup .kicker{display:block; margin-bottom:.25em;}
+.lgroup a{display:block; font-size:14px; padding:.2em 0 .45em; color:#332e25; cursor:pointer; text-decoration:none;}
+.lgroup a .t{border-bottom:1px dotted transparent; transition:border-color var(--move-fast); color:var(--ink);}
+.lgroup a:hover .t{border-bottom-color:var(--accent);}
+.lgroup a .why{display:block; font-size:12px; color:var(--ink-faint); line-height:1.5;}
+.nextbtn{margin-top:1.8em; width:100%; max-width:66ch; text-align:left;
+  background:var(--surface-sunk); border:1px solid var(--border-strong); border-radius:8px;
+  color:var(--ink); font-family:var(--font); font-size:14.5px; padding:.9em 1.3em; cursor:pointer;
+  transition:all var(--move-fast);}
+.nextbtn:hover{border-color:var(--accent-dim); background:var(--accent-wash);}
+.nextbtn .k{color:var(--ink-faint); font-size:11px; letter-spacing:.12em; text-transform:uppercase;
+  display:block; margin-bottom:.15em;}
+.nextbtn .arr{color:var(--accent); float:right;}
+
+/* sim figure */
+figure.frame{background:var(--surface-sunk); border:1px solid var(--border); border-radius:var(--r);
+  margin:1.3em 0 0; overflow:hidden;}
+figure.frame canvas{width:100%; display:block;}
+figure.frame .controls{display:flex; gap:8px; padding:8px 12px; border-top:1px solid var(--border);
+  align-items:center; flex-wrap:wrap;}
+figure.frame .controls .cl{font-size:11.5px; color:var(--ink-faint);}
+figure.frame figcaption{padding:7px 13px 10px; font-size:12.5px; color:var(--ink-muted); line-height:1.55;}
+.ghost{background:none; border:1px solid var(--border-strong); color:var(--ink-muted);
+  font-family:var(--font); font-size:12px; padding:3px 11px; border-radius:var(--r); cursor:pointer;
+  transition:all var(--move-fast);}
+.ghost:hover{color:var(--ink); border-color:var(--ink-muted);}
+.ghost.active{color:var(--accent); border-color:var(--accent-dim); background:var(--accent-wash);}
+figure.frame input[type=range]{flex:1; min-width:100px; accent-color:var(--accent);}
+
+@media(max-width:760px){ :root{--reader-w:100vw;} }
+</style>
+</head>
+<body>
+
+<div id="hdr">
+  <div>
+    <div class="t">Why We Sleep</div>
+    <div class="sub">a celestial chart of ideas · follow the flow or wander freely</div>
+  </div>
+  <div class="spacer"></div>
+  <div id="navcluster">
+    <button class="hbtn" id="navPrev" title="previous idea">‹</button>
+    <button class="hbtn" id="navNext" title="next idea">›</button>
+  </div>
+  <button class="hbtn" id="overviewBtn">Overview&nbsp;·&nbsp;Esc</button>
+</div>
+
+<div id="vp"><div id="world"></div></div>
+
+<div id="reader">
+  <div class="top">
+    <button class="close" id="rClose">✕</button>
+    <span class="typechip" id="rChip"></span>
+    <h2 id="rTitle"></h2>
+    <div class="terrline" id="rTerr"></div>
+  </div>
+  <div id="rbody"></div>
+</div>
+
+<script>
+'use strict';
+/* ============================================================
+   CONTENT v2 — every idea: hook → story → (sim) → mechanism
+   fold → the idea named → where it bites → you can now explain.
+   Connections: ≤4 per idea, in three plain buckets.
+   ============================================================ */
+const N = {
+
+a1:{type:"axiom", title:"Sleep is non-negotiable biology", x:1259, y:512,
+  ess:"Every animal sleeps. It isn't laziness — it's core maintenance the body can't skip.",
+  hook:"Evolution deletes anything wasteful. So why has it kept us unconscious and defenseless for a third of our lives?",
+  story:"Because sleep pays for itself many times over. No species has been found that forgoes it; some do it half a brain at a time rather than not at all. Nature would have bred it out if it could.",
+  mech:"Walker's premise: treat sleep not as the time left over after living, but as the biological process that makes living possible. Everything else in the chart follows from taking it seriously.",
+  term:"Sleep as necessity", def:"the view of sleep as essential physiological maintenance, not optional downtime.",
+  sowhat:"If you treat sleep as the first thing to cut when busy, you're cutting the thing that repairs everything else.",
+  builds:[], leads:[["b1-laplace","the clock that times it"],["b4-domains","and why you can't cheat it"]], live:[]},
+a2:{type:"axiom", title:"Two forces decide when you sleep", x:1057, y:627,
+  ess:"A 24-hour internal clock and a rising chemical pressure together set your sleep.",
+  hook:"Why do you feel a slump at 3pm and a second wind at 9pm — even on no schedule at all?",
+  story:"Two systems run in parallel: a circadian clock that cycles alertness over 24 hours, and a sleep pressure that builds the longer you're awake. Sleepiness is really the gap between them.",
+  mech:"When the clock says 'night' and pressure has piled high, they align and you sleep deeply. Fight either one — jet lag, an all-nighter — and sleep falls apart.",
+  term:"The two-process model", def:"sleep is governed by circadian rhythm (Process C) and sleep pressure (Process S) acting together.",
+  sowhat:"Your sleepiness isn't willpower — it's chemistry and a clock. Work with both and sleep gets easy; fight them and it won't come.",
+  builds:[], leads:[["b1-laplace","the clock"],["b1-pendulum","the pressure"]], live:[]},
+a3:{type:"axiom", title:"Sleep has architecture", x:1462, y:627,
+  ess:"A night isn't uniform — it cycles through deep and dreaming stages, each with a job.",
+  hook:"You wake feeling like you were 'out.' But your brain ran a precise, changing programme all night. What was it doing?",
+  story:"Sleep alternates between NREM (deep, slow-wave) and REM (dreaming) in roughly 90-minute cycles. Early cycles are deep-sleep heavy; later ones are REM heavy — so how the night is shaped matters as much as its length.",
+  mech:"Different stages do different work: NREM files facts and clears the brain; REM knits emotion and creativity. Lose part of the night and you lose a specific function, not just 'rest.'",
+  term:"Sleep architecture", def:"the structured cycling of NREM and REM stages across a night.",
+  sowhat:"Not all hours of sleep are the same. Cutting the last two hours mostly cuts REM — a specific, costly loss.",
+  builds:[], leads:[["b2-logistic","the cycle"],["b2-tension-random","why the end of the night matters"]], live:[]},
+a4:{type:"axiom", title:"Lost sleep is never fully repaid", x:1259, y:771,
+  ess:"You can't bank sleep ahead or fully recover a debt after. The body keeps the ledger.",
+  hook:"Sleep four hours all week, then binge on the weekend — are you square? Your brain says no.",
+  story:"Unlike a bank balance, sleep doesn't let you save up or clear a deficit with one big deposit. A recovery night helps, but the lost deep sleep and REM don't come back in full.",
+  mech:"This makes chronic short sleep a slow accumulation of unrepaid damage, not a debt you'll settle later. Consistency beats catch-up.",
+  term:"Sleep debt", def:"accumulated lost sleep that cannot be fully recovered by later oversleeping.",
+  sowhat:"The all-week-grind, catch-up-Sunday plan doesn't work. Regular sufficient sleep is the only version that pays.",
+  builds:[], leads:[["b4-coinflip","the epidemic of debt"],["b4-fence","so protect the opportunity"]], live:[]},
+
+"b1-laplace":{type:"mechanism", title:"The circadian clock", x:404, y:355,
+  ess:"A ~24-hour internal rhythm that rises and falls your alertness through the day.",
+  hook:"Locked in a cave with no daylight, would you lose track of day and night? People have tried — and kept a rhythm anyway.",
+  story:"Deep in the brain sits a master clock that runs close to 24 hours on its own, cycling body temperature, hormones, and alertness. Daylight resets it each morning to stay in sync with the world.",
+  mech:"The clock explains the afternoon dip and evening second wind, and why your alert hours are fixed, not free. Sunlight is its main reset signal — which is why morning light anchors good sleep.",
+  term:"Circadian rhythm", def:"the body's roughly 24-hour internal cycle, reset daily by light.",
+  sowhat:"Get bright light early and dim light late, and the clock will pull your sleep to a steady, easy time.",
+  builds:[["a2","one of the two forces"]], leads:[["b1-lorenz-story","and it differs by person"]], live:[]},
+"b1-pendulum":{type:"mechanism", title:"Sleep pressure builds all day", sim:"adenosine", x:884, y:309,
+  ess:"The longer you're awake, the more a sleepiness chemical piles up in the brain.",
+  hook:"Why are you barely sleepy at breakfast and fighting your eyelids by midnight?",
+  story:"A molecule called adenosine accumulates in the brain every waking hour, and the higher it climbs the sleepier you feel. A full night's sleep is what clears it back to zero.",
+  mech:"This is Process S — the pressure half of sleep. It rises steadily while you're awake and drains only during sleep, which is why a long day makes for easy sleep.",
+  term:"Adenosine / sleep pressure", def:"a chemical that builds while awake, increasing sleepiness, and clears during sleep.",
+  sowhat:"Naps late in the day drain sleep pressure and steal from the night. Feel the pressure and go to bed on it.",
+  builds:[["a2","one of the two forces"]], leads:[["b1-sensitive","what blocks it"]], live:[]},
+"b1-sensitive":{type:"mechanism", title:"Caffeine hides the pressure", x:520, y:522,
+  ess:"Caffeine doesn't remove sleepiness — it just muffles your ability to feel it.",
+  hook:"A coffee 'wakes you up.' But the sleep pressure is still there. Where did it go?",
+  story:"Caffeine plugs the receptors adenosine would signal through, so you stop feeling the sleepiness even as the chemical keeps rising underneath. When the caffeine wears off, the full backlog hits at once — the crash.",
+  mech:"With a half-life of many hours, an afternoon coffee is still half-active at bedtime, quietly shaving your deep sleep even if you fall asleep fine.",
+  term:"Caffeine's masking effect", def:"caffeine blocks the perception of sleep pressure without reducing it.",
+  sowhat:"Cut caffeine by early afternoon. That 3pm cup can thin tonight's deep sleep without you ever noticing.",
+  builds:[["b1-pendulum","it blocks the pressure signal"]], leads:[["b1-principle","when the forces align"]], live:[]},
+"b1-lorenz-story":{type:"story", title:"Owls and larks", x:254, y:656,
+  ess:"Your preferred sleep timing is largely genetic — not discipline or virtue.",
+  hook:"Some people bound up at 5am; others do their best thinking at midnight. Is one of them just lazy?",
+  story:"Chronotype — whether you're a morning lark or a night owl — is substantially inherited. Owls aren't undisciplined; their internal clock genuinely runs late, and a 9-to-5 world punishes them for it.",
+  mech:"Forcing an owl onto a lark's schedule creates permanent 'social jet lag': they're chronically sleep-deprived and judged for it. The clock is a trait, not a choice.",
+  term:"Chronotype", def:"an individual's genetically influenced tendency toward earlier or later sleep timing.",
+  sowhat:"If you're an owl, stop blaming yourself for mornings — and, where you can, bend your schedule toward your real clock.",
+  builds:[["b1-laplace","the clock, personalized"]], leads:[["b1-principle","aligning your own two forces"]], live:[]},
+"b1-principle":{type:"principle", title:"Sleep comes when the forces align", sim:"twoprocess", x:716, y:679,
+  ess:"You sleep best when high pressure meets the clock's night — and badly when they clash.",
+  hook:"Ever been exhausted but wide awake at 3am, or fine at midnight then wrecked at your alarm? That's the two forces disagreeing.",
+  story:"Great sleep is the overlap: adenosine piled high and the circadian clock in its night trough. Jet lag, shift work, and screens misalign them — so you lie awake tired, or wake unrefreshed.",
+  mech:"Traces to the two-process model: manage both — steady wake time, morning light, no late caffeine or naps — and the forces line up on their own.",
+  term:"Sleep-wake alignment", def:"the coincidence of high sleep pressure with the circadian night that produces deep, easy sleep.",
+  sowhat:"Fix your wake time first. A steady morning anchors the clock, and the pressure takes care of the rest.",
+  builds:[["b1-sensitive","managing pressure"],["b1-laplace","and the clock"]], leads:[["b2-logistic","now: what happens once asleep"]], live:[]},
+
+"b2-logistic":{type:"mechanism", title:"The 90-minute cycle", sim:"cycles", x:1837, y:233,
+  ess:"All night you loop through stages — and the mix shifts from deep sleep to dreaming.",
+  hook:"Do you sleep the same way at 11pm and at 6am? Not even close.",
+  story:"Sleep runs in cycles of roughly 90 minutes, each blending NREM and REM. Early cycles are dominated by deep NREM; later ones tilt heavily toward REM dreaming — so the night has a shape, front to back.",
+  mech:"This shape means the two big jobs are scheduled at different times: deep-sleep work up front, REM work near morning. Cut the night short and you don't lose a bit of everything — you lose the end.",
+  term:"The sleep cycle", def:"the ~90-minute NREM-REM loop that repeats through the night, shifting toward REM by morning.",
+  sowhat:"Waking two hours early doesn't cost 25% of sleep — it costs most of your REM, which loads the final cycles.",
+  builds:[["a3","architecture in motion"]], leads:[["b2-attractors","the deep stage"],["b2-lorenz-attractor","the dreaming stage"]], live:[]},
+"b2-attractors":{type:"mechanism", title:"NREM: deep sleep", x:2069, y:401,
+  ess:"Slow-wave deep sleep is the brain's filing and cleaning shift.",
+  hook:"What actually happens in the dreamless, dead-to-the-world part of the night?",
+  story:"In deep NREM, slow brainwaves sweep the cortex, moving the day's memories from short-term storage into long-term keeping and clearing metabolic waste. It's the heaviest, hardest sleep to wake from.",
+  mech:"Deep sleep dominates the first half of the night, which is why an early bedtime protects it. It's the stage most sacrificed by late nights and alcohol.",
+  term:"NREM / slow-wave sleep", def:"deep, dreamless sleep that consolidates facts and clears the brain.",
+  sowhat:"The facts you studied and the clarity you want tomorrow depend on early-night deep sleep. Guard the first half.",
+  builds:[["b2-logistic","the front of the cycle"]], leads:[["b2-principle","how it saves memory"]], live:[]},
+"b2-lorenz-attractor":{type:"mechanism", title:"REM: dreaming sleep", x:2300, y:282,
+  ess:"REM is the brain's overnight workshop for emotion and creativity.",
+  hook:"Why does the brain, at rest, spin vivid dreams while paralyzing the body?",
+  story:"In REM the brain is almost as active as waking, weaving the day's experiences with old memories — defusing emotional charge and forging unexpected connections. The body is paralyzed so you don't act it out.",
+  mech:"REM concentrates in the last third of the night, so it's the first casualty of short sleep. It's where mood is regulated and where creative leaps are made.",
+  term:"REM sleep", def:"dreaming sleep that processes emotion and fuses ideas, concentrated late in the night.",
+  sowhat:"Skimp on the morning hours and you wake emotionally raw and creatively flat — that's lost REM.",
+  builds:[["b2-logistic","the back of the cycle"]], leads:[["b2-tension-random","why the late night matters"]], live:[]},
+"b2-tension-random":{type:"mechanism", title:"The second half is REM-rich", x:2392, y:470,
+  ess:"Chop the end of your night and you disproportionately cut dreaming sleep.",
+  hook:"Sleep 6 hours instead of 8 — you lost 25% of the time. How much REM did you lose?",
+  story:"Because REM piles into the final cycles, cutting from 8 to 6 hours can remove the majority of your REM while barely touching deep sleep. The loss is not proportional — it's targeted at dreaming.",
+  mech:"This is why a shortened night wrecks mood and creativity specifically, and why sleeping in on recovery days restores REM first. The night's tail is precious.",
+  term:"Disproportionate REM loss", def:"trimming total sleep removes far more REM than its share of the night, because REM loads the end.",
+  sowhat:"An early alarm is mostly a REM alarm. If you must lose sleep, know it's your dreaming brain paying.",
+  builds:[["b2-lorenz-attractor","REM loads the late cycles"]], leads:[["b2-principle","the payoff of a full night"]], live:[]},
+"b2-principle":{type:"principle", title:"Sleep sculpts memory", x:1895, y:598,
+  ess:"A night of sleep both saves what you learned and connects it to what you knew.",
+  hook:"Cram all night for a test, or sleep on it? One of these actually cements the learning.",
+  story:"Deep NREM transfers the day's facts into durable storage; REM then links them to your web of older knowledge, sometimes producing insight. Learning without sleep is writing in disappearing ink.",
+  mech:"Traces to architecture: two stages, two memory jobs, both needed. Sleep before learning readies the brain to absorb; sleep after learning locks it in.",
+  term:"Memory consolidation", def:"the sleep-dependent process of stabilizing and integrating new memories.",
+  sowhat:"Sleep is part of studying, not a break from it. The all-nighter that skips sleep erases much of what it crammed.",
+  builds:[["b2-attractors","deep sleep files it"],["b2-lorenz-attractor","REM connects it"]], leads:[["b3-kokura","the wider payoffs"]], live:[]},
+
+"b3-kokura":{type:"mechanism", title:"Learning needs sleep on both sides", x:271, y:962,
+  ess:"Sleep before learning prepares the brain; sleep after learning saves it.",
+  hook:"When's the best time to sleep relative to studying — before, after, or both?",
+  story:"A rested brain absorbs new information far better than a tired one, so sleep before learning makes room. Sleep after learning then consolidates it. Miss either and the knowledge leaks away.",
+  mech:"The pre-sleep readies the hippocampus to take in new facts; the post-sleep ships them to long-term storage. Both windows matter, which is why steady nightly sleep beats cramming.",
+  term:"Sleep and learning", def:"sufficient sleep both before and after learning is required to encode and retain it.",
+  sowhat:"Protect the night before a big learning day as much as the night after. Both are part of the work.",
+  builds:[["b2-principle","memory, in practice"]], leads:[["b3-contingency","and emotion, too"]], live:[]},
+"b3-contingency":{type:"mechanism", title:"Overnight therapy for emotion", x:601, y:1008,
+  ess:"REM sleep softens the emotional sting of the day's experiences.",
+  hook:"Ever gone to bed upset and woken up able to handle it? Something worked the night shift.",
+  story:"In REM, the brain re-processes emotional memories with the stress chemistry turned down, keeping the lesson while draining the charge. Sleep is, in Walker's phrase, overnight therapy.",
+  mech:"Rob the brain of REM and emotional memories stay raw and reactive; the amygdala runs hot and the rational brakes weaken. Mood disorders and sleep loss feed each other.",
+  term:"Overnight therapy", def:"REM sleep's role in reducing the emotional intensity of memories while preserving their content.",
+  sowhat:"When everything feels unbearable, ask how you've been sleeping. Often the feeling is a REM deficit, not the world.",
+  builds:[["b2-lorenz-attractor","REM's emotional work"]], leads:[["b3-timeline","and the brain's cleanup"]], live:[]},
+"b3-timeline":{type:"mechanism", title:"The brain's nightly clean", x:312, y:1210,
+  ess:"During deep sleep the brain flushes out waste that builds up while you're awake.",
+  hook:"Every organ has a way to clear its garbage. When does the brain take out the trash?",
+  story:"In deep sleep the brain's glymphatic system opens up and washes away metabolic by-products of the day — including the proteins linked to Alzheimer's. Waking hours make the mess; sleep clears it.",
+  mech:"Short deep sleep means incomplete clearance, and the debris accumulates over years. This is one route by which chronic sleep loss is tied to long-term brain decline.",
+  term:"The glymphatic system", def:"the brain's waste-clearance process that ramps up during deep sleep.",
+  sowhat:"Deep sleep isn't just rest — it's sanitation for your brain. Skimping lets the waste pile up over decades.",
+  builds:[["b2-attractors","deep sleep's other job"]], leads:[["b3-principle","and the body's health"]], live:[]},
+"b3-principle":{type:"mechanism", title:"Sleep guards body and immunity", x:774, y:1152,
+  ess:"A night of sleep tunes your immune system, hormones, and metabolism.",
+  hook:"Why do you get sick after a run of bad nights — and why does sleep help you recover?",
+  story:"Sleep marshals immune cells, balances the hormones that govern hunger and stress, and repairs the cardiovascular system. A single short night measurably drops immune activity the next day.",
+  mech:"Chronic short sleep keeps stress hormones elevated and immunity suppressed, raising risk across nearly every major disease. Sleep is preventive medicine you make yourself.",
+  term:"Sleep and health", def:"sleep's regulation of immune, hormonal, and cardiovascular function.",
+  sowhat:"Before the next supplement or hack, fix your sleep — it's the widest-acting health intervention you have.",
+  builds:[["a1","sleep as maintenance"]], leads:[["b3-plan","and the creative payoff"]], live:[]},
+"b3-plan":{type:"principle", title:"Sleep on it — creativity", x:543, y:1326,
+  ess:"REM's fusing of ideas is why the answer often arrives after a night's sleep.",
+  hook:"Why does 'sleep on it' actually work — and why do solutions appear in the shower the next morning?",
+  story:"In REM the brain roams across distant memories, colliding ideas that waking logic keeps apart. That's where insight, metaphor, and the unexpected connection are born. Many discoveries arrived in or after sleep.",
+  mech:"Deep sleep stores the pieces; REM recombines them. Deprive yourself and you keep the facts but lose the leaps — problem-solving flattens.",
+  term:"Sleep and creativity", def:"REM sleep's recombination of memories that produces insight and novel connections.",
+  sowhat:"Stuck on a hard problem? Load it into your head, then sleep. The overnight brain is a better brainstormer than the tired one.",
+  builds:[["b2-lorenz-attractor","REM makes connections"]], leads:[["b4-coinflip","now: what happens when we lose it"]], live:[]},
+
+"b4-coinflip":{type:"phenomenon", title:"The deprivation epidemic", sim:"deprivation", x:1583, y:979,
+  ess:"Modern life quietly runs most of us on chronically too little sleep.",
+  hook:"When did 'I'll sleep when I'm dead' become a brag instead of a warning?",
+  story:"Electric light, screens, long commutes, and a culture that prizes busyness have pushed routine sleep well below what the body needs. Most people underestimate their own deficit — tired has become the baseline they mistake for normal.",
+  mech:"After enough hours awake, performance degrades to the level of legal drunkenness — but unlike alcohol, you don't feel how impaired you are. The deprived brain is a poor judge of itself.",
+  term:"Chronic sleep deprivation", def:"the widespread, normalized state of routinely sleeping less than the body needs.",
+  sowhat:"You are probably more sleep-deprived than you feel, because the deprived brain can't gauge its own deficit. Assume you need more.",
+  builds:[["a4","debt that never gets repaid"]], leads:[["b4-ergodicity","the danger of microsleeps"]], live:[]},
+"b4-ergodicity":{type:"mechanism", title:"Microsleeps and drowsy driving", x:1901, y:945,
+  ess:"A deprived brain steals seconds of sleep with your eyes open — sometimes at the wheel.",
+  hook:"Can you fall asleep for a second or two without knowing it happened? Yes — and it's lethal on a highway.",
+  story:"Push past your limit and the brain forces brief microsleeps: split-second lapses where it goes offline mid-task. Behind the wheel, a two-second lapse at speed is enough to kill.",
+  mech:"Drowsy driving rivals drunk driving for danger, and worse — a tired driver who microsleeps never brakes at all. No amount of willpower prevents a microsleep; only sleep does.",
+  term:"Microsleep", def:"an involuntary, seconds-long lapse into sleep during wakefulness under high sleep pressure.",
+  sowhat:"Never drive drowsy — it's not a matter of pushing through. If you're fighting your eyes, you are already unsafe.",
+  builds:[["b4-coinflip","the sharp end of deprivation"]], leads:[["b4-domains","and why you can't bank it"]], live:[]},
+"b4-domains":{type:"mechanism", title:"You can't bank or repay sleep", x:2219, y:979,
+  ess:"Neither storing sleep ahead nor catching up after fully works.",
+  hook:"Sleep 10 hours Sunday to prepay for a hard week — does the credit carry? Sadly, no.",
+  story:"You can't sleep extra now to cover future loss, and one long recovery night won't restore a week's lost deep sleep and REM. The body doesn't run a savings account for sleep.",
+  mech:"Traces to sleep debt: because the deficit can't be cleared retroactively, only regular sufficient sleep works. Weekend catch-up eases the feeling but not the full damage.",
+  term:"No sleep banking", def:"the inability to store sleep in advance or fully recover a deficit afterward.",
+  sowhat:"Consistency beats heroics. Aim for enough sleep every night, not a weekday deficit paid off on the weekend.",
+  builds:[["a4","the sleep-debt ledger"]], leads:[["b4-survive","one thing that fakes it"]], live:[]},
+"b4-survive":{type:"mechanism", title:"Alcohol sedates, it doesn't sleep you", x:2438, y:1094,
+  ess:"A nightcap knocks you out but wrecks the quality of the night.",
+  hook:"A drink helps you fall asleep — so why do you wake unrefreshed?",
+  story:"Alcohol is a sedative, not a sleep aid. It fragments sleep with tiny awakenings you don't remember and heavily suppresses REM, so you get quantity that looks like sleep but not its restorative work.",
+  mech:"Sedation bypasses the natural descent into real sleep architecture. That's why drinking before bed hits memory and mood the next day even after a 'full' night.",
+  term:"Sedation vs sleep", def:"alcohol induces unconsciousness that lacks the architecture and restoration of real sleep.",
+  sowhat:"A nightcap isn't helping you sleep — it's stealing your REM. Leave a gap between the last drink and bed.",
+  builds:[["b2-lorenz-attractor","it suppresses REM"]], leads:[["b4-signal","another modern disruptor"]], live:[]},
+"b4-signal":{type:"mechanism", title:"Light and screens delay the clock", x:1612, y:1181,
+  ess:"Evening light — especially blue screen light — tells your brain it's still day.",
+  hook:"Why does scrolling in bed leave you wired when you meant to wind down?",
+  story:"Light suppresses melatonin, the hormone that signals night and lets sleep begin. Bright evening light, and the blue light of screens, push the circadian clock later and delay sleep onset.",
+  mech:"The brain reads light as daytime and holds off the night signal. Dim the lights and drop the screens before bed and melatonin can rise on schedule.",
+  term:"Melatonin suppression", def:"evening light delays the sleep-timing hormone melatonin, pushing sleep later.",
+  sowhat:"Dim the house and put screens away an hour before bed. You're not being precious — you're letting the night signal fire.",
+  builds:[["b1-laplace","the clock, disrupted"]], leads:[["b4-danger","and the pill that isn't sleep"]], live:[]},
+"b4-danger":{type:"tension", title:"Sleeping pills aren't sleep", x:1959, y:1152,
+  ess:"Most sleep drugs sedate the brain without restoring real sleep architecture.",
+  hook:"A pill puts you under for eight hours — so why doesn't it feel like real rest?",
+  story:"Classic sleeping pills sedate rather than produce natural sleep, blunting the deep and REM stages that do the actual work. They can also build dependence and rebound insomnia when stopped.",
+  mech:"Sedation looks like sleep on the clock but not in the brainwaves. This is why behavioral approaches (CBT-I) outperform pills for lasting insomnia relief.",
+  term:"Sedative sleep", def:"drug-induced unconsciousness that lacks the restorative stages of natural sleep.",
+  sowhat:"If sleep is a chronic problem, ask about CBT-I before a prescription. A pill's eight hours aren't the eight hours you need.",
+  builds:[["b4-survive","like alcohol, sedation not sleep"]], leads:[["b4-process","the metabolic cost"]], live:[]},
+"b4-process":{type:"mechanism", title:"Short sleep and hunger", x:1650, y:1330,
+  ess:"Too little sleep tips your hunger hormones toward eating more.",
+  hook:"Why do you crave sugar and carbs after a bad night — and never feel quite full?",
+  story:"Sleep loss raises the hunger hormone ghrelin and lowers the fullness hormone leptin, so you eat more and feel satisfied less. The tired brain also craves high-calorie food and has weaker impulse control to refuse it.",
+  mech:"This links chronic short sleep to weight gain and metabolic disease, independent of willpower. The scale is partly a sleep problem.",
+  term:"Sleep and appetite", def:"insufficient sleep shifts hunger hormones toward increased eating.",
+  sowhat:"If dieting keeps failing, check your sleep. You can't out-willpower hormones tilted by exhaustion.",
+  builds:[["b3-principle","sleep tunes metabolism"]], leads:[["b4-destination","the long-term stakes"]], live:[]},
+"b4-destination":{type:"mechanism", title:"The long-term stakes", x:2330, y:1255,
+  ess:"Decades of short sleep raise the risk of the diseases we fear most.",
+  hook:"If one habit quietly raised your odds of heart disease, dementia, and early death, would you change it?",
+  story:"Sustained short sleep is associated with higher risk of cardiovascular disease, diabetes, weakened immunity, and dementia. The nightly shortfall compounds silently over years into serious long-term harm.",
+  mech:"Traces to every job above — cleaning, immunity, metabolism, memory — left chronically undone. The damage is cumulative and mostly invisible until late.",
+  term:"Sleep and disease risk", def:"the association between chronic insufficient sleep and major long-term illnesses.",
+  sowhat:"Treat sleep as a top-tier health investment, on par with diet and exercise — because its neglect shows up decades later.",
+  builds:[["b3-timeline","incomplete cleanup, for years"]], leads:[["b4-explore","so how to sleep well"]], live:[]},
+"b4-explore":{type:"mechanism", title:"How to actually sleep well", x:2470, y:1430,
+  ess:"A few reliable habits — steady schedule, dark and cool, no late stimulants — do most of the work.",
+  hook:"If you could keep only one sleep habit, which would it be? (Hint: it's the boring one.)",
+  story:"Walker's core rules: keep a consistent sleep and wake time even on weekends; get morning light; keep the room dark, cool, and screen-free; and avoid caffeine after midday and alcohol near bed. Regularity is the single most powerful lever.",
+  mech:"Each habit works with the two forces — anchoring the clock and letting pressure and melatonin do their job. Consistency beats any one trick.",
+  term:"Sleep hygiene", def:"the behavioral practices that support natural, sufficient sleep.",
+  sowhat:"Start with a fixed wake time, seven days a week. It's unglamorous and it outperforms every gadget.",
+  builds:[["b1-principle","working with the two forces"]], leads:[["b4-fence","and defend the time"]], live:[]},
+"b4-fence":{type:"principle", title:"Protect the sleep opportunity", x:2090, y:1430,
+  ess:"You can't force sleep — but you can guard a full, unhurried window for it.",
+  hook:"You'd never schedule a meeting with no time for it. Why do you schedule sleep that way?",
+  story:"Sleep can't be willed on command, but it reliably comes when given the chance. That means protecting a genuine eight-hour opportunity — bedtime to alarm — rather than the six hours left after everything else.",
+  mech:"Traces to sleep as necessity: the one thing fully in your control is the opportunity. Defend it like an appointment and biology handles the rest.",
+  term:"Sleep opportunity", def:"the protected block of time in bed that allows a full night's sleep to occur.",
+  sowhat:"Set a bedtime alarm, not just a wake alarm. Guard the window, and the sleep tends to fill it.",
+  builds:[["b4-explore","the habit that matters most"]], leads:[["b4-principle","the whole message"]], live:[]},
+"b4-principle":{type:"principle", title:"Sleep is the foundation, not the leftover", x:1830, y:1560,
+  ess:"Treat sleep as the base that everything else stands on — not the time that's left over.",
+  hook:"What if the most productive thing you did tomorrow was sleep properly tonight?",
+  story:"Walker's close: sleep isn't a competitor to a full life, it's the ground beneath it — memory, mood, health, and creativity all rest on it. Cut it and you weaken everything you were staying up to do.",
+  mech:"Every strand of the chart converges here: two forces, an architecture, a set of nightly repairs, a debt you can't dodge. Honor sleep and the rest of life works better.",
+  term:"Sleep first", def:"prioritizing sufficient sleep as the foundation of health and performance.",
+  sowhat:"Build your day around protecting sleep, not sleep around your day. It's the highest-leverage habit you have.",
+  builds:[["b4-fence","guarding the window"],["a1","sleep as core biology"]], leads:[], live:[]}
+};
+const TERRITORIES = [
+  {label:"I · The Two Timekeepers", sum:"the clock and the pressure", hue:"#4a6684", lx:508, ly:100, rx:184, ry:158, rw:745, rh:590},
+  {label:"II · The Stages and Their Jobs", sum:"NREM, REM, and the cycle", hue:"#4f7050", lx:2114, ly:100, rx:1739, ry:158, rw:745, rh:590},
+  {label:"The Bedrock", sum:"sleep is core biology", hue:"#6f6455", lx:1265, ly:352, rx:964, ry:436, rw:722, rh:439},
+  {label:"III · What Sleep Does For You", sum:"what a night repairs", hue:"#8a5c5c", lx:520, ly:869, rx:184, ry:846, rw:745, rh:590},
+  {label:"IV · The Cost, and How to Sleep", sum:"losing it, and getting it back", hue:"#96702f", lx:2011, ly:820, rx:1479, ry:869, rw:1069, rh:745}
+];
+const ASTERISMS = [
+  ["#4a6684", [["b1-laplace","b1-pendulum"],["b1-pendulum","b1-sensitive"],["b1-sensitive","b1-lorenz-story"],["b1-sensitive","b1-principle"]]],
+  ["#4f7050", [["b2-logistic","b2-attractors"],["b2-lorenz-attractor","b2-attractors"],["b2-attractors","b2-tension-random"],["b2-attractors","b2-principle"]]],
+  ["#6f6455", [["a1","a2"],["a1","a3"],["a2","a4"],["a3","a4"]]],
+  ["#8a5c5c", [["b3-kokura","b3-contingency"],["b3-contingency","b3-timeline"],["b3-contingency","b3-principle"],["b3-principle","b3-plan"]]],
+  ["#96702f", [["b4-coinflip","b4-ergodicity"],["b4-ergodicity","b4-domains"],["b4-domains","b4-survive"],
+    ["b4-signal","b4-danger"],["b4-domains","b4-danger"],["b4-danger","b4-process"],
+    ["b4-survive","b4-explore"],["b4-destination","b4-explore"],["b4-explore","b4-fence"],
+    ["b4-process","b4-principle"],["b4-fence","b4-principle"],["b4-destination","b4-principle"]]]
+];
+const ALL = Object.keys(N);
+const TERRNAME = {b1:"I · The Two Timekeepers", b2:"II · The Stages and Their Jobs",
+  b3:"III · What Sleep Does For You", b4:"IV · The Cost, and How to Sleep", a:"The Bedrock"};
+const HUES = {b1:"#4a6684", b2:"#4f7050", b3:"#8a5c5c", b4:"#96702f", a:"#6f6455"};
+const hueOf = id => id.startsWith('a') ? HUES.a : HUES[id.slice(0,2)];
+const terrOf = id => id.startsWith('a') ? TERRNAME.a : TERRNAME[id.slice(0,2)];
+
+const TOUR = ["b1-laplace","b1-pendulum","b1-sensitive","b1-lorenz-story","b1-principle",
+  "b2-logistic","b2-attractors","b2-lorenz-attractor","b2-tension-random","b2-principle",
+  "b3-kokura","b3-contingency","b3-timeline","b3-principle","b3-plan",
+  "b4-coinflip","b4-ergodicity","b4-domains","b4-survive","b4-signal","b4-danger","b4-process",
+  "b4-destination","b4-explore","b4-fence","b4-principle"];
+const SEQ = {}; TOUR.forEach((id,i)=>SEQ[id]=i+1);
+
+/* degree from curated links (for star size) */
+const DEG = {};
+ALL.forEach(id=>DEG[id]=0);
+ALL.forEach(id=>{
+  const n = N[id];
+  [...n.builds, ...n.leads, ...n.live].forEach(([t])=>{ DEG[id]++; DEG[t]=(DEG[t]||0)+1; });
+});
+const dotSize = id => 16 + Math.min(DEG[id],8)*2.2;
+const dotCenter = id => ({x:N[id].x+dotSize(id)/2, y:N[id].y+dotSize(id)/2});
+
+/* ============================================================
+   CAMERA
+   ============================================================ */
+const vp = document.getElementById('vp');
+const world = document.getElementById('world');
+const reader = document.getElementById('reader');
+const WW = 2750, WH = 1750;
+let cam = {s:0.12, tx:0, ty:0};
+let anim = null;
+function apply(){
+  world.style.transform = `translate(${cam.tx}px, ${cam.ty}px) scale(${cam.s})`;
+  lod();
+}
+function readerW(){ return reader.classList.contains('open') ? (reader.getBoundingClientRect().width||430) : 0; }
+function visW(){ return innerWidth - readerW(); }
+function centerOn(cx, cy, s){
+  cam.s = s;
+  cam.tx = visW()/2 - cx*s;
+  cam.ty = innerHeight/2 - cy*s;
+  apply();
+}
+function flyTo(cx, cy, s, dur=700){
+  if (anim) cancelAnimationFrame(anim);
+  const s0=cam.s, cx0=(visW()/2-cam.tx)/s0, cy0=(innerHeight/2-cam.ty)/s0;
+  const ls0=Math.log(s0), ls1=Math.log(s);
+  const t0=performance.now();
+  function step(t){
+    let p=Math.min(1,(t-t0)/dur);
+    p = p<.5 ? 4*p*p*p : 1-Math.pow(-2*p+2,3)/2;
+    centerOn(cx0+(cx-cx0)*p, cy0+(cy-cy0)*p, Math.exp(ls0+(ls1-ls0)*p));
+    if (p<1) anim=requestAnimationFrame(step);
+  }
+  anim=requestAnimationFrame(step);
+}
+function overviewCam(fly=true){
+  const s = Math.min(visW()/WW, innerHeight/WH)*0.92;
+  if (fly) flyTo(WW/2, WH/2, s, 800); else centerOn(WW/2, WH/2, s);
+}
+vp.addEventListener('wheel', e=>{
+  e.preventDefault();
+  if (anim) cancelAnimationFrame(anim);
+  const f = Math.exp(-e.deltaY*0.0016);
+  const s2 = Math.min(2.2, Math.max(0.06, cam.s*f));
+  const wx=(e.clientX-cam.tx)/cam.s, wy=(e.clientY-cam.ty)/cam.s;
+  cam.s=s2; cam.tx=e.clientX-wx*s2; cam.ty=e.clientY-wy*s2;
+  apply();
+}, {passive:false});
+const ptrs = new Map();
+let panStart=null, pinchStart=null, moved=0;
+vp.addEventListener('pointerdown', e=>{
+  if (e.target.closest('.tlabel')) return;
+  ptrs.set(e.pointerId, {x:e.clientX, y:e.clientY});
+  if (ptrs.size===1){
+    moved=0;
+    panStart={mx:e.clientX, my:e.clientY, tx:cam.tx, ty:cam.ty};
+    vp.classList.add('dragging');
+  } else if (ptrs.size===2){
+    const [p1,p2]=[...ptrs.values()];
+    pinchStart={d:Math.hypot(p1.x-p2.x,p1.y-p2.y), s:cam.s,
+      wx:((p1.x+p2.x)/2-cam.tx)/cam.s, wy:((p1.y+p2.y)/2-cam.ty)/cam.s};
+    panStart=null;
+  }
+});
+addEventListener('pointermove', e=>{
+  if (!ptrs.has(e.pointerId)) return;
+  ptrs.set(e.pointerId, {x:e.clientX, y:e.clientY});
+  if (ptrs.size===1 && panStart){
+    if (anim) cancelAnimationFrame(anim);
+    moved += Math.abs(e.movementX||0)+Math.abs(e.movementY||0);
+    cam.tx = panStart.tx + (e.clientX-panStart.mx);
+    cam.ty = panStart.ty + (e.clientY-panStart.my);
+    apply();
+  } else if (ptrs.size===2 && pinchStart){
+    if (anim) cancelAnimationFrame(anim);
+    const [p1,p2]=[...ptrs.values()];
+    const d=Math.hypot(p1.x-p2.x,p1.y-p2.y);
+    const s2=Math.min(2.2, Math.max(0.06, pinchStart.s*d/pinchStart.d));
+    const cx=(p1.x+p2.x)/2, cy=(p1.y+p2.y)/2;
+    cam.s=s2; cam.tx=cx-pinchStart.wx*s2; cam.ty=cy-pinchStart.wy*s2;
+    apply();
+  }
+});
+function ptrUp(e){ ptrs.delete(e.pointerId);
+  if (ptrs.size<2) pinchStart=null;
+  if (ptrs.size===0){ panStart=null; vp.classList.remove('dragging'); } }
+addEventListener('pointerup', ptrUp);
+addEventListener('pointercancel', ptrUp);
+vp.addEventListener('dblclick', e=>{
+  if (!e.target.closest('.mk')){ closeReader(); overviewCam(); }
+});
+addEventListener('keydown', e=>{
+  if (e.key==='Escape'){ closeReader(); overviewCam(); }
+  if (e.key==='ArrowRight') navStep(1);
+  if (e.key==='ArrowLeft') navStep(-1);
+});
+document.getElementById('overviewBtn').onclick = ()=>{ closeReader(); overviewCam(); };
+addEventListener('resize', ()=>apply());
+
+/* ============================================================
+   SKY — constellation names, asterisms, ecliptic, stars
+   ============================================================ */
+TERRITORIES.forEach(t=>{
+  const rgb = [parseInt(t.hue.slice(1,3),16), parseInt(t.hue.slice(3,5),16), parseInt(t.hue.slice(5,7),16)].join(',');
+  const l = document.createElement('div');
+  l.className = 'tlab';
+  l.style.cssText = `left:${t.lx}px; top:${t.ly}px; transform:translateX(-50%);`;
+  l.innerHTML = `<div class="big" style="color:rgba(${rgb},0.92)">${t.label}</div>
+    <div class="sum">${t.sum}</div>`;
+  l.addEventListener('click', ()=>{
+    flyTo(t.rx+t.rw/2, t.ry+Math.min(t.rh/2, 1000), Math.min(visW()/(t.rw+300), 0.5));
+  });
+  world.appendChild(l);
+});
+
+
+
+/* minor stars — small nameless flecks inside each figure */
+{
+  const R = mulberry32(11);
+  TERRITORIES.forEach(t=>{
+    for (let i=0;i<16;i++){
+      const d=document.createElement('div');
+      const sz=(2.5+R()*3).toFixed(1);
+      d.style.cssText=`position:absolute; left:${Math.round(t.rx+40+R()*(t.rw-80))}px;`+
+        `top:${Math.round(t.ry+40+R()*(t.rh-80))}px; width:${sz}px; height:${sz}px;`+
+        `border-radius:50%; background:${t.hue}; opacity:${(0.18+R()*0.22).toFixed(2)}; pointer-events:none;`;
+      world.appendChild(d);
+    }
+  });
+}
+
+const flowsvg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+flowsvg.setAttribute('width',WW); flowsvg.setAttribute('height',WH);
+flowsvg.style.cssText='position:absolute;top:0;left:0;pointer-events:none;overflow:visible;';
+world.appendChild(flowsvg);
+
+const astsvg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+astsvg.id='astsvg'; astsvg.setAttribute('width',WW); astsvg.setAttribute('height',WH);
+ASTERISMS.forEach(([hue, pairs])=>{
+  pairs.forEach(([a,b])=>{
+    const pa=dotCenter(a), pb=dotCenter(b);
+    const dx=pb.x-pa.x, dy=pb.y-pa.y, L=Math.hypot(dx,dy)||1;
+    const ux=dx/L, uy=dy/L, off=30;
+    const ln = document.createElementNS('http://www.w3.org/2000/svg','line');
+    ln.setAttribute('x1',pa.x+ux*off); ln.setAttribute('y1',pa.y+uy*off);
+    ln.setAttribute('x2',pb.x-ux*off); ln.setAttribute('y2',pb.y-uy*off);
+    ln.setAttribute('stroke',hue); ln.setAttribute('stroke-opacity','0.38');
+    ln.setAttribute('stroke-width','1.6');
+    astsvg.appendChild(ln);
+  });
+});
+world.appendChild(astsvg);
+
+{
+  const pts = TOUR.map(id=>dotCenter(id));
+  let d = `M ${pts[0].x} ${pts[0].y}`;
+  for (let i=1;i<pts.length;i++){
+    const a=pts[i-1], b=pts[i];
+    const mx=(a.x+b.x)/2, my=(a.y+b.y)/2;
+    d += ` Q ${mx + (b.y-a.y)*0.08} ${my - (b.x-a.x)*0.08} ${b.x} ${b.y}`;
+  }
+  const p = document.createElementNS('http://www.w3.org/2000/svg','path');
+  p.setAttribute('d',d); p.setAttribute('fill','none');
+  p.setAttribute('stroke','rgba(61,56,51,0.08)'); p.setAttribute('stroke-width','4');
+  p.setAttribute('stroke-dasharray','2,14');
+  flowsvg.appendChild(p);
+}
+
+const tsvg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+tsvg.id='tsvg'; tsvg.setAttribute('width',WW); tsvg.setAttribute('height',WH);
+const defs = document.createElementNS('http://www.w3.org/2000/svg','defs');
+defs.innerHTML = `<marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="#96702f" opacity="0.8"/></marker>`;
+tsvg.appendChild(defs);
+world.appendChild(tsvg);
+const tlabels = [];
+
+const mkEls = {};
+ALL.forEach(id=>{
+  const n = N[id];
+  const hue = hueOf(id);
+  const size = dotSize(id);
+  const m = document.createElement('div');
+  m.className = 'mk' + (n.sim ? ' hasim' : '');
+  m.style.cssText = `left:${n.x}px; top:${n.y}px;`;
+  m.dataset.id = id;
+  m.innerHTML = `
+    <div class="dot" style="width:${size}px; height:${size}px; background:${hue};"></div>
+    <div class="dtext">
+      <div class="lbl">${SEQ[id]?`<span class="seq">${SEQ[id]}</span>`:''}${n.title}</div>
+      <div class="ess">${n.ess}</div>
+      <div class="sims-badge">▸ live model</div>
+    </div>`;
+  world.appendChild(m);
+  mkEls[id] = m;
+  m.addEventListener('click', e=>{
+    if (moved>6) return;
+    e.stopPropagation();
+    openIdea(id);
+  });
+});
+
+function lod(){
+  const ess = cam.s > 0.55;
+  if (lod._k===ess) return;
+  lod._k = ess;
+  Object.values(mkEls).forEach(m=>m.classList.toggle('showess', ess));
+}
+
+/* ============================================================
+   READER
+   ============================================================ */
+let focusId = null, stopSim = null;
+
+function linkGroup(kicker, items){
+  if (!items.length) return '';
+  return `<div class="lgroup"><span class="kicker">${kicker}</span>
+    ${items.map(([t,why])=>`<a data-t="${t}"><span class="t">${N[t].title}</span>
+      <span class="why">${why}</span></a>`).join('')}
+  </div>`;
+}
+
+function openIdea(id){
+  const n = N[id];
+  if (stopSim){ stopSim(); stopSim=null; }
+  focusId = id;
+  const chip = document.getElementById('rChip');
+  chip.textContent = n.type;
+  chip.style.borderColor = hueOf(id)+'66'; chip.style.color = hueOf(id);
+  document.getElementById('rTitle').textContent = n.title;
+  document.getElementById('rTerr').textContent = terrOf(id) + (SEQ[id]?` · step ${SEQ[id]} of ${TOUR.length}`:'');
+  const nextId = SEQ[id] && SEQ[id] < TOUR.length ? TOUR[SEQ[id]] : null;
+  document.getElementById('rbody').innerHTML = `
+    <div class="hook">${n.hook}</div>
+    <div class="story">${n.story}</div>
+    ${n.sim ? simHTML(n.sim) : ''}
+    ${n.mech ? `<details class="fold"><summary>How it actually works</summary><div class="inner">${n.mech}</div></details>` : ''}
+    <div class="named"><span class="kicker">the idea, named</span>
+      <b>${n.term}</b><div class="def">${n.def}</div></div>
+    <div class="sowhat"><span class="kicker">where it bites</span>${n.sowhat}</div>
+    <div class="linkrow">
+      ${linkGroup('builds on', n.builds)}
+      ${linkGroup('leads to', n.leads)}
+      ${linkGroup('see it live', n.live)}
+    </div>
+    ${nextId ? `<button class="nextbtn" data-t="${nextId}"><span class="k">next in the flow · ${SEQ[nextId]} of ${TOUR.length}</span>${N[nextId].title}<span class="arr">→</span></button>`
+             : (SEQ[id]===TOUR.length ? `<button class="nextbtn" id="finishBtn"><span class="k">end of the flow</span>Back to the chart<span class="arr">↑</span></button>` : '')}`;
+  document.querySelectorAll('#rbody [data-t]').forEach(a=>
+    a.addEventListener('click', ()=>openIdea(a.dataset.t)));
+  const fin = document.getElementById('finishBtn');
+  if (fin) fin.onclick = ()=>{ closeReader(); overviewCam(); };
+  const fig = document.querySelector('#rbody figure.frame');
+  if (fig) stopSim = SIMS[fig.dataset.sim](fig);
+  document.getElementById('rbody').scrollTop = 0;
+  reader.classList.add('open');
+  document.body.classList.add('reader-open');
+  highlight(id);
+  syncNav();
+  const rs = Math.min(0.95, Math.max(0.62, cam.s));
+  setTimeout(()=>flyTo(n.x+180, n.y+60, rs), 60);
+}
+function closeReader(){
+  if (stopSim){ stopSim(); stopSim=null; }
+  reader.classList.remove('open');
+  document.body.classList.remove('reader-open');
+  focusId = null;
+  clearHighlight();
+  syncNav();
+}
+document.getElementById('rClose').onclick = closeReader;
+
+/* map highlight: few directional lines with plain labels */
+function highlight(id){
+  clearHighlight();
+  const n = N[id];
+  const nb = new Set([id]);
+  const conns = [
+    ...n.builds.map(([t])=>({t, lab:'builds on', into:true})),
+    ...n.leads.map(([t])=>({t, lab:'leads to', into:false})),
+    ...n.live.map(([t])=>({t, lab:'see it live', into:false}))
+  ];
+  conns.forEach(c=>nb.add(c.t));
+  ALL.forEach(x=>{
+    mkEls[x].classList.toggle('dimmed', !nb.has(x));
+    mkEls[x].classList.toggle('neighbor', nb.has(x) && x!==id);
+    mkEls[x].classList.toggle('focused', x===id);
+  });
+  const here = dotCenter(id);
+  conns.forEach(c=>{
+    const there = dotCenter(c.t);
+    let from = c.into ? {...there} : {...here};
+    let to   = c.into ? {...here} : {...there};
+    {
+      const ddx=to.x-from.x, ddy=to.y-from.y, LL=Math.hypot(ddx,ddy)||1;
+      const ux=ddx/LL, uy=ddy/LL, off=30;
+      from = {x:from.x+ux*off, y:from.y+uy*off};
+      to   = {x:to.x-ux*off,   y:to.y-uy*off};
+    }
+    const dx=to.x-from.x, dy=to.y-from.y, dist=Math.hypot(dx,dy)||1;
+    const cx=(from.x+to.x)/2 - dy/dist*dist*0.12, cy=(from.y+to.y)/2 + dx/dist*dist*0.12;
+    const p = document.createElementNS('http://www.w3.org/2000/svg','path');
+    p.setAttribute('d',`M ${from.x} ${from.y} Q ${cx} ${cy} ${to.x} ${to.y}`);
+    p.setAttribute('fill','none');
+    p.setAttribute('stroke','rgba(150,112,47,0.45)');
+    p.setAttribute('stroke-width','2.5');
+    p.setAttribute('stroke-dasharray','9,8');
+    p.setAttribute('class','tline');
+    p.setAttribute('marker-end','url(#arr)');
+    tsvg.appendChild(p);
+    const lbl = document.createElement('div');
+    lbl.className='tlabel';
+    lbl.style.left = (.25*from.x+.5*cx+.25*to.x)+'px';
+    lbl.style.top = (.25*from.y+.5*cy+.25*to.y)+'px';
+    lbl.textContent = c.lab;
+    lbl.addEventListener('click', e=>{ e.stopPropagation(); openIdea(c.t); });
+    world.appendChild(lbl);
+    tlabels.push(lbl);
+  });
+}
+function clearHighlight(){
+  ALL.forEach(x=>mkEls[x].classList.remove('dimmed','neighbor','focused'));
+  [...tsvg.querySelectorAll('path')].forEach(p=>p.remove());
+  tlabels.forEach(l=>l.remove()); tlabels.length=0;
+}
+
+/* ============================================================
+   NAV — top-right cluster drives the default flow
+   ============================================================ */
+function syncNav(){
+  const i = focusId ? TOUR.indexOf(focusId) : -1;
+  document.getElementById('navcluster').classList.toggle('on', !!focusId);
+  document.getElementById('navPrev').disabled = i===0;
+  document.getElementById('navNext').disabled = i===TOUR.length-1;
+}
+function navStep(dir){
+  const i = focusId ? TOUR.indexOf(focusId) : -1;
+  if (i<0){ openIdea(TOUR[0]); return; }
+  const j = i+dir;
+  if (j>=0 && j<TOUR.length) openIdea(TOUR[j]);
+}
+document.getElementById('navPrev').onclick = ()=>navStep(-1);
+document.getElementById('navNext').onclick = ()=>navStep(1);
+
+/* ============================================================
+   SIMULATIONS
+   ============================================================ */
+const INKC='#3d3833', GRAY='#8a8069', FAINT='#b0a68c', AMBER='#96702f', SUNK='#ece4d2', BRD='#d5c9ae';
+function mulberry32(a){ return function(){ a|=0; a=a+0x6D2B79F5|0;
+  let t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t;
+  return ((t^t>>>14)>>>0)/4294967296; }; }
+function setActive(fig, btn){
+  fig.querySelectorAll('.ghost').forEach(b=>{ if(b.dataset.d!==undefined||b.dataset.m!==undefined) b.classList.remove('active');});
+  if (btn) btn.classList.add('active');
+}
+function simHTML(kind){
+  const caps = {
+    adenosine:"Sleep pressure climbs all day. Add caffeine and you stop feeling it — until it wears off and the whole backlog lands.",
+    twoprocess:"Two forces across 24 hours: the circadian clock (amber) and sleep pressure (gray). Great sleep is where high pressure meets the clock's night.",
+    cycles:"A night in stages. Deep sleep loads the front, REM the back. Chop the morning hours and it's mostly REM you lose.",
+    deprivation:"Performance against hours awake. Past ~18 hours, a tired brain performs like a legally drunk one — without feeling it."
+  };
+  const ctl = {
+    adenosine:`<button class="ghost active" data-c="off">no caffeine</button>
+      <button class="ghost" data-c="on">3pm coffee</button>`,
+    twoprocess:`<span class="cl">hour</span><input type="range" min="0" max="24" step="1" value="15">`,
+    cycles:`<button class="ghost active" data-h="8">full 8 hours</button>
+      <button class="ghost" data-h="6">cut to 6</button>`,
+    deprivation:`<span class="cl">hours awake</span><input type="range" min="0" max="24" step="1" value="10">`
+  };
+  return `<figure class="frame" data-sim="${kind}">
+    <canvas></canvas>
+    <div class="controls">${ctl[kind]}</div>
+    <figcaption>${caps[kind]}</figcaption>
+  </figure>`;
+}
+const SIMS = {};
+
+function wrapText(ctx, text, x, y, maxW, lh){
+  const words=text.split(' '); let line='', yy=y;
+  for(const w of words){ const t=line?line+' '+w:w;
+    if(ctx.measureText(t).width>maxW && line){ ctx.fillText(line,x,yy); line=w; yy+=lh; }
+    else line=t; }
+  if(line) ctx.fillText(line,x,yy); return yy;
+}
+
+SIMS.adenosine = fig=>{
+  const cv=fig.querySelector('canvas'); cv.width=700; cv.height=380;
+  const ctx=cv.getContext('2d'); const W=700,H=380; let caf=false;
+  const px=50, py=40, pw=W-90, ph=H-110;
+  function draw(){
+    ctx.fillStyle=SUNK; ctx.fillRect(0,0,W,H);
+    ctx.strokeStyle=BRD; ctx.beginPath(); ctx.moveTo(px,py+ph); ctx.lineTo(px+pw,py+ph); ctx.stroke();
+    ctx.fillStyle=FAINT; ctx.font='12px Inter, sans-serif';
+    ctx.fillText("7am", px, py+ph+20); ctx.fillText("3pm", px+pw*0.5, py+ph+20); ctx.fillText("11pm", px+pw-24, py+ph+20);
+    ctx.fillText("sleep pressure", px+4, py-8);
+    const X=h=>px+pw*h/16, Y=v=>py+ph*(1-v);
+    // actual pressure: rises to ~1 over 16h
+    ctx.strokeStyle=GRAY; ctx.lineWidth=2.5; ctx.beginPath();
+    for(let h=0;h<=16;h+=0.2){ const v=h/16; h===0?ctx.moveTo(X(h),Y(v)):ctx.lineTo(X(h),Y(v)); } ctx.stroke();
+    ctx.fillStyle=GRAY; ctx.font='12px Inter, sans-serif'; ctx.fillText("actual pressure", X(12), Y(12/16)-8);
+    if(caf){
+      // felt pressure: dips after 8h (3pm coffee) then rebounds above
+      ctx.strokeStyle=AMBER; ctx.lineWidth=2.5; ctx.beginPath();
+      for(let h=0;h<=16;h+=0.2){
+        let v=h/16;
+        if(h>=8&&h<12){ v -= 0.28*Math.sin((h-8)/4*Math.PI); }
+        if(h>=12){ v += 0.12*Math.min(1,(h-12)); }
+        h===0?ctx.moveTo(X(h),Y(v)):ctx.lineTo(X(h),Y(Math.max(0,v))); }
+      ctx.stroke();
+      ctx.fillStyle=AMBER; ctx.fillText("what you feel (caffeine)", X(8.2), Y(0.35));
+      ctx.fillStyle='#8a5c5c'; ctx.fillText("↑ rebound crash at bedtime", X(12.2), Y(0.95));
+    }
+    ctx.fillStyle=GRAY; ctx.font='13px Inter, sans-serif';
+    wrapText(ctx, caf ? "Caffeine muffles the pressure signal for hours, then the hidden backlog crashes in at bedtime — and thins your deep sleep."
+                      : "Adenosine builds every waking hour. A full night clears it back to zero. Turn on the 3pm coffee to see what caffeine does.", 40, H-40, W-80, 20);
+  }
+  draw();
+  fig.querySelectorAll('.ghost').forEach(b=>b.onclick=()=>{
+    fig.querySelectorAll('.ghost').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active'); caf=b.dataset.c==="on"; draw(); });
+  return ()=>{};
+};
+
+SIMS.twoprocess = fig=>{
+  const cv=fig.querySelector('canvas'); cv.width=700; cv.height=380;
+  const ctx=cv.getContext('2d'); const W=700,H=380; let hr=15;
+  const px=50, py=50, pw=W-90, ph=H-120;
+  const X=h=>px+pw*h/24, Y=v=>py+ph*(1-v);
+  const circ=h=>0.5+0.42*Math.sin((h-9)/24*2*Math.PI); // alert peak ~ mid-day, trough ~3-4am
+  const press=h=>{ let t=(h-7+24)%24; return Math.min(1, t/16); };
+  function draw(){
+    ctx.fillStyle=SUNK; ctx.fillRect(0,0,W,H);
+    // night band
+    ctx.fillStyle='rgba(150,112,47,0.06)'; ctx.fillRect(X(23),py,X(24)-X(23),ph); ctx.fillRect(X(0),py,X(7)-X(0),ph);
+    ctx.strokeStyle=BRD; ctx.beginPath(); ctx.moveTo(px,py+ph); ctx.lineTo(px+pw,py+ph); ctx.stroke();
+    ctx.fillStyle=FAINT; ctx.font='12px Inter, sans-serif';
+    [0,6,12,18,24].forEach(h=>ctx.fillText((h%24)+":00", X(h)-12, py+ph+20));
+    const curve=(f,col)=>{ ctx.strokeStyle=col; ctx.lineWidth=2.5; ctx.beginPath();
+      for(let h=0;h<=24;h+=0.2){ h===0?ctx.moveTo(X(h),Y(f(h))):ctx.lineTo(X(h),Y(f(h))); } ctx.stroke(); };
+    curve(circ,AMBER); curve(press,GRAY);
+    ctx.fillStyle=AMBER; ctx.font='12px Inter, sans-serif'; ctx.fillText("circadian alertness", X(11), Y(circ(11))-8);
+    ctx.fillStyle=GRAY; ctx.fillText("sleep pressure", X(19), Y(press(19))+16);
+    // marker
+    ctx.strokeStyle=INKC; ctx.setLineDash([3,3]); ctx.beginPath(); ctx.moveTo(X(hr),py); ctx.lineTo(X(hr),py+ph); ctx.stroke(); ctx.setLineDash([]);
+    const drive=press(hr)*(1-circ(hr));
+    ctx.fillStyle=INKC; ctx.font='13px Inter, sans-serif';
+    let msg;
+    if(hr>=23||hr<7) msg="Night: pressure high, clock low — the two align and deep sleep comes easily.";
+    else if(hr>=13&&hr<=16) msg="The afternoon dip: a circadian lull even though it's daytime.";
+    else msg="Daytime: the clock keeps you alert and holds sleep off, even as pressure builds.";
+    wrapText(ctx,"At "+hr+":00 — "+msg,40,H-40,W-80,20);
+  }
+  draw();
+  fig.querySelector('input').oninput=e=>{ hr=+e.target.value; draw(); };
+  return ()=>{};
+};
+
+SIMS.cycles = fig=>{
+  const cv=fig.querySelector('canvas'); cv.width=700; cv.height=380;
+  const ctx=cv.getContext('2d'); const W=700,H=380; let hours=8;
+  // stages per 90-min cycle: earlier deep-heavy, later REM-heavy
+  const cycles=[
+    {rem:0.10,deep:0.55},{rem:0.15,deep:0.45},{rem:0.22,deep:0.25},
+    {rem:0.30,deep:0.12},{rem:0.38,deep:0.05},{rem:0.42,deep:0.03}]; // ~5.3 cycles in 8h
+  function draw(){
+    ctx.fillStyle=SUNK; ctx.fillRect(0,0,W,H);
+    const nC = hours===8 ? 5.3 : 4.0;
+    const px=50, py=60, pw=W-90, ph=180, base=py+ph;
+    ctx.fillStyle=FAINT; ctx.font='12px Inter, sans-serif';
+    ctx.fillText("awake", px-2, py-24); ctx.fillText("REM (amber)", px-2, py-8); ctx.fillText("deep NREM (gray)", px-2, base+20);
+    let remTot=0, deepTot=0;
+    const cw = pw/6;
+    for(let c=0;c<6;c++){
+      if(c>=nC){ break; }
+      const frac = Math.min(1, nC-c);
+      const cy=cycles[c];
+      // deep block (bottom, gray), rem block (top, amber), rest light (mid)
+      const x=px+c*cw, w=cw*frac-4;
+      const deepH=ph*cy.deep, remH=ph*cy.rem;
+      ctx.fillStyle='rgba(138,128,105,0.55)'; ctx.fillRect(x, base-deepH, w, deepH);
+      ctx.fillStyle='rgba(150,112,47,0.8)'; ctx.fillRect(x, py, w, remH);
+      ctx.fillStyle='rgba(176,166,140,0.25)'; ctx.fillRect(x, py+remH, w, ph-remH-deepH);
+      remTot+=cy.rem*frac; deepTot+=cy.deep*frac;
+      ctx.fillStyle=FAINT; ctx.font='11px Inter, sans-serif'; ctx.fillText("cyc "+(c+1), x+4, base+34);
+    }
+    if(hours===6){ ctx.strokeStyle='#8a5c5c'; ctx.setLineDash([4,4]); ctx.lineWidth=2;
+      const cutx=px+cw*4; ctx.beginPath(); ctx.moveTo(cutx,py-4); ctx.lineTo(cutx,base+4); ctx.stroke(); ctx.setLineDash([]);
+      ctx.fillStyle='#8a5c5c'; ctx.font='12px Inter, sans-serif'; ctx.fillText("alarm — REM-rich cycles lost", cutx+6, py+10); }
+    ctx.fillStyle=INKC; ctx.font='14px Inter, sans-serif';
+    ctx.fillText("REM this night: "+Math.round(remTot/1.62*100)+"% of a full night's REM", 40, H-46);
+    ctx.fillStyle=GRAY; ctx.font='13px Inter, sans-serif';
+    wrapText(ctx, hours===8 ? "Deep sleep front-loads the night; REM piles into the last cycles."
+                            : "Cutting from 8 to 6 hours keeps most deep sleep but removes the majority of your REM.", 40, H-22, W-80, 18);
+  }
+  draw();
+  fig.querySelectorAll('.ghost').forEach(b=>b.onclick=()=>{
+    fig.querySelectorAll('.ghost').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active'); hours=+b.dataset.h; draw(); });
+  return ()=>{};
+};
+
+SIMS.deprivation = fig=>{
+  const cv=fig.querySelector('canvas'); cv.width=700; cv.height=380;
+  const ctx=cv.getContext('2d'); const W=700,H=380; let awake=10;
+  const px=50, py=40, pw=W-90, ph=H-110;
+  const X=h=>px+pw*h/24, Y=v=>py+ph*(1-v);
+  const impair=h=>Math.min(1, Math.pow(Math.max(0,h-8)/16,1.3)); // rises after ~8h awake
+  function draw(){
+    ctx.fillStyle=SUNK; ctx.fillRect(0,0,W,H);
+    ctx.strokeStyle=BRD; ctx.beginPath(); ctx.moveTo(px,py+ph); ctx.lineTo(px+pw,py+ph); ctx.stroke();
+    ctx.fillStyle=FAINT; ctx.font='12px Inter, sans-serif';
+    [0,6,12,18,24].forEach(h=>ctx.fillText(h+"h", X(h)-6, py+ph+20));
+    ctx.fillText("impairment", px+4, py-8);
+    // drunk threshold at 18h
+    ctx.strokeStyle='rgba(138,92,92,0.6)'; ctx.setLineDash([4,4]);
+    ctx.beginPath(); ctx.moveTo(px,Y(impair(18))); ctx.lineTo(px+pw,Y(impair(18))); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle='#8a5c5c'; ctx.fillText("≈ legally drunk", px+pw-130, Y(impair(18))-6);
+    ctx.strokeStyle=AMBER; ctx.lineWidth=2.5; ctx.beginPath();
+    for(let h=0;h<=24;h+=0.2){ h===0?ctx.moveTo(X(h),Y(impair(h))):ctx.lineTo(X(h),Y(impair(h))); } ctx.stroke();
+    ctx.strokeStyle=INKC; ctx.setLineDash([3,3]); ctx.beginPath(); ctx.moveTo(X(awake),py); ctx.lineTo(X(awake),py+ph); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle=INKC; ctx.beginPath(); ctx.arc(X(awake),Y(impair(awake)),5,0,7); ctx.fill();
+    ctx.font='14px Inter, sans-serif';
+    ctx.fillText(awake+" hours awake — "+(awake>=18?"performing like a drunk driver":awake>=13?"noticeably impaired, but you can't feel it":"still sharp"), 40, H-42);
+    ctx.fillStyle=GRAY; ctx.font='13px Inter, sans-serif';
+    wrapText(ctx,"The cruel part: the deprived brain can't sense its own impairment — so you feel fine while your reactions fall apart.",40,H-20,W-80,18);
+  }
+  draw();
+  fig.querySelector('input').oninput=e=>{ awake=+e.target.value; draw(); };
+  return ()=>{};
+};
+
+/* ============================================================
+   BOOT
+   ============================================================ */
+syncNav();
+overviewCam(false);
+
+</script>
+</body>
+</html>

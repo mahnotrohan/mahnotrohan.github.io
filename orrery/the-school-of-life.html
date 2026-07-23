@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The School of Life — Orrery</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+:root{
+  --ground:#f2ecdf; --surface-sunk:#ece4d2; --surface-raised:#faf6ec;
+  --border:#ddd2bc; --border-strong:#c9bda1;
+  --ink:#26221d; --ink-strong:#14110e; --ink-muted:#5b5343; --ink-faint:#83765b;
+  --accent:#96702f; --accent-dim:#b08d4f; --accent-wash:rgba(150,112,47,0.08);
+  --font:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --r:4px; --reader-w:min(760px, 58vw); --move-fast:150ms ease;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{height:100%; overflow:hidden; background:var(--ground); color:var(--ink);
+  font-family:var(--font); font-size:15.5px; line-height:1.75; overscroll-behavior:none;}
+h1,h2,h3{color:var(--ink-strong); font-weight:600; line-height:1.3;}
+.kicker{font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-muted); font-weight:500;}
+
+/* header — all navigation lives top right */
+#hdr{position:fixed; top:0; left:0; right:0; z-index:40; height:56px;
+  display:flex; align-items:center; gap:1.1rem; padding:0 1.4rem;
+  background:linear-gradient(180deg, rgba(242,236,223,.96), rgba(242,236,223,.75), transparent);
+  pointer-events:none; transition:right .3s cubic-bezier(.25,.7,.3,1);}
+body.reader-open #hdr{right:var(--reader-w);}
+#hdr>*{pointer-events:auto;}
+#hdr .t{font-size:15px; font-weight:600; color:var(--ink-strong);}
+#hdr .sub{font-size:11.5px; color:var(--ink-muted);}
+#hdr .spacer{flex:1;}
+#count{font-size:12px; color:var(--ink-faint); white-space:nowrap;}
+.hbtn{background:rgba(250,246,236,.92); border:1px solid var(--border-strong); color:var(--ink-muted);
+  font-family:var(--font); font-size:12.5px; padding:6px 13px; border-radius:var(--r); cursor:pointer;
+  transition:all var(--move-fast); white-space:nowrap;}
+.hbtn:hover{color:var(--ink); border-color:var(--ink-muted);}
+.hbtn:disabled{opacity:.35; cursor:default;}
+#navcluster{display:flex; align-items:center; gap:10px; opacity:0; pointer-events:none; transition:opacity .2s ease;
+  background:rgba(37,37,37,.92); border:1px solid var(--border-strong); border-radius:8px; padding:3px 6px;}
+#navcluster.on{opacity:1; pointer-events:auto;}
+#navcluster .hbtn{background:none; border:none; font-size:24px; font-weight:300; color:var(--ink-faint); padding:0 6px; line-height:1;}
+#navcluster .hbtn:hover{color:var(--ink-muted);}
+#navcluster .hbtn:disabled{opacity:.25;}
+
+/* viewport & sky */
+#vp{position:fixed; inset:0; cursor:grab; touch-action:none;
+  background:radial-gradient(ellipse at 50% 40%, #f6f1e4 0%, #f2ecdf 55%, #e9e0cb 100%);}
+#vp.dragging{cursor:grabbing;}
+#vp.dragging, #vp.dragging *{user-select:none;}
+#world{position:absolute; top:0; left:0; width:2750px; height:1750px;
+  transform-origin:0 0; will-change:transform;}
+#world::before{content:''; position:absolute; inset:0; pointer-events:none;
+  background-image:radial-gradient(circle, rgba(110,95,65,.14) 1.2px, transparent 1.2px),
+                   radial-gradient(circle, rgba(110,95,65,.08) 1px, transparent 1px);
+  background-size:380px 380px, 150px 150px;
+  background-position:0 0, 70px 100px; opacity:.8;}
+
+/* constellation names */
+.tlab{position:absolute; pointer-events:auto; cursor:pointer; user-select:none; text-align:center;}
+.tlab .big{font-size:40px; font-weight:500; letter-spacing:.5em; line-height:1.3;
+  text-transform:uppercase; white-space:nowrap;}
+.tlab .sum{text-shadow:0 0 5px #f2ecdf,0 0 5px #f2ecdf,0 0 3px #f2ecdf;
+  font-size:19px; color:#665c44; margin-top:.5em; letter-spacing:.18em; text-transform:uppercase;}
+.tlab:hover .big{filter:brightness(1.35);}
+
+/* stars */
+.mk{position:absolute; cursor:pointer; user-select:none;
+  display:flex; gap:14px; width:330px; align-items:flex-start;}
+.mk .dot{border-radius:50%; flex-shrink:0;
+  transition:transform .2s ease, box-shadow .4s ease, opacity .4s ease, background .4s ease;}
+.mk:hover .dot{transform:scale(1.3);}
+.mk .dtext{min-width:0; padding-top:1px;}
+.mk .lbl{text-shadow:0 0 5px #f2ecdf,0 0 5px #f2ecdf,0 0 3px #f2ecdf,0 0 3px #f2ecdf;
+  font-size:19px; color:#26221d; font-weight:500; line-height:1.3;}
+.mk .lbl .seq{font-size:12px; color:#83765b; font-weight:400; margin-right:.5em;}
+.mk .ess{text-shadow:0 0 5px #f2ecdf,0 0 5px #f2ecdf,0 0 3px #f2ecdf,0 0 3px #f2ecdf;
+  font-size:14px; color:#584f3e; line-height:1.45; margin-top:4px; max-width:290px;
+  opacity:0; transition:opacity .3s ease;}
+.mk.showess .ess{opacity:1;}
+.mk .sims-badge{font-size:12px; color:var(--accent-dim); margin-top:3px; display:none;}
+.mk.hasim .sims-badge{display:block;}
+.mk.focused .dot{transform:scale(1.35);}
+.mk.focused .lbl{color:var(--ink-strong);}
+.mk.neighbor .lbl{color:#14110e;}
+.mk.dimmed{opacity:.35;}
+
+/* connection overlay — few, directional, labeled plainly */
+#tsvg, #astsvg, #flowsvg{position:absolute; top:0; left:0; pointer-events:none; overflow:visible;}
+@keyframes dashdrift{to{stroke-dashoffset:-64;}}
+.tline{animation:dashdrift 6s linear infinite;}
+.tlabel{position:absolute; transform:translate(-50%,-50%); background:var(--ground);
+  border:1px solid var(--accent-dim); color:var(--accent); border-radius:12px;
+  font-size:12px; letter-spacing:.06em; padding:2px 11px; white-space:nowrap; cursor:pointer;
+  pointer-events:auto; transition:background var(--move-fast); text-transform:uppercase;}
+.tlabel:hover{background:var(--accent-wash);}
+
+/* ---------- READER ---------- */
+#reader{position:fixed; top:0; right:calc(-1 * var(--reader-w) - 20px); width:var(--reader-w);
+  height:100%; z-index:45; background:var(--surface-raised);
+  border-left:1px solid var(--border); display:flex; flex-direction:column;
+  transition:right .3s cubic-bezier(.25,.7,.3,1);
+  box-shadow:-24px 0 70px rgba(90,75,50,.18);}
+#reader.open{right:0;}
+#reader .top{padding:1.5em 2.2em 1em; border-bottom:1px solid var(--border); position:relative;}
+#reader .close{position:absolute; top:14px; right:16px; background:none; border:none;
+  color:var(--ink-faint); font-size:18px; cursor:pointer;}
+#reader .close:hover{color:var(--ink);}
+#reader h2{font-size:24px; margin:.45em 0 .3em;}
+#reader .terrline{font-size:11.5px; color:var(--ink-faint); margin-top:2px;}
+#rbody{flex:1; overflow-y:auto; padding:1.6em 2.2em 2.5em;}
+#rbody::-webkit-scrollbar{width:6px;}
+#rbody::-webkit-scrollbar-thumb{background:var(--border-strong); border-radius:3px;}
+#rbody>*{max-width:66ch;}
+.hook{font-size:18.5px; color:var(--ink-strong); line-height:1.65;
+  padding-left:1em; border-left:2px solid var(--accent-dim); margin-bottom:1.1em;}
+.story{font-size:15.5px; color:#2b2620;}
+.typechip{display:inline-block; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-muted); border:1px solid var(--border-strong); border-radius:3px; padding:1px 8px;}
+details.fold{margin:1.2em 0 0; border:1px solid var(--border); border-radius:var(--r); background:var(--surface-sunk);}
+details.fold summary{cursor:pointer; padding:.6em 1.05em; color:var(--ink-muted);
+  font-size:13px; list-style:none; user-select:none;}
+details.fold summary::-webkit-details-marker{display:none;}
+details.fold summary::before{content:'+  '; color:var(--accent); font-weight:500;}
+details.fold[open] summary::before{content:'−  ';}
+details.fold summary:hover{color:var(--ink);}
+details.fold .inner{padding:0 1.05em .9em; font-size:14.5px; color:#332e25;}
+.named{margin-top:1.5em; background:var(--surface-sunk); border:1px solid var(--border);
+  border-radius:8px; padding:1em 1.3em;}
+.named .kicker{display:block; margin-bottom:.35em;}
+.named b{color:var(--ink-strong); font-weight:600; font-size:16px;}
+.named .def{font-size:14.5px; color:#332e25; margin-top:.2em;}
+.sowhat{margin-top:1.4em; font-size:15px; color:#2b2620;}
+.sowhat .kicker{display:block; margin-bottom:.3em;}
+.closure{margin-top:1.5em; border:1px solid var(--accent-dim); border-radius:8px;
+  background:var(--accent-wash); padding:1em 1.3em;}
+.closure .kicker{color:var(--accent); display:block; margin-bottom:.3em;}
+.closure .txt{font-size:14.5px; color:#4a443c; line-height:1.65;}
+.linkrow{margin-top:1.6em; border-top:1px solid var(--border); padding-top:1em;
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:.6em 2em;}
+.lgroup .kicker{display:block; margin-bottom:.25em;}
+.lgroup a{display:block; font-size:14px; padding:.2em 0 .45em; color:#332e25; cursor:pointer; text-decoration:none;}
+.lgroup a .t{border-bottom:1px dotted transparent; transition:border-color var(--move-fast); color:var(--ink);}
+.lgroup a:hover .t{border-bottom-color:var(--accent);}
+.lgroup a .why{display:block; font-size:12px; color:var(--ink-faint); line-height:1.5;}
+.nextbtn{margin-top:1.8em; width:100%; max-width:66ch; text-align:left;
+  background:var(--surface-sunk); border:1px solid var(--border-strong); border-radius:8px;
+  color:var(--ink); font-family:var(--font); font-size:14.5px; padding:.9em 1.3em; cursor:pointer;
+  transition:all var(--move-fast);}
+.nextbtn:hover{border-color:var(--accent-dim); background:var(--accent-wash);}
+.nextbtn .k{color:var(--ink-faint); font-size:11px; letter-spacing:.12em; text-transform:uppercase;
+  display:block; margin-bottom:.15em;}
+.nextbtn .arr{color:var(--accent); float:right;}
+
+/* sim figure */
+figure.frame{background:var(--surface-sunk); border:1px solid var(--border); border-radius:var(--r);
+  margin:1.3em 0 0; overflow:hidden;}
+figure.frame canvas{width:100%; display:block;}
+figure.frame .controls{display:flex; gap:8px; padding:8px 12px; border-top:1px solid var(--border);
+  align-items:center; flex-wrap:wrap;}
+figure.frame .controls .cl{font-size:11.5px; color:var(--ink-faint);}
+figure.frame figcaption{padding:7px 13px 10px; font-size:12.5px; color:var(--ink-muted); line-height:1.55;}
+.ghost{background:none; border:1px solid var(--border-strong); color:var(--ink-muted);
+  font-family:var(--font); font-size:12px; padding:3px 11px; border-radius:var(--r); cursor:pointer;
+  transition:all var(--move-fast);}
+.ghost:hover{color:var(--ink); border-color:var(--ink-muted);}
+.ghost.active{color:var(--accent); border-color:var(--accent-dim); background:var(--accent-wash);}
+figure.frame input[type=range]{flex:1; min-width:100px; accent-color:var(--accent);}
+
+@media(max-width:760px){ :root{--reader-w:100vw;} }
+</style>
+</head>
+<body>
+
+<div id="hdr">
+  <div>
+    <div class="t">The School of Life</div>
+    <div class="sub">a celestial chart of ideas · follow the flow or wander freely</div>
+  </div>
+  <div class="spacer"></div>
+  <div id="navcluster">
+    <button class="hbtn" id="navPrev" title="previous idea">‹</button>
+    <button class="hbtn" id="navNext" title="next idea">›</button>
+  </div>
+  <button class="hbtn" id="overviewBtn">Overview&nbsp;·&nbsp;Esc</button>
+</div>
+
+<div id="vp"><div id="world"></div></div>
+
+<div id="reader">
+  <div class="top">
+    <button class="close" id="rClose">✕</button>
+    <span class="typechip" id="rChip"></span>
+    <h2 id="rTitle"></h2>
+    <div class="terrline" id="rTerr"></div>
+  </div>
+  <div id="rbody"></div>
+</div>
+
+<script>
+'use strict';
+/* ============================================================
+   CONTENT v2 — every idea: hook → story → (sim) → mechanism
+   fold → the idea named → where it bites → you can now explain.
+   Connections: ≤4 per idea, in three plain buckets.
+   ============================================================ */
+const N = {
+
+a1:{type:"axiom", title:"No one taught us how to live", x:1259, y:512,
+  ess:"We're schooled in maths and grammar but never in how to feel, love, or cope.",
+  hook:"You spent years on trigonometry. How many hours were you taught on handling anxiety, or choosing a partner?",
+  story:"We assume emotional wisdom arrives on its own with age. The School of Life's founding claim is that it doesn't — the most important skills of living are simply never taught, so most of us improvise badly.",
+  mech:"If living well is a set of learnable skills we were never given, then our struggles aren't personal failings but gaps in an education no one provided. That reframing is the whole starting point.",
+  term:"Emotional education", def:"the missing curriculum of self-knowledge, relationships, and coping we were never formally taught.",
+  sowhat:"Your emotional messes may be less about being broken and more about never having been taught the skills. They can be learned now.",
+  builds:[], leads:[["b1-laplace","the missing curriculum"],["b1-principle","and what maturity really is"]], live:[]},
+a2:{type:"axiom", title:"We are all a bit broken", x:1057, y:627,
+  ess:"Everyone is anxious, confused, and flawed underneath. It's the normal condition, not a defect.",
+  hook:"What if the calm, sorted people you envy are, up close, just as much of a mess as you?",
+  story:"We compare our chaotic insides to everyone else's composed outsides and conclude we're uniquely damaged. In truth, imperfection is universal — the human default, shared by all, including the people we admire.",
+  mech:"Accepting universal brokenness dissolves the shame of being flawed and the loneliness of thinking you're the only one. It's the ground for compassion — toward yourself and everyone else.",
+  term:"Universal brokenness", def:"the recognition that emotional flaw and confusion are the shared human norm.",
+  sowhat:"You're not uniquely broken — you're normally broken. That single fact can lift an enormous, invisible weight.",
+  builds:[], leads:[["b1-sensitive","we're all still children"],["b4-fence","so be kind to the broken"]], live:[]},
+a3:{type:"axiom", title:"Childhood is still running us", x:1462, y:627,
+  ess:"How we love, fear, and react was largely scripted long ago — and we've forgotten the script.",
+  hook:"Why do you keep reacting to a partner or boss with a feeling that seems far too big for the moment?",
+  story:"The patterns laid down in childhood — how love felt, what we feared, how we were soothed or hurt — become templates we replay for decades, mistaking old reflexes for present-day truth.",
+  mech:"Because the origins are hidden, the reactions feel like simple facts about now. Tracing a disproportionate feeling back to its childhood template is how it loosens its grip.",
+  term:"Emotional inheritance", def:"the childhood templates that unconsciously shape how we relate as adults.",
+  sowhat:"When a reaction feels too big for its trigger, it's usually old. Ask what childhood scene it's really replaying.",
+  builds:[], leads:[["b2-attractors","why we pick who we pick"],["a4","and how to loosen it"]], live:[]},
+a4:{type:"axiom", title:"Self-knowledge sets you free", x:1259, y:771,
+  ess:"You can't stop a pattern you can't see. Naming it is the first loosening.",
+  hook:"Can you change a habit you don't know you have? So what has to come first?",
+  story:"The School of Life's route to freedom isn't willpower but insight: understanding why we do what we do robs our automatic patterns of their power. What is understood no longer runs us blindly.",
+  mech:"Awareness inserts a pause between trigger and reaction where choice can live. Self-knowledge doesn't erase our flaws — it lets us hold them consciously rather than be driven by them.",
+  term:"Self-knowledge", def:"understanding one's own emotional patterns and their origins, as the basis for change.",
+  sowhat:"Insight, not self-discipline, is the lever. Understand the pattern and it stops being your autopilot.",
+  builds:[], leads:[["b1-principle","maturity as self-knowledge"],["b4-destination","and self-compassion"]], live:[]},
+
+"b1-laplace":{type:"mechanism", title:"The missing curriculum", x:404, y:355,
+  ess:"The skills we most need to live well are precisely the ones school skips.",
+  hook:"If you designed a school for living, what would be on the timetable that yours never had?",
+  story:"Handling anxiety, choosing a partner, communicating anger, finding meaningful work, facing mortality — these are the load-bearing skills of a life, and almost no formal education touches them.",
+  mech:"We're left to pick them up by accident, from families who often didn't have them either. The gap explains why so many capable, educated people feel quietly lost.",
+  term:"The curriculum of living", def:"the emotional and practical life-skills absent from conventional education.",
+  sowhat:"Treat the hard parts of life as subjects you can actually study, not mysteries you're supposed to just know.",
+  builds:[["a1","emotional education, spelled out"]], leads:[["b1-pendulum","starting with emotional intelligence"]], live:[]},
+"b1-pendulum":{type:"mechanism", title:"Emotional intelligence", x:884, y:309,
+  ess:"The core skill: understanding and working with feelings — yours and others'.",
+  hook:"We call people 'smart' for solving equations. Why not for handling a grieving friend or their own rage?",
+  story:"Emotional intelligence — naming what you feel, sensing what others feel, and responding wisely — predicts a good life far better than raw cleverness. It's a competence, and like any, it can be developed.",
+  mech:"It's built from self-awareness and imagination about others' inner states. The School of Life treats it as the master life-skill on which relationships, work, and calm all depend.",
+  term:"Emotional intelligence", def:"the learnable skill of understanding and managing emotions in oneself and others.",
+  sowhat:"Cleverness got you through school; emotional intelligence gets you through life. It's worth deliberate practice.",
+  builds:[["a1","the heart of the missing curriculum"]], leads:[["b1-sensitive","admitting our immaturity"]], live:[]},
+"b1-sensitive":{type:"mechanism", title:"We're all still children", x:520, y:522,
+  ess:"Grown-ups are just tall children carrying unhealed hurts and unmet needs.",
+  hook:"Watch two adults fight over the dishes. How old do they suddenly sound?",
+  story:"Maturity is mostly a performance; underneath, the frightened, needy child persists in everyone. Adult tantrums, sulks, and defensiveness are that child breaking through the costume.",
+  mech:"Seeing the child in others (and yourself) replaces contempt with tenderness. The rude colleague, the cold parent — each is a wounded child who never got the education this whole chart describes.",
+  term:"The inner child", def:"the persistent childhood self, with its old needs and fears, beneath the adult surface.",
+  sowhat:"When someone (or you) behaves badly, picture the frightened child underneath. It turns judgment into patience.",
+  builds:[["a2","brokenness has an age"]], leads:[["b1-lorenz-story","where philosophy helps"]], live:[]},
+"b1-lorenz-story":{type:"story", title:"Philosophy as consolation", x:254, y:656,
+  ess:"The old thinkers were writing self-help — practical medicine for the troubled mind.",
+  hook:"What if Seneca and the Stoics weren't dusty academics but the original therapists?",
+  story:"Long before psychology, philosophers offered concrete consolation: the Stoics on anxiety and control, Epicurus on what truly brings pleasure, Montaigne on self-acceptance. Philosophy began as therapy for living.",
+  mech:"The School of Life revives this: mining history's wisest minds for usable tools, not exam answers. Their consolations still work because the human predicament hasn't changed.",
+  term:"Philosophy as therapy", def:"treating philosophical wisdom as practical guidance for emotional life.",
+  sowhat:"When you're struggling, the ancients often got there first. Read them as advisors, not artifacts.",
+  builds:[["a1","education from history"]], leads:[["b1-principle","toward maturity"]], live:[]},
+"b1-principle":{type:"principle", title:"Maturity is knowing your madness", x:716, y:679,
+  ess:"The mature aren't sane — they just know exactly how they're crazy, and warn you.",
+  hook:"Who's safer to love: someone who insists they're perfectly normal, or someone who can list their flaws?",
+  story:"Maturity isn't the absence of neurosis but honest, humorous acquaintance with it. The mature person can say 'here's how I get difficult' — and that self-knowledge is what makes them bearable to live with.",
+  mech:"Traces to self-knowledge: you can't warn others about, or manage, a madness you refuse to see. Owning your specific craziness is the most reassuring thing you can offer.",
+  term:"Mature self-awareness", def:"honest, good-humored knowledge of one's own emotional flaws.",
+  sowhat:"Aim not to be flawless but to know your flaws well enough to flag them. That's what makes you safe to be close to.",
+  builds:[["a4","self-knowledge, applied"],["b1-sensitive","the child, acknowledged"]], leads:[["b2-logistic","the hardest arena: love"]], live:[]},
+
+"b2-logistic":{type:"tension", title:"The errors of Romanticism", sim:"romantic", x:1837, y:233,
+  ess:"Our whole idea of love is built on a beautiful, ruinous set of myths.",
+  hook:"Do you secretly believe the right person would just 'get' you, without your having to explain?",
+  story:"Romanticism taught us love means instant recognition, effortless understanding, no need to explain, and no real conflict if it's true. Measured against that fantasy, every real relationship looks like a failure.",
+  mech:"These inherited beliefs — soulmates, love at first sight, intuition over communication — set impossible standards. The School of Life argues most heartbreak is Romanticism's fault, not our partner's.",
+  term:"Romanticism", def:"the modern ideology of love as instinctive, effortless, and conflict-free.",
+  sowhat:"Half your relationship disappointments may be a myth's fault, not your partner's. Question the standard, not just the person.",
+  builds:[["a1","beliefs we were never taught to examine"]], leads:[["b2-attractors","who we then choose"]], live:[]},
+"b2-attractors":{type:"mechanism", title:"We marry our unfinished business", x:2069, y:401,
+  ess:"We're drawn to partners who recreate the emotional patterns of childhood — comfortable, not healthy.",
+  hook:"Why do people so often fall for someone who frustrates them in oddly familiar ways?",
+  story:"We don't seek what's good for us; we seek what feels like home — even when home was painful. The distant parent, the volatile household: we unconsciously chase partners who echo them, mistaking familiarity for love.",
+  mech:"Rooted in emotional inheritance: our template for love was set young, so 'chemistry' often just means 'this reactivates my childhood.' Knowing this lets you question a pull instead of obeying it.",
+  term:"Attachment templates", def:"childhood patterns that steer us toward familiar, not necessarily healthy, partners.",
+  sowhat:"That electric 'chemistry' may be your childhood calling. Worth asking whether it's love or just familiarity.",
+  builds:[["a3","childhood, in our choices"]], leads:[["b2-lorenz-attractor","and how we then fail to speak"]], live:[]},
+"b2-lorenz-attractor":{type:"phenomenon", title:"The tyranny of sulking", x:2300, y:282,
+  ess:"Sulking is the strange belief that a true love should read your mind — so you refuse to explain.",
+  hook:"Ever gone silent and cold, secretly furious that they should just KNOW what's wrong?",
+  story:"To sulk is to be hurt and refuse to say why, punishing someone for failing to guess. Underneath is a touching, impossible hope: that being truly loved means never having to spell out your needs.",
+  mech:"It's Romanticism turned toxic — the myth of effortless understanding weaponized into silence. The cure is unglamorous: patiently, vulnerably explaining, like a not-yet-mind-reader talking to another.",
+  term:"Sulking", def:"withdrawing in wounded silence, expecting a loved one to intuit the grievance.",
+  sowhat:"When you catch yourself sulking, translate it into a sentence. 'They should just know' is the myth talking.",
+  builds:[["b2-logistic","Romanticism's bad debt"]], leads:[["b2-tension-random","so learn to listen"]], live:[]},
+"b2-tension-random":{type:"mechanism", title:"The art of listening", x:2392, y:470,
+  ess:"Good listening isn't waiting to talk — it's helping the other person think.",
+  hook:"When was the last time someone listened so well you understood yourself better?",
+  story:"Most 'listening' is a queue for our own turn. Real listening draws people out — encouraging, gently questioning, reflecting back — so they arrive at clarity they couldn't reach alone. It's a rare and enormous gift.",
+  mech:"It requires setting your ego aside and getting curious about another interior. Done well, it defuses conflict and deepens intimacy more than any clever advice could.",
+  term:"Generous listening", def:"attentive, drawing-out listening that helps another person clarify their own mind.",
+  sowhat:"In your next hard conversation, aim to understand, not to reply. The listening itself often is the help.",
+  builds:[["b1-pendulum","emotional intelligence in action"]], leads:[["b2-principle","love as a skill"]], live:[]},
+"b2-principle":{type:"principle", title:"Love is a skill, not a feeling", x:1895, y:598,
+  ess:"We treat love as something we fall into; it's really something we get better at.",
+  hook:"What if love failing wasn't about finding the wrong person, but never learning the skill?",
+  story:"Romanticism says love is a feeling that strikes; the School of Life says it's a competence — patience, communication, forgiveness, generosity — that can be studied and practiced like any other. The right person is a project, not a discovery.",
+  mech:"Traces to emotional education: if love is a skill, its failures are teachable gaps, not fated mismatches. That's hopeful — you can get better at loving, starting now.",
+  term:"Love as skill", def:"the view of love as a set of learnable competencies rather than a spontaneous feeling.",
+  sowhat:"Stop waiting to 'find' love and start practicing it — listening, forgiving, explaining. It improves with reps.",
+  builds:[["b2-tension-random","listening is part of it"],["b2-logistic","the antidote to the myth"]], leads:[["b3-kokura","now: work and worth"]], live:[]},
+
+"b3-kokura":{type:"mechanism", title:"The confused search for work", x:271, y:962,
+  ess:"We expect work to fulfill us but were never taught how to find what would.",
+  hook:"Why is 'what should I do with my life?' so agonizing — and so rarely answered well?",
+  story:"We inherited the noble, modern idea that work should be meaningful, but no map for finding such work. So we drift, or chase prestige, or freeze — confusing a hard, learnable search with a personal failing.",
+  mech:"Meaningful work usually means relieving some suffering or making something good for others; the search is a skill of self-knowledge plus experiment, not a bolt of destiny.",
+  term:"Meaningful work", def:"work experienced as reducing suffering or adding good, aligned with one's nature.",
+  sowhat:"The career fog isn't a defect in you — it's a hard search no one trained you for. Treat it as experiment, not fate.",
+  builds:[["a1","another untaught life-skill"]], leads:[["b3-contingency","and the status trap around it"]], live:[]},
+"b3-contingency":{type:"tension", title:"Status anxiety", x:601, y:1008,
+  ess:"We chase status less for money than for the love and respect we imagine it brings.",
+  hook:"Why does a stranger's success on your feed sting — even when your own life is fine?",
+  story:"Alain de Botton's diagnosis: we crave status because we fear that without it we'll be ignored and unloved. The anxiety is really about worthiness, dressed up as ambition, and it's stoked by constant comparison.",
+  mech:"Seeing status-hunger as a disguised need for love — and noticing that the audience we're impressing barely cares — loosens its grip. There are other, kinder ways to feel worthy.",
+  term:"Status anxiety", def:"the dread of low regard from others, driving much of our ambition and envy.",
+  sowhat:"When achievement-hunger bites, ask what it's really after — usually love and respect. Then find those more directly.",
+  builds:[["a2","the anxious, worth-seeking self"]], leads:[["b3-timeline","envy as its signal"]], live:[]},
+"b3-timeline":{type:"mechanism", title:"Envy is a clue", sim:"envyclue", x:312, y:1210,
+  ess:"Envy isn't just ugly — it's a messy map to what you actually want.",
+  hook:"Who do you envy? Now: what exactly is it you envy about them?",
+  story:"We're taught to suppress envy as shameful. The School of Life says decode it instead: each pang points to a value or need of yours going unmet. Envy, read carefully, is career and life guidance in disguise.",
+  mech:"The trick is to get specific — you rarely envy someone's whole life, only a slice. That slice names a genuine desire you can then pursue honestly, or consciously let go.",
+  term:"Envy as data", def:"treating envy as information about one's own unmet desires and values.",
+  sowhat:"Keep an 'envy list.' Each entry, examined closely, reveals something you want — and might actually go get.",
+  builds:[["b3-contingency","the sting of comparison"]], leads:[["b3-principle","and the impostor feeling"]], live:[]},
+"b3-principle":{type:"mechanism", title:"Everyone is winging it", x:774, y:1152,
+  ess:"Impostor syndrome dissolves the moment you realize the 'real adults' are improvising too.",
+  hook:"You feel like a fraud among the competent. What if they feel exactly the same?",
+  story:"We assume the people in charge possess a confidence and competence we lack. Get close to anyone in authority and you find the same doubt and improvisation. The category of the fully sorted grown-up simply doesn't exist.",
+  mech:"Impostor syndrome comes from comparing your inside to others' outsides. Knowing everyone is bluffing to some degree gives you permission to try, lead, and create despite the doubt.",
+  term:"Impostor syndrome", def:"the feeling of being an unqualified fraud among seemingly competent others.",
+  sowhat:"Feeling like a fraud isn't a verdict — it's the universal experience. Everyone qualified once felt exactly this. Proceed anyway.",
+  builds:[["a2","no one has it together"]], leads:[["b3-plan","so aim for good enough"]], live:[]},
+"b3-plan":{type:"principle", title:"Good-enough work", x:543, y:1326,
+  ess:"A workable, meaningful-enough job beats an endless hunt for the perfect calling.",
+  hook:"Is there really one perfect job out there for you — or is that another Romantic myth?",
+  story:"Just as with love, we're sold a fantasy of the one perfect vocation, and paralyzed by it. The School of Life offers relief: aim for good-enough work that pays, holds some meaning, and leaves room to live. Perfect is the enemy of started.",
+  mech:"Dropping the perfect-calling myth frees you to commit, grow, and find meaning inside a decent choice — which is where meaning usually accrues anyway, through mastery and contribution.",
+  term:"Good-enough work", def:"satisfying, sufficient work chosen over a paralyzing search for the perfect calling.",
+  sowhat:"Stop waiting for the perfect vocation. Pick good-enough, commit, and let meaning grow from doing it well.",
+  builds:[["b3-kokura","relief for the confused search"]], leads:[["b4-coinflip","now: making peace"]], live:[]},
+
+"b4-coinflip":{type:"mechanism", title:"Cheerful pessimism", x:1583, y:979,
+  ess:"Lower your expectations and ordinary life suddenly feels like a pleasant surprise.",
+  hook:"Would you be happier expecting the day to go well — or bracing for it to be a bit of a mess?",
+  story:"We're told to expect the best; the School of Life prescribes the opposite. Anticipate difficulty, delay, and disappointment as the norm, and reality routinely exceeds it. Pessimism, oddly, is a recipe for cheerfulness.",
+  mech:"Misery is the gap between expectation and reality. Lower the expectation and the gap — and the suffering — shrinks. It's not gloom; it's calibration in the service of calm.",
+  term:"Philosophical pessimism", def:"deliberately modest expectations that leave room for pleasant surprise.",
+  sowhat:"Expect the mildly disappointing as normal. You'll be calmer when it comes, and delighted when it doesn't.",
+  builds:[["a2","imperfection is the norm"]], leads:[["b4-ergodicity","and the value of sadness"]], live:[]},
+"b4-ergodicity":{type:"mechanism", title:"The wisdom of melancholy", x:1901, y:945,
+  ess:"Sadness isn't always a problem to fix — sometimes it's clear-eyed contact with reality.",
+  hook:"What if your quiet melancholy weren't a malfunction, but a form of wisdom?",
+  story:"Our culture treats all sadness as a disorder to medicate away. The School of Life reclaims melancholy: a gentle, unindignant sorrow at life's inherent difficulty that is closer to truth than forced positivity.",
+  mech:"Melancholy differs from depression — it's sad but not resentful, accepting rather than raging. Allowing it prevents the extra suffering of believing you should always be happy.",
+  term:"Melancholy", def:"a calm, accepting sadness in the face of life's built-in difficulties.",
+  sowhat:"Not every low mood needs fixing. Some sadness is just honesty — let it sit, and it often steadies you.",
+  builds:[["b4-coinflip","expecting difficulty"]], leads:[["b4-domains","and the long view"]], live:[]},
+"b4-domains":{type:"mechanism", title:"The view from above", x:2219, y:979,
+  ess:"Zoom out to the scale of stars and centuries and today's panic quietly shrinks.",
+  hook:"How much will this thing you're dreading matter in a hundred years? On the scale of a galaxy?",
+  story:"The Stoics practiced the 'view from above': picturing your troubles from a cosmic or historical distance. Against the vastness of time and space, the humiliation or worry loses its crushing size — a relief, not a nihilism.",
+  mech:"Perspective rescales emotion. What feels total up close becomes a passing speck from far enough away, freeing you from the tyranny of the present moment's intensity.",
+  term:"The view from above", def:"deliberately adopting a vast, distant perspective to shrink present worries.",
+  sowhat:"When something feels catastrophic, widen the lens — to the year, the century, the cosmos. The dread rarely survives the zoom.",
+  builds:[["b4-coinflip","perspective as consolation"]], leads:[["b4-survive","then re-see the small and good"]], live:[]},
+"b4-survive":{type:"mechanism", title:"The art of appreciation", x:2438, y:1094,
+  ess:"Most of what could delight us is already here — we've just stopped seeing it.",
+  hook:"When did a slice of toast, or the light at 5pm, last genuinely move you?",
+  story:"Habit blinds us to the ordinary marvels all around — a friend's face, warmth, a quiet morning. The School of Life treats appreciation as a skill: deliberately re-seeing the everyday as if noticing it for the first, or last, time.",
+  mech:"Gratitude here isn't a chore but a retraining of attention. Since the view from above shrinks the bad, the same widened attention can re-magnify the small goods we take for granted.",
+  term:"Appreciation", def:"the practiced skill of noticing and savoring the ordinary goods of daily life.",
+  sowhat:"Happiness is often less about getting more and more about noticing what's already here. Practice re-seeing it.",
+  builds:[["b4-domains","perspective, turned toward the good"]], leads:[["b4-signal","art helps us see"]], live:[]},
+"b4-signal":{type:"mechanism", title:"Art as therapy", x:1612, y:1181,
+  ess:"Art isn't decoration — it's a tool that consoles, reminds, and re-sensitizes us.",
+  hook:"Why does the right painting or song feel like it understands you better than most people?",
+  story:"The School of Life reframes art by its use: it holds onto feelings we lose, keeps hope and calm in view, makes us feel less alone in our sorrows, and re-opens our eyes to beauty. A gallery is an emotional pharmacy.",
+  mech:"Chosen for what it does to your inner state, art becomes a practical aid to living — a way to summon the moods and perspectives we can't reliably generate alone.",
+  term:"Art as therapy", def:"using art deliberately for its psychological functions — consolation, memory, perspective.",
+  sowhat:"Curate the art, music, and images around you for how they make you feel, not just how they look. Let them do their work.",
+  builds:[["b4-survive","art re-sensitizes us"]], leads:[["b4-danger","toward the good-enough life"]], live:[]},
+"b4-danger":{type:"tension", title:"The good-enough life", sim:"goodenough", x:1959, y:1152,
+  ess:"Chasing a perfect life guarantees misery; a good-enough one is where peace lives.",
+  hook:"Are you unhappy because your life is bad — or because you're measuring it against perfect?",
+  story:"Borrowed from the psychologist Winnicott's 'good-enough mother': the aim isn't a flawless life but a good-enough one — decent, workable, humanly imperfect. Perfectionism isn't high standards; it's a recipe for perpetual disappointment.",
+  mech:"Most misery is the distance between real life and an impossible ideal. Lower the ideal to good-enough and the misery drains away — not as defeat, but as sanity.",
+  term:"Good enough", def:"the deliberate acceptance of a decent, imperfect life over an impossible ideal.",
+  sowhat:"Trade the perfect life for a good-enough one and watch a background hum of failure switch off. It's freedom, not settling.",
+  builds:[["a2","imperfection is the human default"]], leads:[["b4-process","the beauty in imperfection"]], live:[]},
+"b4-process":{type:"mechanism", title:"The beauty of imperfection", x:1650, y:1330,
+  ess:"Wabi-sabi: the cracked, worn, and incomplete can be more beautiful than the flawless.",
+  hook:"Why can a chipped old bowl move you more than a flawless new one?",
+  story:"The Japanese aesthetic of wabi-sabi finds beauty precisely in imperfection, age, and impermanence — the crack, the patina, the incomplete. It's a quiet rebuke to our craving for the shiny and perfect.",
+  mech:"Applied to ourselves, wabi-sabi reframes flaws and scars as sources of character and beauty, not shame. What's imperfect is what's real, and what's real is what can be loved.",
+  term:"Wabi-sabi", def:"the aesthetic that finds beauty in imperfection, impermanence, and incompleteness.",
+  sowhat:"Your cracks aren't disqualifications from a beautiful life — in this light, they're part of what makes it beautiful.",
+  builds:[["b4-danger","imperfection, made beautiful"]], leads:[["b4-destination","and turned inward as kindness"]], live:[]},
+"b4-destination":{type:"mechanism", title:"Quiet the inner critic", x:2330, y:1255,
+  ess:"Talk to yourself as you would to a friend you love — the harsh inner voice is a bad guide.",
+  hook:"Would you ever speak to someone you love the way your inner critic speaks to you?",
+  story:"Most of us carry a savage internal voice, often inherited from a harsh early figure, that we'd never tolerate aimed at anyone else. Self-compassion means deliberately replacing it with the warm, fair voice of a good friend.",
+  mech:"Rooted in emotional inheritance and self-knowledge: the critic is old and learned, not true. Noticing it lets you answer it — kinder to yourself, and paradoxically more able to grow.",
+  term:"Self-compassion", def:"treating oneself with the warmth and fairness one would offer a good friend.",
+  sowhat:"When the inner critic starts, ask what you'd say to a friend in your shoes — then say that to yourself.",
+  builds:[["a4","self-knowledge, turned kind"]], leads:[["b4-explore","and settle into calm"]], live:[]},
+"b4-explore":{type:"mechanism", title:"Ordinary calm", x:2470, y:1430,
+  ess:"A quiet, unremarkable, peaceful life is not a failure — it may be the achievement.",
+  hook:"When did 'ordinary' become an insult — and what did we lose when it did?",
+  story:"We're taught to want the extraordinary and to disdain the ordinary. The School of Life rehabilitates the small, calm life — good work, a few loves, simple pleasures — as not a consolation prize but, quite possibly, the point.",
+  mech:"Once status anxiety is seen through and expectations are lowered, ordinary calm stops looking like failure and starts looking like wisdom hard-won. Peace, not intensity, becomes the aim.",
+  term:"Ordinary life", def:"the unremarkable, calm, sufficient life reclaimed as genuinely good.",
+  sowhat:"A modest, peaceful life isn't settling — for many it's the quiet achievement the loud world talked you out of wanting.",
+  builds:[["b3-contingency","past the status trap"]], leads:[["b4-fence","held with kindness"]], live:[]},
+"b4-fence":{type:"principle", title:"Kindness to the broken", x:2090, y:1430,
+  ess:"Since everyone is struggling under the surface, gentleness is simple realism.",
+  hook:"If you truly believed everyone you met was fighting a hard private battle, how would you treat them?",
+  story:"The School of Life's ethic follows straight from universal brokenness: because everyone is coping with more pain than they show, kindness isn't naïve — it's the accurate response to reality. And the first person owed it is you.",
+  mech:"Compassion is what self-knowledge and shared imperfection add up to. Seeing the wounded child in everyone, including the difficult and the powerful, makes gentleness the only sane stance.",
+  term:"Compassion", def:"the gentleness owed to all people, oneself included, given universal hidden struggle.",
+  sowhat:"Assume everyone — including you — is having a harder time than they let on. Kindness stops being optional and becomes obvious.",
+  builds:[["a2","everyone is a bit broken"],["b1-sensitive","the child in each of us"]], leads:[["b4-principle","the whole lesson"]], live:[]},
+"b4-principle":{type:"principle", title:"Better, not perfect", x:1830, y:1560,
+  ess:"The goal isn't to be fixed or flawless — it's to become a little wiser, kinder, calmer.",
+  hook:"After all this, what would 'success' at living actually look like?",
+  story:"The School of Life's closing note: there's no graduation into a solved, serene life. There's only the ongoing, gentle work of self-knowledge and small improvement — becoming a slightly better, kinder, more self-aware version of your flawed self.",
+  mech:"Every strand converges here: we were never taught, we're all broken, childhood runs deep, and insight frees us — so the honest aim is progress, not perfection, held with humor and compassion.",
+  term:"Better, not perfect", def:"the aim of gradual emotional growth rather than an impossible finished self.",
+  sowhat:"Give up on becoming perfect or fully healed. Aim to be a bit wiser and kinder than yesterday — that's the whole game.",
+  builds:[["b4-fence","kindness, as the method"],["a4","self-knowledge, ongoing"]], leads:[], live:[]}
+};
+const TERRITORIES = [
+  {label:"I · The Missing Education", sum:"learning how to live", hue:"#4a6684", lx:508, ly:100, rx:184, ry:158, rw:745, rh:590},
+  {label:"II · Love and Other People", sum:"the hardest skill", hue:"#4f7050", lx:2114, ly:100, rx:1739, ry:158, rw:745, rh:590},
+  {label:"The Bedrock", sum:"the human condition", hue:"#6f6455", lx:1265, ly:352, rx:964, ry:436, rw:722, rh:439},
+  {label:"III · Work, Status, Envy", sum:"the anxious search", hue:"#8a5c5c", lx:520, ly:869, rx:184, ry:846, rw:745, rh:590},
+  {label:"IV · Consolations", sum:"making peace", hue:"#96702f", lx:2011, ly:820, rx:1479, ry:869, rw:1069, rh:745}
+];
+const ASTERISMS = [
+  ["#4a6684", [["b1-laplace","b1-pendulum"],["b1-pendulum","b1-sensitive"],["b1-sensitive","b1-lorenz-story"],["b1-sensitive","b1-principle"]]],
+  ["#4f7050", [["b2-logistic","b2-attractors"],["b2-lorenz-attractor","b2-attractors"],["b2-attractors","b2-tension-random"],["b2-attractors","b2-principle"]]],
+  ["#6f6455", [["a1","a2"],["a1","a3"],["a2","a4"],["a3","a4"]]],
+  ["#8a5c5c", [["b3-kokura","b3-contingency"],["b3-contingency","b3-timeline"],["b3-contingency","b3-principle"],["b3-principle","b3-plan"]]],
+  ["#96702f", [["b4-coinflip","b4-ergodicity"],["b4-ergodicity","b4-domains"],["b4-domains","b4-survive"],
+    ["b4-signal","b4-danger"],["b4-domains","b4-danger"],["b4-danger","b4-process"],
+    ["b4-survive","b4-explore"],["b4-destination","b4-explore"],["b4-explore","b4-fence"],
+    ["b4-process","b4-principle"],["b4-fence","b4-principle"],["b4-destination","b4-principle"]]]
+];
+const ALL = Object.keys(N);
+const TERRNAME = {b1:"I · The Missing Education", b2:"II · Love and Other People",
+  b3:"III · Work, Status, Envy", b4:"IV · Consolations", a:"The Bedrock"};
+const HUES = {b1:"#4a6684", b2:"#4f7050", b3:"#8a5c5c", b4:"#96702f", a:"#6f6455"};
+const hueOf = id => id.startsWith('a') ? HUES.a : HUES[id.slice(0,2)];
+const terrOf = id => id.startsWith('a') ? TERRNAME.a : TERRNAME[id.slice(0,2)];
+
+const TOUR = ["b1-laplace","b1-pendulum","b1-sensitive","b1-lorenz-story","b1-principle",
+  "b2-logistic","b2-attractors","b2-lorenz-attractor","b2-tension-random","b2-principle",
+  "b3-kokura","b3-contingency","b3-timeline","b3-principle","b3-plan",
+  "b4-coinflip","b4-ergodicity","b4-domains","b4-survive","b4-signal","b4-danger","b4-process",
+  "b4-destination","b4-explore","b4-fence","b4-principle"];
+const SEQ = {}; TOUR.forEach((id,i)=>SEQ[id]=i+1);
+
+/* degree from curated links (for star size) */
+const DEG = {};
+ALL.forEach(id=>DEG[id]=0);
+ALL.forEach(id=>{
+  const n = N[id];
+  [...n.builds, ...n.leads, ...n.live].forEach(([t])=>{ DEG[id]++; DEG[t]=(DEG[t]||0)+1; });
+});
+const dotSize = id => 16 + Math.min(DEG[id],8)*2.2;
+const dotCenter = id => ({x:N[id].x+dotSize(id)/2, y:N[id].y+dotSize(id)/2});
+
+/* ============================================================
+   CAMERA
+   ============================================================ */
+const vp = document.getElementById('vp');
+const world = document.getElementById('world');
+const reader = document.getElementById('reader');
+const WW = 2750, WH = 1750;
+let cam = {s:0.12, tx:0, ty:0};
+let anim = null;
+function apply(){
+  world.style.transform = `translate(${cam.tx}px, ${cam.ty}px) scale(${cam.s})`;
+  lod();
+}
+function readerW(){ return reader.classList.contains('open') ? (reader.getBoundingClientRect().width||430) : 0; }
+function visW(){ return innerWidth - readerW(); }
+function centerOn(cx, cy, s){
+  cam.s = s;
+  cam.tx = visW()/2 - cx*s;
+  cam.ty = innerHeight/2 - cy*s;
+  apply();
+}
+function flyTo(cx, cy, s, dur=700){
+  if (anim) cancelAnimationFrame(anim);
+  const s0=cam.s, cx0=(visW()/2-cam.tx)/s0, cy0=(innerHeight/2-cam.ty)/s0;
+  const ls0=Math.log(s0), ls1=Math.log(s);
+  const t0=performance.now();
+  function step(t){
+    let p=Math.min(1,(t-t0)/dur);
+    p = p<.5 ? 4*p*p*p : 1-Math.pow(-2*p+2,3)/2;
+    centerOn(cx0+(cx-cx0)*p, cy0+(cy-cy0)*p, Math.exp(ls0+(ls1-ls0)*p));
+    if (p<1) anim=requestAnimationFrame(step);
+  }
+  anim=requestAnimationFrame(step);
+}
+function overviewCam(fly=true){
+  const s = Math.min(visW()/WW, innerHeight/WH)*0.92;
+  if (fly) flyTo(WW/2, WH/2, s, 800); else centerOn(WW/2, WH/2, s);
+}
+vp.addEventListener('wheel', e=>{
+  e.preventDefault();
+  if (anim) cancelAnimationFrame(anim);
+  const f = Math.exp(-e.deltaY*0.0016);
+  const s2 = Math.min(2.2, Math.max(0.06, cam.s*f));
+  const wx=(e.clientX-cam.tx)/cam.s, wy=(e.clientY-cam.ty)/cam.s;
+  cam.s=s2; cam.tx=e.clientX-wx*s2; cam.ty=e.clientY-wy*s2;
+  apply();
+}, {passive:false});
+const ptrs = new Map();
+let panStart=null, pinchStart=null, moved=0;
+vp.addEventListener('pointerdown', e=>{
+  if (e.target.closest('.tlabel')) return;
+  ptrs.set(e.pointerId, {x:e.clientX, y:e.clientY});
+  if (ptrs.size===1){
+    moved=0;
+    panStart={mx:e.clientX, my:e.clientY, tx:cam.tx, ty:cam.ty};
+    vp.classList.add('dragging');
+  } else if (ptrs.size===2){
+    const [p1,p2]=[...ptrs.values()];
+    pinchStart={d:Math.hypot(p1.x-p2.x,p1.y-p2.y), s:cam.s,
+      wx:((p1.x+p2.x)/2-cam.tx)/cam.s, wy:((p1.y+p2.y)/2-cam.ty)/cam.s};
+    panStart=null;
+  }
+});
+addEventListener('pointermove', e=>{
+  if (!ptrs.has(e.pointerId)) return;
+  ptrs.set(e.pointerId, {x:e.clientX, y:e.clientY});
+  if (ptrs.size===1 && panStart){
+    if (anim) cancelAnimationFrame(anim);
+    moved += Math.abs(e.movementX||0)+Math.abs(e.movementY||0);
+    cam.tx = panStart.tx + (e.clientX-panStart.mx);
+    cam.ty = panStart.ty + (e.clientY-panStart.my);
+    apply();
+  } else if (ptrs.size===2 && pinchStart){
+    if (anim) cancelAnimationFrame(anim);
+    const [p1,p2]=[...ptrs.values()];
+    const d=Math.hypot(p1.x-p2.x,p1.y-p2.y);
+    const s2=Math.min(2.2, Math.max(0.06, pinchStart.s*d/pinchStart.d));
+    const cx=(p1.x+p2.x)/2, cy=(p1.y+p2.y)/2;
+    cam.s=s2; cam.tx=cx-pinchStart.wx*s2; cam.ty=cy-pinchStart.wy*s2;
+    apply();
+  }
+});
+function ptrUp(e){ ptrs.delete(e.pointerId);
+  if (ptrs.size<2) pinchStart=null;
+  if (ptrs.size===0){ panStart=null; vp.classList.remove('dragging'); } }
+addEventListener('pointerup', ptrUp);
+addEventListener('pointercancel', ptrUp);
+vp.addEventListener('dblclick', e=>{
+  if (!e.target.closest('.mk')){ closeReader(); overviewCam(); }
+});
+addEventListener('keydown', e=>{
+  if (e.key==='Escape'){ closeReader(); overviewCam(); }
+  if (e.key==='ArrowRight') navStep(1);
+  if (e.key==='ArrowLeft') navStep(-1);
+});
+document.getElementById('overviewBtn').onclick = ()=>{ closeReader(); overviewCam(); };
+addEventListener('resize', ()=>apply());
+
+/* ============================================================
+   SKY — constellation names, asterisms, ecliptic, stars
+   ============================================================ */
+TERRITORIES.forEach(t=>{
+  const rgb = [parseInt(t.hue.slice(1,3),16), parseInt(t.hue.slice(3,5),16), parseInt(t.hue.slice(5,7),16)].join(',');
+  const l = document.createElement('div');
+  l.className = 'tlab';
+  l.style.cssText = `left:${t.lx}px; top:${t.ly}px; transform:translateX(-50%);`;
+  l.innerHTML = `<div class="big" style="color:rgba(${rgb},0.92)">${t.label}</div>
+    <div class="sum">${t.sum}</div>`;
+  l.addEventListener('click', ()=>{
+    flyTo(t.rx+t.rw/2, t.ry+Math.min(t.rh/2, 1000), Math.min(visW()/(t.rw+300), 0.5));
+  });
+  world.appendChild(l);
+});
+
+
+
+/* minor stars — small nameless flecks inside each figure */
+{
+  const R = mulberry32(11);
+  TERRITORIES.forEach(t=>{
+    for (let i=0;i<16;i++){
+      const d=document.createElement('div');
+      const sz=(2.5+R()*3).toFixed(1);
+      d.style.cssText=`position:absolute; left:${Math.round(t.rx+40+R()*(t.rw-80))}px;`+
+        `top:${Math.round(t.ry+40+R()*(t.rh-80))}px; width:${sz}px; height:${sz}px;`+
+        `border-radius:50%; background:${t.hue}; opacity:${(0.18+R()*0.22).toFixed(2)}; pointer-events:none;`;
+      world.appendChild(d);
+    }
+  });
+}
+
+const flowsvg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+flowsvg.setAttribute('width',WW); flowsvg.setAttribute('height',WH);
+flowsvg.style.cssText='position:absolute;top:0;left:0;pointer-events:none;overflow:visible;';
+world.appendChild(flowsvg);
+
+const astsvg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+astsvg.id='astsvg'; astsvg.setAttribute('width',WW); astsvg.setAttribute('height',WH);
+ASTERISMS.forEach(([hue, pairs])=>{
+  pairs.forEach(([a,b])=>{
+    const pa=dotCenter(a), pb=dotCenter(b);
+    const dx=pb.x-pa.x, dy=pb.y-pa.y, L=Math.hypot(dx,dy)||1;
+    const ux=dx/L, uy=dy/L, off=30;
+    const ln = document.createElementNS('http://www.w3.org/2000/svg','line');
+    ln.setAttribute('x1',pa.x+ux*off); ln.setAttribute('y1',pa.y+uy*off);
+    ln.setAttribute('x2',pb.x-ux*off); ln.setAttribute('y2',pb.y-uy*off);
+    ln.setAttribute('stroke',hue); ln.setAttribute('stroke-opacity','0.38');
+    ln.setAttribute('stroke-width','1.6');
+    astsvg.appendChild(ln);
+  });
+});
+world.appendChild(astsvg);
+
+{
+  const pts = TOUR.map(id=>dotCenter(id));
+  let d = `M ${pts[0].x} ${pts[0].y}`;
+  for (let i=1;i<pts.length;i++){
+    const a=pts[i-1], b=pts[i];
+    const mx=(a.x+b.x)/2, my=(a.y+b.y)/2;
+    d += ` Q ${mx + (b.y-a.y)*0.08} ${my - (b.x-a.x)*0.08} ${b.x} ${b.y}`;
+  }
+  const p = document.createElementNS('http://www.w3.org/2000/svg','path');
+  p.setAttribute('d',d); p.setAttribute('fill','none');
+  p.setAttribute('stroke','rgba(61,56,51,0.08)'); p.setAttribute('stroke-width','4');
+  p.setAttribute('stroke-dasharray','2,14');
+  flowsvg.appendChild(p);
+}
+
+const tsvg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+tsvg.id='tsvg'; tsvg.setAttribute('width',WW); tsvg.setAttribute('height',WH);
+const defs = document.createElementNS('http://www.w3.org/2000/svg','defs');
+defs.innerHTML = `<marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="#96702f" opacity="0.8"/></marker>`;
+tsvg.appendChild(defs);
+world.appendChild(tsvg);
+const tlabels = [];
+
+const mkEls = {};
+ALL.forEach(id=>{
+  const n = N[id];
+  const hue = hueOf(id);
+  const size = dotSize(id);
+  const m = document.createElement('div');
+  m.className = 'mk' + (n.sim ? ' hasim' : '');
+  m.style.cssText = `left:${n.x}px; top:${n.y}px;`;
+  m.dataset.id = id;
+  m.innerHTML = `
+    <div class="dot" style="width:${size}px; height:${size}px; background:${hue};"></div>
+    <div class="dtext">
+      <div class="lbl">${SEQ[id]?`<span class="seq">${SEQ[id]}</span>`:''}${n.title}</div>
+      <div class="ess">${n.ess}</div>
+      <div class="sims-badge">▸ live model</div>
+    </div>`;
+  world.appendChild(m);
+  mkEls[id] = m;
+  m.addEventListener('click', e=>{
+    if (moved>6) return;
+    e.stopPropagation();
+    openIdea(id);
+  });
+});
+
+function lod(){
+  const ess = cam.s > 0.55;
+  if (lod._k===ess) return;
+  lod._k = ess;
+  Object.values(mkEls).forEach(m=>m.classList.toggle('showess', ess));
+}
+
+/* ============================================================
+   READER
+   ============================================================ */
+let focusId = null, stopSim = null;
+
+function linkGroup(kicker, items){
+  if (!items.length) return '';
+  return `<div class="lgroup"><span class="kicker">${kicker}</span>
+    ${items.map(([t,why])=>`<a data-t="${t}"><span class="t">${N[t].title}</span>
+      <span class="why">${why}</span></a>`).join('')}
+  </div>`;
+}
+
+function openIdea(id){
+  const n = N[id];
+  if (stopSim){ stopSim(); stopSim=null; }
+  focusId = id;
+  const chip = document.getElementById('rChip');
+  chip.textContent = n.type;
+  chip.style.borderColor = hueOf(id)+'66'; chip.style.color = hueOf(id);
+  document.getElementById('rTitle').textContent = n.title;
+  document.getElementById('rTerr').textContent = terrOf(id) + (SEQ[id]?` · step ${SEQ[id]} of ${TOUR.length}`:'');
+  const nextId = SEQ[id] && SEQ[id] < TOUR.length ? TOUR[SEQ[id]] : null;
+  document.getElementById('rbody').innerHTML = `
+    <div class="hook">${n.hook}</div>
+    <div class="story">${n.story}</div>
+    ${n.sim ? simHTML(n.sim) : ''}
+    ${n.mech ? `<details class="fold"><summary>How it actually works</summary><div class="inner">${n.mech}</div></details>` : ''}
+    <div class="named"><span class="kicker">the idea, named</span>
+      <b>${n.term}</b><div class="def">${n.def}</div></div>
+    <div class="sowhat"><span class="kicker">where it bites</span>${n.sowhat}</div>
+    <div class="linkrow">
+      ${linkGroup('builds on', n.builds)}
+      ${linkGroup('leads to', n.leads)}
+      ${linkGroup('see it live', n.live)}
+    </div>
+    ${nextId ? `<button class="nextbtn" data-t="${nextId}"><span class="k">next in the flow · ${SEQ[nextId]} of ${TOUR.length}</span>${N[nextId].title}<span class="arr">→</span></button>`
+             : (SEQ[id]===TOUR.length ? `<button class="nextbtn" id="finishBtn"><span class="k">end of the flow</span>Back to the chart<span class="arr">↑</span></button>` : '')}`;
+  document.querySelectorAll('#rbody [data-t]').forEach(a=>
+    a.addEventListener('click', ()=>openIdea(a.dataset.t)));
+  const fin = document.getElementById('finishBtn');
+  if (fin) fin.onclick = ()=>{ closeReader(); overviewCam(); };
+  const fig = document.querySelector('#rbody figure.frame');
+  if (fig) stopSim = SIMS[fig.dataset.sim](fig);
+  document.getElementById('rbody').scrollTop = 0;
+  reader.classList.add('open');
+  document.body.classList.add('reader-open');
+  highlight(id);
+  syncNav();
+  const rs = Math.min(0.95, Math.max(0.62, cam.s));
+  setTimeout(()=>flyTo(n.x+180, n.y+60, rs), 60);
+}
+function closeReader(){
+  if (stopSim){ stopSim(); stopSim=null; }
+  reader.classList.remove('open');
+  document.body.classList.remove('reader-open');
+  focusId = null;
+  clearHighlight();
+  syncNav();
+}
+document.getElementById('rClose').onclick = closeReader;
+
+/* map highlight: few directional lines with plain labels */
+function highlight(id){
+  clearHighlight();
+  const n = N[id];
+  const nb = new Set([id]);
+  const conns = [
+    ...n.builds.map(([t])=>({t, lab:'builds on', into:true})),
+    ...n.leads.map(([t])=>({t, lab:'leads to', into:false})),
+    ...n.live.map(([t])=>({t, lab:'see it live', into:false}))
+  ];
+  conns.forEach(c=>nb.add(c.t));
+  ALL.forEach(x=>{
+    mkEls[x].classList.toggle('dimmed', !nb.has(x));
+    mkEls[x].classList.toggle('neighbor', nb.has(x) && x!==id);
+    mkEls[x].classList.toggle('focused', x===id);
+  });
+  const here = dotCenter(id);
+  conns.forEach(c=>{
+    const there = dotCenter(c.t);
+    let from = c.into ? {...there} : {...here};
+    let to   = c.into ? {...here} : {...there};
+    {
+      const ddx=to.x-from.x, ddy=to.y-from.y, LL=Math.hypot(ddx,ddy)||1;
+      const ux=ddx/LL, uy=ddy/LL, off=30;
+      from = {x:from.x+ux*off, y:from.y+uy*off};
+      to   = {x:to.x-ux*off,   y:to.y-uy*off};
+    }
+    const dx=to.x-from.x, dy=to.y-from.y, dist=Math.hypot(dx,dy)||1;
+    const cx=(from.x+to.x)/2 - dy/dist*dist*0.12, cy=(from.y+to.y)/2 + dx/dist*dist*0.12;
+    const p = document.createElementNS('http://www.w3.org/2000/svg','path');
+    p.setAttribute('d',`M ${from.x} ${from.y} Q ${cx} ${cy} ${to.x} ${to.y}`);
+    p.setAttribute('fill','none');
+    p.setAttribute('stroke','rgba(150,112,47,0.45)');
+    p.setAttribute('stroke-width','2.5');
+    p.setAttribute('stroke-dasharray','9,8');
+    p.setAttribute('class','tline');
+    p.setAttribute('marker-end','url(#arr)');
+    tsvg.appendChild(p);
+    const lbl = document.createElement('div');
+    lbl.className='tlabel';
+    lbl.style.left = (.25*from.x+.5*cx+.25*to.x)+'px';
+    lbl.style.top = (.25*from.y+.5*cy+.25*to.y)+'px';
+    lbl.textContent = c.lab;
+    lbl.addEventListener('click', e=>{ e.stopPropagation(); openIdea(c.t); });
+    world.appendChild(lbl);
+    tlabels.push(lbl);
+  });
+}
+function clearHighlight(){
+  ALL.forEach(x=>mkEls[x].classList.remove('dimmed','neighbor','focused'));
+  [...tsvg.querySelectorAll('path')].forEach(p=>p.remove());
+  tlabels.forEach(l=>l.remove()); tlabels.length=0;
+}
+
+/* ============================================================
+   NAV — top-right cluster drives the default flow
+   ============================================================ */
+function syncNav(){
+  const i = focusId ? TOUR.indexOf(focusId) : -1;
+  document.getElementById('navcluster').classList.toggle('on', !!focusId);
+  document.getElementById('navPrev').disabled = i===0;
+  document.getElementById('navNext').disabled = i===TOUR.length-1;
+}
+function navStep(dir){
+  const i = focusId ? TOUR.indexOf(focusId) : -1;
+  if (i<0){ openIdea(TOUR[0]); return; }
+  const j = i+dir;
+  if (j>=0 && j<TOUR.length) openIdea(TOUR[j]);
+}
+document.getElementById('navPrev').onclick = ()=>navStep(-1);
+document.getElementById('navNext').onclick = ()=>navStep(1);
+
+/* ============================================================
+   SIMULATIONS
+   ============================================================ */
+const INKC='#3d3833', GRAY='#8a8069', FAINT='#b0a68c', AMBER='#96702f', SUNK='#ece4d2', BRD='#d5c9ae';
+function mulberry32(a){ return function(){ a|=0; a=a+0x6D2B79F5|0;
+  let t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t;
+  return ((t^t>>>14)>>>0)/4294967296; }; }
+function setActive(fig, btn){
+  fig.querySelectorAll('.ghost').forEach(b=>{ if(b.dataset.d!==undefined||b.dataset.m!==undefined) b.classList.remove('active');});
+  if (btn) btn.classList.add('active');
+}
+function simHTML(kind){
+  const caps = {
+    romantic:"The same relationship, seen two ways. The Romantic ideal sets a standard no love survives; the realistic view is where love can actually live.",
+    envyclue:"Click who you envy. Each pang, read closely, points past the person to a specific thing you want — envy as a quiet map.",
+    goodenough:"Slide from perfectionism to good-enough. Misery is the gap between your life and your ideal — lower the ideal and the gap closes."
+  };
+  const ctl = {
+    romantic:`<button class="ghost active" data-v="ideal">the Romantic ideal</button>
+      <button class="ghost" data-v="real">a realistic love</button>`,
+    envyclue:`<span class="cl">you envy…</span>
+      <button class="ghost active" data-e="0">the ex-colleague</button>
+      <button class="ghost" data-e="1">the traveller</button>
+      <button class="ghost" data-e="2">the artist</button>`,
+    goodenough:`<span class="cl">standard</span><input type="range" min="0" max="100" step="5" value="100">`
+  };
+  return `<figure class="frame" data-sim="${kind}">
+    <canvas></canvas>
+    <div class="controls">${ctl[kind]}</div>
+    <figcaption>${caps[kind]}</figcaption>
+  </figure>`;
+}
+const SIMS = {};
+
+function wrapText(ctx, text, x, y, maxW, lh){
+  const words=text.split(' '); let line='', yy=y;
+  for(const w of words){ const t=line?line+' '+w:w;
+    if(ctx.measureText(t).width>maxW && line){ ctx.fillText(line,x,yy); line=w; yy+=lh; }
+    else line=t; }
+  if(line) ctx.fillText(line,x,yy); return yy;
+}
+
+SIMS.romantic = fig=>{
+  const cv=fig.querySelector('canvas'); cv.width=700; cv.height=380;
+  const ctx=cv.getContext('2d'); const W=700,H=380; let v="ideal";
+  const ideal=["They will sense what I need without my saying it.","If it's real love, there won't be much conflict.","We were made for each other — one perfect match exists.","Desire should stay effortless and constant.","To explain a need is to admit the love has failed."];
+  const real=["They can't read my mind; I'll have to explain, kindly and often.","Conflict is normal — the question is how we repair it.","No one is a perfect match; love is learning to accommodate a flawed other.","Desire ebbs and flows; that's not a verdict on the relationship.","Naming a need is a skill of love, not evidence against it."];
+  function draw(){
+    ctx.fillStyle=SUNK; ctx.fillRect(0,0,W,H);
+    const list = v==="ideal"?ideal:real;
+    ctx.fillStyle = v==="ideal" ? '#8a5c5c' : AMBER; ctx.font='16px Inter, sans-serif';
+    ctx.fillText(v==="ideal"?"The Romantic ideal":"A realistic love", 40, 44);
+    ctx.font='14.5px Inter, sans-serif'; let y=88;
+    list.forEach(t=>{ ctx.fillStyle= v==="ideal"?GRAY:INKC; ctx.fillText("•", 40, y); y=wrapText(ctx,t,60,y,W-100,22)+30; });
+    ctx.fillStyle=GRAY; ctx.font='13px Inter, sans-serif';
+    wrapText(ctx, v==="ideal" ? "Held to this standard, every real relationship reads as a failure — and we blame the partner, not the myth."
+                              : "None of this is less romantic. It's the version in which two flawed people can actually love each other.", 40, H-40, W-80, 18);
+  }
+  draw();
+  fig.querySelectorAll('.ghost').forEach(b=>b.onclick=()=>{
+    fig.querySelectorAll('.ghost').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active'); v=b.dataset.v; draw(); });
+  return ()=>{};
+};
+
+SIMS.envyclue = fig=>{
+  const cv=fig.querySelector('canvas'); cv.width=700; cv.height=380;
+  const ctx=cv.getContext('2d'); const W=700,H=380; let e=0;
+  const items=[
+    {who:"the ex-colleague who got promoted",surface:"You don't want their job, their boss, or their hours.",clue:"You want to feel your work is seen and to matter more. That's the real signal — chase recognition, not their title."},
+    {who:"the friend always travelling",surface:"You don't actually want to live out of a suitcase.",clue:"You want more freedom and novelty in your weeks. The clue points to spaciousness — buildable at home, not just abroad."},
+    {who:"the artist making their own work",surface:"You don't envy the precarious income or the doubt.",clue:"You want to make something of your own, on your own terms. The pang names a creative need going unfed."}];
+  function draw(){
+    ctx.fillStyle=SUNK; ctx.fillRect(0,0,W,H);
+    const it=items[e];
+    ctx.fillStyle=GRAY; ctx.font='13px Inter, sans-serif'; ctx.fillText("you envy…", 40, 40);
+    ctx.fillStyle=INKC; ctx.font='19px Inter, sans-serif'; wrapText(ctx,it.who,40,70,W-80,26);
+    ctx.fillStyle=FAINT; ctx.font='13.5px Inter, sans-serif';
+    let y=wrapText(ctx,it.surface,40,140,W-80,20)+30;
+    ctx.fillStyle=AMBER; ctx.font='11px Inter, sans-serif'; ctx.fillText("THE CLUE", 40, y); y+=22;
+    ctx.fillStyle=INKC; ctx.font='15px Inter, sans-serif'; wrapText(ctx,it.clue,40,y,W-80,22);
+    ctx.fillStyle=GRAY; ctx.font='13px Inter, sans-serif';
+    wrapText(ctx,"You never envy a whole life — only a slice. That slice is the desire worth naming.",40,H-30,W-80,18);
+  }
+  draw();
+  fig.querySelectorAll('.ghost').forEach(b=>b.onclick=()=>{
+    fig.querySelectorAll('.ghost').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active'); e=+b.dataset.e; draw(); });
+  return ()=>{};
+};
+
+SIMS.goodenough = fig=>{
+  const cv=fig.querySelector('canvas'); cv.width=700; cv.height=380;
+  const ctx=cv.getContext('2d'); const W=700,H=380; let std=100;
+  const px=60, py=50, pw=W-110, ph=H-130;
+  function draw(){
+    ctx.fillStyle=SUNK; ctx.fillRect(0,0,W,H);
+    // misery = gap between ideal(std) and reality(~62)
+    const reality=62;
+    const gap=Math.max(0, std-reality);
+    ctx.strokeStyle=BRD; ctx.beginPath(); ctx.moveTo(px,py+ph); ctx.lineTo(px+pw,py+ph); ctx.stroke();
+    // reality bar
+    const bx=px+pw*0.28, bw=90;
+    ctx.fillStyle='rgba(138,128,105,0.5)'; const rh=ph*reality/100; ctx.fillRect(bx,py+ph-rh,bw,rh);
+    ctx.fillStyle=INKC; ctx.font='12px Inter, sans-serif'; ctx.fillText("your real life", bx-4, py+ph+20);
+    // ideal bar
+    const ix=px+pw*0.62;
+    ctx.fillStyle='rgba(150,112,47,0.5)'; const ih=ph*std/100; ctx.fillRect(ix,py+ph-ih,bw,ih);
+    ctx.fillStyle=AMBER; ctx.fillText("your standard", ix-4, py+ph+20);
+    // gap bracket
+    ctx.strokeStyle='#8a5c5c'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(ix+bw+16,py+ph-rh); ctx.lineTo(ix+bw+16,py+ph-ih); ctx.stroke();
+    ctx.fillStyle='#8a5c5c'; ctx.font='13px Inter, sans-serif';
+    ctx.fillText("misery = "+Math.round(gap), ix+bw+24, py+ph-(rh+ih)/2);
+    ctx.fillStyle=INKC; ctx.font='14px Inter, sans-serif';
+    ctx.fillText(std>=90?"Perfectionism: the gap (and the suffering) is huge.":std<=65?"Good enough: the gap nearly closes — peace.":"Lowering the standard shrinks the gap.", 40, H-42);
+    ctx.fillStyle=GRAY; ctx.font='13px Inter, sans-serif';
+    wrapText(ctx,"Your life barely moved. Only the standard did — and with it, almost all the unhappiness. Not settling: sanity.",40,H-20,W-80,18);
+  }
+  draw();
+  fig.querySelector('input').oninput=e=>{ std=+e.target.value; draw(); };
+  return ()=>{};
+};
+
+/* ============================================================
+   BOOT
+   ============================================================ */
+syncNav();
+overviewCam(false);
+
+</script>
+</body>
+</html>
