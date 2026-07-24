@@ -24,3 +24,4 @@ Follow the guided flow, or just wander — every thread rejoins the chart.
 - [Decision Theory](/orrery/decision-theory.html) — life as repeated choice under uncertainty: expected value humanized, a decision stack, and the models that turn choosing into a way of living.
 - [Systems Thinking](/orrery/systems-thinking.html) — why structure beats blame: stocks and flows, feedback loops, the recurring archetypes, and where to actually push on a system.
 - [Building Taste](/orrery/building-taste.html) — taste as trained judgment: why it exists, the loop that builds it, its kinds and limits, and the practice that sharpens it.
+- [Interpersonal & Communication Skills](/orrery/interpersonal-communication.html) — the inner game, the listening half, being understood, and moving people through hard moments.
