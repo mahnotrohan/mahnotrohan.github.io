@@ -26,3 +26,4 @@ Follow the guided flow, or just wander — every thread rejoins the chart.
 - [Building Taste](/orrery/building-taste.html) — taste as trained judgment: why it exists, the loop that builds it, its kinds and limits, and the practice that sharpens it.
 - [Interpersonal & Communication Skills](/orrery/interpersonal-communication.html) — the inner game, the listening half, being understood, and moving people through hard moments.
 - [First Principles Thinking](/orrery/first-principles-thinking.html) — the borrowed mind, the two moves of deconstruct and rebuild, why it's hard, and what it lets you build.
+- [Nonviolent Communication](/orrery/nonviolent-communication.html) — what blocks compassion, expressing honestly, receiving empathically, and the hard hours: anger, self, force, and gratitude.
