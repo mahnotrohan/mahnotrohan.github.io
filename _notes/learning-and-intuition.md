@@ -1,6 +1,6 @@
 ---
 layout: notes
-Title: Learning & Intuition
+title: Learning & Intuition
 date: 2026-07-30
 ---
 ## I. Running
