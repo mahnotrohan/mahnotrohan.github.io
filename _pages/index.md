@@ -14,7 +14,6 @@ Outside of work, I cook a lot, brew coffee, read memoirs, and run — I've been 
 This is my digital garden: a place where I write about the things I notice, the questions I sit with, and the slow process of making sense of things as they take shape.
 
 ---
-
 #### Finding your way around
 
 **[Writing](rohanmahnot.space/blog)** — Longer essays. I write about food, attention, discipline, work, and whatever else I'm thinking about.
@@ -24,7 +23,6 @@ This is my digital garden: a place where I write about the things I notice, the 
 **[Thoughts](rohanmahnot.space/thoughts)** — Shorter, looser notes — things I'm curious about, ideas I keep returning to, interesting things I've stumbled on.
 
 ---
-
 #### Say hello
 
 I'd love to hear from you — about something I wrote, a book you think I'd enjoy, or just to say hi.
