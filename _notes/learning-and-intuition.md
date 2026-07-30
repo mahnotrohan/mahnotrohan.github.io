@@ -1,7 +1,7 @@
 ---
 layout: notes
 title: Learning & Intuition
-date: 2026-07-30
+date: 2026-07-29
 ---
 ## I. Running
 
@@ -41,8 +41,8 @@ By the time the result arrives, you've forgotten the decisions that produced it,
 
 This is why my notes helped in course correction. They were a record of what I actually did, not what I thought I did. 
 
-A log alone isn't enough. It captures; it doesn't interpret. It has to be paired with a review ritual. Sitting with the record and reading it against the outcome. Together they help to separate the signal from noise.
+Runners keep training logs. Scientists keep lab journals. Coffee nerds track their brews. All of them help to reconstruct causality.
 
-Runners keep training logs. Scientists keep lab notebooks. Investors keep journals. Coffee nerds track their brews. All of them are solving the same problem. Reconstructing causality after the fact. 
+A log alone isn't enough thought. It has to be paired with a review ritual. To learn from feedbacks, and filter the noise out of all your notes.
 
-When feedback arrives late, or arrives without explanation, improvement depends less on experience than on your ability to remember what the experience actually was.
+When feedback arrives late, or arrives without explanation, iteration depends on your ability to remember what the experience actually was.
