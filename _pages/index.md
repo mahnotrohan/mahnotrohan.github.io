@@ -17,11 +17,11 @@ This is my digital garden: a place where I write about the things I notice, the 
 
 #### Finding your way around
 
-**[Writing](https://mahnotrohan.github.io/blog)** — Longer essays. I write about food, attention, discipline, work, and whatever else I'm thinking about.
+**[Writing](rohanmahnot.space/blog)** — Longer essays. I write about food, attention, discipline, work, and whatever else I'm thinking about.
 
-**[Bookshelf](https://mahnotrohan.github.io/bookshelf)** — What I've been reading, with occasional notes on what stayed with me.
+**[Bookshelf](rohanmahnot.space/bookshelf)** — What I've been reading, with occasional notes on what stayed with me.
 
-**[Thoughts](https://mahnotrohan.github.io/thoughts)** — Shorter, looser notes — things I'm curious about, ideas I keep returning to, interesting things I've stumbled on.
+**[Thoughts](rohanmahnot.space/thoughts)** — Shorter, looser notes — things I'm curious about, ideas I keep returning to, interesting things I've stumbled on.
 
 ---
 
@@ -29,4 +29,4 @@ This is my digital garden: a place where I write about the things I notice, the 
 
 I'd love to hear from you — about something I wrote, a book you think I'd enjoy, or just to say hi.
 
-[Mail](mailto:rohan.mahnot27@gmail.com) · [X](https://x.com/mahnotrohan) · [LinkedIn](https://www.linkedin.com/in/rohan-mahnot-569412182/)
+[Guestbook](https://www.yourworldoftext.com/~rohanmahnot/) | [X](https://x.com/mahnotrohan)
