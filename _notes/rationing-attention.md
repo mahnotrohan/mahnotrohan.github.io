@@ -2,6 +2,10 @@
 layout: notes
 title: Rationing Attention (3/3)
 date: 2026-06-12
+tags: [attention, time]
+stage: settled
+description: "Everyone gets the same 24 hours, but not the same attention. What is actually consuming yours, and do you even know?"
+series: Time & Attention
 ---
 Once you shift the frame from time to [attention](https://rohanmahnot.space/notes/seize-the-day/), things become clear.
 

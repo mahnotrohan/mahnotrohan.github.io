@@ -2,6 +2,9 @@
 layout: notes
 title: Predicament With Restaurant Recommendation
 date: 2025-02-26
+tags: [food, systems]
+stage: rough
+description: "Everyone loves a good meal. Nobody has solved telling you which one."
 ---
 
 Everyone loves a good meal and every few days, someone visits a new restaurant. Maybe it’s trending on Instagram, maybe there’s a discount on Swiggy/Zomato, maybe it just won an award. Or a friend recommended it.

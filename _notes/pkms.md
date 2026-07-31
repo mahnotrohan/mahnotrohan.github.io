@@ -2,6 +2,9 @@
 layout: notes
 title: My PKMS and Task management System
 date: 2026-02-04
+tags: [systems, attention]
+stage: settled
+description: "Every knowledge worker goes through this rite of passage. Here's where mine landed, and why."
 ---
 ![]({{site.baseurl}}/assets/pkms.png)
 Every knowledge worker goes through a rite of passage while developing their personal knowledge management system (PKMS). I’ve been no different. Over the years, I’ve experimented extensively, ranging from Obsidian to a txt file on my desktop.

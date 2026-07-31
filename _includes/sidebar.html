@@ -1,0 +1,55 @@
+{%- assign recent = site.notes | sort: "date" | reverse -%}
+<div class="sb">
+  <a class="sb-mark" href="{{ site.baseurl }}/">Rohan's space</a>
+
+  <div class="sb-searchrow">
+    <button class="sb-search" id="search-open" type="button" aria-label="Search">
+      <span class="sb-mag" aria-hidden="true">&#9906;</span><span>Search</span><kbd>&#8984;K</kbd>
+    </button>
+    <button class="sb-icon" id="theme-toggle" type="button" aria-label="Toggle theme">&#9682;</button>
+  </div>
+
+  <nav class="sb-nav" aria-label="Sections">
+    <div class="sb-prim">
+      <a href="{{ site.baseurl }}/blog"{% if page.url contains "/blog" or page.collection == "notes" %} class="cur"{% endif %}>Writing</a>
+      <a href="{{ site.baseurl }}/now"{% if page.url == "/now" %} class="cur"{% endif %}>Now</a>
+      <a href="{{ site.baseurl }}/about"{% if page.url == "/about" %} class="cur"{% endif %}>About</a>
+    </div>
+
+    <div class="sb-grp">Made</div>
+    <div class="sb-subs">
+      <a href="{{ site.baseurl }}/orrery"{% if page.url contains "orrery" %} class="cur"{% endif %}>Orrery</a><s>&middot;</s>
+      <a class="ext" href="https://bloom.rohanmahnot.space">Bloom</a><s>&middot;</s>
+      <a class="ext" href="https://www.are.na/rohan-mahnot-rh85hxg6yum/project-monet-oeekarcnrdy">Monet</a>
+    </div>
+
+    <div class="sb-grp">Tastes</div>
+    <div class="sb-subs">
+      <a href="{{ site.baseurl }}/bookshelf"{% if page.url == "/bookshelf" %} class="cur"{% endif %}>Shelf</a><s>&middot;</s>
+      <a href="{{ site.baseurl }}/thoughts/on-coffee"{% if page.url contains "on-coffee" %} class="cur"{% endif %}>Coffee</a><s>&middot;</s>
+      <a href="{{ site.baseurl }}/thoughts/on-food"{% if page.url contains "on-food" %} class="cur"{% endif %}>Food</a><s>&middot;</s>
+      <a href="{{ site.baseurl }}/uses-this"{% if page.url == "/uses-this" %} class="cur"{% endif %}>Uses this</a>
+    </div>
+  </nav>
+
+  <div class="sb-h">Recent writing</div>
+  <div class="sb-rec">
+    {%- for n in recent limit: 4 -%}
+    {%- assign rt = n.content | strip_html | number_of_words | divided_by: 220.0 | ceil -%}
+    {%- if rt < 1 %}{% assign rt = 1 %}{% endif -%}
+    <a href="{{ n.url }}">
+      <span class="t">{{ n.title }}</span>
+      <span class="m">{{ n.date | date: "%b %Y" }} &middot; {{ rt }} min</span>
+    </a>
+    {%- endfor -%}
+  </div>
+  <a class="sb-more" href="{{ site.baseurl }}/blog">See {{ recent | size | minus: 4 }} more &rarr;</a>
+
+  <div class="sb-foot">
+    <a href="https://x.com/mahnotrohan">x</a><s>&middot;</s>
+    <a href="https://www.linkedin.com/in/rohan-mahnot-569412182/">linkedin</a><s>&middot;</s>
+    <a href="mailto:mahnot.who@gmail.com">email</a><s>&middot;</s>
+    <a href="https://www.yourworldoftext.com/~rohanmahnot/">guestbook</a><s>&middot;</s>
+    <a href="{{ site.baseurl }}/feed.xml">rss</a>
+  </div>
+</div>

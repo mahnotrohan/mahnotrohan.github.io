@@ -3,6 +3,9 @@ layout: notes
 title: Where Leverage Lives
 date: 2026-02-22
 permalink: /constraints-leverage/
+tags: [systems, business]
+stage: working
+description: "Every value-creating system has roughly the same shape. The leverage is never where you'd guess."
 ---
 ![]({{site.baseurl}}/assets/leverage.png)
 Every system that creates value, be it a company or a scientific innovation, has largely a similar structure. Upstream decisions that set the conditions for everything downstream. Constraints flow top down, and Leverage lies to whoever sets constraints for others.

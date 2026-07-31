@@ -1,0 +1,29 @@
+---
+layout: null
+sitemap: false
+---
+{%- comment -%}
+  Search index, built at compile time and fetched once by the search overlay.
+  Anything with `noindex: true` is excluded, so Notes In Transit and the
+  letters behind it never appear in results.
+{%- endcomment -%}
+[
+{%- assign items = "" | split: "" -%}
+{%- assign items = items | concat: site.notes -%}
+{%- assign items = items | concat: site.pages -%}
+{%- assign first = true -%}
+{%- for it in items -%}
+{%- unless it.noindex or it.url == "/search.json" or it.url contains "notes-in-transit" or it.url == "/feed.xml" or it.title == nil -%}
+{%- if first == false %},{% endif -%}{%- assign first = false -%}
+{
+"title": {{ it.title | jsonify }},
+"url": {{ it.url | relative_url | jsonify }},
+"date": {% if it.date %}{{ it.date | date: "%b %Y" | jsonify }}{% else %}""{% endif %},
+"kind": {% if it.collection == "notes" %}"writing"{% else %}"page"{% endif %},
+"tags": {% if it.tags %}{{ it.tags | jsonify }}{% else %}[]{% endif %},
+"desc": {% if it.description %}{{ it.description | jsonify }}{% else %}""{% endif %},
+"body": {{ it.content | strip_html | normalize_whitespace | truncate: 1800 | jsonify }}
+}
+{%- endunless -%}
+{%- endfor -%}
+]

@@ -3,14 +3,42 @@
   {% include head.html %}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ site.url }}{{ site.baseurl }}/feed.xml">
+    <script>
+      // Set the theme before first paint so there is no flash of the wrong one.
+      (function () {
+        try {
+          var t = localStorage.getItem('theme');
+          if (!t) t = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+          document.documentElement.setAttribute('data-theme', t);
+        } catch (e) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      })();
+    </script>
   <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "b3848e2385f949cebca5bff937d201b6"}'></script><!-- End Cloudflare Web Analytics -->
   <body>
-    <nav>{% include nav.html %}</nav>
-    <div class="wrapper">
-      <main>{{ content }}</main>
-      <footer>{% include footer.html %}</footer>
+    <button class="sb-open" id="sb-open" type="button" aria-label="Menu">&#9776;&nbsp; Menu</button>
+    <div class="shell">
+      <aside class="sb-wrap" id="sb-wrap">{% include sidebar.html %}</aside>
+      <div class="col">
+        <main>{{ content }}</main>
+        <footer>{% include footer.html %}</footer>
+      </div>
+    </div>
+    {%- comment -%}
+      Search overlay lives outside the sidebar: the sidebar is display:none on
+      mobile, which would hide the modal with it. Index is fetched on first open.
+    {%- endcomment -%}
+    <div class="search-modal" id="search-modal" data-search-url="{{ site.baseurl }}/search.json" hidden>
+      <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search">
+        <input type="search" id="search-input" placeholder="Search writing, notes and pages&hellip;" autocomplete="off">
+        <div class="search-results" id="search-results"></div>
+        <div class="search-hint">Enter to open the first result &middot; Esc to close</div>
+      </div>
     </div>
 
+    <script src="{{ site.baseurl }}/assets/site.js" defer></script>
   </body>
 </html>

@@ -2,16 +2,104 @@
 layout: default
 ---
 
+{%- assign rt = content | strip_html | number_of_words | divided_by: 220.0 | ceil -%}
+{%- if rt < 1 %}{% assign rt = 1 %}{% endif -%}
+{%- if page.stage == "settled" %}{% assign dots = 3 %}
+{%- elsif page.stage == "working" %}{% assign dots = 2 %}
+{%- else %}{% assign dots = 1 %}{% endif -%}
+
+{%- comment -%} Position in the collection, for previous/next. {%- endcomment -%}
+{%- assign ordered = site.notes | sort: "date" -%}
+{%- assign idx = 0 -%}
+{%- for n in ordered -%}{% if n.url == page.url %}{% assign idx = forloop.index0 %}{% endif %}{%- endfor -%}
+
 <article>
-  <div>
-    <h1>{{ page.title }}</h1>
+  <h1>{{ page.title }}</h1>
+
+  <div class="p-meta">
+    <span>{{ page.date | date: "%b %Y" }}</span>
+    <span class="sep">&middot;</span>
+    <span>{{ rt }} min read</span>
+    {%- if page.stage %}
+    <span class="sep">&middot;</span>
+    <span class="p-stage"><span class="dots" data-s="{{ dots }}"><i></i><i></i><i></i></span>{{ page.stage }}</span>
+    {%- endif -%}
   </div>
+
+  {%- if page.tags and page.tags != empty %}
+  <div class="p-tags">
+    {%- for t in page.tags -%}
+    <a class="tag" href="{{ site.baseurl }}/blog#{{ t }}">{{ t }}</a>
+    {%- endfor -%}
+  </div>
+  {%- endif -%}
+
+  {%- comment -%} Series navigation, driven by `series` front matter. {%- endcomment -%}
+  {%- if page.series -%}
+  {%- assign parts = site.notes | where: "series", page.series | sort: "date" -%}
+  <div class="p-series">
+    <b>{{ page.series }}</b>
+    <span>Part {% for p in parts %}{% if p.url == page.url %}{{ forloop.index }}{% endif %}{% endfor %} of {{ parts | size }}</span>
+    <s>&middot;</s>
+    {%- for p in parts -%}
+    {%- assign short = p.title | split: " (" | first -%}
+    {%- if p.url == page.url -%}<span class="here">{{ short }}</span>
+    {%- else -%}<a href="{{ p.url }}">{{ short }}</a>{%- endif -%}
+    {%- unless forloop.last %}<s>&rarr;</s>{% endunless -%}
+    {%- endfor -%}
+  </div>
+  {%- endif -%}
 
   <div id="notes-entry-container">
     <content>
       {{ content }}
     </content>
+  </div>
 
+  {%- comment -%}
+    Every essay ends with somewhere to go: related pieces by shared tag,
+    then previous/next by date, then the full index.
+  {%- endcomment -%}
+  <div class="p-foot">
+    {%- if page.tags and page.tags != empty -%}
+    <div class="p-rel">
+      {%- for t in page.tags -%}
+      {%- assign sameTag = site.notes | where_exp: "n", "n.tags contains t" | sort: "date" | reverse -%}
+      {%- assign shown = 0 -%}
+      <div class="p-rel-col">
+        <div class="p-rel-h">More on {{ t }}</div>
+        {%- for n in sameTag -%}
+        {%- if n.url != page.url and shown < 3 -%}
+        {%- assign nrt = n.content | strip_html | number_of_words | divided_by: 220.0 | ceil -%}
+        {%- if nrt < 1 %}{% assign nrt = 1 %}{% endif -%}
+        <a href="{{ n.url }}">
+          <span class="t">{{ n.title }}</span>
+          <span class="m">{{ n.date | date: "%b %Y" }} &middot; {{ nrt }} min</span>
+        </a>
+        {%- assign shown = shown | plus: 1 -%}
+        {%- endif -%}
+        {%- endfor -%}
+        <a class="p-rel-all" href="{{ site.baseurl }}/blog#{{ t }}">All {{ t }} &rarr;</a>
+      </div>
+      {%- endfor -%}
+    </div>
+    {%- endif -%}
 
+    <div class="p-pn">
+      {%- if idx > 0 -%}
+      {%- assign previdx = idx | minus: 1 -%}
+      {%- assign prev = ordered[previdx] -%}
+      <a class="p-prev" href="{{ prev.url }}"><span class="k">&larr; Previous</span>{{ prev.title }}</a>
+      {%- else -%}<span></span>{%- endif -%}
+
+      {%- assign lastidx = ordered | size | minus: 1 -%}
+      {%- if idx < lastidx -%}
+      {%- assign nextidx = idx | plus: 1 -%}
+      {%- assign next = ordered[nextidx] -%}
+      <a class="p-next" href="{{ next.url }}"><span class="k">Next &rarr;</span>{{ next.title }}</a>
+      {%- else -%}<span></span>{%- endif -%}
+    </div>
+
+    <p class="p-all"><a href="{{ site.baseurl }}/blog">All writing &rarr;</a></p>
   </div>
 </article>

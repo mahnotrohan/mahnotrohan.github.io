@@ -1,7 +1,16 @@
 <head>
   <meta charset="UTF-8">
 
+  {%- comment -%}
+    `redirect_to` in front matter turns a page into a redirect stub, so old
+    URLs keep working after content moves. Canonical points at the target.
+  {%- endcomment -%}
+  {%- if page.redirect_to -%}
+  <meta http-equiv="refresh" content="0; url={{ site.baseurl }}{{ page.redirect_to }}">
+  <link rel="canonical" href="{{ site.url }}{{ site.baseurl }}{{ page.redirect_to }}" />
+  {%- else -%}
   <link rel="canonical" href="{{ site.url }}{{ page.url }}" />
+  {%- endif -%}
 
   {%- comment -%}
     Pages with `noindex: true` in their front matter stay unlisted: no crawling,

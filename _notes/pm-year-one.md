@@ -2,6 +2,9 @@
 layout: notes
 title: Learning’s from year one as a PM
 date: 2026-02-12
+tags: [work]
+stage: rough
+description: "Keep the problem space and the solution space separate. Twelve things my first year as a PM taught me."
 ---
 1. Keep the problem space and solution space separate. Do not switch between them.
 2. Experiment a lot, and be comfortable acknowledging what you don’t know.

@@ -2,6 +2,9 @@
 layout: notes
 title: The Ledger
 date: 2026-07-30
+tags: [people]
+stage: working
+description: "A conflict you suppress doesn't go anywhere - it becomes resentment, and resentment stops telling disagreement apart from dismissal."
 ---
 A conflict you suppress stays where you put it. Over time it turns into resentment: the sense that you were treated unfairly, still sitting there.
 

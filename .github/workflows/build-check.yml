@@ -1,0 +1,113 @@
+# Build-only check. Runs on every branch EXCEPT main, and never deploys —
+# so you can verify a change builds before merging it to production.
+name: Build check
+
+on:
+  push:
+    branches-ignore: ["main"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+          cache-version: 0
+
+      - name: Build with Jekyll
+        run: bundle exec jekyll build --trace
+        env:
+          JEKYLL_ENV: production
+
+      - name: Check the pages we expect actually got built
+        run: |
+          set -e
+          missing=0
+          for f in \
+            _site/index.html \
+            _site/blog/index.html \
+            _site/now/index.html \
+            _site/thoughts/index.html \
+            _site/about/index.html \
+            _site/uses-this/index.html \
+            _site/bookshelf/index.html \
+            _site/orrery/index.html \
+            _site/thoughts/on-coffee/index.html \
+            _site/thoughts/on-food/index.html \
+            _site/notes-in-transit/index.html \
+            _site/notes/cooking-and-being/index.html \
+            _site/search.json \
+            _site/feed.xml \
+            _site/styles.css \
+            _site/assets/site.js
+          do
+            if [ ! -f "$f" ]; then echo "MISSING: $f"; missing=1; fi
+          done
+          [ "$missing" = "0" ] || { echo "::error::expected output files are missing"; exit 1; }
+          echo "All expected pages present."
+
+      - name: Check search index is valid JSON and excludes unlisted pages
+        run: |
+          set -e
+          python3 -c "
+          import json, sys
+          d = json.load(open('_site/search.json'))
+          print('search.json entries:', len(d))
+          assert len(d) > 25, 'search index looks too small'
+          leaked = [x['url'] for x in d if 'notes-in-transit' in x['url'] or '/letters/' in x['url']]
+          assert not leaked, 'unlisted pages leaked into search: %s' % leaked
+          untagged = [x['title'] for x in d if x['kind'] == 'writing' and not x['tags']]
+          assert not untagged, 'writing without tags: %s' % untagged
+          print('search index OK, no unlisted pages leaked')
+          "
+
+      - name: Check RSS is well-formed and excludes unlisted pages
+        run: |
+          set -e
+          python3 -c "
+          import xml.etree.ElementTree as ET
+          t = ET.parse('_site/feed.xml')
+          items = t.findall('.//item')
+          print('feed items:', len(items))
+          assert items, 'feed has no items'
+          bad = [i.findtext('link') for i in items if '/letters/' in (i.findtext('link') or '')]
+          assert not bad, 'letters leaked into feed: %s' % bad
+          print('feed.xml OK')
+          "
+
+      - name: Check every note page renders its metadata and exits
+        run: |
+          set -e
+          python3 -c "
+          import glob, sys
+          pages = glob.glob('_site/notes/*/index.html')
+          print('note pages:', len(pages))
+          assert len(pages) >= 28, 'expected ~30 note pages, got %d' % len(pages)
+          fails = []
+          for p in pages:
+              h = open(p, encoding='utf-8').read()
+              for needle in ['min read', 'class=\"dots\"', 'p-foot', 'All writing']:
+                  if needle not in h:
+                      fails.append((p, needle))
+          assert not fails, 'missing furniture: %s' % fails[:8]
+          print('all note pages have metadata and a footer')
+          "
+
+      - name: Check unlisted pages carry noindex
+        run: |
+          set -e
+          grep -q 'noindex' _site/notes-in-transit/index.html || { echo '::error::notes-in-transit missing noindex'; exit 1; }
+          for f in _site/letters/*/index.html; do
+            grep -q 'noindex' "$f" || { echo "::error::$f missing noindex"; exit 1; }
+          done
+          echo "Unlisted pages carry noindex."

@@ -2,6 +2,9 @@
 layout: notes
 title: On putting things in words
 date: 2026-02-21
+tags: [discipline]
+stage: rough
+description: "On writing more publicly, and what the act of wording does to the thought."
 ---
 I’ve been more active online lately, posting more pictures and writing more on Instagram and my personal website. I’ve noticed it myself and I’m aware of how it can look.
 

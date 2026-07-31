@@ -2,6 +2,9 @@
 layout: notes
 title: The Ripples
 date: 2026-07-20
+tags: [time, people]
+stage: working
+description: "We don't see the world as it is; we see it as we are. On rewatching Dead Poets Society a decade later."
 ---
 > We don't see the world as it is, we see it as we are. - Anaïs Nin
 

@@ -2,6 +2,9 @@
 layout: notes
 title: Waves and Loops
 date: 2026-05-23
+tags: [people, thinking]
+stage: working
+description: "Grief and rumination look identical from the outside. They are not the same thing."
 ---
 Grief and negative rumination can look very similar from the outside. To a spectator, they can appear identical. Both involve sustained, painful attention to something difficult. Both can pull a person inward, make them quieter, sadder, harder to reach.
 
