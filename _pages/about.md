@@ -14,20 +14,20 @@ Outside of work, I cook a lot, brew coffee, read memoirs, and run — I've been 
 
 This website is my place to think, somewhere between a journal and a conversation, where ideas don't have to be finished to be worth writing down.
 
-<div class="secth">Elsewhere</div>
+<div class="secth">Around here</div>
 
 <div class="tastes">
   <div>
+    <h3><a href="{{ site.baseurl }}/blog">Writing</a></h3>
+    <p>On suppressed conflict turning into resentment, why memory matters more than what happened, and why nobody is happy in the ride hailing business.</p>
+  </div>
+  <div>
     <h3><a href="{{ site.baseurl }}/now">Now</a></h3>
-    <p>What I'm up to at the moment, and the questions I keep circling.</p>
+    <p>A dripper a month, year six of running, and the questions I keep failing to settle — control, authenticity, whether meaning-seeking is a trap.</p>
   </div>
   <div>
     <h3><a href="{{ site.baseurl }}/uses-this">Uses this</a></h3>
-    <p>The hardware, software and brewing gear I actually use.</p>
-  </div>
-  <div>
-    <h3><a href="{{ site.baseurl }}/blog">Writing</a></h3>
-    <p>{{ site.notes | size }} essays and notes, mostly two-minute reads.</p>
+    <p>Five ways to brew coffee and four pieces of software. Draw your own conclusions.</p>
   </div>
 </div>
 
