@@ -23,7 +23,7 @@ permalink: /
 {%- endfor -%}
 </div>
 
-<p class="p-all"><a href="{{ site.baseurl }}/blog">All {{ recent | size }} pieces →</a></p>
+<p class="p-all"><a href="{{ site.baseurl }}/blog">Read more →</a></p>
 
 <div class="secth">Made</div>
 
