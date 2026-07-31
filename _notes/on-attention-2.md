@@ -3,7 +3,7 @@ layout: notes
 title: On Attention (2/3)
 date: 2026-05-18
 tags: [attention, time]
-stage: settled
+stage: served
 description: "Time isn't the scarce thing. Attention is - and it gets rationed whether you choose to or not."
 series: Time & Attention
 ---

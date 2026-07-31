@@ -4,8 +4,8 @@ layout: default
 
 {%- assign rt = content | strip_html | number_of_words | divided_by: 220.0 | ceil -%}
 {%- if rt < 1 %}{% assign rt = 1 %}{% endif -%}
-{%- if page.stage == "settled" %}{% assign dots = 3 %}
-{%- elsif page.stage == "working" %}{% assign dots = 2 %}
+{%- if page.stage == "served" %}{% assign dots = 3 %}
+{%- elsif page.stage == "cooked" %}{% assign dots = 2 %}
 {%- else %}{% assign dots = 1 %}{% endif -%}
 
 {%- comment -%} Position in the collection, for previous/next. {%- endcomment -%}

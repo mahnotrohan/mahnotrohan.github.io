@@ -4,7 +4,7 @@ title: Where Leverage Lives
 date: 2026-02-22
 permalink: /constraints-leverage/
 tags: [systems, business]
-stage: working
+stage: cooked
 description: "Every value-creating system has roughly the same shape. The leverage is never where you'd guess."
 ---
 ![]({{site.baseurl}}/assets/leverage.png)

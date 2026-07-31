@@ -3,7 +3,7 @@ layout: notes
 title: On Listening to Cravings
 date: 2026-03-29
 tags: [discipline, food]
-stage: rough
+stage: raw
 description: "My flatmates and I are all careful about food. What a craving is actually telling you."
 ---
 I live with friends. We’re all fairly aware of our diets, and conscious about staying active.

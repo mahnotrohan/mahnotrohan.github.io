@@ -3,7 +3,7 @@ layout: notes
 title: Why is no one happy in the ride hailing business?
 date: 2026-05-05
 tags: [business, work]
-stage: settled
+stage: served
 description: "Every participant in the model is structurally dissatisfied. A look at why that is."
 ---
 Ride hailing has evolved from a premium, logistics-heavy service — with a few high-asset agencies or individuals — to a very democratised model in India. In an abstract sense, anyone with a vehicle that can carry at least one passenger is eligible to be onboarded to a ride hailing marketplace. This includes everything from e-rickshaws, two-wheelers, autos, cars, shuttle services, and boats too.

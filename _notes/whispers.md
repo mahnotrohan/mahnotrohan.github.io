@@ -3,7 +3,7 @@ layout: notes
 title: Whispers
 date: 2026-04-29
 tags: [people]
-stage: working
+stage: cooked
 description: "We've all been guilty of a little tittle-tattle. What gossip is actually doing."
 ---
 We have all been guilty of a little tittle-tattle every now and then. It's fun. Someone I know describes it as a way of connection and information exchange. Shared ground always makes it easy for us to connect, but information exchange is a funny way to put it; since when did gossip become a currency in our social systems? And even if it did, there has to be an outcome of trading these stories, right? Does it help you make better decisions, does it build credibility, do you form more connections? Or is it just a facade? Fundamentally, it is a talk about an absent person. But it is not mere information transfer; it has an interpretive layer to it. Talking about someone's experience, in their absence, leaves the narrative to the discernment of the speaker. The narrative is then the pseudo-power that the speaker holds. I say pseudo because it does several things at once while not really having the power. Connection, synergy, enforcing a norm, or just fun.

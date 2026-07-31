@@ -3,7 +3,7 @@ layout: notes
 title: Thoughts On Forever
 date: 2025-02-19
 tags: [time]
-stage: rough
+stage: raw
 description: "Not in a dramatic way. Just noticing how little of anything is actually permanent."
 ---
 

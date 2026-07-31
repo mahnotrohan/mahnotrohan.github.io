@@ -3,7 +3,7 @@ layout: notes
 title: Rationing Attention (3/3)
 date: 2026-06-12
 tags: [attention, time]
-stage: settled
+stage: served
 description: "Everyone gets the same 24 hours, but not the same attention. What is actually consuming yours, and do you even know?"
 series: Time & Attention
 ---

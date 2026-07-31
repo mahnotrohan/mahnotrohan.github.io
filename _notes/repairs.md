@@ -3,7 +3,7 @@ layout: notes
 title: Repairs
 date: 2026-05-11
 tags: [people, time]
-stage: settled
+stage: served
 description: "We are slaves not to what happened, but to how we remember it."
 ---
 Its good to accept that we are slaves to our memories, to how we remember things, not to what actually occurred. I say these distinctly because we assume they're the same, and they aren't. The reality we live in is not as clear or objective as we think it is.

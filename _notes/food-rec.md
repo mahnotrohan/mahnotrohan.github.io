@@ -3,7 +3,7 @@ layout: notes
 title: Predicament With Restaurant Recommendation
 date: 2025-02-26
 tags: [food, systems]
-stage: rough
+stage: raw
 description: "Everyone loves a good meal. Nobody has solved telling you which one."
 ---
 

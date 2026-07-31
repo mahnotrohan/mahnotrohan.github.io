@@ -3,7 +3,7 @@ layout: notes
 title: Seize the day (1/3)
 date: 2026-05-11
 tags: [time, attention]
-stage: settled
+stage: served
 description: "Is life a long game or a short one? Most of us toggle between the two, and pay for the toggling."
 series: Time & Attention
 ---

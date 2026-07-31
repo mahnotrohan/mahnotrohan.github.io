@@ -3,7 +3,7 @@ layout: notes
 title: Learning & Intuition
 date: 2026-07-29
 tags: [learning, thinking]
-stage: working
+stage: cooked
 description: "Nobody teaches a toddler to run. Some things you can only be told, and knowing which is which changes how you learn."
 ---
 No one teaches a toddler to run. She watches, tries, falls, and tries again. Falling tells her when she gets it wrong. After enough tries, running just happens. Reading is different. Someone has to sit with her and say: this is right, this is wrong.

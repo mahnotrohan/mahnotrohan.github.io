@@ -5,8 +5,8 @@
 {%- assign n = include.note -%}
 {%- assign rt = n.content | strip_html | number_of_words | divided_by: 220.0 | ceil -%}
 {%- if rt < 1 %}{% assign rt = 1 %}{% endif -%}
-{%- if n.stage == "settled" %}{% assign dots = 3 %}
-{%- elsif n.stage == "working" %}{% assign dots = 2 %}
+{%- if n.stage == "served" %}{% assign dots = 3 %}
+{%- elsif n.stage == "cooked" %}{% assign dots = 2 %}
 {%- else %}{% assign dots = 1 %}{% endif -%}
 <div class="w-row" data-tags="{{ n.tags | join: ' ' }}">
   <span class="w-date">{{ n.date | date: "%b %Y" }}</span>

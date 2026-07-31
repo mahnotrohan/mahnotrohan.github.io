@@ -3,7 +3,7 @@ layout: notes
 title: Talking to Users
 date: 2026-06-11
 tags: [work]
-stage: rough
+stage: raw
 description: "Data tells you what is happening and by how much. Only users tell you what isn't happening, and why."
 ---
 - **Why is it important? & When is data no sufficient?**
