@@ -36,8 +36,8 @@ html[data-theme="light"] { color-scheme: light; }
 body {
   background-color: var(--bg) !important;
   color: var(--fg);
-  max-width: 1180px;
-  padding: 0 2rem;
+  max-width: 1520px;
+  padding: 0 1.75rem;
 
   &.no-scroll { overflow: hidden; }
 }
@@ -52,9 +52,9 @@ footer { color: var(--fg-faint); }
 // ── grid ──────────────────────────────────────────────────────
 .shell {
   display: grid;
-  grid-template-columns: 232px minmax(0, 1fr);
-  gap: 3.5rem;
-  padding-top: 2.75rem;
+  grid-template-columns: 224px minmax(0, 1fr);
+  gap: 2.75rem;
+  padding-top: 2rem;
 }
 
 .col { min-width: 0; }
@@ -67,7 +67,7 @@ main { min-width: 0; }
 // ── sidebar ───────────────────────────────────────────────────
 .sb-wrap {
   position: sticky;
-  top: 2.75rem;
+  top: 2rem;
   align-self: start;
   font-size: 0.9rem;
   line-height: 1.6;
@@ -219,9 +219,10 @@ main { min-width: 0; }
 }
 
 // ── shared page furniture ─────────────────────────────────────
-// 78ch lands the right edge on the same pixel as the row text below it
-// (row text starts after the 5.5rem date column and fills the rest).
-.lede { color: var(--fg-dim); max-width: 78ch; }
+// Right edge lands on the same pixel as the row text below, at any shell width:
+// the rows indent their text by the date column (5.5rem) plus the grid gap
+// (1.25rem), so the intro gets that same offset added to the shared measure.
+.lede { color: var(--fg-dim); max-width: calc(70ch + 6.75rem); }
 
 .secth {
   font-size: 0.62rem;
@@ -232,7 +233,7 @@ main { min-width: 0; }
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  margin: 2.6rem 0 1.1rem;
+  margin: 2rem 0 0.9rem;
 
   &::after { content: ""; flex: 1; height: 1px; background: var(--rule); }
 }
@@ -308,7 +309,7 @@ main { min-width: 0; }
   grid-template-columns: 5.5rem minmax(0, 1fr) auto;
   gap: 1.25rem;
   align-items: baseline;
-  padding: 0.9rem 0;
+  padding: 0.75rem 0;
   border-bottom: 1px solid var(--rule);
 
   &[hidden] { display: none; }
@@ -328,9 +329,8 @@ main { min-width: 0; }
   &:hover { color: var(--accent); }
 }
 
-// No cap: the grid column already sets the measure, and capping it here left
-// a ragged right edge that didn't line up with the intro above.
-.w-hook { display: block; color: var(--fg-dim); font-size: 0.88rem; line-height: 1.55; margin-top: 0.15rem; }
+// 70ch is the shared measure; .lede above mirrors it plus the date-column offset.
+.w-hook { display: block; color: var(--fg-dim); font-size: 0.88rem; line-height: 1.55; margin-top: 0.15rem; max-width: 70ch; }
 .w-tags { display: flex; gap: 0.3rem; flex-wrap: wrap; margin-top: 0.4rem; }
 
 .w-meta {
