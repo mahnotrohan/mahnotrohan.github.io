@@ -10,9 +10,11 @@ if(!t)t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'
 document.documentElement.setAttribute('data-theme',t);}
 catch(e){document.documentElement.setAttribute('data-theme','light');}})();
 </script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
 <title>Interpersonal & Communication Skills — Orrery</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 :root{
   /* site parity: --ground/--surface-* mirror the main site's --bg/--bg-2/--chip */
   --ground:#fbf8f3; --surface-sunk:#f2ede4; --surface-raised:#fdfcf9;
@@ -283,6 +285,23 @@ html[data-theme="dark"] #astsvg line{stroke-opacity:.55}
 
 <script>
 'use strict';
+
+let INKC, GRAY, FAINT, AMBER, SUNK, BRD;
+let RGB_INK, RGB_GRAY, RGB_FAINT, RGB_AMBER;
+/* Canvas takes no var(), so pull the resolved values and refresh on theme flip.
+   Animated sims pick these up on their next frame; the open one is remounted. */
+function syncSimColours(){
+  const cs = getComputedStyle(document.documentElement);
+  const v = n => cs.getPropertyValue(n).trim();
+  const trip = h => { h = h.replace('#','').trim();
+    if (h.length === 3) h = h.split('').map(c=>c+c).join('');
+    return [0,2,4].map(i=>parseInt(h.slice(i,i+2),16)).join(','); };
+  INKC=v('--sim-ink'); GRAY=v('--sim-gray'); FAINT=v('--sim-faint');
+  AMBER=v('--sim-amber'); SUNK=v('--sim-sunk'); BRD=v('--sim-brd');
+  RGB_INK=trip(INKC); RGB_GRAY=trip(GRAY); RGB_FAINT=trip(FAINT); RGB_AMBER=trip(AMBER);
+}
+syncSimColours();
+
 /* ============================================================
    CONTENT v2 — every idea: hook → story → (sim) → mechanism
    fold → the idea named → where it bites → you can now explain.
@@ -1016,21 +1035,7 @@ document.getElementById('navNext').onclick = ()=>navStep(1);
 /* ============================================================
    SIMULATIONS
    ============================================================ */
-let INKC, GRAY, FAINT, AMBER, SUNK, BRD;
-let RGB_INK, RGB_GRAY, RGB_FAINT, RGB_AMBER;
-/* Canvas takes no var(), so pull the resolved values and refresh on theme flip.
-   Animated sims pick these up on their next frame; the open one is remounted. */
-function syncSimColours(){
-  const cs = getComputedStyle(document.documentElement);
-  const v = n => cs.getPropertyValue(n).trim();
-  const trip = h => { h = h.replace('#','').trim();
-    if (h.length === 3) h = h.split('').map(c=>c+c).join('');
-    return [0,2,4].map(i=>parseInt(h.slice(i,i+2),16)).join(','); };
-  INKC=v('--sim-ink'); GRAY=v('--sim-gray'); FAINT=v('--sim-faint');
-  AMBER=v('--sim-amber'); SUNK=v('--sim-sunk'); BRD=v('--sim-brd');
-  RGB_INK=trip(INKC); RGB_GRAY=trip(GRAY); RGB_FAINT=trip(FAINT); RGB_AMBER=trip(AMBER);
-}
-syncSimColours();
+
 function mulberry32(a){ return function(){ a|=0; a=a+0x6D2B79F5|0;
   let t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t;
   return ((t^t>>>14)>>>0)/4294967296; }; }
