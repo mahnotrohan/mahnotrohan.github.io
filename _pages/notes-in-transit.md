@@ -2,6 +2,8 @@
 layout: page
 title: Notes In Transit
 permalink: /notes-in-transit
+noindex: true
+sitemap: false
 ---
 
 # Notes In Transit

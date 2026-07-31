@@ -1,7 +1,7 @@
 title:               Rohan Mahnot
 include:             ['_pages', '_notes','_letters']
 
-url:                 "https://mahnotrohan.github.io"
+url:                 "https://rohanmahnot.space"
 baseurl:             ''
 
 use_html_extension:  false
@@ -33,4 +33,12 @@ defaults:
   - scope:
       path: "_notes/*.md"
     values:
-      layout: "notes" 
+      layout: "notes"
+  # Notes In Transit and the letters behind it stay unlisted: reachable by
+  # direct URL only, never crawled, indexed, or included in search/RSS.
+  - scope:
+      path: "_letters/*"
+    values:
+      noindex: true
+      sitemap: false
+

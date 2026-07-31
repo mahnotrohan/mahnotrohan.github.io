@@ -3,6 +3,12 @@
 
   <link rel="canonical" href="{{ site.url }}{{ page.url }}" />
 
+  {%- comment -%}
+    Pages with `noindex: true` in their front matter stay unlisted: no crawling,
+    no indexing, and excluded from search/RSS when those are added.
+  {%- endcomment -%}
+  {% if page.noindex %}<meta name="robots" content="noindex, nofollow">{% endif %}
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <meta name="description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.title }}{% endif %}">

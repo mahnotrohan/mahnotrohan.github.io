@@ -16,15 +16,15 @@ This is my digital garden: a place where I write about the things I notice, the 
 ---
 #### Finding your way around
 
-**[Writing](rohanmahnot.space/blog)** — Longer essays. I write about food, attention, discipline, work, and whatever else I'm thinking about.
+**[Writing]({{ site.baseurl }}/blog)** — Longer essays. I write about food, attention, discipline, work, and whatever else I'm thinking about.
 
-**[Bookshelf](rohanmahnot.space/bookshelf)** — What I've been reading, with occasional notes on what stayed with me.
+**[Bookshelf]({{ site.baseurl }}/bookshelf)** — What I've been reading, with occasional notes on what stayed with me.
 
-**[Thoughts](rohanmahnot.space/thoughts)** — Shorter, looser notes — things I'm curious about, ideas I keep returning to, interesting things I've stumbled on.
+**[Thoughts]({{ site.baseurl }}/thoughts)** — Shorter, looser notes — things I'm curious about, ideas I keep returning to, interesting things I've stumbled on.
 
 ---
 #### Say hello
 
 I'd love to hear from you — about something I wrote, a book you think I'd enjoy, or just to say hi.
 
-[Guestbook](https://www.yourworldoftext.com/~rohanmahnot/) | [X](https://x.com/mahnotrohan)
+[Email](mailto:mahnot.who@gmail.com) | [X](https://x.com/mahnotrohan) | [LinkedIn](https://www.linkedin.com/in/rohan-mahnot-569412182/) | [Guestbook](https://www.yourworldoftext.com/~rohanmahnot/)
