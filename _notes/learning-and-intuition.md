@@ -5,11 +5,11 @@ date: 2026-07-29
 ---
 No one teaches a toddler to run. She watches, tries, falls, and tries again. Falling tells her when she gets it wrong. After enough tries, running just happens. Reading is different. Someone has to sit with her and say: this is right, this is wrong.
 
-That's the difference between things you can learn on your own and things you can't. When the world corrects you instantly, thousands of times, you build intuition without noticing. That's why almost no one has a running coach.
+That's the difference between things you can learn on your own and things you can't. When the world corrects you instantly, thousands of times, you build intuition without noticing. That's why very few people have a running coach.
 
 I make coffee every morning. Some days it's great and I feel proud. Some days I'm drinking straw water.
 
-Each cup involves a dozen small choices: how fine to grind, how much coffee, how hot the water, how fast to pour. When the cup is bad, I know in one sip. And yet it took me months to get better. A bad cup only tells you something went wrong. It stays silent about what.
+Each cup involves a dozen small choices: how fine to grind, how much coffee, how hot the water, how fast to pour. When the cup is bad, I know in one sip. And yet it took me months to get better. A bad cup only tells you if something if off. Identifying, what led to this, has a steep learning curve. 
 
 So feedback fails in two ways. Sometimes it comes too late. Sometimes it comes fast but hard to know where its pointing at.
 
