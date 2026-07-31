@@ -14,44 +14,41 @@ catch(e){document.documentElement.setAttribute('data-theme','light');}})();
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 :root{
-  --ground:#f2ecdf; --surface-sunk:#ece4d2; --surface-raised:#faf6ec;
-  --border:#ddd2bc; --border-strong:#c9bda1;
-  --ink:#26221d; --ink-strong:#14110e; --ink-muted:#5b5343; --ink-faint:#83765b;
-  --accent:#96702f; --accent-dim:#b08d4f; --accent-wash:rgba(150,112,47,0.08);
+  /* site parity: --ground/--surface-* mirror the main site's --bg/--bg-2/--chip */
+  --ground:#fbf8f3; --surface-sunk:#f2ede4; --surface-raised:#fdfcf9;
+  --border:#e3dccf; --border-strong:#d2c8b5;
+  --ink:#211f1c; --ink-strong:#14120f; --ink-muted:#5c5751; --ink-faint:#8c867f;
+  --accent:#8f6220; --accent-dim:#c2a47c; --accent-wash:rgba(143,98,32,0.08);
   --font:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
   --r:4px; --reader-w:min(760px, 58vw); --move-fast:150ms ease;
-  /* body copy inks that were previously hardcoded */
-  --ink-body:#2b2620; --ink-soft:#332e25;
-  /* surfaces that can't be expressed with the inks above */
-  --hdr-fade:linear-gradient(180deg, rgba(242,236,223,.96), rgba(242,236,223,.75), transparent);
-  --vp-bg:radial-gradient(ellipse at 50% 40%, #f6f1e4 0%, #f2ecdf 55%, #e9e0cb 100%);
-  --btn-bg:rgba(250,246,236,.92);
-  /* connection lines */
-  --line-soft:rgba(61,56,51,0.08); --line-flow:rgba(150,112,47,0.45);
-  /* canvas simulations read these at mount; canvas can't use var() directly */
-  --sim-ink:#3d3833; --sim-gray:#8a8069; --sim-faint:#b0a68c;
-  --sim-amber:#96702f; --sim-sunk:#ece4d2; --sim-brd:#d5c9ae;
-  /* paper grain + panel shadow */
-  --grid-1:rgba(110,95,65,.14); --grid-2:rgba(110,95,65,.08);
-  --shadow:rgba(90,75,50,.18);
+  --ink-body:#2b2823; --ink-soft:#332f29;
+  --hdr-fade:linear-gradient(180deg, rgba(251,248,243,.96), rgba(251,248,243,.75), transparent);
+  --vp-bg:radial-gradient(ellipse at 50% 40%, #fdfbf7 0%, #fbf8f3 55%, #f2ede4 100%);
+  --btn-bg:rgba(253,252,249,.92);
+  --line-soft:rgba(33,31,28,0.10); --line-flow:rgba(143,98,32,0.45);
+  --sim-ink:#3a352e; --sim-gray:#8c867f; --sim-faint:#b3ac9f;
+  --sim-amber:#8f6220; --sim-sunk:#f2ede4; --sim-brd:#ddd4c3;
+  --grid-1:rgba(110,95,65,.13); --grid-2:rgba(110,95,65,.07);
+  --shadow:rgba(90,75,50,.16);
 }
 
 /* Night sky. Not an inversion of the parchment - a designed second palette,
    sharing the accent with the main site's dark theme. */
 html[data-theme="dark"]{
-  --ground:#15181d; --surface-sunk:#1a1e24; --surface-raised:#1c2128;
-  --border:#2b3138; --border-strong:#3c444e;
-  --ink:#e0d9ca; --ink-strong:#f3ede1; --ink-muted:#a49c8c; --ink-faint:#7e7669;
+  /* site parity: exactly the main site's dark surfaces */
+  --ground:#1a1a1a; --surface-sunk:#232322; --surface-raised:#262523;
+  --border:#2e2e2e; --border-strong:#3e3e3b;
+  --ink:#e8e6e3; --ink-strong:#f5f3f0; --ink-muted:#a5a09a; --ink-faint:#7d7873;
   --accent:#d9a25e; --accent-dim:#8b6c41; --accent-wash:rgba(217,162,94,0.10);
-  --ink-body:#d8d1c2; --ink-soft:#cec6b6;
-  --hdr-fade:linear-gradient(180deg, rgba(21,24,29,.96), rgba(21,24,29,.75), transparent);
-  --vp-bg:radial-gradient(ellipse at 50% 40%, #1b1f26 0%, #15181d 55%, #101216 100%);
-  --btn-bg:rgba(28,33,40,.92);
-  --line-soft:rgba(224,217,202,0.10); --line-flow:rgba(217,162,94,0.45);
-  --sim-ink:#e0d9ca; --sim-gray:#9c9484; --sim-faint:#6c6558;
-  --sim-amber:#d9a25e; --sim-sunk:#1a1e24; --sim-brd:#343c45;
-  --grid-1:rgba(198,186,160,.10); --grid-2:rgba(198,186,160,.05);
-  --shadow:rgba(0,0,0,.45);
+  --ink-body:#dddad5; --ink-soft:#d3cfc9;
+  --hdr-fade:linear-gradient(180deg, rgba(26,26,26,.96), rgba(26,26,26,.75), transparent);
+  --vp-bg:radial-gradient(ellipse at 50% 40%, #202020 0%, #1a1a1a 55%, #141414 100%);
+  --btn-bg:rgba(38,37,35,.92);
+  --line-soft:rgba(232,230,227,0.10); --line-flow:rgba(217,162,94,0.45);
+  --sim-ink:#e8e6e3; --sim-gray:#9d988f; --sim-faint:#6b6660;
+  --sim-amber:#d9a25e; --sim-sunk:#232322; --sim-brd:#393936;
+  --grid-1:rgba(210,203,190,.09); --grid-2:rgba(210,203,190,.045);
+  --shadow:rgba(0,0,0,.5);
 }
 html{color-scheme:light}
 html[data-theme="dark"]{color-scheme:dark}
