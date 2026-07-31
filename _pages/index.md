@@ -10,7 +10,9 @@ permalink: /
 
 # Rohan's space
 
-<p class="lede">Hi, I'm Rohan — a Product Manager at Meesho, in Bangalore. I write short essays about attention, time, the people around me, and how I try to do things well. Most take two minutes. <a href="{{ site.baseurl }}/about">More about me →</a></p>
+<p class="lede">Hi I'm Rohan! This website is my place to think, somewhere between a journal and a conversation, where ideas don't have to be finished to be worth writing down.</p>
+
+<p class="lede">This is my digital garden: a place where I write about the things I notice, the questions I sit with, and the slow process of making sense of things as they take shape. <a href="{{ site.baseurl }}/about">More about me →</a></p>
 
 <div class="secth">Start here</div>
 
