@@ -21,15 +21,7 @@ permalink: /
 {%- endfor -%}
 </div>
 
-<div class="secth">Recently</div>
-
-<div class="w-list">
-{%- for note in recent limit: 5 -%}
-{% include post-row.html note=note %}
-{%- endfor -%}
-</div>
-
-<p class="p-all"><a href="{{ site.baseurl }}/blog">See all {{ recent | size }} →</a></p>
+<p class="p-all"><a href="{{ site.baseurl }}/blog">All {{ recent | size }} pieces →</a></p>
 
 <div class="secth">Made</div>
 
