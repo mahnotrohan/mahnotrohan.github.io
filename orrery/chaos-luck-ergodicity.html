@@ -19,6 +19,7 @@ catch(e){document.documentElement.setAttribute('data-theme','light');}})();
   --border:#e3dccf; --border-strong:#d2c8b5;
   --ink:#211f1c; --ink-strong:#14120f; --ink-muted:#5c5751; --ink-faint:#8c867f;
   --accent:#8f6220; --accent-dim:#c2a47c; --accent-wash:rgba(143,98,32,0.08);
+  --accent-rgb:143,98,32;
   --font:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
   --r:4px; --reader-w:min(760px, 58vw); --move-fast:150ms ease;
   --ink-body:#2b2823; --ink-soft:#332f29;
@@ -32,14 +33,13 @@ catch(e){document.documentElement.setAttribute('data-theme','light');}})();
   --shadow:rgba(90,75,50,.16);
 }
 
-/* Night sky. Not an inversion of the parchment - a designed second palette,
-   sharing the accent with the main site's dark theme. */
+/* Night sky, sharing the main site's dark surfaces exactly. */
 html[data-theme="dark"]{
-  /* site parity: exactly the main site's dark surfaces */
   --ground:#1a1a1a; --surface-sunk:#232322; --surface-raised:#262523;
   --border:#2e2e2e; --border-strong:#3e3e3b;
   --ink:#e8e6e3; --ink-strong:#f5f3f0; --ink-muted:#a5a09a; --ink-faint:#7d7873;
   --accent:#d9a25e; --accent-dim:#8b6c41; --accent-wash:rgba(217,162,94,0.10);
+  --accent-rgb:217,162,94;
   --ink-body:#dddad5; --ink-soft:#d3cfc9;
   --hdr-fade:linear-gradient(180deg, rgba(26,26,26,.96), rgba(26,26,26,.75), transparent);
   --vp-bg:radial-gradient(ellipse at 50% 40%, #202020 0%, #1a1a1a 55%, #141414 100%);
@@ -789,7 +789,7 @@ world.appendChild(astsvg);
   }
   const p = document.createElementNS('http://www.w3.org/2000/svg','path');
   p.setAttribute('d',d); p.setAttribute('fill','none');
-  p.setAttribute('class','lnk-base'); p.setAttribute('stroke','rgba(61,56,51,0.08)'); p.setAttribute('stroke-width','4');
+  p.setAttribute('class','lnk-base'); p.setAttribute('stroke',`rgba(${RGB_INK},0.08)`); p.setAttribute('stroke-width','4');
   p.setAttribute('stroke-dasharray','2,14');
   flowsvg.appendChild(p);
 }
@@ -928,7 +928,7 @@ function highlight(id){
     const p = document.createElementNS('http://www.w3.org/2000/svg','path');
     p.setAttribute('d',`M ${from.x} ${from.y} Q ${cx} ${cy} ${to.x} ${to.y}`);
     p.setAttribute('fill','none');
-    p.setAttribute('class','lnk-flow'); p.setAttribute('stroke','rgba(150,112,47,0.45)');
+    p.setAttribute('class','lnk-flow'); p.setAttribute('stroke',`rgba(${RGB_AMBER},0.45)`);
     p.setAttribute('stroke-width','2.5');
     p.setAttribute('stroke-dasharray','9,8');
     p.setAttribute('class','tline');
@@ -972,13 +972,18 @@ document.getElementById('navNext').onclick = ()=>navStep(1);
    SIMULATIONS
    ============================================================ */
 let INKC, GRAY, FAINT, AMBER, SUNK, BRD;
+let RGB_INK, RGB_GRAY, RGB_FAINT, RGB_AMBER;
 /* Canvas takes no var(), so pull the resolved values and refresh on theme flip.
    Animated sims pick these up on their next frame; static ones are remounted. */
 function syncSimColours(){
   const cs = getComputedStyle(document.documentElement);
   const v = n => cs.getPropertyValue(n).trim();
+  const trip = h => { h = h.replace('#','').trim();
+    if (h.length === 3) h = h.split('').map(c=>c+c).join('');
+    return [0,2,4].map(i=>parseInt(h.slice(i,i+2),16)).join(','); };
   INKC=v('--sim-ink'); GRAY=v('--sim-gray'); FAINT=v('--sim-faint');
   AMBER=v('--sim-amber'); SUNK=v('--sim-sunk'); BRD=v('--sim-brd');
+  RGB_INK=trip(INKC); RGB_GRAY=trip(GRAY); RGB_FAINT=trip(FAINT); RGB_AMBER=trip(AMBER);
 }
 syncSimColours();
 function mulberry32(a){ return function(){ a|=0; a=a+0x6D2B79F5|0;
@@ -1064,7 +1069,7 @@ SIMS.logistic = fig=>{
   const off=document.createElement('canvas');off.width=W;off.height=BH;
   const octx=off.getContext('2d');
   octx.fillStyle=SUNK;octx.fillRect(0,0,W,BH);
-  octx.fillStyle='rgba(61,56,51,0.15)';
+  octx.fillStyle=`rgba(${RGB_INK},0.15)`;
   for(let px=0;px<W;px++){
     const r=2.5+px/W*1.5;let x=0.4;
     for(let i=0;i<300;i++)x=r*x*(1-x);
@@ -1187,7 +1192,7 @@ SIMS.coinflip = fig=>{
       ctx.beginPath();ctx.moveTo(24,y(1));ctx.lineTo(W-14,y(1));ctx.stroke();ctx.setLineDash([]);
       ctx.fillStyle=FAINT;ctx.font='12px Inter, sans-serif';ctx.fillText('start = 1×',W-84,y(1)-6);
       data.paths.forEach(p=>{
-        ctx.strokeStyle='rgba(138,128,105,0.4)';ctx.lineWidth=1;ctx.beginPath();
+        ctx.strokeStyle=`rgba(${RGB_GRAY},0.4)`;ctx.lineWidth=1;ctx.beginPath();
         for(let t=0;t<=round;t++){const X=24+t/100*(W-46),Y=Math.min(H-56,y(p[t]));
           t?ctx.lineTo(X,Y):ctx.moveTo(X,Y);}
         ctx.stroke();});
@@ -1235,7 +1240,7 @@ SIMS.timeline = fig=>{
       S.forEach(p=>{ctx.beginPath();
         for(let t=0;t<=NT;t++){const X=t/NT*W,Y=y(p[t]);t?ctx.lineTo(X,Y):ctx.moveTo(X,Y);}
         ctx.stroke();});};
-    set(base,'rgba(138,128,105,0.1)');set(pert,'rgba(150,112,47,0.12)');
+    set(base,`rgba(${RGB_GRAY},0.1)`);set(pert,`rgba(${RGB_AMBER},0.12)`);
     const mean=S=>{const m=[];for(let t=0;t<=NT;t++){let s=0;S.forEach(p=>s+=p[t]);m.push(s/S.length);}return m;};
     const line=(m,col)=>{ctx.strokeStyle=col;ctx.lineWidth=3;ctx.beginPath();
       for(let t=0;t<=NT;t++){const X=t/NT*W,Y=y(m[t]);t?ctx.lineTo(X,Y):ctx.moveTo(X,Y);}
