@@ -219,7 +219,9 @@ main { min-width: 0; }
 }
 
 // ── shared page furniture ─────────────────────────────────────
-.lede { color: var(--fg-dim); max-width: 60ch; }
+// 78ch lands the right edge on the same pixel as the row text below it
+// (row text starts after the 5.5rem date column and fills the rest).
+.lede { color: var(--fg-dim); max-width: 78ch; }
 
 .secth {
   font-size: 0.62rem;
@@ -326,7 +328,9 @@ main { min-width: 0; }
   &:hover { color: var(--accent); }
 }
 
-.w-hook { display: block; color: var(--fg-dim); font-size: 0.88rem; line-height: 1.55; margin-top: 0.15rem; max-width: 62ch; }
+// No cap: the grid column already sets the measure, and capping it here left
+// a ragged right edge that didn't line up with the intro above.
+.w-hook { display: block; color: var(--fg-dim); font-size: 0.88rem; line-height: 1.55; margin-top: 0.15rem; }
 .w-tags { display: flex; gap: 0.3rem; flex-wrap: wrap; margin-top: 0.4rem; }
 
 .w-meta {
