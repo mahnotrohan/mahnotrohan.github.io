@@ -13,7 +13,7 @@ catch(e){document.documentElement.setAttribute('data-theme','light');}})();
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
-<title>First Principles Thinking — Orrery</title>
+<title>First Principles Thinking - Orrery</title>
 <style>
 :root{
   /* site parity: --ground/--surface-* mirror the main site's --bg/--bg-2/--chip */
@@ -61,7 +61,7 @@ h1,h2,h3{color:var(--ink-strong); font-weight:600; line-height:1.3;}
 .kicker{font-size:11px; letter-spacing:.14em; text-transform:uppercase;
   color:var(--ink-muted); font-weight:500;}
 
-/* header — all navigation lives top right */
+/* header - all navigation lives top right */
 #hdr{position:fixed; top:0; left:0; right:0; z-index:40; height:56px;
   display:flex; align-items:center; gap:1.1rem; padding:0 1.4rem;
   background:var(--hdr-fade);
@@ -131,7 +131,7 @@ body.reader-open #hdr{right:var(--reader-w);}
 .mk.neighbor .lbl{color:var(--ink-strong);}
 .mk.dimmed{opacity:.35;}
 
-/* connection overlay — few, directional, labeled plainly */
+/* connection overlay - few, directional, labeled plainly */
 #tsvg, #astsvg, #flowsvg{position:absolute; top:0; left:0; pointer-events:none; overflow:visible;}
 @keyframes dashdrift{to{stroke-dashoffset:-64;}}
 .tline{animation:dashdrift 6s linear infinite;}
@@ -303,27 +303,27 @@ function syncSimColours(){
 syncSimColours();
 
 /* ============================================================
-   CONTENT v2 — every idea: hook → story → (sim) → mechanism
+   CONTENT v2 - every idea: hook → story → (sim) → mechanism
    fold → the idea named → where it bites → you can now explain.
    Connections: ≤4 per idea, in three plain buckets.
    ============================================================ */
 const N = {
 
 a1:{type:"axiom", title:"Most thinking is borrowed", x:1259, y:512,
-  ess:"You almost never reason from scratch — you pattern-match to something seen before.",
-  hook:"Think of the last problem you solved. Did you actually reason it out — or recognize it and reach for a known answer?",
-  story:"When you think about how to solve a problem, you're almost never reasoning from scratch. You're pattern-matching to something you've seen before — a solution someone else used, a convention that exists, an assumption you absorbed without questioning.",
-  mech:"The default runs in three beats: see a problem, recall a solution, apply it. It works because most problems do resemble old ones. The cost is subtle: the answers were concluded by someone else, somewhere else, and you inherit them conclusions-first — reasoning not included.",
+  ess:"You almost never reason from scratch - you pattern-match to something seen before.",
+  hook:"Think of the last problem you solved. Did you actually reason it out - or recognize it and reach for a known answer?",
+  story:"When you think about how to solve a problem, you're almost never reasoning from scratch. You're pattern-matching to something you've seen before - a solution someone else used, a convention that exists, an assumption you absorbed without questioning.",
+  mech:"The default runs in three beats: see a problem, recall a solution, apply it. It works because most problems do resemble old ones. The cost is subtle: the answers were concluded by someone else, somewhere else, and you inherit them conclusions-first - reasoning not included.",
   term:"Borrowed thinking", def:"solving by pattern-match to inherited solutions, conventions, and absorbed assumptions.",
-  sowhat:"Every default you operate on — how meetings run, what a product 'must' have, what a career path looks like — arrived this way. Knowing that is the door into everything else on this chart.",
+  sowhat:"Every default you operate on - how meetings run, what a product 'must' have, what a career path looks like - arrived this way. Knowing that is the door into everything else on this chart.",
   explain:"why 'thinking hard' and 'reasoning from scratch' are usually two different activities.",
   builds:[], leads:[["b1-laplace","the loop, caught in the act"]], live:[["b1-pendulum","trace one belief to its source"]]},
 
 a2:{type:"axiom", title:"Assumptions are invisible", x:1057, y:627,
   ess:"Your assumptions don't feel like assumptions. They feel like reality.",
-  hook:"Quick — name three assumptions you're making about your current biggest problem. Struggling? That's the point.",
-  story:"Most assumptions are invisible to you: they don't announce themselves. The way a problem is framed, the options you think you have, the constraints you think are fixed — most of these are inherited, not discovered.",
-  mech:"An assumption you can recognize as an assumption is already half-examined. The dangerous ones wear reality's clothes — they were absorbed, not chosen, so there's no moment of decision to remember. That's why the obstacle to this practice isn't intelligence.",
+  hook:"Quick - name three assumptions you're making about your current biggest problem. Struggling? That's the point.",
+  story:"Most assumptions are invisible to you: they don't announce themselves. The way a problem is framed, the options you think you have, the constraints you think are fixed - most of these are inherited, not discovered.",
+  mech:"An assumption you can recognize as an assumption is already half-examined. The dangerous ones wear reality's clothes - they were absorbed, not chosen, so there's no moment of decision to remember. That's why the obstacle to this practice isn't intelligence.",
   term:"Invisible assumptions", def:"inherited beliefs that present themselves as plain reality rather than as claims.",
   sowhat:"You can't examine what you can't see. Every tool on this chart is ultimately a trick for making the invisible visible.",
   explain:"why the hard part of questioning your assumptions is finding them at all.",
@@ -331,78 +331,78 @@ a2:{type:"axiom", title:"Assumptions are invisible", x:1057, y:627,
 
 a3:{type:"axiom", title:"Bedrock exists", x:1462, y:627,
   ess:"Some things are true regardless of convention, opinion, or tradition.",
-  hook:"Underneath every 'that's how it's done' — is there anything that would stay true if everyone stopped believing it?",
-  story:"Yes — and that's what makes the whole practice possible. Keep breaking a claim down and eventually you hit something that cannot be broken down further: true regardless of convention, opinion, or tradition. That's a first principle. A bedrock fact.",
-  mech:"The test is independence: a convention holds because people keep honoring it; a bedrock fact holds whether or not anyone does. A law of physics passes the test; 'how things have always been done' fails it. Decomposition works because this floor exists — the questioning isn't infinite.",
+  hook:"Underneath every 'that's how it's done' - is there anything that would stay true if everyone stopped believing it?",
+  story:"Yes - and that's what makes the whole practice possible. Keep breaking a claim down and eventually you hit something that cannot be broken down further: true regardless of convention, opinion, or tradition. That's a first principle. A bedrock fact.",
+  mech:"The test is independence: a convention holds because people keep honoring it; a bedrock fact holds whether or not anyone does. A law of physics passes the test; 'how things have always been done' fails it. Decomposition works because this floor exists - the questioning isn't infinite.",
   term:"First principle", def:"a fact that cannot be broken down further and holds independent of convention, opinion, or tradition.",
   sowhat:"This is what you're drilling toward every time you decompose. If nothing were irreducibly true, questioning everything would just be vertigo.",
-  explain:"what qualifies as bedrock — and what merely feels like it.",
+  explain:"what qualifies as bedrock - and what merely feels like it.",
   builds:[], leads:[["b2-lorenz-attractor","what bedrock looks like when you hit it"]], live:[]},
 
 a4:{type:"axiom", title:"Understanding can be rebuilt", x:1259, y:771,
-  ess:"You're not stuck with inherited conclusions — ground-up reconstruction is available.",
+  ess:"You're not stuck with inherited conclusions - ground-up reconstruction is available.",
   hook:"If you cleared away everything you merely absorbed, could you actually build your understanding back?",
-  story:"You can. From bedrock facts you can build back up toward your problem without reaching for the conventional solution — asking instead: given only what I know to be true, what would I actually build? First principles thinking is exactly this practice: going underneath the borrowed conclusions to find what's actually, irreducibly true, then rebuilding your understanding from there.",
-  mech:"Reconstruction is a separate act from demolition — decomposing tells you what's true, not what to do. The rebuild starts from the floor the decomposition found and takes nothing else on board. That refusal to re-borrow is what makes the output yours.",
+  story:"You can. From bedrock facts you can build back up toward your problem without reaching for the conventional solution - asking instead: given only what I know to be true, what would I actually build? First principles thinking is exactly this practice: going underneath the borrowed conclusions to find what's actually, irreducibly true, then rebuilding your understanding from there.",
+  mech:"Reconstruction is a separate act from demolition - decomposing tells you what's true, not what to do. The rebuild starts from the floor the decomposition found and takes nothing else on board. That refusal to re-borrow is what makes the output yours.",
   term:"Rebuildability", def:"understanding can be reconstructed from verified ground instead of inherited whole.",
   sowhat:"This is the hopeful half of the practice: borrowed thinking isn't a life sentence. Section IV is about what the rebuilding produces.",
-  explain:"why finding bedrock is only half the practice — and what the other half is.",
+  explain:"why finding bedrock is only half the practice - and what the other half is.",
   builds:[], leads:[["b2-tension-random","the rebuilding move, in full"]], live:[]},
 
 "b1-laplace":{type:"phenomenon", title:"The default loop", x:404, y:355,
   ess:"See a problem → recall a solution → apply it.",
   hook:"What actually happens in your head in the three seconds after you meet a new problem?",
-  story:"Mostly this: see a problem → recall a solution → apply it. A solution someone else used, a convention that exists, an assumption absorbed without questioning — recognition doing the work that reasoning appears to do.",
-  mech:"The loop starts at the solution layer: it searches memory for a matching answer rather than the problem for its actual structure. That's why it's fast — and why it can only ever return something that already exists. Everyone else starts at the solution layer too, which is why conventional answers converge.",
+  story:"Mostly this: see a problem → recall a solution → apply it. A solution someone else used, a convention that exists, an assumption absorbed without questioning - recognition doing the work that reasoning appears to do.",
+  mech:"The loop starts at the solution layer: it searches memory for a matching answer rather than the problem for its actual structure. That's why it's fast - and why it can only ever return something that already exists. Everyone else starts at the solution layer too, which is why conventional answers converge.",
   term:"The recall loop", def:"see → recall → apply: solving by retrieval from the existing stock of answers.",
-  sowhat:"Watch yourself in your next meeting: how many 'decisions' are actually retrievals? The loop isn't wrong — it's just the only mode most thinking ever uses.",
+  sowhat:"Watch yourself in your next meeting: how many 'decisions' are actually retrievals? The loop isn't wrong - it's just the only mode most thinking ever uses.",
   explain:"what the default mode of thinking is actually doing under the hood.",
   builds:[["a1","the borrowing it runs on"]], leads:[["b1-sensitive","why brains default to it"]], live:[["b1-pendulum","trace a recalled belief back"]]},
 
 "b1-pendulum":{type:"simulation", title:"Trace a belief back", sim:"trace", x:884, y:309,
   ess:"Follow one inherited belief upstream and count the verifications. Often: zero.",
   hook:"Pick any belief you hold about how your work must be done. Where did it actually come from?",
-  story:"Trace it below. A typical belief passes to you from a person, who got it from a convention, which froze around someone's constraint years ago — a constraint that may no longer exist. Often, at no link in the chain did anyone stop and verify.",
-  mech:"Transmission and verification are different operations, and chains like this run purely on transmission. Each hop felt reasonable — people repeat what worked around them. But 'plausibly repeated many times' and 'checked once' never add up to the same thing, no matter how long the chain gets.",
+  story:"Trace it below. A typical belief passes to you from a person, who got it from a convention, which froze around someone's constraint years ago - a constraint that may no longer exist. Often, at no link in the chain did anyone stop and verify.",
+  mech:"Transmission and verification are different operations, and chains like this run purely on transmission. Each hop felt reasonable - people repeat what worked around them. But 'plausibly repeated many times' and 'checked once' never add up to the same thing, no matter how long the chain gets.",
   term:"The inheritance chain", def:"the unverified path a belief travels before arriving in your head as 'reality'.",
-  sowhat:"The older and more widely shared a practice, the longer its chain — and the more certain everyone feels. Certainty grows with repetition, not verification — the two can come entirely apart.",
+  sowhat:"The older and more widely shared a practice, the longer its chain - and the more certain everyone feels. Certainty grows with repetition, not verification - the two can come entirely apart.",
   explain:"why a belief can be universally held and still never once checked.",
   builds:[["b1-laplace","where recalled answers come from"]], leads:[["b1-lorenz-story","what else arrives this way"]], live:[]},
 
 "b1-sensitive":{type:"mechanism", title:"Efficiency, not laziness", x:520, y:522,
-  ess:"Borrowing isn't a character flaw — it's how brains are efficient.",
+  ess:"Borrowing isn't a character flaw - it's how brains are efficient.",
   hook:"If pattern-matching is such a trap, why did your brain make it the default?",
-  story:"Because it's not laziness — it's how brains are efficient. Reasoning everything from scratch would make crossing the street a research project; caching other people's conclusions lets you act at the speed life demands.",
-  mech:"A cache is only as good as its entries, and this one stores conclusions without their justifications. So the efficiency comes with a permanent trade: speed now, in exchange for constantly operating inside other people's conclusions. The practice isn't to stop caching — it's to know when to bypass the cache.",
+  story:"Because it's not laziness - it's how brains are efficient. Reasoning everything from scratch would make crossing the street a research project; caching other people's conclusions lets you act at the speed life demands.",
+  mech:"A cache is only as good as its entries, and this one stores conclusions without their justifications. So the efficiency comes with a permanent trade: speed now, in exchange for constantly operating inside other people's conclusions. The practice isn't to stop caching - it's to know when to bypass the cache.",
   term:"Cognitive caching", def:"the brain's efficiency strategy of reusing stored conclusions instead of re-deriving them.",
-  sowhat:"You couldn't first-principle everything even if you tried — the cache is how you get dressed in the morning. The skill is choosing when to bypass it.",
+  sowhat:"You couldn't first-principle everything even if you tried - the cache is how you get dressed in the morning. The skill is choosing when to bypass it.",
   explain:"why the borrowed mind is a feature with a cost, not a bug to be ashamed of.",
   builds:[["b1-laplace","what the loop optimizes for"]], leads:[["b1-lorenz-story","the deepest thing in the cache"]], live:[]},
 
 "b1-lorenz-story":{type:"story", title:"Other people's conclusions", x:254, y:656,
-  ess:"Frames, options, constraints — you inherited more than answers.",
+  ess:"Frames, options, constraints - you inherited more than answers.",
   hook:"When you 'consider your options', who decided what the options were?",
-  story:"Usually not you. The way a problem is framed, the options you think you have, the constraints you think are fixed — most of these are inherited, not discovered. Borrowing doesn't just hand you answers; it hands you the entire shape of the question.",
+  story:"Usually not you. The way a problem is framed, the options you think you have, the constraints you think are fixed - most of these are inherited, not discovered. Borrowing doesn't just hand you answers; it hands you the entire shape of the question.",
   mech:"This is why the trap runs deeper than 'received wisdom'. A borrowed answer can be rejected; a borrowed frame decides what's visible before deliberation even starts. You can reason with perfect rigor inside a frame someone else drew and never notice the drawing.",
-  term:"Inherited framing", def:"the borrowed problem-shape — frame, options, constraints — that thinking happens inside.",
+  term:"Inherited framing", def:"the borrowed problem-shape - frame, options, constraints - that thinking happens inside.",
   sowhat:"When every option on the table feels bad, the likeliest culprit is the table. Ask who built it.",
   explain:"how you can inherit the question itself, not just the answer.",
   builds:[["b1-sensitive","cached at the deepest layer"]], leads:[["b1-principle","the section's takeaway"]], live:[]},
 
 "b1-principle":{type:"principle", title:"You live inside inherited conclusions", x:716, y:679,
   ess:"Until examined, your thinking runs on other people's conclusions.",
-  hook:"If your answers, frames, and constraints all arrived by inheritance — how much of your thinking is yours?",
-  story:"Less than it feels like. None of this is a moral failing — the borrowing is efficient and mostly serves you. But it means that by default you're constantly operating inside other people's conclusions, reasoning downstream of decisions you never saw being made.",
-  mech:"Follow the chain: thinking defaults to recall (the loop), recall runs on a cache (efficiency), and the cache stores frames as well as answers (inherited framing). The conclusion isn't that borrowed thinking is bad — it's that it's invisible, ubiquitous, and yours to interrupt deliberately.",
+  hook:"If your answers, frames, and constraints all arrived by inheritance - how much of your thinking is yours?",
+  story:"Less than it feels like. None of this is a moral failing - the borrowing is efficient and mostly serves you. But it means that by default you're constantly operating inside other people's conclusions, reasoning downstream of decisions you never saw being made.",
+  mech:"Follow the chain: thinking defaults to recall (the loop), recall runs on a cache (efficiency), and the cache stores frames as well as answers (inherited framing). The conclusion isn't that borrowed thinking is bad - it's that it's invisible, ubiquitous, and yours to interrupt deliberately.",
   term:"Operating inside conclusions", def:"the default condition: reasoning within frames and answers concluded by others.",
-  sowhat:"The practice begins with one interrupt: noticing, on a decision that matters, that you're standing in someone else's conclusion — and choosing to go underneath it.",
+  sowhat:"The practice begins with one interrupt: noticing, on a decision that matters, that you're standing in someone else's conclusion - and choosing to go underneath it.",
   explain:"the honest starting position: what your mind is doing before any method is applied.",
   builds:[["b1-lorenz-story","the deepest borrowing"]], leads:[["b2-attractors","the move that goes underneath"]], live:[]},
 
 "b2-logistic":{type:"simulation", title:"The drill, live", sim:"drill", x:1837, y:233,
   ess:"One claim, three rounds of questioning, one rebuilt answer.",
   hook:"Below sits the claim 'I need a lot of capital to get started.' What's left of it after three honest rounds of 'how do I know that's true?'",
-  story:"Drill and see. Each press strips one unverified layer — the observation about other businesses, then what capital is actually for, down to the minimum true requirement. Then build back up, and a different answer appears than the one you started with.",
+  story:"Drill and see. Each press strips one unverified layer - the observation about other businesses, then what capital is actually for, down to the minimum true requirement. Then build back up, and a different answer appears than the one you started with.",
   mech:"Notice what each layer is made of: the top is convention (inherited from watching others), the middle is function (what capital actually buys), the floor is a testable fact. The rebuilt answer looks strange precisely because it grew from the floor, not from the top.",
   term:"The drill", def:"the two moves run end-to-end on a single live claim.",
   sowhat:"This exact sequence fits on a napkin. Run it on the next 'I need X before I can Y' you catch yourself saying.",
@@ -410,49 +410,49 @@ a4:{type:"axiom", title:"Understanding can be rebuilt", x:1259, y:771,
   builds:[["b2-attractors","move one, executed"],["b2-tension-random","move two, executed"]], leads:[["b2-principle","the compression"]], live:[]},
 
 "b2-attractors":{type:"mechanism", title:"Move 1: Decompose", x:2069, y:401,
-  ess:"Ask 'what am I assuming that I haven't verified?' — then ask it of the answer.",
-  hook:"What happens if you ask 'what am I assuming here?' — and then ask it again about your own answer, and again?",
+  ess:"Ask 'what am I assuming that I haven't verified?' - then ask it of the answer.",
+  hook:"What happens if you ask 'what am I assuming here?' - and then ask it again about your own answer, and again?",
   story:"You descend. Take whatever you're looking at and ask: what am I assuming here that I haven't verified? Then ask it again about the answer. Keep going until you hit something that cannot be broken down further.",
-  mech:"The recursion is the whole trick — one round of questioning just swaps an assumption for a slightly deeper one. Repetition is what turns doubting into drilling. And the stop condition is precise: you halt only at something true regardless of convention, opinion, or tradition.",
+  mech:"The recursion is the whole trick - one round of questioning just swaps an assumption for a slightly deeper one. Repetition is what turns doubting into drilling. And the stop condition is precise: you halt only at something true regardless of convention, opinion, or tradition.",
   term:"Decomposition", def:"recursively stripping unverified assumptions until only bedrock remains.",
   sowhat:"On your next real decision, run three rounds. Most people have never asked the question even twice in a row about the same belief.",
-  explain:"the first of the two moves — and why asking once is not the move.",
+  explain:"the first of the two moves - and why asking once is not the move.",
   builds:[["a2","the invisible things the question hunts"]], leads:[["b2-lorenz-attractor","what you hit at the bottom"]], live:[["b2-logistic","drill a real claim"]]},
 
 "b2-lorenz-attractor":{type:"mechanism", title:"Hitting bedrock", x:2300, y:282,
   ess:"The floor: a fact that survives every 'how do I know?'",
   hook:"How do you know when to stop questioning?",
-  story:"When the answer stops giving way. Bedrock is the claim that cannot be broken down further — true regardless of convention, opinion, or tradition. Not 'everyone agrees' (that's convention), not 'it's always been so' (that's tradition): true on its own.",
-  mech:"Each round of decomposition either exposes a deeper assumption or fails to — and the failure is the signal. When 'how do I know that's true?' returns verification instead of another inherited layer, you've reached a first principle and the descent is over.",
+  story:"When the answer stops giving way. Bedrock is the claim that cannot be broken down further - true regardless of convention, opinion, or tradition. Not 'everyone agrees' (that's convention), not 'it's always been so' (that's tradition): true on its own.",
+  mech:"Each round of decomposition either exposes a deeper assumption or fails to - and the failure is the signal. When 'how do I know that's true?' returns verification instead of another inherited layer, you've reached a first principle and the descent is over.",
   term:"Bedrock fact", def:"the irreducible, convention-independent claim where decomposition halts.",
   sowhat:"Beware false floors: 'industry standard', 'best practice', and 'obviously' all feel like bedrock and are exactly not.",
-  explain:"the stop condition of the descent — and the imposters that end it too early.",
+  explain:"the stop condition of the descent - and the imposters that end it too early.",
   builds:[["a3","the floor's existence"]], leads:[["b2-tension-random","now build on it"]], live:[]},
 
 "b2-tension-random":{type:"mechanism", title:"Move 2: Reconstruct", x:2392, y:470,
-  ess:"Given only what I know to be true — what would I actually build?",
+  ess:"Given only what I know to be true - what would I actually build?",
   hook:"You've stripped a problem to bedrock. What stops you from just grabbing the conventional solution on the way back up?",
-  story:"Only discipline. The second move is to build back up from those bedrock facts toward your problem — and not reach for the conventional solution. The governing question: given only what I know to be true, what would I actually build here?",
-  mech:"'Only' is the operative word — the rebuild admits verified facts and nothing else, or the decomposition was theater. The two moves are inseparable: decompose without reconstructing and you've merely criticized; reconstruct without decomposing and you've merely redecorated the convention.",
+  story:"Only discipline. The second move is to build back up from those bedrock facts toward your problem - and not reach for the conventional solution. The governing question: given only what I know to be true, what would I actually build here?",
+  mech:"'Only' is the operative word - the rebuild admits verified facts and nothing else, or the decomposition was theater. The two moves are inseparable: decompose without reconstructing and you've merely criticized; reconstruct without decomposing and you've merely redecorated the convention.",
   term:"Reconstruction", def:"building the answer up from bedrock alone, refusing to re-borrow on the way.",
-  sowhat:"The re-borrowing urge is strongest right here — the conventional answer is familiar and defensible. Expect the pull; refuse it.",
-  explain:"the second move — and why it's a discipline, not a formality.",
+  sowhat:"The re-borrowing urge is strongest right here - the conventional answer is familiar and defensible. Expect the pull; refuse it.",
+  explain:"the second move - and why it's a discipline, not a formality.",
   builds:[["a4","the rebuild is possible"],["b2-lorenz-attractor","the ground it starts from"]], leads:[["b2-principle","both moves, one line"]], live:[["b2-logistic","the rebuild, live"]]},
 
 "b2-principle":{type:"principle", title:"Strip down. Build up. Don't borrow.", x:1895, y:598,
   ess:"The whole method: strip to bedrock, rebuild without borrowing.",
   hook:"Could a practice this powerful really have just two moves?",
-  story:"It has exactly two. Strip down to bedrock; build back up without borrowing. Everything else — the suspicion of the obvious, the verifying question, the strange results — is technique in service of those two moves.",
-  mech:"The moves are jointly necessary: decomposition supplies true ground (otherwise you rebuild on sand), reconstruction supplies the new answer (otherwise you've only excavated). Two moves, one integrity condition — nothing unverified survives the round trip.",
+  story:"It has exactly two. Strip down to bedrock; build back up without borrowing. Everything else - the suspicion of the obvious, the verifying question, the strange results - is technique in service of those two moves.",
+  mech:"The moves are jointly necessary: decomposition supplies true ground (otherwise you rebuild on sand), reconstruction supplies the new answer (otherwise you've only excavated). Two moves, one integrity condition - nothing unverified survives the round trip.",
   term:"First principles thinking", def:"going underneath borrowed conclusions to what's irreducibly true, and rebuilding understanding from there.",
-  sowhat:"When you're lost mid-practice, return here: am I still stripping, or am I rebuilding — and did something unverified sneak back in?",
+  sowhat:"When you're lost mid-practice, return here: am I still stripping, or am I rebuilding - and did something unverified sneak back in?",
   explain:"the entire method, compressed to its two irreducible moves.",
   builds:[["b2-attractors","move one"],["b2-tension-random","move two"]], leads:[["b3-contingency","why it's still hard"]], live:[]},
 
 "b3-kokura":{type:"story", title:"'I need a lot of capital'", x:271, y:962,
   ess:"A felt fact, examined: the capital assumption.",
   hook:"You want to start a business, and one thought arrives instantly: 'I need a lot of capital to get started.' Is that a fact?",
-  story:"It feels like one. The analogical route — how most people think — goes: other businesses needed capital, therefore I do too. The first-principles route asks instead: how do I know I need capital? What is capital actually for? It buys assets, time, and people — do I need all of those to start?",
+  story:"It feels like one. The analogical route - how most people think - goes: other businesses needed capital, therefore I do too. The first-principles route asks instead: how do I know I need capital? What is capital actually for? It buys assets, time, and people - do I need all of those to start?",
   mech:"Watch the frame shift mid-questioning: from 'how much capital do I need?' to 'what's the minimum true requirement to test whether this works?' The first question can only be answered with a number; the second can be answered with an action. That reframe is the drill doing its job.",
   term:"The capital example", def:"the worked case: an inherited 'I need funding' decomposed to its minimum true requirement.",
   sowhat:"Every field has its version of 'I need capital': the credential, the headcount, the permission. Name yours.",
@@ -460,39 +460,39 @@ a4:{type:"axiom", title:"Understanding can be rebuilt", x:1259, y:771,
   builds:[["b1-laplace","analogical thinking, in the wild"],["b3-timeline","the question that cracked it"]], leads:[["b3-plan","what the stripping revealed"]], live:[["b2-logistic","drill it yourself"]]},
 
 "b3-contingency":{type:"tension", title:"Feels like reality", x:601, y:1008,
-  ess:"The obstacle isn't intelligence — it's that assumptions wear reality's clothes.",
+  ess:"The obstacle isn't intelligence - it's that assumptions wear reality's clothes.",
   hook:"If the method is just two moves, why isn't everyone doing this?",
-  story:"Because the obstacle isn't intelligence. Most assumptions are invisible: they don't feel like assumptions, they feel like reality. You can't strip what you can't see — and the seeing is the hard part.",
-  mech:"Move one presupposes a target: 'question your assumptions' is useless while the assumptions are indistinguishable from facts. So the real bottleneck sits upstream of both moves — it's detection. Everything in this section is detection technique.",
+  story:"Because the obstacle isn't intelligence. Most assumptions are invisible: they don't feel like assumptions, they feel like reality. You can't strip what you can't see - and the seeing is the hard part.",
+  mech:"Move one presupposes a target: 'question your assumptions' is useless while the assumptions are indistinguishable from facts. So the real bottleneck sits upstream of both moves - it's detection. Everything in this section is detection technique.",
   term:"The invisibility problem", def:"the gap between knowing you should question assumptions and being able to find them.",
   sowhat:"'I already question my assumptions' usually means 'I question the ones I can see.' The load-bearing ones are the others.",
   explain:"why smart people fail at this exactly as often as everyone else.",
   builds:[["a2","the axiom at work"]], leads:[["b3-timeline","the question that finds them"]], live:[]},
 
 "b3-timeline":{type:"mechanism", title:"'How do I know that's true?'", x:312, y:1210,
-  ess:"The working question — asked actually, not rhetorically.",
+  ess:"The working question - asked actually, not rhetorically.",
   hook:"What single question, asked sincerely, turns an invisible assumption into a visible one?",
-  story:"How do I know that's true? Not rhetorically — actually. Did I verify it? Did someone credible verify it? Is it a law of physics, or is it just how things have always been done?",
-  mech:"This is the question that does the detection work — it demands provenance: a real fact has a verification story; a disguised assumption has only a transmission story ('everyone knows', 'we've always'). Asking it non-rhetorically means requiring an answer — the moment you accept 'well, obviously', you've stopped doing the work.",
-  term:"The verification question", def:"'How do I know that's true?' — the probe that sorts verified fact from inherited convention.",
+  story:"How do I know that's true? Not rhetorically - actually. Did I verify it? Did someone credible verify it? Is it a law of physics, or is it just how things have always been done?",
+  mech:"This is the question that does the detection work - it demands provenance: a real fact has a verification story; a disguised assumption has only a transmission story ('everyone knows', 'we've always'). Asking it non-rhetorically means requiring an answer - the moment you accept 'well, obviously', you've stopped doing the work.",
+  term:"The verification question", def:"'How do I know that's true?' - the probe that sorts verified fact from inherited convention.",
   sowhat:"Three honest sub-questions to keep in your pocket: verified by me? verified by someone credible? physics, or habit? Most beliefs fail all three.",
-  explain:"the one question that does the entire detection job — and how to ask it for real.",
+  explain:"the one question that does the entire detection job - and how to ask it for real.",
   builds:[["b3-contingency","the problem it solves"]], leads:[["b3-kokura","the question, applied"]], live:[]},
 
 "b3-plan":{type:"mechanism", title:"Not load-bearing", x:543, y:1326,
-  ess:"The 'fact' was a convention — and the structure stood without it.",
+  ess:"The 'fact' was a convention - and the structure stood without it.",
   hook:"What did the capital assumption turn out to be, once stripped?",
-  story:"A convention inherited from observing other businesses — not a fact about yours. Reasoning from what capital is actually for pointed somewhere different: maybe you need one paying customer, not funding. The assumption felt structural; it wasn't load-bearing.",
-  mech:"'Load-bearing' is the useful test: remove the assumption and see whether the actual requirement — testing whether this works — still stands. Here it stood. Plenty of assumptions do turn out to be load-bearing when checked; the point isn't that assumptions are false, it's that you don't know which until you strip them.",
+  story:"A convention inherited from observing other businesses - not a fact about yours. Reasoning from what capital is actually for pointed somewhere different: maybe you need one paying customer, not funding. The assumption felt structural; it wasn't load-bearing.",
+  mech:"'Load-bearing' is the useful test: remove the assumption and see whether the actual requirement - testing whether this works - still stands. Here it stood. Plenty of assumptions do turn out to be load-bearing when checked; the point isn't that assumptions are false, it's that you don't know which until you strip them.",
   term:"The load-bearing test", def:"checking whether a removed assumption was actually holding anything up.",
-  sowhat:"The expensive assumptions are the non-load-bearing ones you obey anyway — years spent raising capital you never needed.",
+  sowhat:"The expensive assumptions are the non-load-bearing ones you obey anyway - years spent raising capital you never needed.",
   explain:"what 'stripping it down revealed it wasn't load-bearing' means in practice.",
   builds:[["b3-kokura","the case, concluded"]], leads:[["b3-principle","the general lesson"]], live:[]},
 
 "b3-principle":{type:"principle", title:"Suspect the obvious", x:774, y:1152,
   ess:"The obvious is exactly where unexamined assumptions live.",
   hook:"Of all your beliefs, which are the least likely to have ever been examined?",
-  story:"The obvious ones — obviousness is what an unexamined assumption feels like from the inside. First principles thinking requires you to become suspicious of things that feel obvious, because the obvious stuff is exactly where the unexamined assumptions live.",
+  story:"The obvious ones - obviousness is what an unexamined assumption feels like from the inside. First principles thinking requires you to become suspicious of things that feel obvious, because the obvious stuff is exactly where the unexamined assumptions live.",
   mech:"The section in one chain: invisible assumptions (the axiom) surface as a feeling of obviousness (the tension), yield to the verification question (the tool), and sometimes turn out not to be load-bearing at all (the example). The binding posture: treat 'obviously' as a flag, not a conclusion.",
   term:"Suspicion of the obvious", def:"the discipline of flagging what feels self-evident as the first place to drill.",
   sowhat:"In your next planning discussion, listen for 'obviously', 'of course', and 'everyone knows'. Each one marks a drill site.",
@@ -501,28 +501,28 @@ a4:{type:"axiom", title:"Understanding can be rebuilt", x:1259, y:771,
 
 "b4-coinflip":{type:"simulation", title:"The travel test", sim:"travel", x:1583, y:979,
   ess:"Carry two kinds of knowledge away from home. Watch which survives.",
-  hook:"Take a borrowed rule and a rebuilt model into situations less and less like where they were made. Which fails first — and how loudly?",
-  story:"Run it below. The borrowed rule (gray) works while new situations resemble its origin, then quietly fails. The rebuilt model (amber) keeps working as context drifts — because its test was never resemblance, but whether the underlying facts still hold.",
-  mech:"Then press 'change the underlying facts' and watch the amber row fail too — at exactly the point its foundation moved, a premise you could name and re-check. Robustness is conditional, and knowing the condition is the advantage.",
+  hook:"Take a borrowed rule and a rebuilt model into situations less and less like where they were made. Which fails first - and how loudly?",
+  story:"Run it below. The borrowed rule (gray) works while new situations resemble its origin, then quietly fails. The rebuilt model (amber) keeps working as context drifts - because its test was never resemblance, but whether the underlying facts still hold.",
+  mech:"Then press 'change the underlying facts' and watch the amber row fail too - at exactly the point its foundation moved, a premise you could name and re-check. Robustness is conditional, and knowing the condition is the advantage.",
   term:"The travel test", def:"how far from its origin a piece of knowledge keeps working.",
-  sowhat:"Before importing any practice: is this fragile or robust — and if robust, do its underlying facts hold here?",
+  sowhat:"Before importing any practice: is this fragile or robust - and if robust, do its underlying facts hold here?",
   explain:"the fragile/robust distinction, run as an experiment you can watch.",
   builds:[["b4-signal","fragility, demonstrated"],["b4-danger","robustness, demonstrated"]], leads:[["b4-process","zooming back out"]], live:[]},
 
 "b4-ergodicity":{type:"mechanism", title:"Where mental models come from", x:1901, y:945,
   ess:"First principles thinking is what generates mental models.",
   hook:"Everyone collects mental models these days. Where do the good ones actually come from?",
-  story:"From this practice. When you reason from first principles in a domain and build back up, what you end up with is a model of how that domain actually works. The models aren't a separate thing to acquire — they're the residue of the reasoning.",
-  mech:"The rebuild forces you to connect bedrock facts into working structure, and that structure is the model. Collected models skip the construction step — which is exactly the step that made them trustworthy for their builder.",
+  story:"From this practice. When you reason from first principles in a domain and build back up, what you end up with is a model of how that domain actually works. The models aren't a separate thing to acquire - they're the residue of the reasoning.",
+  mech:"The rebuild forces you to connect bedrock facts into working structure, and that structure is the model. Collected models skip the construction step - which is exactly the step that made them trustworthy for their builder.",
   term:"Model generation", def:"mental models as the output of first-principles reasoning in a domain.",
-  sowhat:"Reading lists of '100 mental models' hands you conclusions again — the very thing the practice exists to go underneath.",
+  sowhat:"Reading lists of '100 mental models' hands you conclusions again - the very thing the practice exists to go underneath.",
   explain:"why mental models are a product of this practice rather than a substitute for it.",
   builds:[["b2-principle","the method that generates them"]], leads:[["b4-domains","what makes these models different"]], live:[]},
 
 "b4-domains":{type:"mechanism", title:"Causes, not conventions", x:2219, y:979,
   ess:"A rebuilt model is grounded in how the domain actually works.",
   hook:"Two people can hold the 'same' model of a domain. Why does it work in one head and misfire in the other?",
-  story:"Because the grounding differs. A model built from first principles is anchored in causes — how the domain actually works — while a borrowed copy of it is anchored in conventions: what people around you say works.",
+  story:"Because the grounding differs. A model built from first principles is anchored in causes - how the domain actually works - while a borrowed copy of it is anchored in conventions: what people around you say works.",
   mech:"Causes and conventions age differently. A cause holds as long as the underlying mechanism does; a convention holds as long as the crowd does. Two models with identical wording can therefore have entirely different lifespans.",
   term:"Causal grounding", def:"a model anchored in the domain's actual mechanics rather than its social consensus.",
   sowhat:"Quick self-test on any model you use: can you explain the mechanism beneath it, or only cite who swears by it?",
@@ -530,11 +530,11 @@ a4:{type:"axiom", title:"Understanding can be rebuilt", x:1259, y:771,
   builds:[["b4-ergodicity","what the rebuild grounds"]], leads:[["b4-survive","the knowing-why difference"]], live:[]},
 
 "b4-survive":{type:"mechanism", title:"Why, not just that", x:2438, y:1094,
-  ess:"You know why your models are true — not just that they're true.",
+  ess:"You know why your models are true - not just that they're true.",
   hook:"What's the practical difference between knowing a thing works and knowing why it works?",
-  story:"Everything, under pressure. When the situation shifts, 'that it works' gives you nothing to reason with — while 'why it works' tells you whether it still applies, how to adapt it, and what breaks first.",
-  mech:"Why-knowledge carries its own applicability conditions: you can check the premises against a new situation because you know what the premises are. That-knowledge has no premises attached — it can only be applied blind and judged by results.",
-  term:"Why-knowledge", def:"understanding that includes the reasons — and therefore its own limits of application.",
+  story:"Everything, under pressure. When the situation shifts, 'that it works' gives you nothing to reason with - while 'why it works' tells you whether it still applies, how to adapt it, and what breaks first.",
+  mech:"Why-knowledge carries its own applicability conditions: you can check the premises against a new situation because you know what the premises are. That-knowledge has no premises attached - it can only be applied blind and judged by results.",
+  term:"Why-knowledge", def:"understanding that includes the reasons - and therefore its own limits of application.",
   sowhat:"Interview yourself the way you'd interview a hire: for each tool you rely on, can you say why it works? The gaps are your fragile spots.",
   explain:"what 'you know why they're true, not just that they're true' buys you in practice.",
   builds:[["b4-domains","causes are the why"]], leads:[["b4-signal","what its absence costs"]], live:[]},
@@ -542,70 +542,70 @@ a4:{type:"axiom", title:"Understanding can be rebuilt", x:1259, y:771,
 "b4-signal":{type:"mechanism", title:"Borrowed knowledge is fragile", x:1612, y:1181,
   ess:"It only works where situations resemble the place you got it.",
   hook:"Why does advice that worked brilliantly for someone else so often fail in your hands?",
-  story:"Because borrowed knowledge is fragile: you can only use it in situations that closely resemble where you got it. The resemblance was doing the work all along — not your understanding.",
-  mech:"A borrowed conclusion is a compressed answer with its reasoning discarded, so resemblance to the original context is the only applicability test left. As situations drift from the source, the conclusion keeps feeling true after it has stopped being true — fragility with no warning light.",
+  story:"Because borrowed knowledge is fragile: you can only use it in situations that closely resemble where you got it. The resemblance was doing the work all along - not your understanding.",
+  mech:"A borrowed conclusion is a compressed answer with its reasoning discarded, so resemblance to the original context is the only applicability test left. As situations drift from the source, the conclusion keeps feeling true after it has stopped being true - fragility with no warning light.",
   term:"Fragile knowledge", def:"conclusions usable only near the context they were borrowed from.",
-  sowhat:"Playbooks from other companies, tactics from other markets, habits from your last job — each carries an unlabeled resemblance requirement.",
+  sowhat:"Playbooks from other companies, tactics from other markets, habits from your last job - each carries an unlabeled resemblance requirement.",
   explain:"why borrowed knowledge breaks silently the moment context drifts.",
   builds:[["b4-survive","what's missing: the why"]], leads:[["b4-danger","the robust alternative"]], live:[["b4-coinflip","watch it break in transit"]]},
 
 "b4-danger":{type:"mechanism", title:"First-principles knowledge is robust", x:1959, y:1152,
   ess:"It applies anywhere the underlying facts still hold.",
   hook:"What would knowledge look like if it told you, by itself, where it could and couldn't be used?",
-  story:"Like this. First-principles knowledge is robust — you can apply it anywhere the underlying facts still hold. Its condition of use isn't resemblance to a remembered context; it's a check you can actually run: do the facts beneath this still hold here?",
-  mech:"Because the knowledge was built up from bedrock, its dependencies are explicit — you know which facts it stands on. That yields durability (it survives context drift) and checkability (you know which facts to re-check when the world shifts — the failure condition is explicit, not hidden).",
-  term:"Robust knowledge", def:"understanding valid wherever its underlying facts hold — and knowingly invalid where they don't.",
-  sowhat:"'Anywhere the facts still hold' is a real boundary, not a blank check — rebuilt models die too. The difference is you know exactly what to re-check.",
-  explain:"where first-principles knowledge can travel — and the one condition on the ticket.",
+  story:"Like this. First-principles knowledge is robust - you can apply it anywhere the underlying facts still hold. Its condition of use isn't resemblance to a remembered context; it's a check you can actually run: do the facts beneath this still hold here?",
+  mech:"Because the knowledge was built up from bedrock, its dependencies are explicit - you know which facts it stands on. That yields durability (it survives context drift) and checkability (you know which facts to re-check when the world shifts - the failure condition is explicit, not hidden).",
+  term:"Robust knowledge", def:"understanding valid wherever its underlying facts hold - and knowingly invalid where they don't.",
+  sowhat:"'Anywhere the facts still hold' is a real boundary, not a blank check - rebuilt models die too. The difference is you know exactly what to re-check.",
+  explain:"where first-principles knowledge can travel - and the one condition on the ticket.",
   builds:[["b4-survive","why carries the conditions"]], leads:[["b4-process","the two modes, side by side"]], live:[["b4-coinflip","the travel test"]]},
 
 "b4-process":{type:"mechanism", title:"The one-line version", x:1650, y:1330,
   ess:"Recall: see → recall → apply. First principles: see → question → find true → build.",
   hook:"Can the entire difference between the two modes of thinking fit in two lines?",
   story:"It can. Most thinking: see a problem → recall a solution → apply it. First principles thinking: see a problem → question everything about it → find what's actually true → build a solution from there.",
-  mech:"Line one is retrieval — its output can only be something that already existed. Line two is construction — its output is bounded by what's true, not by what's been tried. Every contrast on this chart (fragile/robust, convention/cause, borrowed/built) is these two lines wearing different clothes.",
+  mech:"Line one is retrieval - its output can only be something that already existed. Line two is construction - its output is bounded by what's true, not by what's been tried. Every contrast on this chart (fragile/robust, convention/cause, borrowed/built) is these two lines wearing different clothes.",
   term:"The one-line version", def:"recall-apply versus question-find-build: the two loops, compressed.",
   sowhat:"Memorize the second line. In the moment, the full practice compresses to one check: am I recalling right now, or building?",
   explain:"the whole chart, folded into a two-line comparison you can carry.",
   builds:[["b1-laplace","line one"],["b2-principle","line two"]], leads:[["b4-destination","the real difference between them"]], live:[]},
 
 "b4-destination":{type:"mechanism", title:"Where you start", x:2330, y:1255,
-  ess:"The difference isn't effort or IQ — it's the starting layer.",
+  ess:"The difference isn't effort or IQ - it's the starting layer.",
   hook:"If both thinkers face the same problem with the same intelligence, what actually separates them?",
-  story:"Where they start. Everyone else starts at the solution layer — the stock of existing answers. You go underneath it, find the ground, and build up fresh. Same problem, different floor.",
-  mech:"Starting at the solution layer bounds your output by precedent; starting at the ground bounds it by truth. Nothing else about the two thinkers needs to differ — the starting layer alone produces the divergence.",
+  story:"Where they start. Everyone else starts at the solution layer - the stock of existing answers. You go underneath it, find the ground, and build up fresh. Same problem, different floor.",
+  mech:"Starting at the solution layer bounds your output by precedent; starting at the ground bounds it by truth. Nothing else about the two thinkers needs to differ - the starting layer alone produces the divergence.",
   term:"The starting layer", def:"solution layer versus ground: the choice that defines the mode of thought.",
-  sowhat:"'Where am I starting from?' is a cheaper question than 'am I being rigorous?' — and it catches more.",
+  sowhat:"'Where am I starting from?' is a cheaper question than 'am I being rigorous?' - and it catches more.",
   explain:"the single variable that separates the two modes of thinking.",
   builds:[["b4-process","the two lines' one difference"]], leads:[["b4-explore","what building from ground produces"]], live:[]},
 
 "b4-explore":{type:"tension", title:"It will look strange", x:2470, y:1430,
   ess:"Ground-up answers often look wrong to everyone reasoning by convention.",
   hook:"You rebuilt from bedrock and your answer looks nothing like what anyone else does. Did you make a mistake?",
-  story:"Maybe — or maybe it's working. What you build will often look strange to everyone else, because you're not constrained by their inherited assumptions. Strangeness is what escaping a shared frame looks like from inside the frame.",
-  mech:"Conventional answers resemble each other because they're drawn from the same solution layer; an answer grown from bedrock has no reason to resemble them. So resemblance to consensus stops working as a correctness check — the check that remains is the one you built with: does every step trace to something true?",
+  story:"Maybe - or maybe it's working. What you build will often look strange to everyone else, because you're not constrained by their inherited assumptions. Strangeness is what escaping a shared frame looks like from inside the frame.",
+  mech:"Conventional answers resemble each other because they're drawn from the same solution layer; an answer grown from bedrock has no reason to resemble them. So resemblance to consensus stops working as a correctness check - the check that remains is the one you built with: does every step trace to something true?",
   term:"The strangeness signal", def:"the expected divergence of ground-up answers from convention-shaped ones.",
-  sowhat:"Expect the raised eyebrows before you present the answer — social friction is part of the method's price, and worth budgeting for.",
+  sowhat:"Expect the raised eyebrows before you present the answer - social friction is part of the method's price, and worth budgeting for.",
   explain:"why looking wrong to everyone can be evidence of the method working.",
   builds:[["b4-destination","different floor, different building"]], leads:[["b4-fence","why that's the point"]], live:[]},
 
 "b4-fence":{type:"mechanism", title:"That's not a bug", x:2090, y:1430,
   ess:"Freedom from inherited constraints is the whole point.",
-  hook:"If strange-looking answers are the price — what exactly did you buy?",
-  story:"Freedom from constraints that were never real. The strangeness isn't a side effect to minimize — it's the whole point: it marks answers reachable only by someone not bound by the borrowed frame.",
-  mech:"If ground-up reasoning always reproduced convention, the practice would be pointless ritual — decomposition would just be a slow route to the same place. Its value lies exactly in the cases where bedrock licenses what convention forbids; the strange answers aren't the method misfiring, they're its yield.",
+  hook:"If strange-looking answers are the price - what exactly did you buy?",
+  story:"Freedom from constraints that were never real. The strangeness isn't a side effect to minimize - it's the whole point: it marks answers reachable only by someone not bound by the borrowed frame.",
+  mech:"If ground-up reasoning always reproduced convention, the practice would be pointless ritual - decomposition would just be a slow route to the same place. Its value lies exactly in the cases where bedrock licenses what convention forbids; the strange answers aren't the method misfiring, they're its yield.",
   term:"The point", def:"first principles thinking is valuable precisely where it diverges from convention.",
-  sowhat:"When your rebuilt answer matches the conventional one, fine — you've verified it. When it doesn't, you may have found the thing everyone else couldn't see.",
+  sowhat:"When your rebuilt answer matches the conventional one, fine - you've verified it. When it doesn't, you may have found the thing everyone else couldn't see.",
   explain:"why the method's strangest outputs are its most valuable ones.",
   builds:[["b4-explore","the strangeness, reframed"]], leads:[["b4-principle","the full posture"]], live:[]},
 
 "b4-principle":{type:"principle", title:"Go underneath. Find the ground. Build fresh.", x:1830, y:1560,
   ess:"The complete practice, as a posture toward every serious problem.",
   hook:"Strip this whole chart to its own bedrock. What's left?",
-  story:"A posture: most thinking is borrowed, so on the decisions that matter, go underneath the conclusions, find what's irreducibly true, and build up fresh — accepting that the result may look strange, because escaping inherited assumptions was the point all along.",
+  story:"A posture: most thinking is borrowed, so on the decisions that matter, go underneath the conclusions, find what's irreducibly true, and build up fresh - accepting that the result may look strange, because escaping inherited assumptions was the point all along.",
   mech:"Every star traces here: the borrowed mind explains why the ground is hidden, the two moves are how you reach it and return, the invisibility problem is why it takes discipline, and the robust, cause-grounded, strange-looking models are what the trip pays. One practice, thirty facets.",
   term:"The practice", def:"go underneath borrowed conclusions, find bedrock, rebuild without borrowing.",
-  sowhat:"Where to point it: the beliefs your plans actually rest on — the career call, the product bet, the constraint everyone treats as fixed.",
+  sowhat:"Where to point it: the beliefs your plans actually rest on - the career call, the product bet, the constraint everyone treats as fixed.",
   explain:"the whole constellation, compressed back into one actionable posture.",
   builds:[["b1-principle","the condition it answers"],["b2-principle","the method"],["b3-principle","the discipline"],["b4-fence","the payoff"]], leads:[], live:[["b2-logistic","run the drill"],["b4-coinflip","test your knowledge's reach"]]}
 };
@@ -750,7 +750,7 @@ document.getElementById('overviewBtn').onclick = ()=>{ closeReader(); overviewCa
 addEventListener('resize', ()=>apply());
 
 /* ============================================================
-   SKY — constellation names, asterisms, ecliptic, stars
+   SKY - constellation names, asterisms, ecliptic, stars
    ============================================================ */
 const BC = (()=>{const ax=Object.keys(N).filter(id=>id[0]==='a');return {x:ax.reduce((s,i)=>s+N[i].x,0)/ax.length, y:ax.reduce((s,i)=>s+N[i].y,0)/ax.length};})();
 { /* Cleared Court: pull the axioms into a tight core, clear any star that intrudes */
@@ -780,7 +780,7 @@ TERRITORIES.forEach(t=>{
 
 
 
-/* minor stars — small nameless flecks inside each figure */
+/* minor stars - small nameless flecks inside each figure */
 {
   const R = mulberry32(11);
   TERRITORIES.forEach(t=>{
@@ -1015,7 +1015,7 @@ function clearHighlight(){
 }
 
 /* ============================================================
-   NAV — top-right cluster drives the default flow
+   NAV - top-right cluster drives the default flow
    ============================================================ */
 function syncNav(){
   const i = focusId ? TOUR.indexOf(focusId) : -1;
@@ -1075,7 +1075,7 @@ SIMS.trace = fig=>{
     {x:565,y:150,l1:"your belief",l2:"“this is just how it's done”"},
     {x:415,y:210,l1:"the person you got it from",l2:"repeated what worked around them"},
     {x:265,y:150,l1:"the convention they inherited",l2:"“everyone in the field does this”"},
-    {x:115,y:210,l1:"the original constraint",l2:"years ago — possibly gone"}
+    {x:115,y:210,l1:"the original constraint",l2:"years ago - possibly gone"}
   ];
   let shown=1,anim=0,raf=null;
   function draw(){
@@ -1088,7 +1088,7 @@ SIMS.trace = fig=>{
       ctx.beginPath();ctx.moveTo(a.x-26,a.y);
       ctx.lineTo(a.x-26+(b.x+26-(a.x-26))*t,a.y+(b.y-a.y)*t);ctx.stroke();ctx.setLineDash([]);
       if(t===1){ctx.fillStyle=GRAY;ctx.font='12px Inter, sans-serif';
-        ctx.fillText("verified? no — passed along",(a.x+b.x)/2-58,(a.y+b.y)/2-10);
+        ctx.fillText("verified? no - passed along",(a.x+b.x)/2-58,(a.y+b.y)/2-10);
         ctx.font='14px Inter, sans-serif';}
     }
     for(let i=0;i<shown;i++){
@@ -1105,7 +1105,7 @@ SIMS.trace = fig=>{
     }
     ctx.font='15px Inter, sans-serif';
     if(shown<4){ctx.fillStyle=GRAY;
-      ctx.fillText(`hops traced: ${shown-1} of 3 — keep tracing`,16,H-20);}
+      ctx.fillText(`hops traced: ${shown-1} of 3 - keep tracing`,16,H-20);}
     else{ctx.fillStyle=INKC;
       ctx.fillText("chain complete · verifications found along the way: 0",16,H-42);
       ctx.fillStyle=GRAY;ctx.font='13px Inter, sans-serif';
@@ -1132,9 +1132,9 @@ SIMS.drill = fig=>{
   const W=700,H=460;
   const layers=[
     {t:"“I need a lot of capital to get started.”",s:"feels like a fact",kind:"claim"},
-    {t:"how do I know? — other businesses needed capital",s:"an observation about them — convention, not fact",kind:"conv"},
-    {t:"what is capital actually for? — it buys assets, time, and people",s:"function — closer to ground. do I need all of those to start?",kind:"func"},
-    {t:"minimum true requirement: test whether anyone will pay",s:"bedrock — testable, independent of convention",kind:"rock"}
+    {t:"how do I know? - other businesses needed capital",s:"an observation about them - convention, not fact",kind:"conv"},
+    {t:"what is capital actually for? - it buys assets, time, and people",s:"function - closer to ground. do I need all of those to start?",kind:"func"},
+    {t:"minimum true requirement: test whether anyone will pay",s:"bedrock - testable, independent of convention",kind:"rock"}
   ];
   let depth=0,built=false;
   function draw(){
@@ -1164,17 +1164,17 @@ SIMS.drill = fig=>{
       ctx.fillStyle=GRAY;ctx.font='12.5px Inter, sans-serif';
       ctx.fillText(layers[i].s,46,y+50);
       if(i<depth){ctx.fillStyle=FAINT;ctx.font='12px Inter, sans-serif';
-        ctx.fillText("— stripped: unverified",W-190,y+28);}
+        ctx.fillText(" - stripped: unverified",W-190,y+28);}
     }
     ctx.font='14px Inter, sans-serif';
     if(built){
       ctx.fillStyle=`rgba(${RGB_AMBER},0.10)`;ctx.fillRect(30,H-64,W-60,44);
       ctx.strokeStyle=AMBER;ctx.lineWidth=2;ctx.strokeRect(30,H-64,W-60,44);
       ctx.fillStyle=INKC;ctx.font='600 15px Inter, sans-serif';
-      ctx.fillText("rebuilt from bedrock: get one paying customer — not funding.",46,H-37);
+      ctx.fillText("rebuilt from bedrock: get one paying customer - not funding.",46,H-37);
     }else if(depth<3){
       ctx.fillStyle=GRAY;
-      ctx.fillText(`layers stripped: ${depth} of 3 — keep asking`,30,H-30);
+      ctx.fillText(`layers stripped: ${depth} of 3 - keep asking`,30,H-30);
     }else{
       ctx.fillStyle=INKC;
       ctx.fillText("bedrock reached. now: given only what I know to be true, what would I actually build?",30,H-30);
@@ -1212,8 +1212,8 @@ SIMS.travel = fig=>{
     const row=(y,label,col)=>{
       ctx.fillStyle=col;ctx.font='600 13.5px Inter, sans-serif';
       ctx.fillText(label,56,y-24);};
-    row(140,"borrowed rule — carried by resemblance",GRAY);
-    row(260,"rebuilt model — carried by knowing why",AMBER);
+    row(140,"borrowed rule - carried by resemblance",GRAY);
+    row(260,"rebuilt model - carried by knowing why",AMBER);
     const seen=Math.floor(prog);
     for(let i=0;i<NC;i++){
       if(i>seen)continue;
@@ -1225,15 +1225,15 @@ SIMS.travel = fig=>{
       ctx.fillStyle=rOK?AMBER:FAINT;
       ctx.fillText(rOK?"✓":"✗",x-6,266);
       if(!bOK&&i===3){ctx.fillStyle=GRAY;ctx.font='11.5px Inter, sans-serif';
-        ctx.fillText("resemblance gone —",x-42,168);ctx.fillText("fails, silently",x-30,182);}
+        ctx.fillText("resemblance gone - ",x-42,168);ctx.fillText("fails, silently",x-30,182);}
       if(!rOK){ctx.fillStyle=INKC;ctx.font='11.5px Inter, sans-serif';
-        ctx.fillText("foundation moved — a",x-72,288);ctx.fillText("premise you knew to check",x-84,302);}
+        ctx.fillText("foundation moved - a",x-72,288);ctx.fillText("premise you knew to check",x-84,302);}
     }
     ctx.font='14px Inter, sans-serif';ctx.fillStyle=INKC;
     if(seen<NC-1&&running)ctx.fillText("travelling…",56,388);
     else if(seen>=NC-1){
       ctx.fillText(factsChanged?
-        "when the underlying facts themselves change, the rebuilt model fails too — at a premise you could name.":
+        "when the underlying facts themselves change, the rebuilt model fails too - at a premise you could name.":
         "the borrowed rule died with the resemblance. the rebuilt model travelled the whole way.",56,388);
       ctx.fillStyle=GRAY;ctx.font='12.5px Inter, sans-serif';
       ctx.fillText("robust = valid anywhere the underlying facts still hold. that's the whole condition.",56,410);

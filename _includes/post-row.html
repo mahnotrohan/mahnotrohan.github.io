@@ -5,9 +5,6 @@
 {%- assign n = include.note -%}
 {%- assign rt = n.content | strip_html | number_of_words | divided_by: 220.0 | ceil -%}
 {%- if rt < 1 %}{% assign rt = 1 %}{% endif -%}
-{%- if n.stage == "served" %}{% assign dots = 3 %}
-{%- elsif n.stage == "cooked" %}{% assign dots = 2 %}
-{%- else %}{% assign dots = 1 %}{% endif -%}
 <div class="w-row" data-tags="{{ n.tags | join: ' ' }}">
   <span class="w-date">{{ n.date | date: "%b %Y" }}</span>
   <span class="w-main">
@@ -23,6 +20,5 @@
   </span>
   <span class="w-meta">
     <span class="w-mins">{{ rt }} min</span>
-    <span class="dots" data-s="{{ dots }}" title="{{ n.stage }}"><i></i><i></i><i></i></span>
   </span>
 </div>

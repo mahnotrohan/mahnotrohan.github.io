@@ -12,12 +12,12 @@
   <nav class="sb-nav" aria-label="Sections">
     <div class="sb-prim">
       <a href="{{ site.baseurl }}/blog"{% if page.url contains "/blog" or page.collection == "notes" %} class="cur"{% endif %}>Writing</a>
-      <a href="{{ site.baseurl }}/orrery"{% if page.url contains "orrery" %} class="cur"{% endif %}>Orrery</a>
       <a href="{{ site.baseurl }}/about"{% if page.url == "/about" %} class="cur"{% endif %}>About</a>
     </div>
 
-    <div class="sb-grp">Made</div>
+    <div class="sb-grp">Workshop</div>
     <div class="sb-subs">
+      <a href="{{ site.baseurl }}/orrery"{% if page.url contains "orrery" %} class="cur"{% endif %}>Orrery</a><s>&middot;</s>
       <a class="ext" href="https://bloom.rohanmahnot.space">Bloom</a><s>&middot;</s>
       <a class="ext" href="https://www.are.na/rohan-mahnot-rh85hxg6yum/project-monet-oeekarcnrdy">Monet</a>
     </div>

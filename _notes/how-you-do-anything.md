@@ -3,7 +3,6 @@ layout: notes
 title: How you do anything is how you do everything?
 date: 2026-03-20
 tags: [discipline]
-stage: raw
 description: "Sounds cool. I don't think it survives contact with a real week."
 ---
 "How you do anything is how you do everything" Sounds cool, right? If you are good at something, that would make you good at everything. Well I've been a long-time believer of this and I only realize now that my interpretation hasn't been correct. It's been an interpretation that was made while cruising at 30,000 feet.

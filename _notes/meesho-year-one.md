@@ -3,7 +3,6 @@ layout: notes
 title: One year at Meesho
 date: 2026-02-16
 tags: [work]
-stage: raw
 description: "A character-defining year, and the parts of the culture I've grown to admire."
 ---
 I complete a year at Meesho this month.

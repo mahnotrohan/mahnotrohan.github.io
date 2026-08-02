@@ -3,7 +3,6 @@ layout: notes
 title: The Ripples
 date: 2026-07-20
 tags: [time, people]
-stage: cooked
 description: "We don't see the world as it is; we see it as we are. On rewatching Dead Poets Society a decade later."
 ---
 > We don't see the world as it is, we see it as we are. - Anaïs Nin
@@ -21,7 +20,7 @@ Art and self-expression are so fundamental to being human. And these aren't thin
 
 Roughly a lustrum back, I shared this very feeling with a friend, and I swear, I felt magic in that split second, saying out loud how I was looking forward to the life ahead, because I was hoping that it would be amazing. I was excited about the things out there, and I wanted to experience them all. And I did. And life did get better.
 
-The third time I watched this movie was over a month back. And this time, I interpreted it in a completely different way. More than just sympathising with the characters, I could empathise. Life had happened, and I had grown to have a broader understanding of self and society — and most important of all, I had developed kindness for myself. And today, I feel very grateful, which is partly why I write as well. Someone's blog changed my entire life. The blog was the ripple that created the waves I am surfing today.
+The third time I watched this movie was over a month back. And this time, I interpreted it in a completely different way. More than just sympathising with the characters, I could empathise. Life had happened, and I had grown to have a broader understanding of self and society - and most important of all, I had developed kindness for myself. And today, I feel very grateful, which is partly why I write as well. Someone's blog changed my entire life. The blog was the ripple that created the waves I am surfing today.
 
 All of our emotions, and our ability to feel everything - the good, bad, ugly - makes us who we are. Art, music, poetry, stories, food, this is what enriches our lives. I hope to enrich my life even more as the clock turns and the calendars flip to the months and years ahead. I hope to write a lot as well. To live life with a full cup.
 

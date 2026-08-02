@@ -3,7 +3,6 @@ layout: notes
 title: On Castigation
 date: 2026-04-18
 tags: [learning, discipline]
-stage: cooked
 description: "Punishments are feedback loops. Most of them are badly designed ones."
 ---
 Punishments are feedback loops, something that tells us that certain actions are discouraged. Depending on the context, the impact, and the stakes, the feedback loops are defined. A child scribbling on the wall, an employee screwing up a product release, and a disobeying student are all punished, but in different ways.

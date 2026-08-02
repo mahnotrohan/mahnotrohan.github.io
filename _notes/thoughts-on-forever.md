@@ -3,7 +3,6 @@ layout: notes
 title: Thoughts On Forever
 date: 2025-02-19
 tags: [time]
-stage: raw
 description: "Not in a dramatic way. Just noticing how little of anything is actually permanent."
 ---
 
@@ -13,7 +12,7 @@ It’s funny how we latch onto moments. A warm piece of cake on a rainy evening.
 
 But everything moves at its own pace. Your favourite restaurant closes. The friend who knew all your secrets moves halfway across the world. The job that once felt like a dream slowly stops fitting right.
 
-I used to think that was devastating, but now I’m not so sure. Maybe it’s more like finishing a really good book - there’s that ache when you turn the last page, but you’re different for having read it. People, places, moments—they all leave something behind, like footprints in fresh snow.
+I used to think that was devastating, but now I’m not so sure. Maybe it’s more like finishing a really good book - there’s that ache when you turn the last page, but you’re different for having read it. People, places, moments - they all leave something behind, like footprints in fresh snow.
 
 Some things, yeah, you hold onto. If someone spends most of their life with a partner and loses them, expecting them to just move on feels wrong. Some attachments stay, even when you can’t walk those same paths anymore.
 

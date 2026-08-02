@@ -13,7 +13,7 @@ catch(e){document.documentElement.setAttribute('data-theme','light');}})();
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
-<title>Thinking in Bets — Orrery</title>
+<title>Thinking in Bets - Orrery</title>
 <style>
 :root{
   /* site parity: --ground/--surface-* mirror the main site's --bg/--bg-2/--chip */
@@ -61,7 +61,7 @@ h1,h2,h3{color:var(--ink-strong); font-weight:600; line-height:1.3;}
 .kicker{font-size:11px; letter-spacing:.14em; text-transform:uppercase;
   color:var(--ink-muted); font-weight:500;}
 
-/* header — all navigation lives top right */
+/* header - all navigation lives top right */
 #hdr{position:fixed; top:0; left:0; right:0; z-index:40; height:56px;
   display:flex; align-items:center; gap:1.1rem; padding:0 1.4rem;
   background:var(--hdr-fade);
@@ -126,7 +126,7 @@ body.reader-open #hdr{right:var(--reader-w);}
 .mk.neighbor .lbl{color:var(--ink-strong);}
 .mk.dimmed{opacity:.35;}
 
-/* connection overlay — few, directional, labeled plainly */
+/* connection overlay - few, directional, labeled plainly */
 #tsvg, #astsvg, #flowsvg{position:absolute; top:0; left:0; pointer-events:none; overflow:visible;}
 @keyframes dashdrift{to{stroke-dashoffset:-64;}}
 .tline{animation:dashdrift 6s linear infinite;}
@@ -298,52 +298,52 @@ function syncSimColours(){
 syncSimColours();
 
 /* ============================================================
-   CONTENT v2 — every idea: hook → story → (sim) → mechanism
+   CONTENT v2 - every idea: hook → story → (sim) → mechanism
    fold → the idea named → where it bites → you can now explain.
    Connections: ≤4 per idea, in three plain buckets.
    ============================================================ */
 const N = {
 
 a1:{type:"axiom", title:"Life is poker, not chess", x:1259, y:512,
-  ess:"Outcomes come from skill, luck, and hidden cards — not skill alone.",
-  hook:"You made the smart call and still lost. Were you wrong — or just unlucky?",
+  ess:"Outcomes come from skill, luck, and hidden cards - not skill alone.",
+  hook:"You made the smart call and still lost. Were you wrong - or just unlucky?",
   story:"Chess has no hidden pieces and almost no luck; skill basically decides. Life is poker: you choose with cards face-down and fate shuffling the deck. Good play still loses hands.",
-  mech:"Annie Duke's founding move: stop treating life like chess. Once you admit luck and hidden information, you judge decisions differently — by process, not just result.",
+  mech:"Annie Duke's founding move: stop treating life like chess. Once you admit luck and hidden information, you judge decisions differently - by process, not just result.",
   term:"Poker vs chess", def:"decisions under uncertainty and luck (poker) versus near-perfect information and skill (chess).",
-  sowhat:"Most real decisions — careers, relationships, money — are poker. Judging them like chess trains you to learn the wrong lessons.",
+  sowhat:"Most real decisions - careers, relationships, money - are poker. Judging them like chess trains you to learn the wrong lessons.",
   builds:[], leads:[["b1-laplace","the error this invites"],["b2-logistic","so every decision is a bet"]], live:[]},
 a2:{type:"axiom", title:"Every decision is a bet", x:1057, y:627,
   ess:"To decide is to commit resources to one uncertain future over the alternatives.",
   hook:"You chose to read this instead of everything else. What did you bet against by choosing it?",
-  story:"A bet isn't just chips on a table. Every choice wagers time, money, or attention on one future — and forgoes all the others you could have backed.",
+  story:"A bet isn't just chips on a table. Every choice wagers time, money, or attention on one future - and forgoes all the others you could have backed.",
   mech:"Reframing decisions as bets forces the real questions: what are the odds, what's at stake, and what am I giving up? It drags hidden assumptions into the open.",
   term:"Decision as bet", def:"any choice that commits resources to a preferred future against uncertain alternatives.",
-  sowhat:"Calling your choices 'bets' isn't cynical — it makes you ask the odds and the stakes before you leap, not after.",
+  sowhat:"Calling your choices 'bets' isn't cynical - it makes you ask the odds and the stakes before you leap, not after.",
   builds:[], leads:[["b2-logistic","the betting frame"],["a4","and beliefs are bets too"]], live:[]},
 a3:{type:"axiom", title:"You never see all the cards", x:1462, y:627,
-  ess:"Uncertainty and hidden information are permanent — not a temporary lack of research.",
+  ess:"Uncertainty and hidden information are permanent - not a temporary lack of research.",
   hook:"How much of what you'd need to be truly sure right now is simply unknowable?",
   story:"Some of the deck is always face-down: what others will do, what the world will throw, how things will break. No amount of preparation turns poker into chess.",
   mech:"Accepting irreducible uncertainty is freeing: you stop demanding certainty before acting and start working in probabilities and bets instead.",
-  term:"Hidden information", def:"the permanently unknowable cards — others' actions, future events, luck — in every real decision.",
+  term:"Hidden information", def:"the permanently unknowable cards - others' actions, future events, luck - in every real decision.",
   sowhat:"You'll never have enough information to be certain. Waiting for certainty is itself a losing bet.",
   builds:[], leads:[["b2-tension-random","so think in probabilities"],["b3-kokura","and watch how the mind copes"]], live:[]},
 a4:{type:"axiom", title:"Beliefs drive bets, and beliefs are shaky", x:1259, y:771,
   ess:"We bet on our beliefs, yet we form them first and vet them rarely.",
-  hook:"Think of something you're sure of. When did you last actually check it — or did you just absorb it?",
-  story:"We like to think we hear something, weigh it, then believe. In truth we believe first — instantly, to fit in or feel right — and only maybe examine it later, if ever.",
+  hook:"Think of something you're sure of. When did you last actually check it - or did you just absorb it?",
+  story:"We like to think we hear something, weigh it, then believe. In truth we believe first - instantly, to fit in or feel right - and only maybe examine it later, if ever.",
   mech:"Since every bet rides on a belief, unreliable beliefs mean unreliable bets. The whole discipline is vetting beliefs before staking real chips on them.",
   term:"Believe-then-vet", def:"the mind's habit of accepting a claim first and (rarely) scrutinizing it afterward.",
   sowhat:"Your confidence in a belief says nothing about its accuracy. Treat beliefs as bets you might have to defend.",
   builds:[], leads:[["b2-attractors","beliefs are bets"],["b3-kokura","motivated reasoning"]], live:[]},
 
 "b1-laplace":{type:"phenomenon", title:"Resulting", sim:"resulting", x:404, y:355,
-  ess:"Judging a decision by how it happened to turn out — the master mistake.",
+  ess:"Judging a decision by how it happened to turn out - the master mistake.",
   hook:"A friend drives home drunk and arrives safe. Good decision?",
   story:"We call a choice good when it works and bad when it doesn't. But a drunk drive that arrives safe was still a terrible bet, and a smart bet that loses was still smart. Duke calls the confusion 'resulting.'",
-  mech:"Outcomes are noisy: luck sits between your decision and the result. Grade the decision by what you knew and the odds you faced — not by the card that fell.",
+  mech:"Outcomes are noisy: luck sits between your decision and the result. Grade the decision by what you knew and the odds you faced - not by the card that fell.",
   term:"Resulting", def:"equating the quality of a decision with the quality of its outcome.",
-  sowhat:"You learn the wrong lesson every time you praise a lucky win or punish an unlucky loss — in others and in yourself.",
+  sowhat:"You learn the wrong lesson every time you praise a lucky win or punish an unlucky loss - in others and in yourself.",
   builds:[["a1","luck sits between choice and result"]], leads:[["b1-pendulum","what really makes an outcome"]], live:[]},
 "b1-pendulum":{type:"mechanism", title:"Outcome = decision + luck", x:884, y:309,
   ess:"Every result is the sum of what you chose and what fate added.",
@@ -351,26 +351,26 @@ a4:{type:"axiom", title:"Beliefs drive bets, and beliefs are shaky", x:1259, y:7
   story:"Split any outcome into two parts: the quality of your decision, and the luck that landed on top. One result can't tell you which part did the work.",
   mech:"Because luck contaminates every result, a single outcome is weak evidence about decision quality. Only the pattern across many decisions reveals your real skill.",
   term:"The outcome equation", def:"outcome = decision quality + luck; a single result blends the two inseparably.",
-  sowhat:"Stop reading destiny into single results — a win, a loss, a hire. Judge the process; let the scoreboard average out.",
+  sowhat:"Stop reading destiny into single results - a win, a loss, a hire. Judge the process; let the scoreboard average out.",
   builds:[["a1","poker's two ingredients"]], leads:[["b1-sensitive","a famous misjudgment"]], live:[["b1-laplace","see resulting in action"]]},
 "b1-sensitive":{type:"story", title:"The Pete Carroll pass", x:520, y:522,
   ess:"A defensible call, one unlucky result, and a nation calling it the dumbest ever.",
   hook:"Super Bowl, seconds left, one yard to go. The coach calls a pass, it's intercepted. Genius or idiot?",
   story:"Pete Carroll's goal-line pass in Super Bowl XLIX was intercepted and he was branded the worst coach alive. But the call had sound logic and low interception odds. The result was ugly; the decision wasn't.",
-  mech:"The pile-on was pure resulting: had the pass worked, he'd be a genius. Same decision, opposite verdicts — decided by a coin he didn't control.",
+  mech:"The pile-on was pure resulting: had the pass worked, he'd be a genius. Same decision, opposite verdicts - decided by a coin he didn't control.",
   term:"The resulting headline", def:"public judgment of a decision driven entirely by its (often lucky) outcome.",
-  sowhat:"Before you crown or crucify anyone — yourself included — for a decision, ask: am I judging the call, or just the roll?",
+  sowhat:"Before you crown or crucify anyone - yourself included - for a decision, ask: am I judging the call, or just the roll?",
   builds:[["b1-laplace","resulting, at full volume"]], leads:[["b1-lorenz-story","and hindsight makes it worse"]], live:[]},
 "b1-lorenz-story":{type:"mechanism", title:"Hindsight makes the past look certain", x:254, y:656,
   ess:"Once you know how it ended, it feels like it had to end that way.",
   hook:"After the fact, didn't the outcome seem obvious? Then why didn't it feel obvious before?",
   story:"Knowing the result rewrites memory: the uncertain past hardens into an inevitable story. We forget the other futures that were genuinely live at the moment of choice.",
-  mech:"Hindsight fuels resulting — the outcome looks foreordained, so the decision looks obviously right or wrong. It erases the uncertainty the decider actually faced.",
+  mech:"Hindsight fuels resulting - the outcome looks foreordained, so the decision looks obviously right or wrong. It erases the uncertainty the decider actually faced.",
   term:"Hindsight bias", def:"the after-the-fact sense that an outcome was predictable all along.",
-  sowhat:"When reviewing a past choice, reconstruct what you actually knew then — not what you know now. Otherwise every lesson is contaminated.",
+  sowhat:"When reviewing a past choice, reconstruct what you actually knew then - not what you know now. Otherwise every lesson is contaminated.",
   builds:[["a3","the past hides its cards too"]], leads:[["b1-principle","the fix"]], live:[]},
 "b1-principle":{type:"principle", title:"Judge the decision, not the result", x:716, y:679,
-  ess:"Grade the bet by the odds and info you had — not by the card that fell.",
+  ess:"Grade the bet by the odds and info you had - not by the card that fell.",
   hook:"How would you rate your best decision of the year if it had happened to fail?",
   story:"A good decision is one that made sense given what you knew and the stakes you faced. Whether it won or lost is partly luck's department, not yours.",
   mech:"Traces to poker: since outcome = decision + luck, the only fair scorecard is decision quality. Separate the two and you finally learn the right lessons.",
@@ -387,9 +387,9 @@ a4:{type:"axiom", title:"Beliefs drive bets, and beliefs are shaky", x:1259, y:7
   sowhat:"Before a big call, phrase it as a bet with odds and stakes. Vague preferences become decisions you can reason about.",
   builds:[["a2","a decision is a bet"]], leads:[["b2-attractors","and beliefs are bets"]], live:[]},
 "b2-attractors":{type:"mechanism", title:"Beliefs are bets too", x:2069, y:401,
-  ess:"Every belief is a wager on how the world is — usually placed without checking the odds.",
+  ess:"Every belief is a wager on how the world is - usually placed without checking the odds.",
   hook:"You'd bet money the earth is round. Would you bet just as fast on your take on last night's news?",
-  story:"We hold beliefs as facts, but each is really a bet about reality — often placed on flimsy evidence we never examined. Seeing beliefs as bets exposes how thin the support often is.",
+  story:"We hold beliefs as facts, but each is really a bet about reality - often placed on flimsy evidence we never examined. Seeing beliefs as bets exposes how thin the support often is.",
   mech:"If beliefs are bets, they deserve odds, not certainty: 'I'm 70% sure', not 'I know.' That single shift makes you open to updating when new cards arrive.",
   term:"Beliefs as bets", def:"the view that every belief is an implicit wager about reality, holdable at a probability.",
   sowhat:"Attach a confidence level to your strong opinions. 'I'm 60% on this' invites evidence; 'I know' slams the door.",
@@ -405,13 +405,13 @@ a4:{type:"axiom", title:"Beliefs drive bets, and beliefs are shaky", x:1259, y:7
 "b2-tension-random":{type:"mechanism", title:"Think in probabilities", sim:"probability", x:2392, y:470,
   ess:"Drop true/false. Almost everything worth deciding lives at some percentage in between.",
   hook:"Will you hit your goal this year? 'Yes' and 'no' are both wrong. What's the real answer?",
-  story:"We crave black-and-white — right or wrong, will or won't. But reality runs on shades: 'about 65% likely.' Forcing a coin-flip world into yes/no throws away most of what you know.",
-  mech:"Probabilistic thinking holds several futures at once, weighted by likelihood. It makes you calibrated instead of merely confident — and ready to update as odds shift.",
+  story:"We crave black-and-white - right or wrong, will or won't. But reality runs on shades: 'about 65% likely.' Forcing a coin-flip world into yes/no throws away most of what you know.",
+  mech:"Probabilistic thinking holds several futures at once, weighted by likelihood. It makes you calibrated instead of merely confident - and ready to update as odds shift.",
   term:"Calibration", def:"assigning realistic probabilities so your 70%-sure claims come true about 70% of the time.",
-  sowhat:"Replace 'it'll work / it won't' with a percentage. You'll plan for more than one future — and be less blindsided by the one that arrives.",
+  sowhat:"Replace 'it'll work / it won't' with a percentage. You'll plan for more than one future - and be less blindsided by the one that arrives.",
   builds:[["a3","uncertainty is permanent"]], leads:[["b2-principle","which redefines being wrong"]], live:[]},
 "b2-principle":{type:"principle", title:"Redefining 'wrong'", x:1895, y:598,
-  ess:"Being wrong isn't a sin — it's information, and often just variance.",
+  ess:"Being wrong isn't a sin - it's information, and often just variance.",
   hook:"What if 'I was wrong' meant 'I got new data', not 'I failed'? Would you admit it faster?",
   story:"In a probabilistic world, a good 80% bet still loses one time in five. Losing doesn't make it wrong. And when you truly are mistaken, that's just the world handing you a better model.",
   mech:"Divorcing 'wrong' from shame lets you update quickly and cheaply. The truthseeker treats being wrong as the fastest route to being less wrong.",
@@ -421,57 +421,57 @@ a4:{type:"axiom", title:"Beliefs drive bets, and beliefs are shaky", x:1259, y:7
 
 "b3-kokura":{type:"phenomenon", title:"Motivated reasoning", x:271, y:962,
   ess:"We reason to protect what we already believe, not to find what's true.",
-  hook:"Notice how hard you scrutinize a study you dislike — and how easily you wave through one you like?",
+  hook:"Notice how hard you scrutinize a study you dislike - and how easily you wave through one you like?",
   story:"The mind is a lawyer, not a scientist: it builds the case for what it already wants to believe and cross-examines everything else. Smart people are just better lawyers.",
   mech:"Motivated reasoning means more intelligence can entrench error, not cure it. You can't out-think a bias you're using your thinking to defend.",
   term:"Motivated reasoning", def:"processing evidence to reach a desired conclusion rather than an accurate one.",
-  sowhat:"Your smartest arguments are often well-dressed self-defense. You can't fix this alone — which is the next idea.",
+  sowhat:"Your smartest arguments are often well-dressed self-defense. You can't fix this alone - which is the next idea.",
   builds:[["a4","we believe first, defend after"]], leads:[["b3-contingency","being right vs getting it right"]], live:[]},
 "b3-contingency":{type:"tension", title:"Being right vs getting it right", x:601, y:1008,
   ess:"Wanting to be right and wanting to get it right pull in opposite directions.",
-  hook:"In your last argument, were you trying to find the truth — or to win?",
+  hook:"In your last argument, were you trying to find the truth - or to win?",
   story:"'Being right' defends the ego and the belief you walked in with. 'Getting it right' is willing to lose the argument to gain the truth. Most of us conflate the two and choose the first.",
-  mech:"The truthseeker deliberately values accuracy over vindication — rewarding the update, not the win. That preference must be chosen; the ego defaults the other way.",
+  mech:"The truthseeker deliberately values accuracy over vindication - rewarding the update, not the win. That preference must be chosen; the ego defaults the other way.",
   term:"Truthseeking", def:"prioritizing accuracy over the comfort of being proven right.",
   sowhat:"Catch yourself defending a position for pride. Ask: would I rather win this, or actually get it right?",
   builds:[["b3-kokura","the ego's default"]], leads:[["b3-timeline","so recruit other people"]], live:[]},
 "b3-timeline":{type:"mechanism", title:"The decision pod", x:312, y:1210,
-  ess:"You can't debias yourself alone — so borrow other people's eyes.",
+  ess:"You can't debias yourself alone - so borrow other people's eyes.",
   hook:"Who in your life will tell you you're wrong to your face? If no one, that's a problem.",
-  story:"Duke's answer to motivated reasoning is a small group committed to truth over comfort — a 'pod' that pressure-tests each other's bets and catches the blind spots no solo mind can.",
+  story:"Duke's answer to motivated reasoning is a small group committed to truth over comfort - a 'pod' that pressure-tests each other's bets and catches the blind spots no solo mind can.",
   mech:"A good group exposes you to dissent and holds you accountable, doing from outside what your reasoning won't do from inside. The group is the debiasing tool.",
   term:"The decision group", def:"a small circle committed to truthseeking that stress-tests each member's thinking.",
-  sowhat:"Find two or three people who'll challenge you honestly, and bring them your live decisions — not just your finished ones.",
+  sowhat:"Find two or three people who'll challenge you honestly, and bring them your live decisions - not just your finished ones.",
   builds:[["b3-contingency","truthseeking, made social"]], leads:[["b3-principle","the rules that make it work"]], live:[]},
 "b3-principle":{type:"mechanism", title:"Accountability and dissent", x:774, y:1152,
   ess:"A truth-group works only with real accountability and welcomed disagreement.",
-  hook:"A group of people who all agree with you — is that support, or a trap?",
+  hook:"A group of people who all agree with you - is that support, or a trap?",
   story:"Duke borrows the scientists' norms (CUDOS): share openly, welcome all comers, judge ideas impartially, stay skeptical. Above all, seek out dissent instead of nodding heads.",
-  mech:"Accountability — knowing you'll have to explain your reasoning — makes you think better in advance. Diverse dissent supplies the disconfirming evidence your mind hides.",
-  term:"CUDOS", def:"communism, universalism, disinterestedness, organized skepticism — norms for a truthseeking group.",
+  mech:"Accountability - knowing you'll have to explain your reasoning - makes you think better in advance. Diverse dissent supplies the disconfirming evidence your mind hides.",
+  term:"CUDOS", def:"communism, universalism, disinterestedness, organized skepticism - norms for a truthseeking group.",
   sowhat:"Build groups that reward being challenged, not being agreed with. An echo chamber feels great and teaches nothing.",
   builds:[["b3-timeline","what makes a pod work"]], leads:[["b3-plan","and how to talk odds"]], live:[]},
 "b3-plan":{type:"principle", title:"Communicate in probabilities", x:543, y:1326,
-  ess:"Say how sure you are — a number, not a nod — so others can push back precisely.",
+  ess:"Say how sure you are - a number, not a nod - so others can push back precisely.",
   hook:"'It'll probably work.' Probably like 55%, or like 95%? Those are wildly different bets.",
   story:"Vague confidence hides your real position. Stating 'I'm about 70%' invites others to move you with evidence and lets you keep score later on your own calibration.",
   mech:"Probabilities make beliefs falsifiable and updatable in public. They also disarm ego: an open 70% leaves room to be moved without losing face.",
   term:"Expressing uncertainty", def:"attaching explicit probabilities to claims so they can be tested and revised.",
-  sowhat:"Put a number on it — in meetings, forecasts, plans. Precision about your uncertainty is a superpower few people use.",
+  sowhat:"Put a number on it - in meetings, forecasts, plans. Precision about your uncertainty is a superpower few people use.",
   builds:[["b3-principle","truthseeking, in language"]], leads:[["b4-coinflip","now: recruit your other selves"]], live:[]},
 
 "b4-coinflip":{type:"mechanism", title:"Mental time travel", x:1583, y:979,
   ess:"Bring your past and future selves into the room where you decide.",
   hook:"What would the you of ten years from now beg the you of right now to do differently?",
-  story:"In the heat of a choice, only the present self is at the table — and it's impulsive and short-sighted. Deliberately summoning past and future selves widens the view.",
+  story:"In the heat of a choice, only the present self is at the table - and it's impulsive and short-sighted. Deliberately summoning past and future selves widens the view.",
   mech:"Mental time travel counters our bias toward the now. Consulting other selves imports the memory and consequence the present moment conveniently forgets.",
   term:"Mental time travel", def:"deliberately consulting your past and future selves when making a present decision.",
   sowhat:"Before deciding, ask what past-you learned and what future-you will wish you'd done. The present self is a bad lone advisor.",
   builds:[["a2","a bet placed across time"]], leads:[["b4-ergodicity","a tool for it"]], live:[]},
 "b4-ergodicity":{type:"mechanism", title:"10-10-10", sim:"tenten", x:1901, y:945,
   ess:"How will this feel in 10 minutes, 10 months, 10 years?",
-  hook:"That thing you're agonizing over — will it even register in ten years?",
-  story:"Suzy Welch's tiny tool: run the decision forward at three horizons. Most 'huge' present feelings shrink to nothing over months and years — and some quiet choices loom larger.",
+  hook:"That thing you're agonizing over - will it even register in ten years?",
+  story:"Suzy Welch's tiny tool: run the decision forward at three horizons. Most 'huge' present feelings shrink to nothing over months and years - and some quiet choices loom larger.",
   mech:"Three horizons expose temporal discounting: the present self overweights right-now emotion. Seeing all three at once rebalances the bet toward the long run.",
   term:"10-10-10", def:"weighing a decision by its consequences in 10 minutes, 10 months, and 10 years.",
   sowhat:"Next fraught choice, actually run 10-10-10. The panic of the moment usually loses its vote once the longer horizons speak.",
@@ -480,7 +480,7 @@ a4:{type:"axiom", title:"Beliefs drive bets, and beliefs are shaky", x:1259, y:7
   ess:"When emotion hijacks the present self, every bet gets worse.",
   hook:"Ever made a string of terrible choices right after one infuriating setback? That's tilt.",
   story:"Poker's word for emotional hijack: after a bad beat, the rattled player chases losses and torches their judgment. The same tilt follows anger, ego, and euphoria off the felt.",
-  mech:"On tilt, the present self seizes the wheel and the future self is locked out. The move isn't to reason harder in the moment — it's to notice tilt and step away.",
+  mech:"On tilt, the present self seizes the wheel and the future self is locked out. The move isn't to reason harder in the moment - it's to notice tilt and step away.",
   term:"Tilt", def:"an emotionally hijacked state in which decision quality collapses.",
   sowhat:"Learn your tilt signals and pre-commit: when tilted, make no big bets. Decide that rule now, while you're calm.",
   builds:[["b4-coinflip","the present self, hijacked"]], leads:[["b4-survive","so pre-arm the future self"]], live:[]},
@@ -490,12 +490,12 @@ a4:{type:"axiom", title:"Beliefs drive bets, and beliefs are shaky", x:1259, y:7
   story:"Ulysses tied himself to the mast before the sirens. You can too: rules, defaults, and commitments set by a calm self that bind the tilted one.",
   mech:"Because the in-the-moment self can't be trusted, you move decisions upstream to when you're clear-headed. The past self becomes the future self's bodyguard.",
   term:"Ulysses contract", def:"a commitment made in a cool state that constrains your future, compromised self.",
-  sowhat:"Automate the good bet in advance — the auto-transfer, the deleted app, the if-then rule — so willpower isn't needed when it's weakest.",
+  sowhat:"Automate the good bet in advance - the auto-transfer, the deleted app, the if-then rule - so willpower isn't needed when it's weakest.",
   builds:[["b4-domains","defending against tilt"]], leads:[["b4-signal","and minimize regret"]], live:[]},
 "b4-signal":{type:"mechanism", title:"Feel the regret before you act", x:1612, y:1181,
   ess:"Move regret from after the decision to before it, where it can still help.",
   hook:"Most regret arrives too late to be useful. What if you felt it in advance?",
-  story:"Duke flips regret forward: imagine your future self looking back, disappointed. Felt beforehand, that pang becomes data — a warning you can still act on, not a wound you nurse later.",
+  story:"Duke flips regret forward: imagine your future self looking back, disappointed. Felt beforehand, that pang becomes data - a warning you can still act on, not a wound you nurse later.",
   mech:"Prospective regret recruits the future self as an advisor rather than a judge. It surfaces the downside your optimistic present self would rather ignore.",
   term:"Anticipated regret", def:"deliberately feeling future regret in advance to inform a present choice.",
   sowhat:"Before committing, ask what future-you will most regret. Then treat that answer as a live input, not background noise.",
@@ -509,7 +509,7 @@ a4:{type:"axiom", title:"Beliefs drive bets, and beliefs are shaky", x:1259, y:7
   sowhat:"For any real goal, write the success story first, then reverse-engineer the moves. It beats planning blind from the present.",
   builds:[["b4-signal","future-self thinking, aimed at wins"]], leads:[["b4-process","now imagine the failure"]], live:[]},
 "b4-process":{type:"mechanism", title:"Premortem: start from the failure", x:1650, y:1330,
-  ess:"Assume the plan already failed, then explain why — before you commit.",
+  ess:"Assume the plan already failed, then explain why - before you commit.",
   hook:"It's a year from now and the plan flopped. Can you say, in detail, what killed it?",
   story:"A premortem gives everyone permission to voice doubts by pretending the disaster already happened. People who'd never criticize a live plan will happily autopsy a dead one.",
   mech:"Imagining failure defeats optimism bias and unlocks honest dissent. Each cause you surface becomes a risk you can hedge now, while it's still cheap.",
@@ -522,26 +522,26 @@ a4:{type:"axiom", title:"Beliefs drive bets, and beliefs are shaky", x:1259, y:7
   story:"Backcasting and premortem together sketch a decision tree: the branching futures, good and bad, each with rough odds. Suddenly you're betting on a landscape, not a single hoped-for path.",
   mech:"Seeing the whole tree stops you fixating on the one future you want. You weigh branches by probability and stakes, and prepare for the ones you'd otherwise ignore.",
   term:"Scenario tree", def:"a map of a decision's possible futures, each assigned a rough probability.",
-  sowhat:"Sketch the branches before a big bet — even roughly. Naming the bad ones is how you stop being ambushed by them.",
+  sowhat:"Sketch the branches before a big bet - even roughly. Naming the bad ones is how you stop being ambushed by them.",
   builds:[["b4-process","futures, mapped"]], leads:[["b4-explore","and played over the long run"]], live:[]},
 "b4-explore":{type:"mechanism", title:"Play the long run", sim:"luckskill", x:2470, y:1430,
   ess:"Skill shows up over many bets, never in any single hand.",
   hook:"A great decision-maker and a coin both lose sometimes. Over 500 rounds, who's ahead?",
-  story:"In the short run luck drowns skill — the best player loses hands, the fool wins them. Stretch the sample to hundreds of decisions and skill separates cleanly from noise.",
+  story:"In the short run luck drowns skill - the best player loses hands, the fool wins them. Stretch the sample to hundreds of decisions and skill separates cleanly from noise.",
   mech:"This is why one result proves little and a long record proves a lot. You optimize for decision quality and let the law of large numbers do the scoring.",
   term:"The long run", def:"the horizon over which luck averages out and decision skill becomes visible.",
   sowhat:"Don't judge yourself on any single outcome. Judge the process, and give it enough repetitions to show.",
   builds:[["b4-destination","betting across many branches"]], leads:[["b4-fence","so protect your ability to keep betting"]], live:[]},
 "b4-fence":{type:"principle", title:"Protect the bankroll", x:2090, y:1430,
   ess:"Stay in the game: no single bet should be able to knock you out.",
-  hook:"A bet with great odds — but lose and you're broke. Do you take it?",
+  hook:"A bet with great odds - but lose and you're broke. Do you take it?",
   story:"The long run only rewards you if you survive to reach it. Poker players guard their bankroll so one bad beat can't end the night; the same discipline protects a life.",
   mech:"Since skill needs many hands to pay off, ruin is the one truly unrecoverable error. Size your bets so variance can bruise you but never bury you.",
   term:"Bankroll management", def:"sizing bets so that bad luck can never remove you from the game.",
   sowhat:"Never stake what you can't afford to lose on any one bet, however good the odds. Surviving is the precondition for winning.",
   builds:[["b4-explore","the long run needs a survivor"]], leads:[["b4-principle","the whole bet"]], live:[]},
 "b4-principle":{type:"principle", title:"Bet on better decisions", x:1830, y:1560,
-  ess:"You can't control the cards — so wager everything on the quality of your decisions.",
+  ess:"You can't control the cards - so wager everything on the quality of your decisions.",
   hook:"If you can't choose your luck, what's actually left to get better at?",
   story:"Duke's close: outcomes are part luck forever, so stop chasing results and start compounding decision quality. Judge the process, think in bets, recruit other selves and other people, and let the long run pay you.",
   mech:"Every idea here folds into one habit: improve the decision, accept the variance. Do that consistently and the scoreboard, over enough hands, takes care of itself.",
@@ -689,7 +689,7 @@ document.getElementById('overviewBtn').onclick = ()=>{ closeReader(); overviewCa
 addEventListener('resize', ()=>apply());
 
 /* ============================================================
-   SKY — constellation names, asterisms, ecliptic, stars
+   SKY - constellation names, asterisms, ecliptic, stars
    ============================================================ */
 TERRITORIES.forEach(t=>{
   const rgb = [parseInt(t.hue.slice(1,3),16), parseInt(t.hue.slice(3,5),16), parseInt(t.hue.slice(5,7),16)].join(',');
@@ -706,7 +706,7 @@ TERRITORIES.forEach(t=>{
 
 
 
-/* minor stars — small nameless flecks inside each figure */
+/* minor stars - small nameless flecks inside each figure */
 {
   const R = mulberry32(11);
   TERRITORIES.forEach(t=>{
@@ -915,7 +915,7 @@ function clearHighlight(){
 }
 
 /* ============================================================
-   NAV — top-right cluster drives the default flow
+   NAV - top-right cluster drives the default flow
    ============================================================ */
 function syncNav(){
   const i = focusId ? TOUR.indexOf(focusId) : -1;
@@ -945,8 +945,8 @@ function setActive(fig, btn){
 }
 function simHTML(kind){
   const caps = {
-    resulting:"Four decisions: good or bad, won or lost. Flip the lens — judging by outcome mislabels the two off-diagonal traps.",
-    probability:"A claim isn't true or false — it's a credence. Slide your confidence and watch both futures stay on the table.",
+    resulting:"Four decisions: good or bad, won or lost. Flip the lens - judging by outcome mislabels the two off-diagonal traps.",
+    probability:"A claim isn't true or false - it's a credence. Slide your confidence and watch both futures stay on the table.",
     tenten:"The same choice at three horizons. Impulse feelings fade; quiet neglect grows. 10-10-10 lets the long view vote.",
     tree:"One decision, several futures, each with rough odds. Toggle the win-path and the failure-path you'd otherwise ignore.",
     luckskill:"A skilled decider vs a coin, round by round. Short run: tangled. Long run: skill pulls clear of the noise."
@@ -1007,7 +1007,7 @@ SIMS.resulting = fig=>{
     });
     ctx.fillStyle=GRAY; ctx.font='13px Inter, sans-serif';
     const msg = lens==="outcome"
-      ? "Judging by outcome praises the lucky fool and blames the unlucky expert — two errors."
+      ? "Judging by outcome praises the lucky fool and blames the unlucky expert - two errors."
       : "Judging by decision quality gets all four right, whatever luck did afterward.";
     ctx.fillText(msg, 60, H-20);
   }
@@ -1033,10 +1033,10 @@ SIMS.probability = fig=>{
     ctx.fillStyle=GRAY; ctx.fillText("slips  "+(100-p)+"%", bx+bw*p/100+10, by+26);
     // the two futures held at once
     ctx.font='14px Inter, sans-serif';
-    ctx.fillStyle=INKC; wrapText(ctx,"You're not saying yes or no. You're holding both futures, weighted — and planning for each.", 40, 210, bw, 22);
+    ctx.fillStyle=INKC; wrapText(ctx,"You're not saying yes or no. You're holding both futures, weighted - and planning for each.", 40, 210, bw, 22);
     ctx.fillStyle=FAINT; ctx.font='13px Inter, sans-serif';
     let note;
-    if(p>=95||p<=5) note="Near-certain — one of the rare places a near-yes/no is honest.";
+    if(p>=95||p<=5) note="Near-certain - one of the rare places a near-yes/no is honest.";
     else if(p>=45&&p<=55) note="A true coin-flip. 'It'll work' would have thrown away that this is 50/50.";
     else note="Neither certainty. Anyone forcing this to yes/no is discarding what you actually know.";
     wrapText(ctx,note,40,270,bw,20);
@@ -1102,7 +1102,7 @@ SIMS.tree = fig=>{
     });
     ctx.fillStyle=GRAY; ctx.font='13px Inter, sans-serif';
     const msg = hl==="back" ? "Backcasting: stand in the win and ask what path led here."
-      : hl==="pre" ? "Premortem: stand in the failure and name what killed it — while you still can prevent it."
+      : hl==="pre" ? "Premortem: stand in the failure and name what killed it - while you still can prevent it."
       : "One decision fans into weighted futures. You're betting on the whole tree, not the branch you hope for.";
     wrapText(ctx,msg,40,H-24,W-80,20);
   }
@@ -1142,7 +1142,7 @@ SIMS.luckskill = fig=>{
     ctx.fillStyle=AMBER; ctx.fillText("skilled decider", px+8, Y(skill[t])+16);
     ctx.fillStyle=FAINT; ctx.font='12px Inter, sans-serif'; ctx.fillText("decision #"+t+" of "+N, px, H-16);
     ctx.fillStyle=GRAY; ctx.font='12px Inter, sans-serif';
-    const note = t<80 ? "Short run: the two tangle — luck is louder than skill." : "Long run: the small per-decision edge compounds clear of the noise.";
+    const note = t<80 ? "Short run: the two tangle - luck is louder than skill." : "Long run: the small per-decision edge compounds clear of the noise.";
     ctx.fillText(note, 220, H-16);
     if(t<N) raf=requestAnimationFrame(frame);
   }

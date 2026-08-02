@@ -3,7 +3,6 @@ layout: notes
 title: The Scaling Asymmetry
 date: 2026-05-15
 tags: [business]
-stage: cooked
 description: "Software scales beautifully. The businesses wrapped around it often don't."
 ---
 The modern tech enabled startups is giving birth to a lot of innovative businesses.

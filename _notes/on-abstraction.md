@@ -3,7 +3,6 @@ layout: notes
 title: On Abstraction
 date: 2026-04-23
 tags: [thinking, learning]
-stage: cooked
 description: "Compression is useful right up until you forget what you compressed."
 ---
 Abstraction is the process of compressing broad, deep structures into something simpler. Something you can operate from with speed, clarity, and confidence. It gives you the option to forgo details when you can function without them.

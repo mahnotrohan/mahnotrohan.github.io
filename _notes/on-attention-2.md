@@ -3,7 +3,6 @@ layout: notes
 title: On Attention (2/3)
 date: 2026-05-18
 tags: [attention, time]
-stage: served
 description: "Time isn't the scarce thing. Attention is - and it gets rationed whether you choose to or not."
 series: Time & Attention
 ---
@@ -19,7 +18,7 @@ Maintenance sits above the rest. Your health, your relationships, your finances,
 
 Maintenance gets done first, every day, regardless of bandwidth. If you only had attention for one thing, this is where it would go. The failure mode is invisible in the moment; the cost of neglect doesn't announce itself, and by the time it does, you've already lost something.
 
-Each area needs a different kind of maintenance. Knowing both — the area that requires maintenance and the type of care it takes — is important.
+Each area needs a different kind of maintenance. Knowing both - the area that requires maintenance and the type of care it takes - is important.
 
 # II.
 
@@ -37,16 +36,16 @@ These aren't strategic, they're friction. The mistake is treating them as either
 
 The next cell is ongoing effort with a bounded reward. Finishing a book. Training for a marathon. Earning a degree.
 
-These look like long bets but aren't — the reward is real and definite, you just have to keep showing up until you reach it. The failure mode is starting more of them than you can sustain. Every abandoned project costs more than not having started, because it taught you the wrong lesson: that you don't finish things. Only commit to one when you can see the finish from where you're standing.
+These look like long bets but aren't - the reward is real and definite, you just have to keep showing up until you reach it. The failure mode is starting more of them than you can sustain. Every abandoned project costs more than not having started, because it taught you the wrong lesson: that you don't finish things. Only commit to one when you can see the finish from where you're standing.
 
 # V.
 
-Then the actual long bet — ongoing effort with a reward you can't predict in shape, timing, or magnitude. Building a network. Writing publicly. Reading outside your field.
+Then the actual long bet - ongoing effort with a reward you can't predict in shape, timing, or magnitude. Building a network. Writing publicly. Reading outside your field.
 
 The structure is venture-portfolio, most of what you put in won't pay back. You can't tell in advance which area will, and you stay in long enough for the asymmetry to find you. 
 *The downside is bounded, while the upside is potentially limitless.*
 
-The failure mode is impatience — redirecting attention every time something doesn't deliver on its timeline. The other is treating it as pruning, because the feedback loops are too long for the brain's reward system to register. You need the discipline to spend on these even when there's no signal.
+The failure mode is impatience - redirecting attention every time something doesn't deliver on its timeline. The other is treating it as pruning, because the feedback loops are too long for the brain's reward system to register. You need the discipline to spend on these even when there's no signal.
 
 ---
 

@@ -13,7 +13,7 @@ catch(e){document.documentElement.setAttribute('data-theme','light');}})();
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
-<title>The School of Life — Orrery</title>
+<title>The School of Life - Orrery</title>
 <style>
 :root{
   /* site parity: --ground/--surface-* mirror the main site's --bg/--bg-2/--chip */
@@ -61,7 +61,7 @@ h1,h2,h3{color:var(--ink-strong); font-weight:600; line-height:1.3;}
 .kicker{font-size:11px; letter-spacing:.14em; text-transform:uppercase;
   color:var(--ink-muted); font-weight:500;}
 
-/* header — all navigation lives top right */
+/* header - all navigation lives top right */
 #hdr{position:fixed; top:0; left:0; right:0; z-index:40; height:56px;
   display:flex; align-items:center; gap:1.1rem; padding:0 1.4rem;
   background:var(--hdr-fade);
@@ -126,7 +126,7 @@ body.reader-open #hdr{right:var(--reader-w);}
 .mk.neighbor .lbl{color:var(--ink-strong);}
 .mk.dimmed{opacity:.35;}
 
-/* connection overlay — few, directional, labeled plainly */
+/* connection overlay - few, directional, labeled plainly */
 #tsvg, #astsvg, #flowsvg{position:absolute; top:0; left:0; pointer-events:none; overflow:visible;}
 @keyframes dashdrift{to{stroke-dashoffset:-64;}}
 .tline{animation:dashdrift 6s linear infinite;}
@@ -298,7 +298,7 @@ function syncSimColours(){
 syncSimColours();
 
 /* ============================================================
-   CONTENT v2 — every idea: hook → story → (sim) → mechanism
+   CONTENT v2 - every idea: hook → story → (sim) → mechanism
    fold → the idea named → where it bites → you can now explain.
    Connections: ≤4 per idea, in three plain buckets.
    ============================================================ */
@@ -307,7 +307,7 @@ const N = {
 a1:{type:"axiom", title:"No one taught us how to live", x:1259, y:512,
   ess:"We're schooled in maths and grammar but never in how to feel, love, or cope.",
   hook:"You spent years on trigonometry. How many hours were you taught on handling anxiety, or choosing a partner?",
-  story:"We assume emotional wisdom arrives on its own with age. The School of Life's founding claim is that it doesn't — the most important skills of living are simply never taught, so most of us improvise badly.",
+  story:"We assume emotional wisdom arrives on its own with age. The School of Life's founding claim is that it doesn't - the most important skills of living are simply never taught, so most of us improvise badly.",
   mech:"If living well is a set of learnable skills we were never given, then our struggles aren't personal failings but gaps in an education no one provided. That reframing is the whole starting point.",
   term:"Emotional education", def:"the missing curriculum of self-knowledge, relationships, and coping we were never formally taught.",
   sowhat:"Your emotional messes may be less about being broken and more about never having been taught the skills. They can be learned now.",
@@ -315,15 +315,15 @@ a1:{type:"axiom", title:"No one taught us how to live", x:1259, y:512,
 a2:{type:"axiom", title:"We are all a bit broken", x:1057, y:627,
   ess:"Everyone is anxious, confused, and flawed underneath. It's the normal condition, not a defect.",
   hook:"What if the calm, sorted people you envy are, up close, just as much of a mess as you?",
-  story:"We compare our chaotic insides to everyone else's composed outsides and conclude we're uniquely damaged. In truth, imperfection is universal — the human default, shared by all, including the people we admire.",
-  mech:"Accepting universal brokenness dissolves the shame of being flawed and the loneliness of thinking you're the only one. It's the ground for compassion — toward yourself and everyone else.",
+  story:"We compare our chaotic insides to everyone else's composed outsides and conclude we're uniquely damaged. In truth, imperfection is universal - the human default, shared by all, including the people we admire.",
+  mech:"Accepting universal brokenness dissolves the shame of being flawed and the loneliness of thinking you're the only one. It's the ground for compassion - toward yourself and everyone else.",
   term:"Universal brokenness", def:"the recognition that emotional flaw and confusion are the shared human norm.",
-  sowhat:"You're not uniquely broken — you're normally broken. That single fact can lift an enormous, invisible weight.",
+  sowhat:"You're not uniquely broken - you're normally broken. That single fact can lift an enormous, invisible weight.",
   builds:[], leads:[["b1-sensitive","we're all still children"],["b4-fence","so be kind to the broken"]], live:[]},
 a3:{type:"axiom", title:"Childhood is still running us", x:1462, y:627,
-  ess:"How we love, fear, and react was largely scripted long ago — and we've forgotten the script.",
+  ess:"How we love, fear, and react was largely scripted long ago - and we've forgotten the script.",
   hook:"Why do you keep reacting to a partner or boss with a feeling that seems far too big for the moment?",
-  story:"The patterns laid down in childhood — how love felt, what we feared, how we were soothed or hurt — become templates we replay for decades, mistaking old reflexes for present-day truth.",
+  story:"The patterns laid down in childhood - how love felt, what we feared, how we were soothed or hurt - become templates we replay for decades, mistaking old reflexes for present-day truth.",
   mech:"Because the origins are hidden, the reactions feel like simple facts about now. Tracing a disproportionate feeling back to its childhood template is how it loosens its grip.",
   term:"Emotional inheritance", def:"the childhood templates that unconsciously shape how we relate as adults.",
   sowhat:"When a reaction feels too big for its trigger, it's usually old. Ask what childhood scene it's really replaying.",
@@ -332,7 +332,7 @@ a4:{type:"axiom", title:"Self-knowledge sets you free", x:1259, y:771,
   ess:"You can't stop a pattern you can't see. Naming it is the first loosening.",
   hook:"Can you change a habit you don't know you have? So what has to come first?",
   story:"The School of Life's route to freedom isn't willpower but insight: understanding why we do what we do robs our automatic patterns of their power. What is understood no longer runs us blindly.",
-  mech:"Awareness inserts a pause between trigger and reaction where choice can live. Self-knowledge doesn't erase our flaws — it lets us hold them consciously rather than be driven by them.",
+  mech:"Awareness inserts a pause between trigger and reaction where choice can live. Self-knowledge doesn't erase our flaws - it lets us hold them consciously rather than be driven by them.",
   term:"Self-knowledge", def:"understanding one's own emotional patterns and their origins, as the basis for change.",
   sowhat:"Insight, not self-discipline, is the lever. Understand the pattern and it stops being your autopilot.",
   builds:[], leads:[["b1-principle","maturity as self-knowledge"],["b4-destination","and self-compassion"]], live:[]},
@@ -340,15 +340,15 @@ a4:{type:"axiom", title:"Self-knowledge sets you free", x:1259, y:771,
 "b1-laplace":{type:"mechanism", title:"The missing curriculum", x:404, y:355,
   ess:"The skills we most need to live well are precisely the ones school skips.",
   hook:"If you designed a school for living, what would be on the timetable that yours never had?",
-  story:"Handling anxiety, choosing a partner, communicating anger, finding meaningful work, facing mortality — these are the load-bearing skills of a life, and almost no formal education touches them.",
+  story:"Handling anxiety, choosing a partner, communicating anger, finding meaningful work, facing mortality - these are the load-bearing skills of a life, and almost no formal education touches them.",
   mech:"We're left to pick them up by accident, from families who often didn't have them either. The gap explains why so many capable, educated people feel quietly lost.",
   term:"The curriculum of living", def:"the emotional and practical life-skills absent from conventional education.",
   sowhat:"Treat the hard parts of life as subjects you can actually study, not mysteries you're supposed to just know.",
   builds:[["a1","emotional education, spelled out"]], leads:[["b1-pendulum","starting with emotional intelligence"]], live:[]},
 "b1-pendulum":{type:"mechanism", title:"Emotional intelligence", x:884, y:309,
-  ess:"The core skill: understanding and working with feelings — yours and others'.",
+  ess:"The core skill: understanding and working with feelings - yours and others'.",
   hook:"We call people 'smart' for solving equations. Why not for handling a grieving friend or their own rage?",
-  story:"Emotional intelligence — naming what you feel, sensing what others feel, and responding wisely — predicts a good life far better than raw cleverness. It's a competence, and like any, it can be developed.",
+  story:"Emotional intelligence - naming what you feel, sensing what others feel, and responding wisely - predicts a good life far better than raw cleverness. It's a competence, and like any, it can be developed.",
   mech:"It's built from self-awareness and imagination about others' inner states. The School of Life treats it as the master life-skill on which relationships, work, and calm all depend.",
   term:"Emotional intelligence", def:"the learnable skill of understanding and managing emotions in oneself and others.",
   sowhat:"Cleverness got you through school; emotional intelligence gets you through life. It's worth deliberate practice.",
@@ -357,12 +357,12 @@ a4:{type:"axiom", title:"Self-knowledge sets you free", x:1259, y:771,
   ess:"Grown-ups are just tall children carrying unhealed hurts and unmet needs.",
   hook:"Watch two adults fight over the dishes. How old do they suddenly sound?",
   story:"Maturity is mostly a performance; underneath, the frightened, needy child persists in everyone. Adult tantrums, sulks, and defensiveness are that child breaking through the costume.",
-  mech:"Seeing the child in others (and yourself) replaces contempt with tenderness. The rude colleague, the cold parent — each is a wounded child who never got the education this whole chart describes.",
+  mech:"Seeing the child in others (and yourself) replaces contempt with tenderness. The rude colleague, the cold parent - each is a wounded child who never got the education this whole chart describes.",
   term:"The inner child", def:"the persistent childhood self, with its old needs and fears, beneath the adult surface.",
   sowhat:"When someone (or you) behaves badly, picture the frightened child underneath. It turns judgment into patience.",
   builds:[["a2","brokenness has an age"]], leads:[["b1-lorenz-story","where philosophy helps"]], live:[]},
 "b1-lorenz-story":{type:"story", title:"Philosophy as consolation", x:254, y:656,
-  ess:"The old thinkers were writing self-help — practical medicine for the troubled mind.",
+  ess:"The old thinkers were writing self-help - practical medicine for the troubled mind.",
   hook:"What if Seneca and the Stoics weren't dusty academics but the original therapists?",
   story:"Long before psychology, philosophers offered concrete consolation: the Stoics on anxiety and control, Epicurus on what truly brings pleasure, Montaigne on self-acceptance. Philosophy began as therapy for living.",
   mech:"The School of Life revives this: mining history's wisest minds for usable tools, not exam answers. Their consolations still work because the human predicament hasn't changed.",
@@ -370,9 +370,9 @@ a4:{type:"axiom", title:"Self-knowledge sets you free", x:1259, y:771,
   sowhat:"When you're struggling, the ancients often got there first. Read them as advisors, not artifacts.",
   builds:[["a1","education from history"]], leads:[["b1-principle","toward maturity"]], live:[]},
 "b1-principle":{type:"principle", title:"Maturity is knowing your madness", x:716, y:679,
-  ess:"The mature aren't sane — they just know exactly how they're crazy, and warn you.",
+  ess:"The mature aren't sane - they just know exactly how they're crazy, and warn you.",
   hook:"Who's safer to love: someone who insists they're perfectly normal, or someone who can list their flaws?",
-  story:"Maturity isn't the absence of neurosis but honest, humorous acquaintance with it. The mature person can say 'here's how I get difficult' — and that self-knowledge is what makes them bearable to live with.",
+  story:"Maturity isn't the absence of neurosis but honest, humorous acquaintance with it. The mature person can say 'here's how I get difficult' - and that self-knowledge is what makes them bearable to live with.",
   mech:"Traces to self-knowledge: you can't warn others about, or manage, a madness you refuse to see. Owning your specific craziness is the most reassuring thing you can offer.",
   term:"Mature self-awareness", def:"honest, good-humored knowledge of one's own emotional flaws.",
   sowhat:"Aim not to be flawless but to know your flaws well enough to flag them. That's what makes you safe to be close to.",
@@ -382,30 +382,30 @@ a4:{type:"axiom", title:"Self-knowledge sets you free", x:1259, y:771,
   ess:"Our whole idea of love is built on a beautiful, ruinous set of myths.",
   hook:"Do you secretly believe the right person would just 'get' you, without your having to explain?",
   story:"Romanticism taught us love means instant recognition, effortless understanding, no need to explain, and no real conflict if it's true. Measured against that fantasy, every real relationship looks like a failure.",
-  mech:"These inherited beliefs — soulmates, love at first sight, intuition over communication — set impossible standards. The School of Life argues most heartbreak is Romanticism's fault, not our partner's.",
+  mech:"These inherited beliefs - soulmates, love at first sight, intuition over communication - set impossible standards. The School of Life argues most heartbreak is Romanticism's fault, not our partner's.",
   term:"Romanticism", def:"the modern ideology of love as instinctive, effortless, and conflict-free.",
   sowhat:"Half your relationship disappointments may be a myth's fault, not your partner's. Question the standard, not just the person.",
   builds:[["a1","beliefs we were never taught to examine"]], leads:[["b2-attractors","who we then choose"]], live:[]},
 "b2-attractors":{type:"mechanism", title:"We marry our unfinished business", x:2069, y:401,
-  ess:"We're drawn to partners who recreate the emotional patterns of childhood — comfortable, not healthy.",
+  ess:"We're drawn to partners who recreate the emotional patterns of childhood - comfortable, not healthy.",
   hook:"Why do people so often fall for someone who frustrates them in oddly familiar ways?",
-  story:"We don't seek what's good for us; we seek what feels like home — even when home was painful. The distant parent, the volatile household: we unconsciously chase partners who echo them, mistaking familiarity for love.",
+  story:"We don't seek what's good for us; we seek what feels like home - even when home was painful. The distant parent, the volatile household: we unconsciously chase partners who echo them, mistaking familiarity for love.",
   mech:"Rooted in emotional inheritance: our template for love was set young, so 'chemistry' often just means 'this reactivates my childhood.' Knowing this lets you question a pull instead of obeying it.",
   term:"Attachment templates", def:"childhood patterns that steer us toward familiar, not necessarily healthy, partners.",
   sowhat:"That electric 'chemistry' may be your childhood calling. Worth asking whether it's love or just familiarity.",
   builds:[["a3","childhood, in our choices"]], leads:[["b2-lorenz-attractor","and how we then fail to speak"]], live:[]},
 "b2-lorenz-attractor":{type:"phenomenon", title:"The tyranny of sulking", x:2300, y:282,
-  ess:"Sulking is the strange belief that a true love should read your mind — so you refuse to explain.",
+  ess:"Sulking is the strange belief that a true love should read your mind - so you refuse to explain.",
   hook:"Ever gone silent and cold, secretly furious that they should just KNOW what's wrong?",
   story:"To sulk is to be hurt and refuse to say why, punishing someone for failing to guess. Underneath is a touching, impossible hope: that being truly loved means never having to spell out your needs.",
-  mech:"It's Romanticism turned toxic — the myth of effortless understanding weaponized into silence. The cure is unglamorous: patiently, vulnerably explaining, like a not-yet-mind-reader talking to another.",
+  mech:"It's Romanticism turned toxic - the myth of effortless understanding weaponized into silence. The cure is unglamorous: patiently, vulnerably explaining, like a not-yet-mind-reader talking to another.",
   term:"Sulking", def:"withdrawing in wounded silence, expecting a loved one to intuit the grievance.",
   sowhat:"When you catch yourself sulking, translate it into a sentence. 'They should just know' is the myth talking.",
   builds:[["b2-logistic","Romanticism's bad debt"]], leads:[["b2-tension-random","so learn to listen"]], live:[]},
 "b2-tension-random":{type:"mechanism", title:"The art of listening", x:2392, y:470,
-  ess:"Good listening isn't waiting to talk — it's helping the other person think.",
+  ess:"Good listening isn't waiting to talk - it's helping the other person think.",
   hook:"When was the last time someone listened so well you understood yourself better?",
-  story:"Most 'listening' is a queue for our own turn. Real listening draws people out — encouraging, gently questioning, reflecting back — so they arrive at clarity they couldn't reach alone. It's a rare and enormous gift.",
+  story:"Most 'listening' is a queue for our own turn. Real listening draws people out - encouraging, gently questioning, reflecting back - so they arrive at clarity they couldn't reach alone. It's a rare and enormous gift.",
   mech:"It requires setting your ego aside and getting curious about another interior. Done well, it defuses conflict and deepens intimacy more than any clever advice could.",
   term:"Generous listening", def:"attentive, drawing-out listening that helps another person clarify their own mind.",
   sowhat:"In your next hard conversation, aim to understand, not to reply. The listening itself often is the help.",
@@ -413,35 +413,35 @@ a4:{type:"axiom", title:"Self-knowledge sets you free", x:1259, y:771,
 "b2-principle":{type:"principle", title:"Love is a skill, not a feeling", x:1895, y:598,
   ess:"We treat love as something we fall into; it's really something we get better at.",
   hook:"What if love failing wasn't about finding the wrong person, but never learning the skill?",
-  story:"Romanticism says love is a feeling that strikes; the School of Life says it's a competence — patience, communication, forgiveness, generosity — that can be studied and practiced like any other. The right person is a project, not a discovery.",
-  mech:"Traces to emotional education: if love is a skill, its failures are teachable gaps, not fated mismatches. That's hopeful — you can get better at loving, starting now.",
+  story:"Romanticism says love is a feeling that strikes; the School of Life says it's a competence - patience, communication, forgiveness, generosity - that can be studied and practiced like any other. The right person is a project, not a discovery.",
+  mech:"Traces to emotional education: if love is a skill, its failures are teachable gaps, not fated mismatches. That's hopeful - you can get better at loving, starting now.",
   term:"Love as skill", def:"the view of love as a set of learnable competencies rather than a spontaneous feeling.",
-  sowhat:"Stop waiting to 'find' love and start practicing it — listening, forgiving, explaining. It improves with reps.",
+  sowhat:"Stop waiting to 'find' love and start practicing it - listening, forgiving, explaining. It improves with reps.",
   builds:[["b2-tension-random","listening is part of it"],["b2-logistic","the antidote to the myth"]], leads:[["b3-kokura","now: work and worth"]], live:[]},
 
 "b3-kokura":{type:"mechanism", title:"The confused search for work", x:271, y:962,
   ess:"We expect work to fulfill us but were never taught how to find what would.",
-  hook:"Why is 'what should I do with my life?' so agonizing — and so rarely answered well?",
-  story:"We inherited the noble, modern idea that work should be meaningful, but no map for finding such work. So we drift, or chase prestige, or freeze — confusing a hard, learnable search with a personal failing.",
+  hook:"Why is 'what should I do with my life?' so agonizing - and so rarely answered well?",
+  story:"We inherited the noble, modern idea that work should be meaningful, but no map for finding such work. So we drift, or chase prestige, or freeze - confusing a hard, learnable search with a personal failing.",
   mech:"Meaningful work usually means relieving some suffering or making something good for others; the search is a skill of self-knowledge plus experiment, not a bolt of destiny.",
   term:"Meaningful work", def:"work experienced as reducing suffering or adding good, aligned with one's nature.",
-  sowhat:"The career fog isn't a defect in you — it's a hard search no one trained you for. Treat it as experiment, not fate.",
+  sowhat:"The career fog isn't a defect in you - it's a hard search no one trained you for. Treat it as experiment, not fate.",
   builds:[["a1","another untaught life-skill"]], leads:[["b3-contingency","and the status trap around it"]], live:[]},
 "b3-contingency":{type:"tension", title:"Status anxiety", x:601, y:1008,
   ess:"We chase status less for money than for the love and respect we imagine it brings.",
-  hook:"Why does a stranger's success on your feed sting — even when your own life is fine?",
+  hook:"Why does a stranger's success on your feed sting - even when your own life is fine?",
   story:"Alain de Botton's diagnosis: we crave status because we fear that without it we'll be ignored and unloved. The anxiety is really about worthiness, dressed up as ambition, and it's stoked by constant comparison.",
-  mech:"Seeing status-hunger as a disguised need for love — and noticing that the audience we're impressing barely cares — loosens its grip. There are other, kinder ways to feel worthy.",
+  mech:"Seeing status-hunger as a disguised need for love - and noticing that the audience we're impressing barely cares - loosens its grip. There are other, kinder ways to feel worthy.",
   term:"Status anxiety", def:"the dread of low regard from others, driving much of our ambition and envy.",
-  sowhat:"When achievement-hunger bites, ask what it's really after — usually love and respect. Then find those more directly.",
+  sowhat:"When achievement-hunger bites, ask what it's really after - usually love and respect. Then find those more directly.",
   builds:[["a2","the anxious, worth-seeking self"]], leads:[["b3-timeline","envy as its signal"]], live:[]},
 "b3-timeline":{type:"mechanism", title:"Envy is a clue", sim:"envyclue", x:312, y:1210,
-  ess:"Envy isn't just ugly — it's a messy map to what you actually want.",
+  ess:"Envy isn't just ugly - it's a messy map to what you actually want.",
   hook:"Who do you envy? Now: what exactly is it you envy about them?",
   story:"We're taught to suppress envy as shameful. The School of Life says decode it instead: each pang points to a value or need of yours going unmet. Envy, read carefully, is career and life guidance in disguise.",
-  mech:"The trick is to get specific — you rarely envy someone's whole life, only a slice. That slice names a genuine desire you can then pursue honestly, or consciously let go.",
+  mech:"The trick is to get specific - you rarely envy someone's whole life, only a slice. That slice names a genuine desire you can then pursue honestly, or consciously let go.",
   term:"Envy as data", def:"treating envy as information about one's own unmet desires and values.",
-  sowhat:"Keep an 'envy list.' Each entry, examined closely, reveals something you want — and might actually go get.",
+  sowhat:"Keep an 'envy list.' Each entry, examined closely, reveals something you want - and might actually go get.",
   builds:[["b3-contingency","the sting of comparison"]], leads:[["b3-principle","and the impostor feeling"]], live:[]},
 "b3-principle":{type:"mechanism", title:"Everyone is winging it", x:774, y:1152,
   ess:"Impostor syndrome dissolves the moment you realize the 'real adults' are improvising too.",
@@ -449,104 +449,104 @@ a4:{type:"axiom", title:"Self-knowledge sets you free", x:1259, y:771,
   story:"We assume the people in charge possess a confidence and competence we lack. Get close to anyone in authority and you find the same doubt and improvisation. The category of the fully sorted grown-up simply doesn't exist.",
   mech:"Impostor syndrome comes from comparing your inside to others' outsides. Knowing everyone is bluffing to some degree gives you permission to try, lead, and create despite the doubt.",
   term:"Impostor syndrome", def:"the feeling of being an unqualified fraud among seemingly competent others.",
-  sowhat:"Feeling like a fraud isn't a verdict — it's the universal experience. Everyone qualified once felt exactly this. Proceed anyway.",
+  sowhat:"Feeling like a fraud isn't a verdict - it's the universal experience. Everyone qualified once felt exactly this. Proceed anyway.",
   builds:[["a2","no one has it together"]], leads:[["b3-plan","so aim for good enough"]], live:[]},
 "b3-plan":{type:"principle", title:"Good-enough work", x:543, y:1326,
   ess:"A workable, meaningful-enough job beats an endless hunt for the perfect calling.",
-  hook:"Is there really one perfect job out there for you — or is that another Romantic myth?",
+  hook:"Is there really one perfect job out there for you - or is that another Romantic myth?",
   story:"Just as with love, we're sold a fantasy of the one perfect vocation, and paralyzed by it. The School of Life offers relief: aim for good-enough work that pays, holds some meaning, and leaves room to live. Perfect is the enemy of started.",
-  mech:"Dropping the perfect-calling myth frees you to commit, grow, and find meaning inside a decent choice — which is where meaning usually accrues anyway, through mastery and contribution.",
+  mech:"Dropping the perfect-calling myth frees you to commit, grow, and find meaning inside a decent choice - which is where meaning usually accrues anyway, through mastery and contribution.",
   term:"Good-enough work", def:"satisfying, sufficient work chosen over a paralyzing search for the perfect calling.",
   sowhat:"Stop waiting for the perfect vocation. Pick good-enough, commit, and let meaning grow from doing it well.",
   builds:[["b3-kokura","relief for the confused search"]], leads:[["b4-coinflip","now: making peace"]], live:[]},
 
 "b4-coinflip":{type:"mechanism", title:"Cheerful pessimism", x:1583, y:979,
   ess:"Lower your expectations and ordinary life suddenly feels like a pleasant surprise.",
-  hook:"Would you be happier expecting the day to go well — or bracing for it to be a bit of a mess?",
+  hook:"Would you be happier expecting the day to go well - or bracing for it to be a bit of a mess?",
   story:"We're told to expect the best; the School of Life prescribes the opposite. Anticipate difficulty, delay, and disappointment as the norm, and reality routinely exceeds it. Pessimism, oddly, is a recipe for cheerfulness.",
-  mech:"Misery is the gap between expectation and reality. Lower the expectation and the gap — and the suffering — shrinks. It's not gloom; it's calibration in the service of calm.",
+  mech:"Misery is the gap between expectation and reality. Lower the expectation and the gap - and the suffering - shrinks. It's not gloom; it's calibration in the service of calm.",
   term:"Philosophical pessimism", def:"deliberately modest expectations that leave room for pleasant surprise.",
   sowhat:"Expect the mildly disappointing as normal. You'll be calmer when it comes, and delighted when it doesn't.",
   builds:[["a2","imperfection is the norm"]], leads:[["b4-ergodicity","and the value of sadness"]], live:[]},
 "b4-ergodicity":{type:"mechanism", title:"The wisdom of melancholy", x:1901, y:945,
-  ess:"Sadness isn't always a problem to fix — sometimes it's clear-eyed contact with reality.",
+  ess:"Sadness isn't always a problem to fix - sometimes it's clear-eyed contact with reality.",
   hook:"What if your quiet melancholy weren't a malfunction, but a form of wisdom?",
   story:"Our culture treats all sadness as a disorder to medicate away. The School of Life reclaims melancholy: a gentle, unindignant sorrow at life's inherent difficulty that is closer to truth than forced positivity.",
-  mech:"Melancholy differs from depression — it's sad but not resentful, accepting rather than raging. Allowing it prevents the extra suffering of believing you should always be happy.",
+  mech:"Melancholy differs from depression - it's sad but not resentful, accepting rather than raging. Allowing it prevents the extra suffering of believing you should always be happy.",
   term:"Melancholy", def:"a calm, accepting sadness in the face of life's built-in difficulties.",
-  sowhat:"Not every low mood needs fixing. Some sadness is just honesty — let it sit, and it often steadies you.",
+  sowhat:"Not every low mood needs fixing. Some sadness is just honesty - let it sit, and it often steadies you.",
   builds:[["b4-coinflip","expecting difficulty"]], leads:[["b4-domains","and the long view"]], live:[]},
 "b4-domains":{type:"mechanism", title:"The view from above", x:2219, y:979,
   ess:"Zoom out to the scale of stars and centuries and today's panic quietly shrinks.",
   hook:"How much will this thing you're dreading matter in a hundred years? On the scale of a galaxy?",
-  story:"The Stoics practiced the 'view from above': picturing your troubles from a cosmic or historical distance. Against the vastness of time and space, the humiliation or worry loses its crushing size — a relief, not a nihilism.",
+  story:"The Stoics practiced the 'view from above': picturing your troubles from a cosmic or historical distance. Against the vastness of time and space, the humiliation or worry loses its crushing size - a relief, not a nihilism.",
   mech:"Perspective rescales emotion. What feels total up close becomes a passing speck from far enough away, freeing you from the tyranny of the present moment's intensity.",
   term:"The view from above", def:"deliberately adopting a vast, distant perspective to shrink present worries.",
-  sowhat:"When something feels catastrophic, widen the lens — to the year, the century, the cosmos. The dread rarely survives the zoom.",
+  sowhat:"When something feels catastrophic, widen the lens - to the year, the century, the cosmos. The dread rarely survives the zoom.",
   builds:[["b4-coinflip","perspective as consolation"]], leads:[["b4-survive","then re-see the small and good"]], live:[]},
 "b4-survive":{type:"mechanism", title:"The art of appreciation", x:2438, y:1094,
-  ess:"Most of what could delight us is already here — we've just stopped seeing it.",
+  ess:"Most of what could delight us is already here - we've just stopped seeing it.",
   hook:"When did a slice of toast, or the light at 5pm, last genuinely move you?",
-  story:"Habit blinds us to the ordinary marvels all around — a friend's face, warmth, a quiet morning. The School of Life treats appreciation as a skill: deliberately re-seeing the everyday as if noticing it for the first, or last, time.",
+  story:"Habit blinds us to the ordinary marvels all around - a friend's face, warmth, a quiet morning. The School of Life treats appreciation as a skill: deliberately re-seeing the everyday as if noticing it for the first, or last, time.",
   mech:"Gratitude here isn't a chore but a retraining of attention. Since the view from above shrinks the bad, the same widened attention can re-magnify the small goods we take for granted.",
   term:"Appreciation", def:"the practiced skill of noticing and savoring the ordinary goods of daily life.",
   sowhat:"Happiness is often less about getting more and more about noticing what's already here. Practice re-seeing it.",
   builds:[["b4-domains","perspective, turned toward the good"]], leads:[["b4-signal","art helps us see"]], live:[]},
 "b4-signal":{type:"mechanism", title:"Art as therapy", x:1612, y:1181,
-  ess:"Art isn't decoration — it's a tool that consoles, reminds, and re-sensitizes us.",
+  ess:"Art isn't decoration - it's a tool that consoles, reminds, and re-sensitizes us.",
   hook:"Why does the right painting or song feel like it understands you better than most people?",
   story:"The School of Life reframes art by its use: it holds onto feelings we lose, keeps hope and calm in view, makes us feel less alone in our sorrows, and re-opens our eyes to beauty. A gallery is an emotional pharmacy.",
-  mech:"Chosen for what it does to your inner state, art becomes a practical aid to living — a way to summon the moods and perspectives we can't reliably generate alone.",
-  term:"Art as therapy", def:"using art deliberately for its psychological functions — consolation, memory, perspective.",
+  mech:"Chosen for what it does to your inner state, art becomes a practical aid to living - a way to summon the moods and perspectives we can't reliably generate alone.",
+  term:"Art as therapy", def:"using art deliberately for its psychological functions - consolation, memory, perspective.",
   sowhat:"Curate the art, music, and images around you for how they make you feel, not just how they look. Let them do their work.",
   builds:[["b4-survive","art re-sensitizes us"]], leads:[["b4-danger","toward the good-enough life"]], live:[]},
 "b4-danger":{type:"tension", title:"The good-enough life", sim:"goodenough", x:1959, y:1152,
   ess:"Chasing a perfect life guarantees misery; a good-enough one is where peace lives.",
-  hook:"Are you unhappy because your life is bad — or because you're measuring it against perfect?",
-  story:"Borrowed from the psychologist Winnicott's 'good-enough mother': the aim isn't a flawless life but a good-enough one — decent, workable, humanly imperfect. Perfectionism isn't high standards; it's a recipe for perpetual disappointment.",
-  mech:"Most misery is the distance between real life and an impossible ideal. Lower the ideal to good-enough and the misery drains away — not as defeat, but as sanity.",
+  hook:"Are you unhappy because your life is bad - or because you're measuring it against perfect?",
+  story:"Borrowed from the psychologist Winnicott's 'good-enough mother': the aim isn't a flawless life but a good-enough one - decent, workable, humanly imperfect. Perfectionism isn't high standards; it's a recipe for perpetual disappointment.",
+  mech:"Most misery is the distance between real life and an impossible ideal. Lower the ideal to good-enough and the misery drains away - not as defeat, but as sanity.",
   term:"Good enough", def:"the deliberate acceptance of a decent, imperfect life over an impossible ideal.",
   sowhat:"Trade the perfect life for a good-enough one and watch a background hum of failure switch off. It's freedom, not settling.",
   builds:[["a2","imperfection is the human default"]], leads:[["b4-process","the beauty in imperfection"]], live:[]},
 "b4-process":{type:"mechanism", title:"The beauty of imperfection", x:1650, y:1330,
   ess:"Wabi-sabi: the cracked, worn, and incomplete can be more beautiful than the flawless.",
   hook:"Why can a chipped old bowl move you more than a flawless new one?",
-  story:"The Japanese aesthetic of wabi-sabi finds beauty precisely in imperfection, age, and impermanence — the crack, the patina, the incomplete. It's a quiet rebuke to our craving for the shiny and perfect.",
+  story:"The Japanese aesthetic of wabi-sabi finds beauty precisely in imperfection, age, and impermanence - the crack, the patina, the incomplete. It's a quiet rebuke to our craving for the shiny and perfect.",
   mech:"Applied to ourselves, wabi-sabi reframes flaws and scars as sources of character and beauty, not shame. What's imperfect is what's real, and what's real is what can be loved.",
   term:"Wabi-sabi", def:"the aesthetic that finds beauty in imperfection, impermanence, and incompleteness.",
-  sowhat:"Your cracks aren't disqualifications from a beautiful life — in this light, they're part of what makes it beautiful.",
+  sowhat:"Your cracks aren't disqualifications from a beautiful life - in this light, they're part of what makes it beautiful.",
   builds:[["b4-danger","imperfection, made beautiful"]], leads:[["b4-destination","and turned inward as kindness"]], live:[]},
 "b4-destination":{type:"mechanism", title:"Quiet the inner critic", x:2330, y:1255,
-  ess:"Talk to yourself as you would to a friend you love — the harsh inner voice is a bad guide.",
+  ess:"Talk to yourself as you would to a friend you love - the harsh inner voice is a bad guide.",
   hook:"Would you ever speak to someone you love the way your inner critic speaks to you?",
   story:"Most of us carry a savage internal voice, often inherited from a harsh early figure, that we'd never tolerate aimed at anyone else. Self-compassion means deliberately replacing it with the warm, fair voice of a good friend.",
-  mech:"Rooted in emotional inheritance and self-knowledge: the critic is old and learned, not true. Noticing it lets you answer it — kinder to yourself, and paradoxically more able to grow.",
+  mech:"Rooted in emotional inheritance and self-knowledge: the critic is old and learned, not true. Noticing it lets you answer it - kinder to yourself, and paradoxically more able to grow.",
   term:"Self-compassion", def:"treating oneself with the warmth and fairness one would offer a good friend.",
-  sowhat:"When the inner critic starts, ask what you'd say to a friend in your shoes — then say that to yourself.",
+  sowhat:"When the inner critic starts, ask what you'd say to a friend in your shoes - then say that to yourself.",
   builds:[["a4","self-knowledge, turned kind"]], leads:[["b4-explore","and settle into calm"]], live:[]},
 "b4-explore":{type:"mechanism", title:"Ordinary calm", x:2470, y:1430,
-  ess:"A quiet, unremarkable, peaceful life is not a failure — it may be the achievement.",
-  hook:"When did 'ordinary' become an insult — and what did we lose when it did?",
-  story:"We're taught to want the extraordinary and to disdain the ordinary. The School of Life rehabilitates the small, calm life — good work, a few loves, simple pleasures — as not a consolation prize but, quite possibly, the point.",
+  ess:"A quiet, unremarkable, peaceful life is not a failure - it may be the achievement.",
+  hook:"When did 'ordinary' become an insult - and what did we lose when it did?",
+  story:"We're taught to want the extraordinary and to disdain the ordinary. The School of Life rehabilitates the small, calm life - good work, a few loves, simple pleasures - as not a consolation prize but, quite possibly, the point.",
   mech:"Once status anxiety is seen through and expectations are lowered, ordinary calm stops looking like failure and starts looking like wisdom hard-won. Peace, not intensity, becomes the aim.",
   term:"Ordinary life", def:"the unremarkable, calm, sufficient life reclaimed as genuinely good.",
-  sowhat:"A modest, peaceful life isn't settling — for many it's the quiet achievement the loud world talked you out of wanting.",
+  sowhat:"A modest, peaceful life isn't settling - for many it's the quiet achievement the loud world talked you out of wanting.",
   builds:[["b3-contingency","past the status trap"]], leads:[["b4-fence","held with kindness"]], live:[]},
 "b4-fence":{type:"principle", title:"Kindness to the broken", x:2090, y:1430,
   ess:"Since everyone is struggling under the surface, gentleness is simple realism.",
   hook:"If you truly believed everyone you met was fighting a hard private battle, how would you treat them?",
-  story:"The School of Life's ethic follows straight from universal brokenness: because everyone is coping with more pain than they show, kindness isn't naïve — it's the accurate response to reality. And the first person owed it is you.",
+  story:"The School of Life's ethic follows straight from universal brokenness: because everyone is coping with more pain than they show, kindness isn't naïve - it's the accurate response to reality. And the first person owed it is you.",
   mech:"Compassion is what self-knowledge and shared imperfection add up to. Seeing the wounded child in everyone, including the difficult and the powerful, makes gentleness the only sane stance.",
   term:"Compassion", def:"the gentleness owed to all people, oneself included, given universal hidden struggle.",
-  sowhat:"Assume everyone — including you — is having a harder time than they let on. Kindness stops being optional and becomes obvious.",
+  sowhat:"Assume everyone - including you - is having a harder time than they let on. Kindness stops being optional and becomes obvious.",
   builds:[["a2","everyone is a bit broken"],["b1-sensitive","the child in each of us"]], leads:[["b4-principle","the whole lesson"]], live:[]},
 "b4-principle":{type:"principle", title:"Better, not perfect", x:1830, y:1560,
-  ess:"The goal isn't to be fixed or flawless — it's to become a little wiser, kinder, calmer.",
+  ess:"The goal isn't to be fixed or flawless - it's to become a little wiser, kinder, calmer.",
   hook:"After all this, what would 'success' at living actually look like?",
-  story:"The School of Life's closing note: there's no graduation into a solved, serene life. There's only the ongoing, gentle work of self-knowledge and small improvement — becoming a slightly better, kinder, more self-aware version of your flawed self.",
-  mech:"Every strand converges here: we were never taught, we're all broken, childhood runs deep, and insight frees us — so the honest aim is progress, not perfection, held with humor and compassion.",
+  story:"The School of Life's closing note: there's no graduation into a solved, serene life. There's only the ongoing, gentle work of self-knowledge and small improvement - becoming a slightly better, kinder, more self-aware version of your flawed self.",
+  mech:"Every strand converges here: we were never taught, we're all broken, childhood runs deep, and insight frees us - so the honest aim is progress, not perfection, held with humor and compassion.",
   term:"Better, not perfect", def:"the aim of gradual emotional growth rather than an impossible finished self.",
-  sowhat:"Give up on becoming perfect or fully healed. Aim to be a bit wiser and kinder than yesterday — that's the whole game.",
+  sowhat:"Give up on becoming perfect or fully healed. Aim to be a bit wiser and kinder than yesterday - that's the whole game.",
   builds:[["b4-fence","kindness, as the method"],["a4","self-knowledge, ongoing"]], leads:[], live:[]}
 };
 const TERRITORIES = [
@@ -689,7 +689,7 @@ document.getElementById('overviewBtn').onclick = ()=>{ closeReader(); overviewCa
 addEventListener('resize', ()=>apply());
 
 /* ============================================================
-   SKY — constellation names, asterisms, ecliptic, stars
+   SKY - constellation names, asterisms, ecliptic, stars
    ============================================================ */
 TERRITORIES.forEach(t=>{
   const rgb = [parseInt(t.hue.slice(1,3),16), parseInt(t.hue.slice(3,5),16), parseInt(t.hue.slice(5,7),16)].join(',');
@@ -706,7 +706,7 @@ TERRITORIES.forEach(t=>{
 
 
 
-/* minor stars — small nameless flecks inside each figure */
+/* minor stars - small nameless flecks inside each figure */
 {
   const R = mulberry32(11);
   TERRITORIES.forEach(t=>{
@@ -915,7 +915,7 @@ function clearHighlight(){
 }
 
 /* ============================================================
-   NAV — top-right cluster drives the default flow
+   NAV - top-right cluster drives the default flow
    ============================================================ */
 function syncNav(){
   const i = focusId ? TOUR.indexOf(focusId) : -1;
@@ -946,8 +946,8 @@ function setActive(fig, btn){
 function simHTML(kind){
   const caps = {
     romantic:"The same relationship, seen two ways. The Romantic ideal sets a standard no love survives; the realistic view is where love can actually live.",
-    envyclue:"Click who you envy. Each pang, read closely, points past the person to a specific thing you want — envy as a quiet map.",
-    goodenough:"Slide from perfectionism to good-enough. Misery is the gap between your life and your ideal — lower the ideal and the gap closes."
+    envyclue:"Click who you envy. Each pang, read closely, points past the person to a specific thing you want - envy as a quiet map.",
+    goodenough:"Slide from perfectionism to good-enough. Misery is the gap between your life and your ideal - lower the ideal and the gap closes."
   };
   const ctl = {
     romantic:`<button class="ghost active" data-v="ideal">the Romantic ideal</button>
@@ -977,8 +977,8 @@ function wrapText(ctx, text, x, y, maxW, lh){
 SIMS.romantic = fig=>{
   const cv=fig.querySelector('canvas'); cv.width=700; cv.height=380;
   const ctx=cv.getContext('2d'); const W=700,H=380; let v="ideal";
-  const ideal=["They will sense what I need without my saying it.","If it's real love, there won't be much conflict.","We were made for each other — one perfect match exists.","Desire should stay effortless and constant.","To explain a need is to admit the love has failed."];
-  const real=["They can't read my mind; I'll have to explain, kindly and often.","Conflict is normal — the question is how we repair it.","No one is a perfect match; love is learning to accommodate a flawed other.","Desire ebbs and flows; that's not a verdict on the relationship.","Naming a need is a skill of love, not evidence against it."];
+  const ideal=["They will sense what I need without my saying it.","If it's real love, there won't be much conflict.","We were made for each other - one perfect match exists.","Desire should stay effortless and constant.","To explain a need is to admit the love has failed."];
+  const real=["They can't read my mind; I'll have to explain, kindly and often.","Conflict is normal - the question is how we repair it.","No one is a perfect match; love is learning to accommodate a flawed other.","Desire ebbs and flows; that's not a verdict on the relationship.","Naming a need is a skill of love, not evidence against it."];
   function draw(){
     ctx.fillStyle=SUNK; ctx.fillRect(0,0,W,H);
     const list = v==="ideal"?ideal:real;
@@ -987,7 +987,7 @@ SIMS.romantic = fig=>{
     ctx.font='14.5px Inter, sans-serif'; let y=88;
     list.forEach(t=>{ ctx.fillStyle= v==="ideal"?GRAY:INKC; ctx.fillText("•", 40, y); y=wrapText(ctx,t,60,y,W-100,22)+30; });
     ctx.fillStyle=GRAY; ctx.font='13px Inter, sans-serif';
-    wrapText(ctx, v==="ideal" ? "Held to this standard, every real relationship reads as a failure — and we blame the partner, not the myth."
+    wrapText(ctx, v==="ideal" ? "Held to this standard, every real relationship reads as a failure - and we blame the partner, not the myth."
                               : "None of this is less romantic. It's the version in which two flawed people can actually love each other.", 40, H-40, W-80, 18);
   }
   draw();
@@ -1001,8 +1001,8 @@ SIMS.envyclue = fig=>{
   const cv=fig.querySelector('canvas'); cv.width=700; cv.height=380;
   const ctx=cv.getContext('2d'); const W=700,H=380; let e=0;
   const items=[
-    {who:"the ex-colleague who got promoted",surface:"You don't want their job, their boss, or their hours.",clue:"You want to feel your work is seen and to matter more. That's the real signal — chase recognition, not their title."},
-    {who:"the friend always travelling",surface:"You don't actually want to live out of a suitcase.",clue:"You want more freedom and novelty in your weeks. The clue points to spaciousness — buildable at home, not just abroad."},
+    {who:"the ex-colleague who got promoted",surface:"You don't want their job, their boss, or their hours.",clue:"You want to feel your work is seen and to matter more. That's the real signal - chase recognition, not their title."},
+    {who:"the friend always travelling",surface:"You don't actually want to live out of a suitcase.",clue:"You want more freedom and novelty in your weeks. The clue points to spaciousness - buildable at home, not just abroad."},
     {who:"the artist making their own work",surface:"You don't envy the precarious income or the doubt.",clue:"You want to make something of your own, on your own terms. The pang names a creative need going unfed."}];
   function draw(){
     ctx.fillStyle=SUNK; ctx.fillRect(0,0,W,H);
@@ -1014,7 +1014,7 @@ SIMS.envyclue = fig=>{
     ctx.fillStyle=AMBER; ctx.font='11px Inter, sans-serif'; ctx.fillText("THE CLUE", 40, y); y+=22;
     ctx.fillStyle=INKC; ctx.font='15px Inter, sans-serif'; wrapText(ctx,it.clue,40,y,W-80,22);
     ctx.fillStyle=GRAY; ctx.font='13px Inter, sans-serif';
-    wrapText(ctx,"You never envy a whole life — only a slice. That slice is the desire worth naming.",40,H-30,W-80,18);
+    wrapText(ctx,"You never envy a whole life - only a slice. That slice is the desire worth naming.",40,H-30,W-80,18);
   }
   draw();
   fig.querySelectorAll('.ghost').forEach(b=>b.onclick=()=>{
@@ -1047,9 +1047,9 @@ SIMS.goodenough = fig=>{
     ctx.fillStyle='#8a5c5c'; ctx.font='13px Inter, sans-serif';
     ctx.fillText("misery = "+Math.round(gap), ix+bw+24, py+ph-(rh+ih)/2);
     ctx.fillStyle=INKC; ctx.font='14px Inter, sans-serif';
-    ctx.fillText(std>=90?"Perfectionism: the gap (and the suffering) is huge.":std<=65?"Good enough: the gap nearly closes — peace.":"Lowering the standard shrinks the gap.", 40, H-42);
+    ctx.fillText(std>=90?"Perfectionism: the gap (and the suffering) is huge.":std<=65?"Good enough: the gap nearly closes - peace.":"Lowering the standard shrinks the gap.", 40, H-42);
     ctx.fillStyle=GRAY; ctx.font='13px Inter, sans-serif';
-    wrapText(ctx,"Your life barely moved. Only the standard did — and with it, almost all the unhappiness. Not settling: sanity.",40,H-20,W-80,18);
+    wrapText(ctx,"Your life barely moved. Only the standard did - and with it, almost all the unhappiness. Not settling: sanity.",40,H-20,W-80,18);
   }
   draw();
   fig.querySelector('input').oninput=e=>{ std=+e.target.value; draw(); };

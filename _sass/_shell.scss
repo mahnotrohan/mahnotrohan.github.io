@@ -227,6 +227,19 @@ $now-indent: 1.1rem;     // .now-item left border + padding
 
 .lede { color: var(--fg-dim); max-width: calc(#{$measure} + #{$row-indent}); }
 
+// Body prose on every page shares the site measure. Only text elements are
+// capped: the component blocks (.blurbs, .cards, .picks, .now-list) are divs
+// and keep the full column width.
+content > p,
+content > ul,
+content > ol,
+content > dl,
+content > blockquote,
+content > pre,
+content > table {
+  max-width: calc(#{$measure} + #{$row-indent});
+}
+
 .secth {
   font-size: 0.62rem;
   letter-spacing: 0.16em;
@@ -251,35 +264,6 @@ $now-indent: 1.1rem;     // .now-item left border + padding
   white-space: nowrap;
 
   &:hover { color: var(--accent); }
-}
-
-// Doneness: three dots, filled to the stage. No emoji.
-.dots {
-  display: inline-flex;
-  gap: 3px;
-  align-items: center;
-  vertical-align: middle;
-
-  i { width: 5px; height: 5px; border-radius: 50%; background: var(--fg-faint); opacity: 0.3; display: block; }
-  &[data-s="1"] i:nth-child(1),
-  &[data-s="2"] i:nth-child(-n+2),
-  &[data-s="3"] i { background: var(--accent); opacity: 1; }
-}
-
-.legend {
-  display: flex;
-  gap: 1.5rem;
-  flex-wrap: wrap;
-  font-size: 0.85rem;
-  color: var(--fg-dim);
-  background: var(--bg-2);
-  border: 1px solid var(--rule);
-  border-radius: 8px;
-  padding: 0.8rem 1rem;
-  margin-top: 1.4rem;
-
-  span { display: flex; gap: 0.5rem; align-items: center; }
-  b { color: var(--fg); font-weight: 600; }
 }
 
 .filters {
@@ -364,7 +348,6 @@ $now-indent: 1.1rem;     // .now-item left border + padding
   .sep { opacity: 0.45; }
 }
 
-.p-stage { display: inline-flex; gap: 0.4rem; align-items: center; }
 .p-tags { display: flex; gap: 0.3rem; flex-wrap: wrap; margin: 0.7rem 0 0; }
 
 .p-series {

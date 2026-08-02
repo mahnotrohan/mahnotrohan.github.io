@@ -4,7 +4,6 @@ title: What does it mean to be Knowledgable
 date: 2026-02-23
 permalink: /what-is-knowledge/
 tags: [learning, thinking]
-stage: cooked
 description: "I used to think the path to great outcomes was a straight line. On what knowing something actually means."
 ---
 I used to think that the path to great outcomes looked like this 
@@ -41,7 +40,7 @@ You never act with full information. Our minds are evolved to make decisions in 
 
 So "the right decision" isn't something you can reliably choose. Often, you don't even know what "right" means at the moment of deciding. We only call decisions "right" in hindsight, once the outcome is known.
 
-> *Life can only be understood backwards; but it must be lived forwards — Søren Kierkegaard*
+> *Life can only be understood backwards; but it must be lived forwards - Søren Kierkegaard*
 > 
 
 A better goal is to reduce uncertainty faster than others, while keeping downside controlled. If I can't guarantee the right outcome, I can at least guarantee a good process. 

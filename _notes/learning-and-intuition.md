@@ -3,7 +3,6 @@ layout: notes
 title: Learning & Intuition
 date: 2026-07-29
 tags: [learning, thinking]
-stage: cooked
 description: "Nobody teaches a toddler to run. Some things you can only be told, and knowing which is which changes how you learn."
 ---
 No one teaches a toddler to run. She watches, tries, falls, and tries again. Falling tells her when she gets it wrong. After enough tries, running just happens. Reading is different. Someone has to sit with her and say: this is right, this is wrong.
@@ -20,7 +19,7 @@ Memory makes it worse. While you wait for the result, you slowly forget what you
 
 This is why I started taking notes. Every few weeks my coffee would go bad, and the fix was always the same: follow the notebook, not my memory. Runners keep training logs. Scientists keep lab journals. Same reason. Written down, the facts stay put.
 
-Running is fast and clear. Instinct is enough. Coffee is fast but confusing, so I need a notebook and one change at a time. But the things I care about most — managing people, writing, deciding what to build — are slow and confusing. The result comes months later, mixed with everything else that happened. And by then, I remember it wrong.
+Running is fast and clear. Instinct is enough. Coffee is fast but confusing, so I need a notebook and one change at a time. But the things I care about most - managing people, writing, deciding what to build - are slow and confusing. The result comes months later, mixed with everything else that happened. And by then, I remember it wrong.
 
 You can't speed this up. But you can do three things.
 
@@ -28,6 +27,6 @@ Write down what you decided and what you expect. The result will show up on its 
 
 Reread your notes on a schedule. If you only look back when you feel like it, you'll only look back when things are going well.
 
-Rent someone's intuition. That's what a coach is — someone who already made your mistakes and remembers them.
+Rent someone's intuition. That's what a coach is - someone who already made your mistakes and remembers them.
 
 A toddler needs none of this. Running teaches her by itself. The things I'm bad at are the things that teach nothing on their own.

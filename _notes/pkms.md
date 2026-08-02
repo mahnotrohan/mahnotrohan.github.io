@@ -3,7 +3,6 @@ layout: notes
 title: My PKMS and Task management System
 date: 2026-02-04
 tags: [systems, attention]
-stage: served
 description: "Every knowledge worker goes through this rite of passage. Here's where mine landed, and why."
 ---
 ![]({{site.baseurl}}/assets/pkms.png)

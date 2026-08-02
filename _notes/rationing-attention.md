@@ -3,7 +3,6 @@ layout: notes
 title: Rationing Attention (3/3)
 date: 2026-06-12
 tags: [attention, time]
-stage: served
 description: "Everyone gets the same 24 hours, but not the same attention. What is actually consuming yours, and do you even know?"
 series: Time & Attention
 ---
@@ -30,7 +29,7 @@ But a lot of life is made of micro-expenditures. Ambient noise on a commute, a q
 I find Kahneman’s System 1 / System 2 framework useful to understand here. 
 System 2 - intentional, effortful thinking. You know when you’ve used, and why. 
 System 1 - automatic, associative processing. Operates mostly below awareness. 
-Its costs are invisible. The emotional texture of an environment, ambient stimulation, the micro-decisions of daily life — all draw from the same pool, while appearing with no obvious costs.
+Its costs are invisible. The emotional texture of an environment, ambient stimulation, the micro-decisions of daily life - all draw from the same pool, while appearing with no obvious costs.
 
 ### 2. Working Memory Load
 
@@ -38,7 +37,7 @@ Another invisible drain is how much you’re carrying in your head. When you hav
 
 I’ve noticed this with myself, the more regularly I journal, the more clearly I think, and the speed of decisions goes up. 
 
-But there’s an open question I sit with here — does dumping my thoughts help because it releases the emotional weight, freeing up the attention tied to unresolved feeling? Or is it simply the act of moving things from your head to an external surface that creates the relief? 
+But there’s an open question I sit with here - does dumping my thoughts help because it releases the emotional weight, freeing up the attention tied to unresolved feeling? Or is it simply the act of moving things from your head to an external surface that creates the relief? 
 Its probably both, but they’re very different mechanisms. Recharging depleted vsis different from freeing up occupied attention.
 
 ### 3. The Gut-Mind Conflict
@@ -52,12 +51,12 @@ What costs you is the unacknowledged loop, not the tension itself.
 This works at three levels: *visibility*, *prevention*, and *recovery*.
 
 1. **Visibility**
-    You can’t manage what you can’t see. Building a habit of asking — what is actually consuming my attention right now? — is where it starts. Journaling and honest audits of your environments are good tools to help with this this. The goal is to surface the invisible.
+    You can’t manage what you can’t see. Building a habit of asking - what is actually consuming my attention right now? - is where it starts. Journaling and honest audits of your environments are good tools to help with this this. The goal is to surface the invisible.
     
 2. **Prevention**
-    1. Limit exposure to low-ROI attention sinks. A noisy commute, passive scrolling, meetings that didn’t need to happen — expenditures with poor returns. 
+    1. Limit exposure to low-ROI attention sinks. A noisy commute, passive scrolling, meetings that didn’t need to happen - expenditures with poor returns. 
     2. Reduce context-switching. Every switch between types of thinking carries a transition cost. Batching similar work and limiting interruptions within a task reduces this overhead significantly.
-    3. [Offload your cognitive load](https://rohanmahnot.space/notes/pkms/). Working memory is finite. Externalise whatever you can — open decisions, tasks, worries et. The goal isn’t organisation for its own sake; it’s keeping working memory available for what actually needs it.
+    3. [Offload your cognitive load](https://rohanmahnot.space/notes/pkms/). Working memory is finite. Externalise whatever you can - open decisions, tasks, worries et. The goal isn’t organisation for its own sake; it’s keeping working memory available for what actually needs it.
     4. Close open loops. Unresolved things like deferred decisions, unaddressed conflicts et. occupy mental bandwidth passively. Closing a loop doesn’t mean resolving it fully. Sometimes it just means deciding consciously when you’ll return to it. 
     The mind needs to know something is handled, not necessarily solved.
     5. Manage the depth of engagement. Even when you can’t limit exposure, you can choose how much of yourself to bring to something. The trade off to consider is Depth of engagement and the frequency.

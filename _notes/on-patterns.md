@@ -3,14 +3,13 @@ layout: notes
 title: Patterns & Induction
 date: 2025-02-25
 tags: [thinking]
-stage: cooked
 description: "The chicken fed at 9 AM every morning has an excellent theory - right up until Sunday."
 ---
 Every morning, a chicken on a poultry farm is fed at 9 AM. After weeks of this routine, the chicken becomes absolutely certain of one thing: being fed at 9 AM is just how the world works. Until one day, the farmer arrives - not with food, but with a different purpose.
 
 Now, imagine a world called Flatland, where everyone exists in just two dimensions. Its inhabitants can move forward and backward, left and right - but they can’t conceive of up or down because they’ve never experienced those directions. Their reality is shaped entirely by what they know, making a third dimension unimaginable.
 
-We’re not so different. The chicken trusted its daily feeding schedule. The Flatlanders couldn’t fathom a world beyond their own. And we, too, rarely question our deepest assumptions—until reality forces us to.
+We’re not so different. The chicken trusted its daily feeding schedule. The Flatlanders couldn’t fathom a world beyond their own. And we, too, rarely question our deepest assumptions - until reality forces us to.
 
 We predict the future by looking at the past - what mathematically, we call inductive reasoning. If the first half of a movie is funny, we expect the rest to be too. If winter has always meant snow, we assume it will again. If something has worked ten times before, we take for granted that it’ll keep working. Most of the time, this works. Until it doesn’t.
 

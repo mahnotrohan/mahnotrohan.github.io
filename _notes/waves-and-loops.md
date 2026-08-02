@@ -3,7 +3,6 @@ layout: notes
 title: Waves and Loops
 date: 2026-05-23
 tags: [people, thinking]
-stage: cooked
 description: "Grief and rumination look identical from the outside. They are not the same thing."
 ---
 Grief and negative rumination can look very similar from the outside. To a spectator, they can appear identical. Both involve sustained, painful attention to something difficult. Both can pull a person inward, make them quieter, sadder, harder to reach.
@@ -20,7 +19,7 @@ Grief, after all, is a response to loss. The loss could be of an identity, a rel
 
 You, as a person, expand around it. It softens over time, but it does not disappear.
 
-Grief, even when it overwhelms you, can be moved through — but only if you remain in some contact with it, rather than merely circling around it. This is where having some say begins to matter.
+Grief, even when it overwhelms you, can be moved through - but only if you remain in some contact with it, rather than merely circling around it. This is where having some say begins to matter.
 
 Self-agency, then. Not as control. Not as the ability to stop hurting on command. Agency does not mean choosing what you feel; it means having some say in how you relate to what you feel.
 
@@ -36,6 +35,6 @@ Grief asks to be felt. Rumination asks to be repeated.
 
 As part of grieving, gratitude can arise too. The very attachment and love that make grief possible also kindle gratitude. You do not grieve what did not matter. Grief is a shadow cast by love or meaning. It is an ache for something that mattered.
 
-Giving attention to that ache — to what mattered, to what happened, to what you loved so deeply — is what helps you expand around grief, rather than shrink inside it.
+Giving attention to that ache - to what mattered, to what happened, to what you loved so deeply - is what helps you expand around grief, rather than shrink inside it.
 
 It is still messy, vague, confusing, and aching. But perhaps it is also something you would rather experience fully than repress.

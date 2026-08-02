@@ -3,7 +3,6 @@ layout: notes
 title: A Mirror Held Up
 date: 2026-05-07
 tags: [people]
-stage: cooked
 description: "Why I narrate my small decisions to the people around me, and what that's actually for."
 ---
 I find myself telling trivial things to the people around me, about my day, the small decisions I made, the things I noticed. After one such day, after talking at length about why I love wearing black t-shirts so much, I sat reflecting: why was I talking about it? Why do I need a witness, or an audience, to feel fully seen?

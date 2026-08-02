@@ -25,7 +25,7 @@ permalink: /
 
 <p class="p-all"><a href="{{ site.baseurl }}/blog">Read more →</a></p>
 
-<div class="secth">Made</div>
+<div class="secth">Workshop</div>
 
 <div class="cards">
   <a class="card" href="{{ site.baseurl }}/orrery">
@@ -68,7 +68,7 @@ permalink: /
 
 <div class="secth">Say hello</div>
 
-<p>I'd love to hear from you — about something I wrote, a book you think I'd enjoy, or just to say hi.</p>
+<p>I'd love to hear from you - about something I wrote, a book you think I'd enjoy, or just to say hi.</p>
 
 <p class="hello">
   <a href="mailto:mahnot.who@gmail.com">Email</a> |

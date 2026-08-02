@@ -13,7 +13,7 @@ catch(e){document.documentElement.setAttribute('data-theme','light');}})();
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
-<title>Decision Theory — Orrery</title>
+<title>Decision Theory - Orrery</title>
 <style>
 :root{
   /* site parity: --ground/--surface-* mirror the main site's --bg/--bg-2/--chip */
@@ -61,7 +61,7 @@ h1,h2,h3{color:var(--ink-strong); font-weight:600; line-height:1.3;}
 .kicker{font-size:11px; letter-spacing:.14em; text-transform:uppercase;
   color:var(--ink-muted); font-weight:500;}
 
-/* header — all navigation lives top right */
+/* header - all navigation lives top right */
 #hdr{position:fixed; top:0; left:0; right:0; z-index:40; height:56px;
   display:flex; align-items:center; gap:1.1rem; padding:0 1.4rem;
   background:var(--hdr-fade);
@@ -126,7 +126,7 @@ body.reader-open #hdr{right:var(--reader-w);}
 .mk.neighbor .lbl{color:var(--ink-strong);}
 .mk.dimmed{opacity:.35;}
 
-/* connection overlay — few, directional, labeled plainly */
+/* connection overlay - few, directional, labeled plainly */
 #tsvg, #astsvg, #flowsvg{position:absolute; top:0; left:0; pointer-events:none; overflow:visible;}
 @keyframes dashdrift{to{stroke-dashoffset:-64;}}
 .tline{animation:dashdrift 6s linear infinite;}
@@ -298,7 +298,7 @@ function syncSimColours(){
 syncSimColours();
 
 /* ============================================================
-   CONTENT v2 — every idea: hook → story → (sim) → mechanism
+   CONTENT v2 - every idea: hook → story → (sim) → mechanism
    fold → the idea named → where it bites → you can now explain.
    Connections: ≤4 per idea, in three plain buckets.
    ============================================================ */
@@ -306,19 +306,19 @@ const N = {
 
 a1:{type:"axiom", title:"Life is repeated decisions under uncertainty", x:1259, y:512,
   ess:"You decide again and again, with limited energy, partial information, and shifting wants.",
-  hook:"What if 'make the perfect choice' was never the game — and chasing it is why you feel stuck?",
+  hook:"What if 'make the perfect choice' was never the game - and chasing it is why you feel stuck?",
   story:"Life is repeated decision-making under uncertainty, with limited energy, imperfect information, and changing preferences. Perfect choices are a fantasy; you're playing a long, noisy, repeated game.",
-  mech:"So the goal isn't one flawless call. It's a system that helps you make robust, adaptive, low-regret choices over and over — one that survives being wrong and keeps learning.",
+  mech:"So the goal isn't one flawless call. It's a system that helps you make robust, adaptive, low-regret choices over and over - one that survives being wrong and keeps learning.",
   term:"Repeated decision-making", def:"life modeled as a long series of choices under uncertainty rather than a few decisive ones.",
   sowhat:"Stop grading yourself on single outcomes. Build a process you can run a thousand times, not a perfect answer you'll never find.",
   builds:[], leads:[["a2","what a decision is made of"],["b1-laplace","the model underneath"]], live:[]},
 a2:{type:"axiom", title:"Every decision has five parts", x:1057, y:627,
   ess:"You, the world, your options, the consequences, and the learning that follows.",
-  hook:"When a choice goes wrong, which of the five parts actually failed — and would you even know?",
+  hook:"When a choice goes wrong, which of the five parts actually failed - and would you even know?",
   story:"Every decision has five pieces: you (an agent with needs, values, energy); the world (uncertain, partly knowable); your options; the consequences that may follow; and the feedback that reshapes your future beliefs.",
-  mech:"Naming the parts locates your errors. A bad outcome might be bad values, bad beliefs, a missing option, or no feedback loop — not just bad execution.",
-  term:"The five parts", def:"agent, world, options, consequences, learning — the anatomy of any decision.",
-  sowhat:"Next misfire, ask which part broke. You'll usually find it wasn't effort — it was a blind spot upstream.",
+  mech:"Naming the parts locates your errors. A bad outcome might be bad values, bad beliefs, a missing option, or no feedback loop - not just bad execution.",
+  term:"The five parts", def:"agent, world, options, consequences, learning - the anatomy of any decision.",
+  sowhat:"Next misfire, ask which part broke. You'll usually find it wasn't effort - it was a blind spot upstream.",
   builds:[], leads:[["a3","how the parts combine"]], live:[]},
 a3:{type:"axiom", title:"Values, then beliefs, then execution", x:1462, y:627,
   ess:"A good decision = clear values + accurate beliefs + good options + sane execution + feedback.",
@@ -330,26 +330,26 @@ a3:{type:"axiom", title:"Values, then beliefs, then execution", x:1462, y:627,
   builds:[], leads:[["b2-logistic","start with values"],["b1-principle","the wrong-variable trap"]], live:[]},
 a4:{type:"axiom", title:"Survival before optimization", x:1259, y:771,
   ess:"Never take a risk that can knock you out of the game. Averages can lie.",
-  hook:"A bet with a great average return and a small chance of ruin — good bet or trap?",
+  hook:"A bet with a great average return and a small chance of ruin - good bet or trap?",
   story:"Ergodicity: a strategy with a high average payoff but a small chance of ruin can still be terrible, because ruin ends the repeated game. Averages describe a crowd; you walk one path, once.",
-  mech:"So survival comes before optimization. Refuse risks of physical, financial, reputational, or spiritual ruin — even when the expected value looks good — because you can't play tomorrow if today wipes you out.",
+  mech:"So survival comes before optimization. Refuse risks of physical, financial, reputational, or spiritual ruin - even when the expected value looks good - because you can't play tomorrow if today wipes you out.",
   term:"Ergodicity / no ruin", def:"avoiding any risk that can permanently remove you from the game, whatever its average payoff.",
-  sowhat:"Cap your downside first. No upside is worth a real chance of ruin — protect the ability to keep playing.",
+  sowhat:"Cap your downside first. No upside is worth a real chance of ruin - protect the ability to keep playing.",
   builds:[], leads:[["b1-sensitive","the humanized model"],["b4-process","and keep slack"]], live:[]},
 
 "b1-laplace":{type:"mechanism", title:"Expected value", sim:"ev", x:404, y:355,
-  ess:"Judge an option by probability times payoff — not by likelihood alone.",
+  ess:"Judge an option by probability times payoff - not by likelihood alone.",
   hook:"A 30% shot at something huge, or a 90% shot at something tiny. Which is the better bet?",
   story:"Classical decision theory says choose the highest expected utility: expected value = probability of an outcome times its value. A low-probability, high-upside action can beat a near-sure small one.",
-  mech:"The move is to stop judging by likelihood alone. A rare big win, especially with capped downside, is often worth more than a frequent trivial one — the payoff size matters as much as the odds.",
+  mech:"The move is to stop judging by likelihood alone. A rare big win, especially with capped downside, is often worth more than a frequent trivial one - the payoff size matters as much as the odds.",
   term:"Expected value", def:"probability of an outcome multiplied by the value of that outcome.",
-  sowhat:"When the downside is small and capped, take more low-odds, high-upside swings — writing, applying, building, learning hard things.",
+  sowhat:"When the downside is small and capped, take more low-odds, high-upside swings - writing, applying, building, learning hard things.",
   builds:[["a3","beliefs meet values"]], leads:[["b1-pendulum","where this breaks"]], live:[]},
 "b1-pendulum":{type:"tension", title:"Why expected value breaks", x:884, y:309,
   ess:"Real life won't hand you clean probabilities or a fixed idea of what you value.",
   hook:"The math says maximize expected utility. So why does it so often give the wrong answer for a life?",
   story:"Reality complicates the tidy equation: you don't know the true probabilities, you may not know what you truly value, emotion distorts perception, some outcomes are irreversible, and some choices change who you become.",
-  mech:"Each of these breaks a hidden assumption of classical EV — known odds, stable preferences, reversibility, a fixed self. Used naively, the formula optimizes a world you don't actually live in.",
+  mech:"Each of these breaks a hidden assumption of classical EV - known odds, stable preferences, reversibility, a fixed self. Used naively, the formula optimizes a world you don't actually live in.",
   term:"The limits of EV", def:"the ways real decisions violate classical expected-value assumptions.",
   sowhat:"Use expected value as a lens, not a verdict. Where odds are unknown or outcomes irreversible, it needs the human upgrades that follow.",
   builds:[["b1-laplace","the classical model"]], leads:[["b1-sensitive","the upgrade"]], live:[]},
@@ -362,7 +362,7 @@ a4:{type:"axiom", title:"Survival before optimization", x:1259, y:771,
   sowhat:"Run big choices through the four: upside, downside, learning, becoming. It catches what a raw expected-value calc misses.",
   builds:[["b1-pendulum","fixing EV's blind spots"],["a4","downside first"]], leads:[["b1-lorenz-story","the becoming part"]], live:[]},
 "b1-lorenz-story":{type:"mechanism", title:"Some choices change who you become", x:254, y:656,
-  ess:"A few decisions don't just have outcomes — they rewrite the person doing the deciding.",
+  ess:"A few decisions don't just have outcomes - they rewrite the person doing the deciding.",
   hook:"Which of your past choices didn't just change your life, but changed you?",
   story:"Most choices give you consequences; some quietly reshape your character, tastes, and defaults. The job you take, the people you keep, the habits you repeat slowly turn you into a different chooser.",
   mech:"This is why identity alignment belongs in the model: a decision that pays off but corrodes who you are is a bad trade. Ask not just what you'll get, but who you'll become by choosing it repeatedly.",
@@ -379,20 +379,20 @@ a4:{type:"axiom", title:"Survival before optimization", x:1259, y:771,
   builds:[["a3","values sit at the top"],["b1-lorenz-story","the self is a variable too"]], leads:[["b2-logistic","the stack begins here"]], live:[]},
 
 "b2-logistic":{type:"mechanism", title:"Values: what am I optimizing for?", x:1837, y:233,
-  ess:"The first question in any decision — and the one most people skip.",
+  ess:"The first question in any decision - and the one most people skip.",
   hook:"Before weighing options, can you say in one word what this choice is really for?",
-  story:"Step one of the stack: ask what you're optimizing for. Money, health, peace, love, freedom, skill, dignity — each points to a different 'best' option. Skip this and you'll optimize by default, usually for whatever's easiest to measure.",
-  mech:"Values convert a vague dilemma into a solvable one by naming the target. They're first in the stack because everything downstream — beliefs, options, payoffs — is judged against them.",
+  story:"Step one of the stack: ask what you're optimizing for. Money, health, peace, love, freedom, skill, dignity - each points to a different 'best' option. Skip this and you'll optimize by default, usually for whatever's easiest to measure.",
+  mech:"Values convert a vague dilemma into a solvable one by naming the target. They're first in the stack because everything downstream - beliefs, options, payoffs - is judged against them.",
   term:"The values question", def:"explicitly naming the variable a given decision should serve.",
   sowhat:"Open every real decision with 'what am I optimizing for here?' The answer often makes the choice obvious.",
   builds:[["a3","values lead the stack"]], leads:[["b2-attractors","then examine beliefs"]], live:[]},
 "b2-attractors":{type:"mechanism", title:"Beliefs: what would change my mind?", x:2069, y:401,
-  ess:"Hold beliefs as probabilities, and update them on evidence — Bayesian, not binary.",
+  ess:"Hold beliefs as probabilities, and update them on evidence - Bayesian, not binary.",
   hook:"Instead of 'am I right?', try asking 'what evidence would change my mind?' Notice the difference?",
-  story:"Step two: ask what you believe is true and how sure you are. Think like a Bayesian — start with a belief, gather evidence, update gradually. Don't ask 'am I right?'; ask 'what would change my mind?'",
-  mech:"Framing beliefs as updatable probabilities keeps you honest and open. A belief with no disconfirming evidence attached isn't a conviction — it's an attachment.",
+  story:"Step two: ask what you believe is true and how sure you are. Think like a Bayesian - start with a belief, gather evidence, update gradually. Don't ask 'am I right?'; ask 'what would change my mind?'",
+  mech:"Framing beliefs as updatable probabilities keeps you honest and open. A belief with no disconfirming evidence attached isn't a conviction - it's an attachment.",
   term:"Bayesian updating", def:"holding beliefs as probabilities and revising them incrementally as evidence arrives.",
-  sowhat:"For any strong view, write down what would change it. If nothing would, you're not reasoning — you're defending.",
+  sowhat:"For any strong view, write down what would change it. If nothing would, you're not reasoning - you're defending.",
   builds:[["b2-logistic","values framed the question"]], leads:[["b2-lorenz-attractor","then widen the options"]], live:[]},
 "b2-lorenz-attractor":{type:"mechanism", title:"Options: what am I not seeing?", x:2300, y:282,
   ess:"Expand the choice set before you choose. The best move is often C, D, or 'wait.'",
@@ -400,20 +400,20 @@ a4:{type:"axiom", title:"Survival before optimization", x:1259, y:771,
   story:"Step three: ask what choices you're not seeing. People agonize between two options when the real move is a third, a combination, or 'wait and gather more information.' A great decision-maker expands the option set before choosing.",
   mech:"Premature framing as A-vs-B is a common trap; the constraint is usually in your imagination, not the world. Generating options is cheap and happens before, not during, the pick.",
   term:"Option generation", def:"deliberately widening the set of possible actions before selecting one.",
-  sowhat:"When stuck between two options, force out three more — including 'do nothing yet.' The winner is often not on the original list.",
+  sowhat:"When stuck between two options, force out three more - including 'do nothing yet.' The winner is often not on the original list.",
   builds:[["b2-attractors","beliefs in hand"]], leads:[["b2-tension-random","then price the payoffs"]], live:[]},
 "b2-tension-random":{type:"mechanism", title:"Payoffs: first- and second-order", x:2392, y:470,
   ess:"Weigh not just what happens now, but later, and who it makes you, and what it does to trust and health.",
-  hook:"The immediate payoff looks great. What does it cost you in a year — or in character?",
+  hook:"The immediate payoff looks great. What does it cost you in a year - or in character?",
   story:"Step four: map upside, downside, and hidden costs across layers. First-order (what happens now), second-order (what happens later because of this), identity (who you become), relationship (what it does to trust), and health (what it does to your baseline state).",
   mech:"Most regret hides in the later-order effects the immediate payoff obscures. Scanning all five layers surfaces the costs that don't show up on the first glance.",
-  term:"Order effects", def:"the layered consequences of a choice — immediate, delayed, identity, relational, physical.",
+  term:"Order effects", def:"the layered consequences of a choice - immediate, delayed, identity, relational, physical.",
   sowhat:"For any tempting option, ask 'and then what?' three times. The hidden costs live in the second and third answers.",
   builds:[["b2-lorenz-attractor","options to compare"]], leads:[["b2-principle","then check reversibility"]], live:[]},
 "b2-principle":{type:"principle", title:"Reversibility: one-way or two-way door?", sim:"doors", x:1895, y:598,
   ess:"For reversible decisions, move fast. For irreversible ones, slow down. Most people do the opposite.",
   hook:"You agonize over the dinner menu but rushed the job, the debt, the move. Why?",
-  story:"Step five: ask whether you can undo this. Bezos's model — a two-way door you can walk back through, versus a one-way door you can't. For reversible decisions, move fast; for irreversible ones, slow down. Most people agonize over restaurant orders and rush into jobs, partners, debt, and lifestyle commitments.",
+  story:"Step five: ask whether you can undo this. Bezos's model - a two-way door you can walk back through, versus a one-way door you can't. For reversible decisions, move fast; for irreversible ones, slow down. Most people agonize over restaurant orders and rush into jobs, partners, debt, and lifestyle commitments.",
   mech:"Reversibility sets the right speed and rigor. Spending heavy deliberation on cheap reversible choices wastes the cognition that irreversible ones actually need.",
   term:"One-way vs two-way doors", def:"classifying decisions by whether they can be reversed, to set deliberation speed.",
   sowhat:"Sort each choice by the door it is. Speed through the two-way doors; save your care for the one-way ones.",
@@ -422,29 +422,29 @@ a4:{type:"axiom", title:"Survival before optimization", x:1259, y:771,
 "b3-kokura":{type:"mechanism", title:"Opportunity cost", x:271, y:962,
   ess:"Every yes is a no to everything else you could have done with that time.",
   hook:"What did saying yes to your last commitment quietly cost you the chance to do?",
-  story:"Every 'yes' is a 'no' to something else. The true cost of an option isn't just its price — it's the best alternative you gave up to take it. Your calendar reveals your real values better than your self-image does.",
+  story:"Every 'yes' is a 'no' to something else. The true cost of an option isn't just its price - it's the best alternative you gave up to take it. Your calendar reveals your real values better than your self-image does.",
   mech:"Ignoring opportunity cost makes everything look free. Counting it turns 'is this good?' into the sharper 'is this better than what it displaces?'",
   term:"Opportunity cost", def:"the value of the best alternative forgone when you choose one option.",
-  sowhat:"Judge commitments against what they crowd out, not in isolation. And audit your calendar — it's your values, revealed.",
+  sowhat:"Judge commitments against what they crowd out, not in isolation. And audit your calendar - it's your values, revealed.",
   builds:[["a1","the repeated game has limited time"]], leads:[["b3-contingency","and information has value"]], live:[]},
 "b3-contingency":{type:"mechanism", title:"Value of information", x:601, y:1008,
-  ess:"Sometimes the best move isn't to choose — it's to buy cheap information first.",
+  ess:"Sometimes the best move isn't to choose - it's to buy cheap information first.",
   hook:"Before the big leap, what's the smallest, cheapest thing you could learn that would change the call?",
   story:"Sometimes the best decision is not choosing yet, but gathering cheap information. Before a big career move, talk to five people doing the job. Before starting a company, test demand. Before committing to a relationship, observe behavior under stress.",
   mech:"Information has value when it can change your decision and costs less than being wrong. Buying it converts an irreversible gamble into a staged, better-informed one.",
   term:"Value of information", def:"the worth of cheap evidence gathered before a costly, hard-to-reverse choice.",
-  sowhat:"Before any big commitment, ask what small test would most reduce your uncertainty — then run it first.",
+  sowhat:"Before any big commitment, ask what small test would most reduce your uncertainty - then run it first.",
   builds:[["b2-lorenz-attractor","'wait' was an option"]], leads:[["b3-timeline","and mind your regrets"]], live:[]},
 "b3-timeline":{type:"mechanism", title:"Regret minimization", x:312, y:1210,
   ess:"Ask which mistake you'd rather have made, looking back from ten years out.",
-  hook:"Ten years from now, which will sting more — the failure you risked, or the chance you ducked?",
-  story:"Ask: ten years from now, which mistake would I rather have made? Especially for career, love, creativity, and adventure, you'll usually regret cowardice more than failure — assuming the downside isn't catastrophic.",
+  hook:"Ten years from now, which will sting more - the failure you risked, or the chance you ducked?",
+  story:"Ask: ten years from now, which mistake would I rather have made? Especially for career, love, creativity, and adventure, you'll usually regret cowardice more than failure - assuming the downside isn't catastrophic.",
   mech:"Shifting to the long view quiets present fear and status-noise, exposing what you'll actually care about. The 'downside isn't catastrophic' clause keeps it married to survival-first.",
   term:"Regret minimization", def:"choosing to minimize anticipated long-term regret rather than short-term discomfort.",
   sowhat:"For bold, non-ruinous choices, run the ten-year test. Fear shrinks; the cost of cowardice comes into focus.",
   builds:[["a4","only when downside is capped"]], leads:[["b3-principle","and invert"]], live:[]},
 "b3-principle":{type:"principle", title:"Inversion: avoid the ruiners", sim:"inversion", x:774, y:1152,
-  ess:"Instead of 'how do I live well?', ask 'how would I ruin my life?' — then avoid those things.",
+  ess:"Instead of 'how do I live well?', ask 'how would I ruin my life?' - then avoid those things.",
   hook:"What if the fastest route to a good life is just refusing to wreck it?",
   story:"Invert the question. Rather than 'how do I live well?', ask 'how would I ruin my life?' The reliable ruiners: sleep deprivation, bad partners, addiction, chronic debt, resentment, no exercise, no close friends, a fragile ego, dishonest work, and environments that reward your worst traits. Then avoid them.",
   mech:"Avoiding disaster is easier and higher-leverage than engineering excellence, and the ruiners are few and knowable. Subtracting them removes most catastrophic downside at once.",
@@ -453,15 +453,15 @@ a4:{type:"axiom", title:"Survival before optimization", x:1259, y:771,
   builds:[["a4","ruin is the thing to dodge"]], leads:[["b3-plan","then balance explore and exploit"]], live:[]},
 "b3-plan":{type:"tension", title:"Explore vs exploit", sim:"explore", x:543, y:1326,
   ess:"Explore when young, uncertain, or stuck; exploit when you've found what works.",
-  hook:"Are you still sampling when you should commit — or committing when you should still be sampling?",
+  hook:"Are you still sampling when you should commit - or committing when you should still be sampling?",
   story:"Life alternates between exploration and exploitation. Explore when young, uncertain, or stuck; exploit when you've found something that works. The mistake is exploring forever because commitment feels scary, or exploiting too early because uncertainty feels uncomfortable.",
-  mech:"The optimal mix shifts with your stage and information: more sampling early when you know little, more committing later once the payoffs are clear. Both errors — endless searching and premature settling — feel like comfort.",
+  mech:"The optimal mix shifts with your stage and information: more sampling early when you know little, more committing later once the payoffs are clear. Both errors - endless searching and premature settling - feel like comfort.",
   term:"Explore-exploit", def:"the trade-off between sampling new options and committing to a known good one.",
   sowhat:"Ask which mode this season calls for. Then notice if you're stalling in the comfortable one instead.",
   builds:[["a1","stages of the repeated game"]], leads:[["b4-coinflip","now: decisions become a life"]], live:[]},
 
 "b4-coinflip":{type:"mechanism", title:"Health is the base layer", x:1583, y:979,
-  ess:"Your body isn't a side quest — it's the operating system every decision runs on.",
+  ess:"Your body isn't a side quest - it's the operating system every decision runs on.",
   hook:"How good is your judgment on three hours of sleep? So which decision comes first?",
   story:"Health is the base layer. Bad sleep makes you stupid, no movement makes you anxious, poor food makes your mood noisy, chronic stress blurs your values. Before deep philosophy, fix the primitives: sleep, movement, real food, sunlight, strength, protected attention, and people who regulate rather than dysregulate you.",
   mech:"Every other decision is made by a brain and body in some state; degrade the state and you degrade every choice downstream. This is boring advice because it's load-bearing advice.",
@@ -469,17 +469,17 @@ a4:{type:"axiom", title:"Survival before optimization", x:1259, y:771,
   sowhat:"When your choices feel hard and your mood feels loud, check the primitives first. Fix the body before you philosophize.",
   builds:[["a2","'you' is the first part"]], leads:[["b4-ergodicity","then guard your energy"]], live:[]},
 "b4-ergodicity":{type:"mechanism", title:"Energy before productivity", x:1901, y:945,
-  ess:"Don't only ask how to do more — ask what gives energy and what drains it.",
+  ess:"Don't only ask how to do more - ask what gives energy and what drains it.",
   hook:"You could do more today. But could you do it again tomorrow, and the day after?",
-  story:"Don't ask only 'how do I do more?' Ask 'what gives me energy, and what drains it?' A good life isn't maximum output — it's sustainable aliveness: high agency without chronic depletion.",
-  mech:"Output run on depletion isn't productivity, it's borrowing against tomorrow. Managing energy — the renewable input — beats managing tasks, because it's what makes repeated effort possible.",
+  story:"Don't ask only 'how do I do more?' Ask 'what gives me energy, and what drains it?' A good life isn't maximum output - it's sustainable aliveness: high agency without chronic depletion.",
+  mech:"Output run on depletion isn't productivity, it's borrowing against tomorrow. Managing energy - the renewable input - beats managing tasks, because it's what makes repeated effort possible.",
   term:"Sustainable aliveness", def:"optimizing for renewable energy and agency rather than peak short-term output.",
   sowhat:"Audit your week for energy, not just tasks. Cut the quiet drains; protect the genuine sources.",
   builds:[["b4-coinflip","energy rests on health"]], leads:[["b4-domains","and your actions shape identity"]], live:[]},
 "b4-domains":{type:"mechanism", title:"Identity is a feedback loop", x:2219, y:979,
-  ess:"You become what you repeatedly do — every action casts a vote for who you are.",
+  ess:"You become what you repeatedly do - every action casts a vote for who you are.",
   hook:"Not 'what do I want?' but 'what kind of person does this action train me to become?'",
-  story:"You become what you repeatedly do. So alongside 'what do I want?', ask 'what kind of person does this action train me to become?' Every action casts a vote for an identity. Small habits matter — not because one workout changes your body, but because it reinforces 'I am someone who keeps promises to myself.'",
+  story:"You become what you repeatedly do. So alongside 'what do I want?', ask 'what kind of person does this action train me to become?' Every action casts a vote for an identity. Small habits matter - not because one workout changes your body, but because it reinforces 'I am someone who keeps promises to myself.'",
   mech:"Behavior and identity form a loop: acts build the self-image, which makes the acts easier next time. Choosing actions by the identity they cast a vote for compounds into character.",
   term:"Identity votes", def:"the idea that each action is evidence to yourself about the kind of person you are.",
   sowhat:"Judge small choices by the identity they reinforce. Keeping tiny promises to yourself is how you become someone who does.",
@@ -487,22 +487,22 @@ a4:{type:"axiom", title:"Survival before optimization", x:1259, y:771,
 "b4-survive":{type:"principle", title:"Environment beats willpower", x:2438, y:1094,
   ess:"Design your surroundings so good behavior is easy and bad behavior is annoying.",
   hook:"You keep losing the willpower battle. What if you stopped fighting and moved the battlefield?",
-  story:"Willpower is overrated; environment design is king. Make good behaviors easy and bad ones annoying. Want to read more? Keep books visible. Use your phone less? Charge it outside the bedroom. Eat better? Don't keep junk at home. Want ambitious friends? Go where ambitious people are. You're not a brain floating in space — you're a creature shaped by surroundings.",
+  story:"Willpower is overrated; environment design is king. Make good behaviors easy and bad ones annoying. Want to read more? Keep books visible. Use your phone less? Charge it outside the bedroom. Eat better? Don't keep junk at home. Want ambitious friends? Go where ambitious people are. You're not a brain floating in space - you're a creature shaped by surroundings.",
   mech:"Willpower is a scarce, depletable resource; environment works for free, all day, without attention. Shaping the defaults means the easy path and the good path become the same path.",
   term:"Environment design", def:"structuring surroundings so desired behaviors are the path of least resistance.",
-  sowhat:"Stop relying on discipline. Change the defaults — visible, easy, or absent — and let the environment do the work.",
+  sowhat:"Stop relying on discipline. Change the defaults - visible, easy, or absent - and let the environment do the work.",
   builds:[["b4-domains","identity built by repeated acts"]], leads:[["b4-signal","and choose your people"]], live:[]},
 "b4-signal":{type:"mechanism", title:"Relationships compound", x:1612, y:1181,
-  ess:"A good life is impossible without good relationships — not difficult, impossible.",
+  ess:"A good life is impossible without good relationships - not difficult, impossible.",
   hook:"Who in your life makes your nervous system calmer just by being there? Are you investing in them?",
   story:"Relationships are compounding assets, and a good life is impossible without good ones. Invest early in people you can be honest with, who make you braver, who tell you the truth without cruelty, whose presence calms your nervous system. Avoid people who make you perform, shrink, lie, or constantly recover.",
-  mech:"Relationships accrue like any compounding asset — trust and depth build slowly and pay off over decades. Choosing who you're around is one of the highest-leverage repeated decisions you make.",
+  mech:"Relationships accrue like any compounding asset - trust and depth build slowly and pay off over decades. Choosing who you're around is one of the highest-leverage repeated decisions you make.",
   term:"Relational capital", def:"trusted relationships treated as slowly compounding, load-bearing assets.",
-  sowhat:"Invest early and deliberately in the people who regulate you — and gently exit the ones who dysregulate you.",
+  sowhat:"Invest early and deliberately in the people who regulate you - and gently exit the ones who dysregulate you.",
   builds:[["a2","'you' exists among others"]], leads:[["b4-danger","and stay adaptable"]], live:[]},
 "b4-danger":{type:"principle", title:"Adaptability over certainty", x:1959, y:1152,
   ess:"Hold direction and principles, not rigid predictions and scripts. Let plans stay alive.",
-  hook:"When reality contradicts your plan, do you update the plan — or defend the story?",
+  hook:"When reality contradicts your plan, do you update the plan - or defend the story?",
   story:"The world changes, so your plans should be alive. A strong strategy has direction not rigid prediction, principles not scripts, experiments not fantasies, feedback not ego defense. The adaptive person asks 'what is reality telling me?'; the fragile person asks 'how do I protect my old story?'",
   mech:"Certainty is brittle: a rigid plan shatters when the world diverges from it. Direction plus feedback bends and re-routes, which is what survives an uncertain, changing game.",
   term:"Adaptive strategy", def:"steering by direction, principles, and feedback rather than fixed prediction.",
@@ -510,15 +510,15 @@ a4:{type:"axiom", title:"Survival before optimization", x:1259, y:771,
   builds:[["a1","the world keeps changing"]], leads:[["b4-process","so bank optionality"]], live:[]},
 "b4-process":{type:"mechanism", title:"Optionality and slack", x:1650, y:1330,
   ess:"Create options before you need them, and never run life at 100% capacity.",
-  hook:"When the unexpected hits, will you have room to respond — or are you already maxed out?",
-  story:"Create options before you need them: skills, savings, reputation, health, a broad network, calm under pressure — optionality is freedom stored in advance. And keep a margin of safety: slack in your health, money, calendar, emotions, and relationships. A life with no buffer isn't efficient, it's brittle.",
-  mech:"Optionality and slack both hedge an uncertain world — one gives you moves, the other gives you resilience. Running at full capacity maximizes output right up until the first shock breaks you.",
+  hook:"When the unexpected hits, will you have room to respond - or are you already maxed out?",
+  story:"Create options before you need them: skills, savings, reputation, health, a broad network, calm under pressure - optionality is freedom stored in advance. And keep a margin of safety: slack in your health, money, calendar, emotions, and relationships. A life with no buffer isn't efficient, it's brittle.",
+  mech:"Optionality and slack both hedge an uncertain world - one gives you moves, the other gives you resilience. Running at full capacity maximizes output right up until the first shock breaks you.",
   term:"Optionality / margin of safety", def:"pre-built options and spare capacity that make a life resilient and free.",
-  sowhat:"Bank options while you don't need them, and leave buffer everywhere. Slack isn't waste — it's what keeps you unbreakable.",
+  sowhat:"Bank options while you don't need them, and leave buffer everywhere. Slack isn't waste - it's what keeps you unbreakable.",
   builds:[["a4","slack protects against ruin"]], leads:[["b4-destination","then take on something worthwhile"]], live:[]},
 "b4-destination":{type:"mechanism", title:"Meaning comes from responsibility", x:2330, y:1255,
-  ess:"Meaning usually comes from carrying something worthwhile — not from comfort.",
-  hook:"When have you felt most alive — while comfortable, or while carrying something hard that mattered?",
+  ess:"Meaning usually comes from carrying something worthwhile - not from comfort.",
+  hook:"When have you felt most alive - while comfortable, or while carrying something hard that mattered?",
   story:"Pleasure and comfort are nice, but meaning usually comes from carrying something worthwhile: a project, a family, a craft, a mission, a community, a promise, a standard. Strong opinion: a life optimized only for comfort eventually becomes depressing. Humans need chosen difficulty.",
   mech:"Comfort removes friction, but meaning is made by voluntarily taking friction on. A worthwhile burden organizes energy and identity around something larger than momentary ease.",
   term:"Chosen difficulty", def:"the voluntary responsibility that generates meaning beyond comfort.",
@@ -526,27 +526,27 @@ a4:{type:"axiom", title:"Survival before optimization", x:1259, y:771,
   builds:[["b1-principle","meaning can be the variable"]], leads:[["b4-explore","and read your emotions well"]], live:[]},
 "b4-explore":{type:"mechanism", title:"Emotions are data, not commands", x:2470, y:1430,
   ess:"Feelings are useful signals and terrible dictators. Feel fully, interpret carefully, act wisely.",
-  hook:"Your anxiety is screaming. Is it warning you of real risk — or just of growth and novelty?",
+  hook:"Your anxiety is screaming. Is it warning you of real risk - or just of growth and novelty?",
   story:"Emotional truth is data, not command. Anxiety may signal risk or may signal growth. Excitement may signal opportunity or novelty addiction. Anger may signal violation or ego injury. The move: feel fully, interpret carefully, act wisely.",
-  mech:"Emotions carry real information about your state and situation, but they're noisy and easily misread. Treating them as signals to interpret — not orders to obey — keeps their wisdom without their tyranny.",
+  mech:"Emotions carry real information about your state and situation, but they're noisy and easily misread. Treating them as signals to interpret - not orders to obey - keeps their wisdom without their tyranny.",
   term:"Emotions as signals", def:"treating feelings as informative data to interpret rather than commands to follow.",
-  sowhat:"When a strong feeling hits, name it and ask what it might mean — before you let it choose for you.",
+  sowhat:"When a strong feeling hits, name it and ask what it might mean - before you let it choose for you.",
   builds:[["a2","'you' includes emotions"]], leads:[["b4-fence","and let the good compound"]], live:[]},
 "b4-fence":{type:"principle", title:"Everything compounds", sim:"compounding", x:2090, y:1430,
   ess:"The real question isn't 'is this good today?' but 'what does this become if repeated for five years?'",
   hook:"This one choice barely matters. But what is it, multiplied by a thousand days?",
-  story:"Most good things compound slowly — fitness, skill, trust, taste, wealth, reputation, emotional regulation, wisdom. So do the bad ones — avoidance, debt, cynicism, resentment, sedentary habits, attention fragmentation. Don't ask 'is this choice good today?' Ask 'what does this become if repeated for five years?'",
+  story:"Most good things compound slowly - fitness, skill, trust, taste, wealth, reputation, emotional regulation, wisdom. So do the bad ones - avoidance, debt, cynicism, resentment, sedentary habits, attention fragmentation. Don't ask 'is this choice good today?' Ask 'what does this become if repeated for five years?'",
   mech:"Single instances look negligible, which is exactly why compounding is invisible until it's enormous. Judging a repeated choice by its five-year trajectory reveals stakes the single day hides.",
   term:"Compounding", def:"the slow multiplication of small repeated choices, good and bad, over years.",
   sowhat:"Grade your habits by their five-year trajectory, not today's payoff. The tiny daily vote is the whole election.",
   builds:[["b4-domains","identity compounds too"]], leads:[["b4-principle","the good-life formula"]], live:[]},
 "b4-principle":{type:"principle", title:"The good life is a product, not a sum", sim:"formula", x:1830, y:1560,
   ess:"Good life = health × agency × love × mastery × meaning × adaptability. If one hits zero, everything suffers.",
-  hook:"Which of your six factors is nearest to zero right now — and what is it dragging down with it?",
-  story:"The formula: a good life = health × agency × love × mastery × meaning × adaptability. Multiplication, not addition — because if any one goes to zero, everything suffers. Health without meaning feels empty; meaning without health becomes martyrdom; agency without love becomes ego; love without boundaries becomes self-erasure; mastery without adaptability becomes rigidity; adaptability without values becomes drifting. The master principle: build a life where your daily actions make you healthier, freer, more useful, more loving, and harder to break.",
-  mech:"Because the factors multiply, you can't compensate for a zero by maxing the others — a life brilliant on five and empty on the sixth still collapses. The work is tending the weakest factor, not perfecting the strongest.",
-  term:"The good-life product", def:"health × agency × love × mastery × meaning × adaptability — where any zero sinks the whole.",
-  sowhat:"Find your factor nearest zero and tend it. Balance across the six beats excellence in one — that's decision theory turned into a life.",
+  hook:"Which of your six factors is nearest to zero right now - and what is it dragging down with it?",
+  story:"The formula: a good life = health × agency × love × mastery × meaning × adaptability. Multiplication, not addition - because if any one goes to zero, everything suffers. Health without meaning feels empty; meaning without health becomes martyrdom; agency without love becomes ego; love without boundaries becomes self-erasure; mastery without adaptability becomes rigidity; adaptability without values becomes drifting. The master principle: build a life where your daily actions make you healthier, freer, more useful, more loving, and harder to break.",
+  mech:"Because the factors multiply, you can't compensate for a zero by maxing the others - a life brilliant on five and empty on the sixth still collapses. The work is tending the weakest factor, not perfecting the strongest.",
+  term:"The good-life product", def:"health × agency × love × mastery × meaning × adaptability - where any zero sinks the whole.",
+  sowhat:"Find your factor nearest zero and tend it. Balance across the six beats excellence in one - that's decision theory turned into a life.",
   builds:[["b4-fence","tended daily, it compounds"],["a3","values hold it together"]], leads:[], live:[]}
 };
 const TERRITORIES = [
@@ -689,7 +689,7 @@ document.getElementById('overviewBtn').onclick = ()=>{ closeReader(); overviewCa
 addEventListener('resize', ()=>apply());
 
 /* ============================================================
-   SKY — constellation names, asterisms, ecliptic, stars
+   SKY - constellation names, asterisms, ecliptic, stars
    ============================================================ */
 TERRITORIES.forEach(t=>{
   const rgb = [parseInt(t.hue.slice(1,3),16), parseInt(t.hue.slice(3,5),16), parseInt(t.hue.slice(5,7),16)].join(',');
@@ -706,7 +706,7 @@ TERRITORIES.forEach(t=>{
 
 
 
-/* minor stars — small nameless flecks inside each figure */
+/* minor stars - small nameless flecks inside each figure */
 {
   const R = mulberry32(11);
   TERRITORIES.forEach(t=>{
@@ -915,7 +915,7 @@ function clearHighlight(){
 }
 
 /* ============================================================
-   NAV — top-right cluster drives the default flow
+   NAV - top-right cluster drives the default flow
    ============================================================ */
 function syncNav(){
   const i = focusId ? TOUR.indexOf(focusId) : -1;
@@ -945,12 +945,12 @@ function setActive(fig, btn){
 }
 function simHTML(kind){
   const caps = {
-    ev:"Probability times payoff. Slide the odds and watch a rare, huge upside overtake a near-sure tiny one — the case for capped-downside swings.",
-    doors:"Two-way doors reverse; one-way doors don't. Match your speed to the door — fast for reversible, slow for the rest.",
-    inversion:"Don't engineer the good life — subtract the ruiners. Click each to see the disaster you're designing out.",
-    explore:"Early on, sample widely; once something works, commit. The cost of each mistake — searching forever, or settling too soon.",
+    ev:"Probability times payoff. Slide the odds and watch a rare, huge upside overtake a near-sure tiny one - the case for capped-downside swings.",
+    doors:"Two-way doors reverse; one-way doors don't. Match your speed to the door - fast for reversible, slow for the rest.",
+    inversion:"Don't engineer the good life - subtract the ruiners. Click each to see the disaster you're designing out.",
+    explore:"Early on, sample widely; once something works, commit. The cost of each mistake - searching forever, or settling too soon.",
     compounding:"One choice barely moves the needle. Repeat it daily for five years and watch the two paths separate.",
-    formula:"Six factors, multiplied. Drag any toward zero and the whole good life collapses — balance beats a lone maximum."
+    formula:"Six factors, multiplied. Drag any toward zero and the whole good life collapses - balance beats a lone maximum."
   };
   const ctl = {
     ev:`<span class="cl">chance of the big win</span><input type="range" min="5" max="95" step="5" value="30">`,
@@ -1001,7 +1001,7 @@ SIMS.ev = fig=>{
       ctx.fillStyle=win?AMBER:GRAY; ctx.font='14px Inter, sans-serif'; ctx.fillText("EV "+ev.toFixed(1), x+bw/2-22, base-h-8);
     });
     ctx.fillStyle=GRAY; ctx.font='13px Inter, sans-serif';
-    wrapText(ctx, evA>=evB ? "Even at "+p+"% odds, the bold swing's huge payoff wins on expected value — and its downside is just the small stake."
+    wrapText(ctx, evA>=evB ? "Even at "+p+"% odds, the bold swing's huge payoff wins on expected value - and its downside is just the small stake."
                            : "At "+p+"% the safe bet still wins. Slide the odds up and watch the bold swing overtake it.", 40, H-38, W-80, 20);
   }
   draw(); fig.querySelector('input').oninput=e=>{ p=+e.target.value; draw(); }; return ()=>{};
@@ -1026,11 +1026,11 @@ SIMS.doors = fig=>{
     if(mode==="two") arrow(cx-60,cy+20,cx-140);
     else { ctx.strokeStyle='#8a5c5c'; ctx.beginPath(); ctx.moveTo(cx-95,cy+8); ctx.lineTo(cx-80,cy+32); ctx.moveTo(cx-80,cy+8); ctx.lineTo(cx-95,cy+32); ctx.stroke(); }
     ctx.fillStyle= mode==="two"?AMBER:'#8a5c5c'; ctx.font='18px Inter, sans-serif';
-    ctx.fillText(mode==="two"?"Two-way door — you can walk back":"One-way door — no going back", cx-150, cy+130);
+    ctx.fillText(mode==="two"?"Two-way door - you can walk back":"One-way door - no going back", cx-150, cy+130);
     ctx.fillStyle=INKC; ctx.font='15px Inter, sans-serif';
     ctx.fillText(mode==="two"?"→ Decide fast. Reversible mistakes are cheap.":"→ Slow down. This one you live with.", cx-150, cy+160);
     ctx.fillStyle=GRAY; ctx.font='13px Inter, sans-serif';
-    wrapText(ctx,"Most people invert this — agonizing over dinner orders (two-way) and rushing jobs, partners, and debt (one-way).",40,H-30,W-80,18);
+    wrapText(ctx,"Most people invert this - agonizing over dinner orders (two-way) and rushing jobs, partners, and debt (one-way).",40,H-30,W-80,18);
   }
   draw();
   fig.querySelectorAll('.ghost').forEach(b=>b.onclick=()=>{
@@ -1043,13 +1043,13 @@ SIMS.inversion = fig=>{
   const cv=fig.querySelector('canvas'); cv.width=700; cv.height=380;
   const ctx=cv.getContext('2d'); const W=700,H=380; let r=0;
   const items=[
-    {name:"Sleep deprivation",cost:"Blunts judgment, mood, and health — and quietly degrades every other decision you make."},
+    {name:"Sleep deprivation",cost:"Blunts judgment, mood, and health - and quietly degrades every other decision you make."},
     {name:"Chronic debt",cost:"Removes your options and slack, forcing bad short-term choices and foreclosing good long-term ones."},
-    {name:"An environment that rewards your worst traits",cost:"Slowly turns you into your worst self — no willpower survives a bad-enough environment."}];
+    {name:"An environment that rewards your worst traits",cost:"Slowly turns you into your worst self - no willpower survives a bad-enough environment."}];
   function draw(){
     ctx.fillStyle=SUNK; ctx.fillRect(0,0,W,H);
     ctx.fillStyle=GRAY; ctx.font='14px Inter, sans-serif';
-    ctx.fillText("Instead of 'how do I live well?' — ask 'how would I ruin my life?'", 40, 44);
+    ctx.fillText("Instead of 'how do I live well?' - ask 'how would I ruin my life?'", 40, 44);
     const it=items[r];
     ctx.fillStyle='#8a5c5c'; ctx.font='20px Inter, sans-serif'; wrapText(ctx,"✗ "+it.name,40,90,W-80,26);
     ctx.fillStyle=INKC; ctx.font='15px Inter, sans-serif'; wrapText(ctx,it.cost,40,150,W-80,24);
@@ -1086,7 +1086,7 @@ SIMS.explore = fig=>{
     ctx.fillStyle=INKC; ctx.font='14px Inter, sans-serif';
     ctx.fillText("At this stage: ~"+e+"% explore, "+(100-e)+"% exploit.", 40, H-42);
     ctx.fillStyle=GRAY; ctx.font='13px Inter, sans-serif';
-    wrapText(ctx, stage<35 ? "Early or stuck: sample widely — the cost of a wrong turn is low and the information is priceless."
+    wrapText(ctx, stage<35 ? "Early or stuck: sample widely - the cost of a wrong turn is low and the information is priceless."
                            : "Once something works: commit and compound. Exploring forever is just fear of commitment wearing a lab coat.", 40, H-20, W-80, 18);
   }
   draw(); fig.querySelector('input').oninput=e=>{ stage=+e.target.value; draw(); }; return ()=>{};
@@ -1113,9 +1113,9 @@ SIMS.compounding = fig=>{
     const end=vals[vals.length-1];
     ctx.fillStyle=INKC; ctx.font='15px Inter, sans-serif';
     ctx.fillText(good ? "A 1%-better choice, daily, for 5 years → "+end.toFixed(1)+"× where you started."
-                      : "A 1%-worse choice, daily, for 5 years → "+end.toFixed(2)+"× — a slow erosion.", 40, H-38);
+                      : "A 1%-worse choice, daily, for 5 years → "+end.toFixed(2)+"× - a slow erosion.", 40, H-38);
     ctx.fillStyle=GRAY; ctx.font='13px Inter, sans-serif';
-    wrapText(ctx,"The single day is negligible — which is exactly why compounding is invisible until it's enormous.",40,H-18,W-80,18);
+    wrapText(ctx,"The single day is negligible - which is exactly why compounding is invisible until it's enormous.",40,H-18,W-80,18);
   }
   draw();
   fig.querySelectorAll('.ghost').forEach(b=>b.onclick=()=>{
@@ -1147,8 +1147,8 @@ SIMS.formula = fig=>{
     ctx.fillStyle= prod<0.15?'#8a5c5c':INKC; ctx.font='16px Inter, sans-serif';
     ctx.fillText("good life score: "+(prod*100).toFixed(1)+" / 100", 40, base+60);
     ctx.fillStyle=GRAY; ctx.font='13px Inter, sans-serif';
-    wrapText(ctx, weak<25 ? "One factor near zero drags the whole product down — five strong scores can't rescue a sixth that's collapsed."
-                          : "Balanced factors multiply well. Tend your weakest, not your strongest — that's where the whole life is lost or saved.", 40, H-30, W-80, 18);
+    wrapText(ctx, weak<25 ? "One factor near zero drags the whole product down - five strong scores can't rescue a sixth that's collapsed."
+                          : "Balanced factors multiply well. Tend your weakest, not your strongest - that's where the whole life is lost or saved.", 40, H-30, W-80, 18);
   }
   draw(); fig.querySelector('input').oninput=e=>{ weak=+e.target.value; draw(); }; return ()=>{};
 };

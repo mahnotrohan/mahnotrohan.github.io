@@ -13,7 +13,7 @@ catch(e){document.documentElement.setAttribute('data-theme','light');}})();
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
-<title>Nonviolent Communication — Orrery</title>
+<title>Nonviolent Communication - Orrery</title>
 <style>
 :root{
   /* site parity: --ground/--surface-* mirror the main site's --bg/--bg-2/--chip */
@@ -61,7 +61,7 @@ h1,h2,h3{color:var(--ink-strong); font-weight:600; line-height:1.3;}
 .kicker{font-size:11px; letter-spacing:.14em; text-transform:uppercase;
   color:var(--ink-muted); font-weight:500;}
 
-/* header — all navigation lives top right */
+/* header - all navigation lives top right */
 #hdr{position:fixed; top:0; left:0; right:0; z-index:40; height:56px;
   display:flex; align-items:center; gap:1.1rem; padding:0 1.4rem;
   background:var(--hdr-fade);
@@ -131,7 +131,7 @@ body.reader-open #hdr{right:var(--reader-w);}
 .mk.neighbor .lbl{color:var(--ink-strong);}
 .mk.dimmed{opacity:.35;}
 
-/* connection overlay — few, directional, labeled plainly */
+/* connection overlay - few, directional, labeled plainly */
 #tsvg, #astsvg, #flowsvg{position:absolute; top:0; left:0; pointer-events:none; overflow:visible;}
 @keyframes dashdrift{to{stroke-dashoffset:-64;}}
 .tline{animation:dashdrift 6s linear infinite;}
@@ -303,7 +303,7 @@ function syncSimColours(){
 syncSimColours();
 
 /* ============================================================
-   CONTENT v2 — every idea: hook → story → (sim) → mechanism
+   CONTENT v2 - every idea: hook → story → (sim) → mechanism
    fold → the idea named → where it bites → you can now explain.
    Connections: ≤4 per idea, in three plain buckets.
    ============================================================ */
@@ -311,20 +311,20 @@ const N = {
 
 a1:{type:"axiom", title:"Compassion is our natural state", x:1259, y:512,
   ess:"Giving from the heart is not an achievement. It is the default we lost.",
-  hook:"Why do some people turn cruel under pressure — and why do a few stay kind inside a concentration camp?",
-  story:"Etty Hillesum wrote in a German camp that when a Gestapo officer screamed at her she felt “no indignation, rather a real compassion,” and wanted to ask, “Did you have a very unhappy childhood, has your girlfriend let you down?” Rosenberg does not read her as a saint. He reads her as evidence that the capacity was never removed — only, in most of us, obstructed.",
-  mech:"The whole book rests on this line and mostly assumes rather than defends it: it is “our nature to enjoy giving and receiving in a compassionate manner.” Rosenberg uses <i>nonviolence</i> exactly as Gandhi used it — “to refer to our natural state of compassion when violence has subsided from the heart.” Everything after it answers the two questions the premise raises — what disconnects us, and what keeps some people connected. If you believe humans are natively selfish, NVC reads as naive technique; if the premise holds, it reads as clearing an obstruction.",
+  hook:"Why do some people turn cruel under pressure - and why do a few stay kind inside a concentration camp?",
+  story:"Etty Hillesum wrote in a German camp that when a Gestapo officer screamed at her she felt “no indignation, rather a real compassion,” and wanted to ask, “Did you have a very unhappy childhood, has your girlfriend let you down?” Rosenberg does not read her as a saint. He reads her as evidence that the capacity was never removed - only, in most of us, obstructed.",
+  mech:"The whole book rests on this line and mostly assumes rather than defends it: it is “our nature to enjoy giving and receiving in a compassionate manner.” Rosenberg uses <i>nonviolence</i> exactly as Gandhi used it - “to refer to our natural state of compassion when violence has subsided from the heart.” Everything after it answers the two questions the premise raises - what disconnects us, and what keeps some people connected. If you believe humans are natively selfish, NVC reads as naive technique; if the premise holds, it reads as clearing an obstruction.",
   term:"Our natural state", def:"compassion is not a virtue to be installed but a default we get disconnected from.",
-  sowhat:"It changes the goal. You are not trying to become a better person — you are trying to stop doing the specific things that block what is already there.",
+  sowhat:"It changes the goal. You are not trying to become a better person - you are trying to stop doing the specific things that block what is already there.",
   explain:"why NVC treats compassion as something to unblock rather than something to build.",
   builds:[], leads:[["b1-laplace","then what disconnects us?"]], live:[]},
 
 a2:{type:"axiom", title:"Every action serves a need", x:1057, y:627,
   ess:"Nobody has ever acted for no reason. Even the acts you regret served something.",
-  hook:"The person who did the unforgivable thing — including the version of you who did it — what were they trying to get?",
+  hook:"The person who did the unforgivable thing - including the version of you who did it - what were they trying to get?",
   story:"Rosenberg states it as a belief, and applies it without exception: “I believe that human beings are always acting in the service of needs and values… whether the action does or does not meet the need, or whether it's one we end up celebrating or regretting.” It applies to the pen you ruined a suit with and to the man in a Swedish prison who killed his best friend.",
-  mech:"This is not moral relativism — it does not say the act was fine. It says the act was a strategy, and strategies can be catastrophic while the need underneath is ordinary and shared. That is what makes a different strategy findable at all; if a person were simply evil, there would be nothing to work with.",
-  term:"Needs behind actions", def:"every behaviour, including violence, is an attempt — often a tragic one — to meet a need.",
+  mech:"This is not moral relativism - it does not say the act was fine. It says the act was a strategy, and strategies can be catastrophic while the need underneath is ordinary and shared. That is what makes a different strategy findable at all; if a person were simply evil, there would be nothing to work with.",
+  term:"Needs behind actions", def:"every behaviour, including violence, is an attempt - often a tragic one - to meet a need.",
   sowhat:"“Why would anyone do that?” always has an answer, and finding it is the only route to a different outcome. Condemnation ends the search before it starts.",
   explain:"why NVC can hold an act to be terrible and its cause to be ordinary at the same time.",
   builds:[], leads:[["b2-attractors","the needs themselves"]], live:[["b1-pendulum","watch a judgment turn back into a need"]]},
@@ -333,7 +333,7 @@ a3:{type:"axiom", title:"Needs are universal, strategies are not", x:1462, y:627
   ess:"We never really disagree about needs. We disagree about how to meet them.",
   hook:"Two people are shouting at each other. What, precisely, are they disagreeing about?",
   story:"Rosenberg lists what he takes to be shared by everyone: autonomy, celebration and mourning, integrity, interdependence, play, spiritual communion, physical nurturance. In Southern California he asked landowners and migrant farm workers what each needed. One said “The problem is that these people are racist!” The other, louder: “The problem is that these people don't respect law and order!” He met the same thing in Israel, where a Palestinian mukhtar told the room “You people are acting like a bunch of Nazis” and an Israeli woman shot back that it was a totally insensitive thing to say. Neither side had said a need out loud.",
-  mech:"Conflict lives at the strategy layer, where options are scarce and mutually exclusive. Dropping to the needs layer does not dissolve the disagreement, and Rosenberg's claim is the modest one: it enlarges the set of moves available. Money is his own worked example — “Money is not a need as we define it in NVC; it is one of countless strategies that may be selected to address a need.”",
+  mech:"Conflict lives at the strategy layer, where options are scarce and mutually exclusive. Dropping to the needs layer does not dissolve the disagreement, and Rosenberg's claim is the modest one: it enlarges the set of moves available. Money is his own worked example - “Money is not a need as we define it in NVC; it is one of countless strategies that may be selected to address a need.”",
   term:"Needs vs strategies", def:"a need is what life requires; a strategy is one particular way of getting it, at one time, from one person.",
   sowhat:"The move Rosenberg wanted from the Israeli woman: “I am needing more respect in our dialogue. Instead of telling us how you think we are acting, would you tell us what it is we are doing that you find disturbing?” Because “from the moment people begin talking about what they need rather than what's wrong with one another, the possibility of finding ways to meet everybody's needs is greatly increased.”",
   explain:"why moving a fight down to the needs layer creates options that did not exist above it.",
@@ -341,29 +341,29 @@ a3:{type:"axiom", title:"Needs are universal, strategies are not", x:1462, y:627
 
 a4:{type:"axiom", title:"No one can be made to do anything", x:1259, y:771,
   ess:"You can make people wish they had complied. That is all force ever buys.",
-  hook:"You hold all the authority — parent, manager, state. What can you actually make another person do?",
-  story:"“I could make all the demands in the world but still couldn't make my children do anything,” Rosenberg writes. “All I could do was make them wish they had — through punishment. Then eventually they taught me that any time I was foolish enough to make them wish they had complied by punishing them, they had ways of making me wish that I hadn't!”",
+  hook:"You hold all the authority - parent, manager, state. What can you actually make another person do?",
+  story:"“I could make all the demands in the world but still couldn't make my children do anything,” Rosenberg writes. “All I could do was make them wish they had - through punishment. Then eventually they taught me that any time I was foolish enough to make them wish they had complied by punishing them, they had ways of making me wish that I hadn't!”",
   mech:"This is the hinge under the hardest half of the book. If willing action cannot be manufactured, then demands, punishment, praise and guilt are all attempts at something impossible, and their real product is resentment plus diminished goodwill. What remains is slower: making it possible for someone to want to.",
-  term:"The limit of power", def:"no amount of leverage produces willing action — only submission or rebellion.",
-  sowhat:"Every management, parenting or political strategy built on “make them” is buying compliance and paying in goodwill. And the bill is cumulative: “The more we have in the past blamed, punished, or laid guilt trips on others… the higher the likelihood that our requests will now be heard as demands” — most of all when we hold authority.",
+  term:"The limit of power", def:"no amount of leverage produces willing action - only submission or rebellion.",
+  sowhat:"Every management, parenting or political strategy built on “make them” is buying compliance and paying in goodwill. And the bill is cumulative: “The more we have in the past blamed, punished, or laid guilt trips on others… the higher the likelihood that our requests will now be heard as demands” - most of all when we hold authority.",
   explain:"why the whole punishment-and-reward apparatus is trying to do something that cannot be done.",
   builds:[], leads:[["b4-explore","the two questions that expose this"]], live:[["b4-coinflip","the four doors out of a hard sentence"]]},
 
 "b1-laplace":{type:"story · phenomenon", title:"Looking under the street lamp", x:404, y:355,
   ess:"NVC contains nothing new. It is a redirection of attention.",
-  hook:"A man is on his knees under a street lamp, searching. “Did you drop your keys here?” “No — in the alley.” So why is he looking here?",
+  hook:"A man is on his knees under a street lamp, searching. “Did you drop your keys here?” “No - in the alley.” So why is he looking here?",
   story:"“But the light is much better here.” Rosenberg tells it against himself: “my cultural conditioning leads me to focus attention on places where I am unlikely to get what I want.” He was ten in Detroit in 1943 when a race war killed more than forty people and his family spent three days locked in the house; when school reopened, two boys heard his name at roll call, hissed “Are you a kike?”, and beat him after school. The method came from asking what lets some people stay human anyway.",
-  mech:"He is explicit that there is no new content: “It contains nothing new; all that has been integrated into NVC has been known for centuries. The intent is to remind us about what we already know.” Four components — observation, feeling, need, request — are used twice over: to express honestly, and to receive empathically. All four at once sound like this: “Felix, when I see two balls of soiled socks under the coffee table and another three next to the TV, I feel irritated because I am needing more order in the rooms that we share in common… Would you be willing to put your socks in your room or in the washing machine?” And the caveat that governs everything else: “The essence of NVC is in our consciousness of the four components, not in the actual words that are exchanged.”",
+  mech:"He is explicit that there is no new content: “It contains nothing new; all that has been integrated into NVC has been known for centuries. The intent is to remind us about what we already know.” Four components - observation, feeling, need, request - are used twice over: to express honestly, and to receive empathically. All four at once sound like this: “Felix, when I see two balls of soiled socks under the coffee table and another three next to the TV, I feel irritated because I am needing more order in the rooms that we share in common… Would you be willing to put your socks in your room or in the washing machine?” And the caveat that governs everything else: “The essence of NVC is in our consciousness of the four components, not in the actual words that are exchanged.”",
   term:"NVC", def:"a way of communicating that leads us to give from the heart: four components, used both to express and to receive.",
-  sowhat:"Most arguments are searches under the lamp — who started it, who is right, what kind of person they are. None of those is where the keys are.",
+  sowhat:"Most arguments are searches under the lamp - who started it, who is right, what kind of person they are. None of those is where the keys are.",
   explain:"what NVC actually is, and why its author insists it is a reminder rather than a discovery.",
   builds:[["a1","the nature it tries to unblock"]], leads:[["b1-pendulum","the first thing in the way"]], live:[]},
 
 "b1-pendulum":{type:"mechanism", title:"The judgment reflex", sim:"judgment", x:884, y:309,
   ess:"Every label you put on a person is a fact about your own unmet need.",
-  hook:"Your partner wants more affection than you do. What word comes to mind for them — and what word would come if the gap ran the other way?",
+  hook:"Your partner wants more affection than you do. What word comes to mind for them - and what word would come if the gap ran the other way?",
   story:"Rosenberg's own answer: “If my partner wants more affection than I'm giving her, she is needy and dependent. But if I want more affection than she's giving me, then she is aloof and insensitive.” Same person, same relationship. The label tracks the size and direction of his own unmet need, and nothing else. “It is my belief that all such analyses of other human beings are tragic expressions of our own values and needs.”",
-  mech:"Tragic because of what the form does: hearing “you are X,” people spend their energy on defence or counterattack — and the label manufactures its own evidence. Judge a child a liar and “why would people want to tell the truth, knowing they will be judged and punished for doing so?” Comparison is the same move (“Comparisons are a form of judgment”): Dan Greenburg's recipe for misery is to list what Mozart had composed by the age of twelve and compare it against your own achievements now. Two caveats. Value judgments are fine — “Violence is bad” becomes “I am fearful of the use of violence to resolve conflicts; I value the resolution of human conflicts through other means.” And Rosenberg refuses to build a new moralism out of this: “I don't say it's wrong to judge people… However, it's that kind of thinking on your part that makes you feel very angry.”",
+  mech:"Tragic because of what the form does: hearing “you are X,” people spend their energy on defence or counterattack - and the label manufactures its own evidence. Judge a child a liar and “why would people want to tell the truth, knowing they will be judged and punished for doing so?” Comparison is the same move (“Comparisons are a form of judgment”): Dan Greenburg's recipe for misery is to list what Mozart had composed by the age of twelve and compare it against your own achievements now. Two caveats. Value judgments are fine - “Violence is bad” becomes “I am fearful of the use of violence to resolve conflicts; I value the resolution of human conflicts through other means.” And Rosenberg refuses to build a new moralism out of this: “I don't say it's wrong to judge people… However, it's that kind of thinking on your part that makes you feel very angry.”",
   term:"Moralistic judgment", def:"language implying wrongness or badness in people who do not act in harmony with our values.",
   sowhat:"O.J. Harvey sampled literature from many countries and reported “a high correlation” between the frequency of person-classifying words and the frequency of violent incidents. Rosenberg's line: “Classifying and judging people promotes violence.” Rumi's, which he sets against it: “Out beyond ideas of wrongdoing and right-doing, there is a field. I'll meet you there.”",
   explain:"why an insult is best read as a badly-worded status report on the speaker.",
@@ -372,8 +372,8 @@ a4:{type:"axiom", title:"No one can be made to do anything", x:1259, y:771,
 "b1-sensitive":{type:"mechanism", title:"Amtssprache", x:520, y:522,
   ess:"“I had to.” The grammar that removes the person from their own actions.",
   hook:"Eichmann and his colleagues had their own name for the language they used at work. What do you think they called it?",
-  story:"Amtssprache — “office talk,” a term Rosenberg takes from Hannah Arendt's <i>Eichmann in Jerusalem</i>. Asked why they did something: I had to. Why did you have to? “Superiors' orders.” “Company policy.” “It was the law.” Rosenberg's inventory of what we blame instead of ourselves runs from vague forces (“I cleaned my room because I had to”) through diagnoses, others' actions, authority, group pressure, policy and roles, all the way to uncontrollable impulses.",
-  mech:"A teacher told him she hated giving grades but had to — district policy. He asked her to say it as “I choose to give grades because I want…”. Without hesitation: “because I want to keep my job.” Then: “But I don't like saying it that way. It makes me feel so responsible for what I'm doing.” Rosenberg: “That's why I want you to do it that way.”",
+  story:"Amtssprache - “office talk,” a term Rosenberg takes from Hannah Arendt's <i>Eichmann in Jerusalem</i>. Asked why they did something: I had to. Why did you have to? “Superiors' orders.” “Company policy.” “It was the law.” Rosenberg's inventory of what we blame instead of ourselves runs from vague forces (“I cleaned my room because I had to”) through diagnoses, others' actions, authority, group pressure, policy and roles, all the way to uncontrollable impulses.",
+  mech:"A teacher told him she hated giving grades but had to - district policy. He asked her to say it as “I choose to give grades because I want…”. Without hesitation: “because I want to keep my job.” Then: “But I don't like saying it that way. It makes me feel so responsible for what I'm doing.” Rosenberg: “That's why I want you to do it that way.”",
   term:"Amtssprache", def:"responsibility-denying language: any construction in which an action happens without anyone choosing it.",
   sowhat:"A woman insisted some things you simply have to do: “I hate cooking. I hate it with a passion, but I have been doing it every day for twenty years, even when I've been as sick as a dog.” She went home and announced she was finished; three weeks later her elder son said, “I just said to myself, Thank God! … maybe finally she won't be complaining at every meal!” Bernanos feared not cruelty but “the docility, the lack of responsibility of the modern man.”",
   explain:"how ordinary grammar lets a person act without ever being the author of the act.",
@@ -382,18 +382,18 @@ a4:{type:"axiom", title:"No one can be made to do anything", x:1259, y:771,
 "b1-lorenz-story":{type:"story", title:"Deserve", x:254, y:656,
   ess:"The belief that some people have earned suffering does more work than you think.",
   hook:"“He deserves to be punished for what he did.” What has to be true about a person for that sentence to make sense?",
-  story:"That they are bad — and that enough suffering will make them repent and change. Rosenberg's counter: “I believe it is in everyone's interest that people change, not in order to avoid punishment, but because they see the change as benefiting themselves.” Meanwhile, in 75 percent of American television programmes shown when children are most likely to be watching, the hero kills or beats someone, usually as the climax. Viewers, taught that bad guys deserve it, enjoy the scene.",
-  mech:"Deserve and the demand are one machine. A demand “explicitly or implicitly threatens listeners with blame or punishment if they fail to comply”; deserve supplies the justification. Both require a world sorted into who is what — which is how the Cold War could be conducted entirely in the vocabulary of “evil empire” and “imperialist oppressors,” with neither side acknowledging the fear lurking behind the labels.",
+  story:"That they are bad - and that enough suffering will make them repent and change. Rosenberg's counter: “I believe it is in everyone's interest that people change, not in order to avoid punishment, but because they see the change as benefiting themselves.” Meanwhile, in 75 percent of American television programmes shown when children are most likely to be watching, the hero kills or beats someone, usually as the climax. Viewers, taught that bad guys deserve it, enjoy the scene.",
+  mech:"Deserve and the demand are one machine. A demand “explicitly or implicitly threatens listeners with blame or punishment if they fail to comply”; deserve supplies the justification. Both require a world sorted into who is what - which is how the Cold War could be conducted entirely in the vocabulary of “evil empire” and “imperialist oppressors,” with neither side acknowledging the fear lurking behind the labels.",
   term:"Deserve-thinking", def:"the assumption that wrongness in a person justifies their suffering, and that suffering produces change.",
   sowhat:"“At the root of much, if not all, violence… is a kind of thinking that attributes the cause of conflict to wrongness in one's adversaries, and a corresponding inability to think of oneself or others in terms of vulnerability.”",
   explain:"why “they deserve it” is a load-bearing belief rather than a throwaway phrase.",
   builds:[["a4","why the demand cannot work anyway"]], leads:[["b1-principle","what all four forms have in common"]], live:[]},
 
 "b1-principle":{type:"principle", title:"Life-alienating communication", x:716, y:679,
-  ess:"Judgment, comparison, denied responsibility, demand — four forms, one function.",
+  ess:"Judgment, comparison, denied responsibility, demand - four forms, one function.",
   hook:"Who benefits from a population trained to look outside itself to find out what is right?",
   story:"Rosenberg's answer is political. “It would be in the interest of kings, czars, nobles, and so forth that the masses be educated in a way that renders them slavelike in mentality. The language of wrongness, should, and have to is perfectly suited for this purpose.” The four blocking forms are not personal bad habits; they are the residue of hierarchical societies, still running in our mouths.",
-  mech:"The mechanism is the same in each: attention moves from what is alive in us — feeling, need — to an external verdict about who is what. Once attention is out there, compliance can only be bought with fear, guilt or shame, and “we all pay dearly when people respond to our values and needs not out of a desire to give from the heart.” Note the scope of his claim: several centuries of a particular education, not a fact about human nature.",
+  mech:"The mechanism is the same in each: attention moves from what is alive in us - feeling, need - to an external verdict about who is what. Once attention is out there, compliance can only be bought with fear, guilt or shame, and “we all pay dearly when people respond to our values and needs not out of a desire to give from the heart.” Note the scope of his claim: several centuries of a particular education, not a fact about human nature.",
   term:"Life-alienating communication", def:"forms of language that cut us off from our own feelings and needs, and so from compassion.",
   sowhat:"“When we are in contact with our feelings and needs, we humans no longer make good slaves and underlings.”",
   explain:"how four ordinary speech habits add up to a political technology.",
@@ -402,8 +402,8 @@ a4:{type:"axiom", title:"No one can be made to do anything", x:1259, y:771,
 "b2-logistic":{type:"mechanism", title:"Observation without evaluation", sim:"observe", x:1837, y:233,
   ess:"Say what a camera would have recorded. Then, separately, say what you made of it.",
   hook:"“He has a big mouth.” “He talks too much.” “He wants to be the centre of attention.” Which of those tells you what the man actually did?",
-  story:"None of them. Rosenberg spent an entire staff meeting failing to get teachers to describe what their principal actually did, until someone finally said it: he tells stories about his childhood and war experiences in faculty meetings, and meetings sometimes run twenty minutes over. In the joint meeting they lost it again — rolled eyes, pointed yawns, one man staring at his watch — until a teacher screwed up his courage: “Ed, you have a big mouth.” Told at last what he actually did, the principal asked, “Why didn't one of you tell me before?” — then launched into a story about the habit.",
-  mech:"“When we combine observation with evaluation, people are apt to hear criticism” — and resist. The caveat is important: “NVC does not mandate that we remain completely objective and refrain from evaluating. It only requires that we maintain a separation between our observations and our evaluations.” Krishnamurti called observing without evaluating the highest form of human intelligence; “What nonsense!” shot through Rosenberg's mind before he noticed he had just made an evaluation. Ruth Bebermeyer sings the distinction plainer: “I've never seen a lazy man; I've seen a man who never ran while I watched him… but he was not a lazy man.” Flattering labels do it too — “even a positive or an apparently neutral label such as cook limits our perception of the totality of another person's being.”",
+  story:"None of them. Rosenberg spent an entire staff meeting failing to get teachers to describe what their principal actually did, until someone finally said it: he tells stories about his childhood and war experiences in faculty meetings, and meetings sometimes run twenty minutes over. In the joint meeting they lost it again - rolled eyes, pointed yawns, one man staring at his watch - until a teacher screwed up his courage: “Ed, you have a big mouth.” Told at last what he actually did, the principal asked, “Why didn't one of you tell me before?” - then launched into a story about the habit.",
+  mech:"“When we combine observation with evaluation, people are apt to hear criticism” - and resist. The caveat is important: “NVC does not mandate that we remain completely objective and refrain from evaluating. It only requires that we maintain a separation between our observations and our evaluations.” Krishnamurti called observing without evaluating the highest form of human intelligence; “What nonsense!” shot through Rosenberg's mind before he noticed he had just made an evaluation. Ruth Bebermeyer sings the distinction plainer: “I've never seen a lazy man; I've seen a man who never ran while I watched him… but he was not a lazy man.” Flattering labels do it too - “even a positive or an apparently neutral label such as cook limits our perception of the totality of another person's being.”",
   term:"Observation", def:"an evaluation-free report of what was said or done, specific to time and context.",
   sowhat:"Seven tells, all learnable: the verb <i>to be</i> (“you are too generous”); evaluative verbs (“Doug procrastinates”); an inference stated as the only possible one (“she won't get her work in”); prediction stated as certainty; vague referents (“immigrants don't take care of their property”); ability words (“a poor soccer player”); and always / never / often used as exaggeration rather than count.",
   explain:"how to strip the verdict out of a sentence without pretending you have no opinion.",
@@ -411,39 +411,39 @@ a4:{type:"axiom", title:"No one can be made to do anything", x:1259, y:771,
 
 "b2-lorenz-attractor":{type:"mechanism", title:"Feelings, and their impostors", sim:"feeling", x:2300, y:282,
   ess:"“I feel misunderstood” is not a feeling. It is a report on someone else.",
-  hook:"Say “I feel ignored.” Now — what are you actually feeling, and how would anyone know?",
-  story:"You might be relieved, if you wanted to be left alone, or hurt, if you wanted to be involved. “Ignored” describes your reading of them, not your state. Rosenberg's tell: after “I feel,” the words that, like, or as if — or a pronoun, or a name — mean a thought is coming. “I feel that you should know better” is an opinion in a feeling's clothes.",
-  mech:"The cost of not having the words is not small. He went through twenty-one years of American schools and cannot recall anyone ever asking how he felt; he once played baseball for a month on an untreated broken wrist. Hospital administrators told him they could never admit fear to physicians — “they would just pick us to pieces” — and when one of them did anyway, a proposal that had been voted down 17 to 1 passed 17 to 1.",
-  term:"Feeling vs. thought", def:"misunderstood, manipulated, ignored, rejected, unappreciated — words that, in Rosenberg's phrase, “express how we interpret others, rather than how we feel.”",
-  sowhat:"There is a third impostor, pointed inward: “I feel inadequate as a guitar player” rates an ability, and the feeling underneath is disappointment, impatience, or frustration. A woman who said “I feel like I'm married to a wall” got a husband who sat mute and immobile — a diagnosis heard as criticism tends to produce the behaviour it names.",
-  explain:"how to tell a feeling from a thought wearing a feeling's grammar — and why it matters that you can.",
+  hook:"Say “I feel ignored.” Now - what are you actually feeling, and how would anyone know?",
+  story:"You might be relieved, if you wanted to be left alone, or hurt, if you wanted to be involved. “Ignored” describes your reading of them, not your state. Rosenberg's tell: after “I feel,” the words that, like, or as if - or a pronoun, or a name - mean a thought is coming. “I feel that you should know better” is an opinion in a feeling's clothes.",
+  mech:"The cost of not having the words is not small. He went through twenty-one years of American schools and cannot recall anyone ever asking how he felt; he once played baseball for a month on an untreated broken wrist. Hospital administrators told him they could never admit fear to physicians - “they would just pick us to pieces” - and when one of them did anyway, a proposal that had been voted down 17 to 1 passed 17 to 1.",
+  term:"Feeling vs. thought", def:"misunderstood, manipulated, ignored, rejected, unappreciated - words that, in Rosenberg's phrase, “express how we interpret others, rather than how we feel.”",
+  sowhat:"There is a third impostor, pointed inward: “I feel inadequate as a guitar player” rates an ability, and the feeling underneath is disappointment, impatience, or frustration. A woman who said “I feel like I'm married to a wall” got a husband who sat mute and immobile - a diagnosis heard as criticism tends to produce the behaviour it names.",
+  explain:"how to tell a feeling from a thought wearing a feeling's grammar - and why it matters that you can.",
   builds:[["b2-logistic","the first component"]], leads:[["b2-attractors","and where feelings actually come from"]], live:[]},
 
 "b2-attractors":{type:"mechanism", title:"Stimulus is not cause", x:2069, y:401,
   ess:"What others do can set a feeling off. It never causes it.",
   hook:"Someone says: “You're the most self-centred person I've ever met.” Where does the feeling that follows actually come from?",
-  story:"From what you need. “Our feelings result from how we choose to receive what others say and do, as well as from our particular needs and expectations in that moment.” The repair is grammatical — I feel … because I need … — and it survives contact with real life: “When they cancelled the contract, I felt really irritated because I was hoping for an opportunity to rehire the workers we laid off last year.”",
-  mech:"Three patterns hide the connection: impersonal it and that (“it bugs me”); “I feel X because you…”; and naming only the other person's action (“when you don't call me on my birthday, I feel hurt”). This is also the machinery of guilt — “It hurts Mommy and Daddy when you get poor grades” teaches a child that their behaviour is the cause of a parent's state. And underneath all of it: “Judgments, criticisms, diagnoses, and interpretations of others are all alienated expressions of our needs.”",
+  story:"From what you need. “Our feelings result from how we choose to receive what others say and do, as well as from our particular needs and expectations in that moment.” The repair is grammatical - I feel … because I need … - and it survives contact with real life: “When they cancelled the contract, I felt really irritated because I was hoping for an opportunity to rehire the workers we laid off last year.”",
+  mech:"Three patterns hide the connection: impersonal it and that (“it bugs me”); “I feel X because you…”; and naming only the other person's action (“when you don't call me on my birthday, I feel hurt”). This is also the machinery of guilt - “It hurts Mommy and Daddy when you get poor grades” teaches a child that their behaviour is the cause of a parent's state. And underneath all of it: “Judgments, criticisms, diagnoses, and interpretations of others are all alienated expressions of our needs.”",
   term:"Stimulus vs cause", def:"the trigger is outside you; the cause is the need you meet it with, plus the thinking you wrap around it.",
   sowhat:"Saying a need out loud is frightening, and Rosenberg notes the cost is not evenly distributed: “Women, in particular, are susceptible to criticism. For centuries, the image of the loving woman has been associated with sacrifice and the denial of one's own needs to take care of others.” His mother realised at a workshop that for thirty-six years she had been angry with his father for not meeting needs she had never once stated out loud.",
   explain:"why owning the cause of a feeling is not self-blame but the only way to become answerable.",
   builds:[["a3","the needs themselves"],["b2-lorenz-attractor","the feelings that point to them"]], leads:[["b2-tension-random","and then: what do you actually want?"]], live:[]},
 
 "b2-tension-random":{type:"mechanism", title:"How do you do a don't?", sim:"request", x:2392, y:470,
-  ess:"Name the action you want — in the positive, concretely, and doable now.",
+  ess:"Name the action you want - in the positive, concretely, and doable now.",
   hook:"You ask your husband not to spend so much time at work. Three weeks later he signs up for a golf tournament. What went wrong?",
-  story:"You said what you did not want. Ruth Bebermeyer's children's song: “How do you do a don't?… All I know is I feel won't when I'm told to do a don't.” The woman's real request turned out to be “I would like him to spend at least one evening a week at home with the children and me” — a thing a human being can actually do on a Tuesday.",
-  mech:"Vagueness fails the same way. “Let me be me” produced “I do!” / “No, you don't!” until it got concrete. Rosenberg warns that vague language can also “mask oppressive interpersonal games”: a father asking his fifteen-year-old for “a little responsibility” meant “to jump when I say jump, and to smile while doing it” — obedience, not responsibility. Two further moves close the loop: ask for a reflection (“Could you tell me what you just heard me say?” — answered, when it comes back wrong, with “I'm grateful to you for telling me what you heard. I can see that I didn't make myself as clear as I'd have liked”), and ask for honesty, specifying which kind: their feelings and the reasons for them, a particular thought, or willingness to take an action. Underneath all of it sits the general claim: “Whenever we say something to another person, we are requesting something in return” — empathic connection, honesty, or action — and most of the trouble comes from not knowing which one we wanted.",
+  story:"You said what you did not want. Ruth Bebermeyer's children's song: “How do you do a don't?… All I know is I feel won't when I'm told to do a don't.” The woman's real request turned out to be “I would like him to spend at least one evening a week at home with the children and me” - a thing a human being can actually do on a Tuesday.",
+  mech:"Vagueness fails the same way. “Let me be me” produced “I do!” / “No, you don't!” until it got concrete. Rosenberg warns that vague language can also “mask oppressive interpersonal games”: a father asking his fifteen-year-old for “a little responsibility” meant “to jump when I say jump, and to smile while doing it” - obedience, not responsibility. Two further moves close the loop: ask for a reflection (“Could you tell me what you just heard me say?” - answered, when it comes back wrong, with “I'm grateful to you for telling me what you heard. I can see that I didn't make myself as clear as I'd have liked”), and ask for honesty, specifying which kind: their feelings and the reasons for them, a particular thought, or willingness to take an action. Underneath all of it sits the general claim: “Whenever we say something to another person, we are requesting something in return” - empathic connection, honesty, or action - and most of the trouble comes from not knowing which one we wanted.",
   term:"Positive, concrete, doable", def:"a request names an action, in the affirmative, specific enough that the other person can tell whether they have done it.",
-  sowhat:"Black students told a principal to stop being racist and got “Get out of here! I don't need you people telling me what to do!” They came back with thirty-eight concrete actions — starting with “refer to us as black students and not you people.” He agreed to all thirty-eight.",
+  sowhat:"Black students told a principal to stop being racist and got “Get out of here! I don't need you people telling me what to do!” They came back with thirty-eight concrete actions - starting with “refer to us as black students and not you people.” He agreed to all thirty-eight.",
   explain:"why most requests fail before anyone has decided whether to grant them.",
   builds:[["b2-attractors","the need the request serves"]], leads:[["b2-principle","and the line it must not cross"]], live:[]},
 
 "b2-principle":{type:"principle", title:"A request, not a demand", x:1895, y:598,
   ess:"Phrasing helps. What settles it is what you do when they say no.",
-  hook:"You asked beautifully, all four components, and they said no. Watch yourself for the next ten seconds — what happens?",
+  hook:"You asked beautifully, all four components, and they said no. Watch yourself for the next ten seconds - what happens?",
   story:"“Our requests are received as demands when others believe they will be blamed or punished if they do not comply. When people hear a demand, they see only two options: submission or rebellion.” Jack asks Jane to spend the evening; she is worn out. “How typical of you to be so selfish!” is a demand. So is turning away in silence. So is “If you really loved me, you'd spend the evening with me.” “So you're feeling worn out and needing some rest this evening?” is a request.",
-  mech:"Which forces the objective to change: “If our objective is only to change people and their behaviour or to get our way, then NVC is not an appropriate tool… The objective of NVC is to establish a relationship based on honesty and empathy.” A mother reported that it “didn't work” — she had expressed herself cleanly, he still had not complied, and she had told him he couldn't go through life being lazy and irresponsible. The caveat is not passivity: this “does not mean we give up when someone says no… we don't engage in persuasion until we have empathized with what's preventing the other person from saying yes.” Invited out for ice cream, a woman said a brusque “No!”; the guess “I sense that you are angry” was wrong, and “So you're feeling fearful and want to protect yourself from being judged for how you communicate?” was right. She came for the ice cream.",
+  mech:"Which forces the objective to change: “If our objective is only to change people and their behaviour or to get our way, then NVC is not an appropriate tool… The objective of NVC is to establish a relationship based on honesty and empathy.” A mother reported that it “didn't work” - she had expressed herself cleanly, he still had not complied, and she had told him he couldn't go through life being lazy and irresponsible. The caveat is not passivity: this “does not mean we give up when someone says no… we don't engage in persuasion until we have empathized with what's preventing the other person from saying yes.” Invited out for ice cream, a woman said a brusque “No!”; the guess “I sense that you are angry” was wrong, and “So you're feeling fearful and want to protect yourself from being judged for how you communicate?” was right. She came for the ice cream.",
   term:"Request vs demand", def:"a request is one whose refusal you meet with empathy rather than blame, guilt, or withdrawal.",
   sowhat:"Rosenberg wrote “Song from Brett” in his son's voice after one such evening: “If I clearly understand you intend no demand, I'll usually respond when you call… you can spit, moan, groan, and throw a fit; I still won't take the garbage out.” Once Brett felt empathised with, he began taking the garbage out unreminded.",
   explain:"the one test that tells you which of the two you have been making all along.",
@@ -452,18 +452,18 @@ a4:{type:"axiom", title:"No one can be made to do anything", x:1259, y:771,
 "b3-kokura":{type:"story", title:"Don't just do something, stand there", x:271, y:962,
   ess:"The urge to fix is the most common way of not being there.",
   hook:"Your daughter looks in the mirror and says, “I'm as ugly as a pig.” What is the wrong thing to say?",
-  story:"“You're the most gorgeous creature God ever put on the face of the earth.” She said “Oh, Daddy!” and slammed the door on her way out. Reassurance is a correction — it tells someone their experience is mistaken. What she needed was: “Are you feeling disappointed with your appearance today?”",
-  mech:"The chapter title is a Buddhist saying Rosenberg borrows. “Empathy is a respectful understanding of what others are experiencing” — “emptying our mind and listening with our whole being.” Buber: every living situation “demands presence, responsibility; it demands you.” Chuang-Tzu described the hearing of the spirit, which “demands the emptiness of all the faculties.” Simone Weil is the warning: “The capacity to give one's attention to a sufferer is… almost a miracle… Nearly all those who think they have the capacity do not possess it.”",
+  story:"“You're the most gorgeous creature God ever put on the face of the earth.” She said “Oh, Daddy!” and slammed the door on her way out. Reassurance is a correction - it tells someone their experience is mistaken. What she needed was: “Are you feeling disappointed with your appearance today?”",
+  mech:"The chapter title is a Buddhist saying Rosenberg borrows. “Empathy is a respectful understanding of what others are experiencing” - “emptying our mind and listening with our whole being.” Buber: every living situation “demands presence, responsibility; it demands you.” Chuang-Tzu described the hearing of the spirit, which “demands the emptiness of all the faculties.” Simone Weil is the warning: “The capacity to give one's attention to a sufferer is… almost a miracle… Nearly all those who think they have the capacity do not possess it.”",
   term:"Presence", def:"attending to what is alive in another person right now, without adding anything of your own.",
   sowhat:"Advice, reassurance and explanation all feel generous, and all quietly move the conversation back to you. The move is to do less, and later.",
   explain:"why the helpful reflex is usually the thing that ends the conversation.",
   builds:[["b2-principle","the expressing half, complete"]], leads:[["b3-contingency","the ten ways we avoid it"]], live:[]},
 
 "b3-contingency":{type:"mechanism", title:"Ten ways to not listen", x:601, y:1008,
-  ess:"Advising, one-upping, educating, consoling, story-telling — all of it is leaving.",
+  ess:"Advising, one-upping, educating, consoling, story-telling - all of it is leaving.",
   hook:"Someone tells you something painful. Which of your habitual responses is actually empathy?",
-  story:"Holley Humphrey's list of the blocks: advising (“I think you should…”), one-upping (“that's nothing, wait'll you hear what happened to me”), educating, consoling (“it wasn't your fault”), story-telling (“that reminds me of the time…”), shutting down (“cheer up”), sympathizing (“oh, you poor thing”), interrogating (“when did this begin?”), explaining, correcting. Rabbi Harold Kushner found these words unbearable while his son was dying — worse, he had been saying them to others for twenty years.",
-  mech:"Rosenberg asked twenty-three mental-health professionals to reply to “I'm feeling very depressed. I just don't see any reason to go on.” Three of the twenty-three conveyed understanding; the commonest response was “When did this begin?” His diagnosis of the whole class: “When we are thinking about people's words and listening to how they connect to our theories, we are looking at people — we are not with them.” Even sympathy counts: “during the moment we are offering sympathy, we are not empathizing.”",
+  story:"Holley Humphrey's list of the blocks: advising (“I think you should…”), one-upping (“that's nothing, wait'll you hear what happened to me”), educating, consoling (“it wasn't your fault”), story-telling (“that reminds me of the time…”), shutting down (“cheer up”), sympathizing (“oh, you poor thing”), interrogating (“when did this begin?”), explaining, correcting. Rabbi Harold Kushner found these words unbearable while his son was dying - worse, he had been saying them to others for twenty years.",
+  mech:"Rosenberg asked twenty-three mental-health professionals to reply to “I'm feeling very depressed. I just don't see any reason to go on.” Three of the twenty-three conveyed understanding; the commonest response was “When did this begin?” His diagnosis of the whole class: “When we are thinking about people's words and listening to how they connect to our theories, we are looking at people - we are not with them.” Even sympathy counts: “during the moment we are offering sympathy, we are not empathizing.”",
   term:"Blocks to empathy", def:"any response that moves attention from their experience to your reaction, theory, story or repair.",
   sowhat:"This is not a list of bad people's habits. It is a list of the responses that arrive first, fastest, and with the best intentions.",
   explain:"why kind, well-meant replies so reliably fail the person in front of you.",
@@ -472,25 +472,25 @@ a4:{type:"axiom", title:"No one can be made to do anything", x:1259, y:771,
 "b3-timeline":{type:"simulation", title:"Hearing the need behind the words", sim:"translate", x:312, y:1210,
   ess:"Whatever they say, listen only for observation, feeling, need, request.",
   hook:"You walk into a mosque in a refugee camp and a man screams “Murderer!” at you, and a dozen voices join him. What is he telling you?",
-  story:"On the way in Rosenberg had seen spent tear-gas canisters stamped Made in U.S.A. So he answered: “Are you angry because you would like my government to use its resources differently?” He notes he had no idea whether the guess was right — “what was critical was my sincere effort to connect with his feeling and need.” The man talked for twenty more minutes. An hour later he invited Rosenberg home for Ramadan dinner.",
-  mech:"“No matter what others say, we only hear what they are observing, feeling, needing and requesting.” Paraphrase as a question that checks rather than asserts — “Are you feeling hurt because you would have liked more appreciation of your efforts than you received?” — because the tone must say you are asking whether you understood, not claiming that you have. Two signs the person has had enough: a release of tension, or the flow of words stops. The commonest error in the guess is grammatical: not “you're frustrated because I am a certain way,” but “you're frustrated because you wanted something different from me.” And a caveat — “paraphrase only when it contributes to greater compassion and understanding”: a Chinese man in one of his groups heard his father's feelings for a long time without voicing any of them, and only much later said, “Now I think I'm probably ready.”",
+  story:"On the way in Rosenberg had seen spent tear-gas canisters stamped Made in U.S.A. So he answered: “Are you angry because you would like my government to use its resources differently?” He notes he had no idea whether the guess was right - “what was critical was my sincere effort to connect with his feeling and need.” The man talked for twenty more minutes. An hour later he invited Rosenberg home for Ramadan dinner.",
+  mech:"“No matter what others say, we only hear what they are observing, feeling, needing and requesting.” Paraphrase as a question that checks rather than asserts - “Are you feeling hurt because you would have liked more appreciation of your efforts than you received?” - because the tone must say you are asking whether you understood, not claiming that you have. Two signs the person has had enough: a release of tension, or the flow of words stops. The commonest error in the guess is grammatical: not “you're frustrated because I am a certain way,” but “you're frustrated because you wanted something different from me.” And a caveat - “paraphrase only when it contributes to greater compassion and understanding”: a Chinese man in one of his groups heard his father's feelings for a long time without voicing any of them, and only much later said, “Now I think I'm probably ready.”",
   term:"Empathic guess", def:"a checkable question about the other person's feeling and need, offered without needing to be right.",
-  sowhat:"An elderly patient sat in her room all day repeating “I want to die.” A volunteer said, “So you would like to die.” She stopped, looked relieved, talked — and afterwards ate, and took her medicine.",
+  sowhat:"An elderly patient sat in her room all day repeating “I want to die.” A volunteer said, “So you would like to die.” She stopped, looked relieved, talked - and afterwards ate, and took her medicine.",
   explain:"how to hear a need inside a sentence that contains no needs at all.",
   builds:[["b3-contingency","instead of the ten"]], leads:[["b3-plan","where it gets hard"]], live:[]},
 
 "b3-plan":{type:"story", title:"Empathy where it is hardest", x:543, y:1326,
   ess:"It holds under a knife. It fails with your own mother, and when you are empty.",
   hook:"A man on drugs has you on the floor with a knife at your throat, shouting that you are lying about the rooms. What do you say?",
-  story:"A Toronto detox night worker remembered a joke — “never to put your but in the face of an angry person” — and said instead: “It sounds like you're really angry and you want to be given a room.” Thirty-five minutes later he put the knife away and she helped him find a room. “I stopped seeing him as a monster… people who seem like monsters are simply human beings whose language and behaviour sometimes keep us from seeing their humanness.”",
-  mech:"It fails when we are running on empty: “we need empathy to give empathy,” and the inability to give it signals that “we are too starved for empathy” ourselves. Rosenberg's four moves then are to say so out loud, to give ourselves emergency first-aid empathy, to scream nonviolently, or to take time out. After three days mediating between the Black Egyptians and the East St. Louis police — three dead in a month — he came home to his children fighting and said, “Hey, I'm in a lot of pain! I just want some peace and quiet!” His nine-year-old asked, “Do you want to talk about it?” And the reliable failures are close to home: the detox worker came back needing help with her mother, to whom she had just said “But, mother, it's my life!” — “It may be difficult to empathize with those who are closest to us,” and harder still with “those who appear to possess more power, status, or resources.”",
-  term:"Empathy under load", def:"the capacity holds in danger and fails in depletion — the binding constraint is your own supply, not their behaviour.",
-  sowhat:"In front of a Cleveland gang who laughed when he named his hurt, he stayed with feelings and needs for forty-five minutes. The roughest one said he was the best speaker they had had. A counsellor whispered, “But you haven't said anything!” — “In fact, I had said a lot by demonstrating that there was nothing they could throw at me that couldn't be translated into universal human feelings and needs.”",
+  story:"A Toronto detox night worker remembered a joke - “never to put your but in the face of an angry person” - and said instead: “It sounds like you're really angry and you want to be given a room.” Thirty-five minutes later he put the knife away and she helped him find a room. “I stopped seeing him as a monster… people who seem like monsters are simply human beings whose language and behaviour sometimes keep us from seeing their humanness.”",
+  mech:"It fails when we are running on empty: “we need empathy to give empathy,” and the inability to give it signals that “we are too starved for empathy” ourselves. Rosenberg's four moves then are to say so out loud, to give ourselves emergency first-aid empathy, to scream nonviolently, or to take time out. After three days mediating between the Black Egyptians and the East St. Louis police - three dead in a month - he came home to his children fighting and said, “Hey, I'm in a lot of pain! I just want some peace and quiet!” His nine-year-old asked, “Do you want to talk about it?” And the reliable failures are close to home: the detox worker came back needing help with her mother, to whom she had just said “But, mother, it's my life!” - “It may be difficult to empathize with those who are closest to us,” and harder still with “those who appear to possess more power, status, or resources.”",
+  term:"Empathy under load", def:"the capacity holds in danger and fails in depletion - the binding constraint is your own supply, not their behaviour.",
+  sowhat:"In front of a Cleveland gang who laughed when he named his hurt, he stayed with feelings and needs for forty-five minutes. The roughest one said he was the best speaker they had had. A counsellor whispered, “But you haven't said anything!” - “In fact, I had said a lot by demonstrating that there was nothing they could throw at me that couldn't be translated into universal human feelings and needs.”",
   explain:"what empathy costs the person giving it, and what to do when you cannot pay.",
   builds:[["b3-timeline","the move, under pressure"]], leads:[["b3-principle","why any of it works"]], live:[]},
 
 "b3-principle":{type:"principle", title:"Being heard is what heals", x:774, y:1152,
-  ess:"Not advice, not solutions — the experience of having been received.",
+  ess:"Not advice, not solutions - the experience of having been received.",
   hook:"What actually changes in a person at the moment someone finally hears them?",
   story:"Carl Rogers: “When… someone really hears you without passing judgment on you, without trying to take responsibility for you, without trying to mold you, it feels damn good!… It is astonishing how elements that seem insoluble become soluble when someone listens.” A teacher named Milly took her principal by both shoulders: “Mrs. Anderson, I don't want you to do anything; I just want you to listen.” They sat on a bench. “And you know, it didn't take that long.”",
   mech:"He sat forty minutes with a twenty-year-old woman who had been mute for three months after medication, hospitalisation and shock treatment, and came back day after day, alternating empathic guesses with saying his own state out loud. On the fourth day he took her hand: her muscles tensed, she shrank back, then slightly yielded. On the fifth she held out a clenched fist, face averted, with a crumpled note in it: “Please help me say what's inside.” His conclusion is deliberately deflationary: “we don't need insights into psychological dynamics or training in psychotherapy. What is essential is our ability to be present.”",
@@ -501,11 +501,11 @@ a4:{type:"axiom", title:"No one can be made to do anything", x:1259, y:771,
 
 "b4-coinflip":{type:"simulation", title:"Four doors", sim:"fourdoors", x:1583, y:979,
   ess:"Every hard sentence anyone says to you opens exactly four doors.",
-  hook:"“You're the most self-centred person I've ever met.” Before you reply — how many things can you actually do with that?",
-  story:"Four. Blame yourself (“Oh, I should've been more sensitive”) and you get guilt, shame, depression, “at great cost to our self-esteem.” Blame them (“You have no right to say that — you're the one who's really self-centred”) and you get anger. Sense your own feelings and needs (“I feel hurt, because I need some recognition of my efforts to be considerate of your preferences”) and the sentence becomes information. Sense theirs (“Are you feeling hurt because you need more consideration for your preferences?”) and it becomes a connection.",
-  mech:"The doors are not equally available. One and two are reflexes; three and four have to be chosen, which is why the whole practice is really about buying yourself the half-second to choose. Nothing about the stimulus changes across the four — the entire difference is where attention goes. Rosenberg puts this same fork at the centre of anger: door two is precisely where anger is manufactured.",
+  hook:"“You're the most self-centred person I've ever met.” Before you reply - how many things can you actually do with that?",
+  story:"Four. Blame yourself (“Oh, I should've been more sensitive”) and you get guilt, shame, depression, “at great cost to our self-esteem.” Blame them (“You have no right to say that - you're the one who's really self-centred”) and you get anger. Sense your own feelings and needs (“I feel hurt, because I need some recognition of my efforts to be considerate of your preferences”) and the sentence becomes information. Sense theirs (“Are you feeling hurt because you need more consideration for your preferences?”) and it becomes a connection.",
+  mech:"The doors are not equally available. One and two are reflexes; three and four have to be chosen, which is why the whole practice is really about buying yourself the half-second to choose. Nothing about the stimulus changes across the four - the entire difference is where attention goes. Rosenberg puts this same fork at the centre of anger: door two is precisely where anger is manufactured.",
   term:"The four options", def:"blame ourselves, blame others, sense our own feelings and needs, sense theirs.",
-  sowhat:"It works on the messages you send yourself, too. “Look, you just messed up again” is door one — with the same three exits.",
+  sowhat:"It works on the messages you send yourself, too. “Look, you just messed up again” is door one - with the same three exits.",
   explain:"the four-way fork that sits underneath anger, guilt, self-compassion and empathy alike.",
   builds:[["a4","why doors one and two buy nothing"],["a3","the needs that doors three and four reach"]], leads:[["b4-ergodicity","door two, examined"]], live:[]},
 
@@ -513,8 +513,8 @@ a4:{type:"axiom", title:"No one can be made to do anything", x:1259, y:771,
   ess:"Anger is manufactured between the act and you, by a judgment.",
   hook:"Hit on the nose two days running in remarkably similar ways, and more painfully the second time. Why was he enraged only on the first day?",
   story:"Because the first boy was already “a spoiled brat” in his head. “That image was in my head before his elbow ever caught my nose, and when it did, it was no longer simply an elbow hitting my nose. It was: that obnoxious brat has no right to do this!” The second child he had pitied. “It's not what the other person does, but the images and interpretations in my own head that produce my anger.”",
-  mech:"“Whenever we are angry, we are finding fault — we are choosing to play God by judging or blaming the other person for being wrong or deserving punishment.” Change the need and the identical lateness produces hurt, or frustration, or gratitude for thirty minutes of solitude. None of which makes anger useless: “At the core of all anger is a need that is not being fulfilled,” so it “can be valuable if we use it as an alarm clock to wake us up” — the cost being that it then “co-opts our energy by directing it toward punishing people rather than meeting our needs.” Hence the drill: “over and over again, we consciously replace the phrase I am angry because they … with I am angry because I am needing ….” He is not asking anyone to swallow anger — the opposite: “killing people is too superficial,” a hopelessly weak expression of what is actually going on in us.",
-  term:"Anger's cause", def:"not the act, but the moralistic thought you meet it with — which is what makes the anger yours to work with.",
+  mech:"“Whenever we are angry, we are finding fault - we are choosing to play God by judging or blaming the other person for being wrong or deserving punishment.” Change the need and the identical lateness produces hurt, or frustration, or gratitude for thirty minutes of solitude. None of which makes anger useless: “At the core of all anger is a need that is not being fulfilled,” so it “can be valuable if we use it as an alarm clock to wake us up” - the cost being that it then “co-opts our energy by directing it toward punishing people rather than meeting our needs.” Hence the drill: “over and over again, we consciously replace the phrase I am angry because they … with I am angry because I am needing ….” He is not asking anyone to swallow anger - the opposite: “killing people is too superficial,” a hopelessly weak expression of what is actually going on in us.",
+  term:"Anger's cause", def:"not the act, but the moralistic thought you meet it with - which is what makes the anger yours to work with.",
   sowhat:"A prisoner, John, moved from “they didn't respond to my request” to “I need the training… I'm scared,” and went silent. Three hours later: “I wish you had taught me two years ago what you taught me this morning. I wouldn't have had to kill my best friend.”",
   explain:"where anger is actually made, and why that location is good news.",
   builds:[["b4-coinflip","door two"],["a2","the need under the rage"]], leads:[["b4-domains","so how do you say it?"]], live:[]},
@@ -522,39 +522,39 @@ a4:{type:"axiom", title:"No one can be made to do anything", x:1259, y:771,
 "b4-domains":{type:"mechanism", title:"Four steps to expressing anger", x:2219, y:979,
   ess:"Stop. Breathe. Find the judgment. Find the need. Then speak.",
   hook:"A stranger beside you says something vicious about people like you, and you are furious. What is step one?",
-  story:"Do nothing. “The first step is to stop and do nothing except to breathe. We refrain from making any move to blame or punish the other person. We simply stay quiet.” Then name the judgment you are holding (“she's being racist”), find what it points to — inclusion, equality, respect, connection — and only then open your mouth, with the anger transformed into needs and need-connected feelings.",
-  mech:"Usually one more step is needed in between: empathise with them first, because “the more we hear them, the more they'll hear us.” In a cab, after a passenger's anti-Semitic remark, he took a few deep breaths and gave himself empathy first “for the hurt, fear, and rage that were stirring inside me,” let the violent images play out (“I even enjoyed the image of actually grabbing his head and smashing it”), and only then spent nearly ten minutes guessing the man's feelings and needs. Three times he asked him to repeat back the pain he had expressed — because “to whatever degree people hear blame, they have failed to hear our pain.”",
+  story:"Do nothing. “The first step is to stop and do nothing except to breathe. We refrain from making any move to blame or punish the other person. We simply stay quiet.” Then name the judgment you are holding (“she's being racist”), find what it points to - inclusion, equality, respect, connection - and only then open your mouth, with the anger transformed into needs and need-connected feelings.",
+  mech:"Usually one more step is needed in between: empathise with them first, because “the more we hear them, the more they'll hear us.” In a cab, after a passenger's anti-Semitic remark, he took a few deep breaths and gave himself empathy first “for the hurt, fear, and rage that were stirring inside me,” let the violent images play out (“I even enjoyed the image of actually grabbing his head and smashing it”), and only then spent nearly ten minutes guessing the man's feelings and needs. Three times he asked him to repeat back the pain he had expressed - because “to whatever degree people hear blame, they have failed to hear our pain.”",
   term:"The four steps", def:"stop and breathe; identify the judgmental thought; connect with the need; express the feeling and the unmet need.",
-  sowhat:"The frightening part is not the anger. “It's easy to get angry and tell people, that was a racist thing to do” — what is hard is saying the need underneath out loud.",
+  sowhat:"The frightening part is not the anger. “It's easy to get angry and tell people, that was a racist thing to do” - what is hard is saying the need underneath out loud.",
   explain:"how to express anger fully rather than either swallowing it or firing it.",
   builds:[["b4-ergodicity","where the anger actually comes from"]], leads:[["b4-survive","and the longer arc of growing up"]], live:[["b4-coinflip","the fork this depends on"]]},
 
 "b4-survive":{type:"mechanism", title:"Slavery, obnoxiousness, liberation", x:2438, y:1094,
   ess:"Responsible for everyone's feelings; responsible for nobody's; responsible to people.",
   hook:"You stop taking responsibility for other people's feelings. Why does everyone suddenly find you insufferable?",
-  story:"Because that is stage two. Stage one is emotional slavery — believing we are responsible for others' feelings, which turns the people closest to us into burdens. Stage two Rosenberg calls, half-joking, the obnoxious stage: “That's your problem! I'm not responsible for your feelings!” Stage three is emotional liberation: responding out of compassion, taking full responsibility for our own intentions and actions but not for others' feelings.",
-  mech:"The middle stage is progress, not regression; it sounds rigid because the fear and guilt around having needs have not gone yet. When his daughter Marla — formerly “the perfect little girl who denied her own needs” — answered her principal's dress-code remark with “Bug off!”, Rosenberg celebrated: “Marla had graduated from emotional slavery to obnoxiousness.” The end state is not indifference: “we can never meet our own needs at the expense of others,” and liberation means stating a need in a way that shows you care equally that theirs is met. The counter-move for the partner is counterintuitive: not “are you feeling tense because I have been making too many demands on you?”, which keeps both people enslaved, but refusing “the notion that there is anything wrong with her needs” while empathising with his — “you sense your freedom closing down because you think you constantly have to take care of me.”",
+  story:"Because that is stage two. Stage one is emotional slavery - believing we are responsible for others' feelings, which turns the people closest to us into burdens. Stage two Rosenberg calls, half-joking, the obnoxious stage: “That's your problem! I'm not responsible for your feelings!” Stage three is emotional liberation: responding out of compassion, taking full responsibility for our own intentions and actions but not for others' feelings.",
+  mech:"The middle stage is progress, not regression; it sounds rigid because the fear and guilt around having needs have not gone yet. When his daughter Marla - formerly “the perfect little girl who denied her own needs” - answered her principal's dress-code remark with “Bug off!”, Rosenberg celebrated: “Marla had graduated from emotional slavery to obnoxiousness.” The end state is not indifference: “we can never meet our own needs at the expense of others,” and liberation means stating a need in a way that shows you care equally that theirs is met. The counter-move for the partner is counterintuitive: not “are you feeling tense because I have been making too many demands on you?”, which keeps both people enslaved, but refusing “the notion that there is anything wrong with her needs” while empathising with his - “you sense your freedom closing down because you think you constantly have to take care of me.”",
   term:"Emotional liberation", def:"responding to others' needs out of compassion, never out of fear, guilt or shame.",
-  sowhat:"His mother, at fourteen, faked appendicitis to be given a beaded purse she could not ask for — got the surgery and the purse — then let a nurse walk off with it rather than say “please return it to me.”",
+  sowhat:"His mother, at fourteen, faked appendicitis to be given a beaded purse she could not ask for - got the surgery and the purse - then let a nurse walk off with it rather than say “please return it to me.”",
   explain:"why the middle of this road looks like a personality problem and is actually a stage.",
   builds:[["a3","your needs and theirs, both real"]], leads:[["b4-signal","and the hardest person to do this with"]], live:[]},
 
 "b4-signal":{type:"mechanism", title:"Mourning, not self-punishment", x:1612, y:1181,
   ess:"Regret that teaches, in place of shame that only hurts.",
   hook:"You have just done something stupid and expensive. What are the first words you say to yourself?",
-  story:"Rosenberg put an uncapped pen in the pocket of a new light grey suit and walked out with a polka-dotted one. “For twenty minutes I was brutal with myself: How could you be so careless? What a stupid thing to do!” Then he asked what need lay behind “careless” and “stupid” — to take better care of himself while rushing to serve everyone else's needs — and the shame released into plain sadness.",
-  mech:"Then the second half, which he names separately: NVC self-forgiveness is “connecting with the need we were trying to meet when we took the action that we now regret.” What need was the self who pocketed the pen serving? Care and consideration for other people. “An important aspect of self-compassion is to be able to empathically hold both parts of ourselves — the self that regrets a past action and the self that took the action in the first place.” The word to watch is should: “Most of the time when we use this word with ourselves, we resist learning, because should implies that there is no choice.”",
-  term:"NVC mourning", def:"connecting with the feelings and unmet needs stirred by past actions we now regret — regret without self-hatred.",
-  sowhat:"Rosenberg rates this the whole book's most important use — “its most crucial application… may be in the way we treat ourselves” — because “shame is a form of self-hatred, and actions taken in reaction to shame are not free and joyful acts,” and even when shame changes the behaviour, people can feel what it was built out of. The play he opens the chapter with wants a boy to know “the subtle, sneaky, important reason why he was born a human being and not a chair.”",
+  story:"Rosenberg put an uncapped pen in the pocket of a new light grey suit and walked out with a polka-dotted one. “For twenty minutes I was brutal with myself: How could you be so careless? What a stupid thing to do!” Then he asked what need lay behind “careless” and “stupid” - to take better care of himself while rushing to serve everyone else's needs - and the shame released into plain sadness.",
+  mech:"Then the second half, which he names separately: NVC self-forgiveness is “connecting with the need we were trying to meet when we took the action that we now regret.” What need was the self who pocketed the pen serving? Care and consideration for other people. “An important aspect of self-compassion is to be able to empathically hold both parts of ourselves - the self that regrets a past action and the self that took the action in the first place.” The word to watch is should: “Most of the time when we use this word with ourselves, we resist learning, because should implies that there is no choice.”",
+  term:"NVC mourning", def:"connecting with the feelings and unmet needs stirred by past actions we now regret - regret without self-hatred.",
+  sowhat:"Rosenberg rates this the whole book's most important use - “its most crucial application… may be in the way we treat ourselves” - because “shame is a form of self-hatred, and actions taken in reaction to shame are not free and joyful acts,” and even when shame changes the behaviour, people can feel what it was built out of. The play he opens the chapter with wants a boy to know “the subtle, sneaky, important reason why he was born a human being and not a chair.”",
   explain:"how to learn from a mistake without paying for it in self-hatred first.",
   builds:[["a2","the need even the mistake was serving"]], leads:[["b4-danger","and then: why are you doing any of this?"]], live:[]},
 
 "b4-danger":{type:"mechanism", title:"The energy behind the action", x:1959, y:1152,
-  ess:"Money, approval, punishment, shame, guilt, duty — six ways to lose the joy.",
+  ess:"Money, approval, punishment, shame, guilt, duty - six ways to lose the joy.",
   hook:"List everything you tell yourself you have to do. How much of your week is on that list?",
-  story:"Rosenberg did the exercise and was shaken by the length of his own list. Step two: write “I choose to…” in front of every item. Step three: “I choose to … because I want ….” Clinical reports came out as “because I want the income they provided.” “As soon as I recognized this, I never wrote another clinical report” — thirty-five years ago, and counting.",
-  mech:"The car pool went the other way: same action, different energy, once he connected it to his educational values — though “I sometimes needed to remind myself two or three times during the drive.” The six motivations he warns about are money, approval, escaping punishment, avoiding shame, avoiding guilt, and duty. He ranks duty worst, “the most socially dangerous,” because it is Amtssprache turned inward — the thing that let Eichmann's colleagues work without feeling personally responsible.",
-  term:"Choose to", def:"every “have to” rewritten as a choice plus the want it serves — after which you keep it, drop it, or do it differently.",
+  story:"Rosenberg did the exercise and was shaken by the length of his own list. Step two: write “I choose to…” in front of every item. Step three: “I choose to … because I want ….” Clinical reports came out as “because I want the income they provided.” “As soon as I recognized this, I never wrote another clinical report” - thirty-five years ago, and counting.",
+  mech:"The car pool went the other way: same action, different energy, once he connected it to his educational values - though “I sometimes needed to remind myself two or three times during the drive.” The six motivations he warns about are money, approval, escaping punishment, avoiding shame, avoiding guilt, and duty. He ranks duty worst, “the most socially dangerous,” because it is Amtssprache turned inward - the thing that let Eichmann's colleagues work without feeling personally responsible.",
+  term:"Choose to", def:"every “have to” rewritten as a choice plus the want it serves - after which you keep it, drop it, or do it differently.",
   sowhat:"“Don't do anything that isn't play” sounds unhinged until you notice what it means: do nothing out of fear, guilt, shame, duty or obligation. The hard work stays. The resentment goes.",
   explain:"why the same action can be joyful or corrosive depending on nothing but the reason behind it.",
   builds:[["b1-sensitive","the have-to, now turned inward"]], leads:[["b4-process","and what to do when you are stuck"]], live:[]},
@@ -562,10 +562,10 @@ a4:{type:"axiom", title:"No one can be made to do anything", x:1259, y:771,
 "b4-process":{type:"mechanism", title:"Talking to yourself in needs", x:1650, y:1330,
   ess:"Depression is what an unheard need sounds like from the inside.",
   hook:"Two voices in your head have been arguing for months and neither has moved an inch. What are they both missing?",
-  story:"A student's “career woman” said: “I should do something more with my life. I'm wasting my education and talents.” Her “responsible mother” answered: “You're being unrealistic… how can you handle anything else?” Both are made of judgment — should, wasting, can't handle. Each voice was then asked to take an “NVC pill”: when a, I feel b, because I am needing c, therefore I now would like d.",
-  mech:"Translated, they stopped being enemies: “I feel depressed and discouraged because I am needing the fulfilment I once had in my profession. Therefore, I now would like to find part-time work” — and “I feel scared because I'm needing reassurance that the children will be well taken care of.” Ernest Becker's term for depression is “cognitively arrested alternatives”; Rosenberg's gloss is that “depression is indicative of a state of alienation from our own needs.” The caveat is honest: she still had to find quality child care and her husband's support. The same substitution is what he puts in place of clinical diagnosis — “What is this person feeling? What is she or he needing? How am I feeling in response to this person, and what needs of mine are behind my feelings? What action or decision would I request this person to take?” — having concluded that diagnoses “depended more upon the school the psychiatrist had attended than the characteristics of the patients themselves.”",
-  term:"Self-empathy", def:"running the same four components inward — what happened, what I feel, what I need, what I would now like.",
-  sowhat:"“Depression is the reward we get for being good” — for having been taught to be a good little boy or girl instead of how to ask for what we want. A woman woke with a terrible headache and, instead of “did I eat the wrong food?”, asked what she needed right now; she walked, and did slow neck rolls. “The headache was a way to say to myself, I need more attention.”",
+  story:"A student's “career woman” said: “I should do something more with my life. I'm wasting my education and talents.” Her “responsible mother” answered: “You're being unrealistic… how can you handle anything else?” Both are made of judgment - should, wasting, can't handle. Each voice was then asked to take an “NVC pill”: when a, I feel b, because I am needing c, therefore I now would like d.",
+  mech:"Translated, they stopped being enemies: “I feel depressed and discouraged because I am needing the fulfilment I once had in my profession. Therefore, I now would like to find part-time work” - and “I feel scared because I'm needing reassurance that the children will be well taken care of.” Ernest Becker's term for depression is “cognitively arrested alternatives”; Rosenberg's gloss is that “depression is indicative of a state of alienation from our own needs.” The caveat is honest: she still had to find quality child care and her husband's support. The same substitution is what he puts in place of clinical diagnosis - “What is this person feeling? What is she or he needing? How am I feeling in response to this person, and what needs of mine are behind my feelings? What action or decision would I request this person to take?” - having concluded that diagnoses “depended more upon the school the psychiatrist had attended than the characteristics of the patients themselves.”",
+  term:"Self-empathy", def:"running the same four components inward - what happened, what I feel, what I need, what I would now like.",
+  sowhat:"“Depression is the reward we get for being good” - for having been taught to be a good little boy or girl instead of how to ask for what we want. A woman woke with a terrible headache and, instead of “did I eat the wrong food?”, asked what she needed right now; she walked, and did slow neck rolls. “The headache was a way to say to myself, I need more attention.”",
   explain:"how an internal deadlock dissolves when both sides stop speaking in judgments.",
   builds:[["b4-signal","the same move, applied to regret"]], leads:[["b4-destination","and outward again: when force is unavoidable"]], live:[]},
 
@@ -573,9 +573,9 @@ a4:{type:"axiom", title:"No one can be made to do anything", x:1259, y:771,
   ess:"Grab the child out of the road. Do not then teach them they are bad.",
   hook:"Dialogue has failed, or there is no time for it, and you are going to use force. What single question decides which kind you are using?",
   story:"Your intention. “The intention behind the protective use of force is to prevent injury or injustice. The intention behind the punitive use of force is to cause individuals to suffer for their perceived misdeeds.” Same child, same street: grabbing them is protective. Spanking them, or “How could you be so stupid! You should be ashamed of yourself!”, is punitive.",
-  mech:"The two rest on opposite assumptions. Protective force assumes injurious behaviour comes from ignorance — of consequences; of other ways to meet the need; the belief that we have the right to hurt people because they “deserve” it; or delusional thinking, “for example, hearing a voice that instructs us to kill someone” — so “the corrective process is therefore one of education, not punishment.” Punitive force assumes people offend because they are bad, and so must suffer enough to repent and change. Punitive force is not only physical: it includes blame and labelling, withholding privileges, and withdrawal of caring or respect, “one of the most powerful threats of all.”",
+  mech:"The two rest on opposite assumptions. Protective force assumes injurious behaviour comes from ignorance - of consequences; of other ways to meet the need; the belief that we have the right to hurt people because they “deserve” it; or delusional thinking, “for example, hearing a voice that instructs us to kill someone” - so “the corrective process is therefore one of education, not punishment.” Punitive force assumes people offend because they are bad, and so must suffer enough to repent and change. Punitive force is not only physical: it includes blame and labelling, withholding privileges, and withdrawal of caring or respect, “one of the most powerful threats of all.”",
   term:"Protective vs punitive force", def:"force used to protect life or rights, versus force used to make someone suffer for a wrong.",
-  sowhat:"A principal swatted a big boy for hitting a smaller one. “I suspect what he learned instead was not to hit people smaller than he is when somebody bigger — like the principal — might be watching… you have reinforced the notion that the way to get what you want from somebody else is to hit them.” Rosenberg scripts the alternative: empathise first — “you're feeling angry because you'd like to be treated with more respect” — and only then say your own feelings and needs.",
+  sowhat:"A principal swatted a big boy for hitting a smaller one. “I suspect what he learned instead was not to hit people smaller than he is when somebody bigger - like the principal - might be watching… you have reinforced the notion that the way to get what you want from somebody else is to hit them.” Rosenberg scripts the alternative: empathise first - “you're feeling angry because you'd like to be treated with more respect” - and only then say your own feelings and needs.",
   explain:"how to tell the two apart in the moment, when both look like the same physical act.",
   builds:[["a4","force cannot buy willingness"]], leads:[["b4-explore","and the question that ends punishment"]], live:[]},
 
@@ -583,27 +583,27 @@ a4:{type:"axiom", title:"No one can be made to do anything", x:1259, y:771,
   ess:"Ask the second question and punishment stops looking like it works.",
   hook:"Punishment got the room cleaned. So what exactly is the problem?",
   story:"That only the first question was asked. Question one: “What do I want this person to do that's different from what he or she is currently doing?” Against that, punishment often looks effective. Question two: “What do I want this person's reasons to be for doing what I'm asking?” Against that, “punishment and reward interfere with people's ability to do things motivated by the reasons we'd like them to have.”",
-  mech:"The room gets cleaned out of obedience to authority (“because my Mom said so”), avoidance of punishment, or fear of upsetting a parent — almost never out of a desire for order. Rosenberg's aim instead is “a level of moral development based on autonomy and interdependence.” The costs land even where punishment works: morale drops, attention shifts from the value of the act to the consequence of skipping it, and “if children brush their teeth because they fear shame and ridicule, their oral health may improve but their self-respect will develop cavities.” He is careful here: “Having raised four children, I empathize deeply with parents,” and even when punishment works, that “doesn't mean that other methods of influence wouldn't have worked equally well.”",
-  term:"The two questions", def:"what do I want them to do, and what do I want their reasons to be — the second indicts most of our methods.",
-  sowhat:"An alternative school for expelled students nearly shut down — and the reason is the warning attached to all thirty of these ideas. “With only four days to prepare the faculty, I was unable to sufficiently clarify the difference between NVC and permissiveness,” so teachers were ignoring conflict instead of intervening. Eight of the most disruptive boys, aged eleven to fourteen, supplied the fix: a room students go to “till they feel like doin' somethin'” — not to punish, but so that the ones who wanted to study could. It worked because it came from the students, and because they told their peers what it was for.",
+  mech:"The room gets cleaned out of obedience to authority (“because my Mom said so”), avoidance of punishment, or fear of upsetting a parent - almost never out of a desire for order. Rosenberg's aim instead is “a level of moral development based on autonomy and interdependence.” The costs land even where punishment works: morale drops, attention shifts from the value of the act to the consequence of skipping it, and “if children brush their teeth because they fear shame and ridicule, their oral health may improve but their self-respect will develop cavities.” He is careful here: “Having raised four children, I empathize deeply with parents,” and even when punishment works, that “doesn't mean that other methods of influence wouldn't have worked equally well.”",
+  term:"The two questions", def:"what do I want them to do, and what do I want their reasons to be - the second indicts most of our methods.",
+  sowhat:"An alternative school for expelled students nearly shut down - and the reason is the warning attached to all thirty of these ideas. “With only four days to prepare the faculty, I was unable to sufficiently clarify the difference between NVC and permissiveness,” so teachers were ignoring conflict instead of intervening. Eight of the most disruptive boys, aged eleven to fourteen, supplied the fix: a room students go to “till they feel like doin' somethin'” - not to punish, but so that the ones who wanted to study could. It worked because it came from the students, and because they told their peers what it was for.",
   explain:"the one question that separates methods that work from methods that only appear to.",
   builds:[["b4-destination","the distinction it enforces"],["a4","the limit it runs into"]], leads:[["b4-fence","and the same trap hiding inside praise"]], live:[]},
 
 "b4-fence":{type:"mechanism", title:"Appreciation, not praise", x:2090, y:1430,
   ess:"“Good job” is a verdict. Say what you did, what I feel, what need it met.",
-  hook:"“You did a good job on that report.” What could possibly be wrong with a compliment — and why is it the thing you almost never say?",
-  story:"It is a judgment, and it “establishes the speaker as someone who sits in judgment. I define judgments — both positive and negative — as life-alienating communication.” Rosenberg's three components instead: the actions that contributed to our well-being, the needs of ours they fulfilled, and the pleasurable feelings that came from it. “This is what you did; this is what I feel; this is the need of mine that was met.” And people are starving for it: asked at a party what appreciation would leave her jumping for joy, the director of a shelter for battered women began to cry — she could not remember ever having received any.",
-  mech:"Praise used as a reward decays. Told that praised employees work harder, he agrees — “but only initially. Once they sense the manipulation behind the appreciation, their productivity drops.” Hence: “Express appreciation to celebrate, not to manipulate.” Receiving it is its own skill, between egotism and false humility (“oh, it was nothing”); Golda Meir told one of her ministers, “Don't be so humble, you're not that great.” His third way is to receive “in the awareness that God has given everyone the power to enrich the lives of others” — as Nafez Assailey, a Palestinian trainee, did when he locked his thumb onto Rosenberg's in the Sufi manner: “I kiss the God in you that allows you to give us what you did.”",
-  term:"Appreciation", def:"action, need met, feeling — a report on your own life rather than a grade on someone else's.",
-  sowhat:"Rosenberg finally told his uncle Julius — who came daily to nurse Rosenberg's totally paralysed grandmother, treating her “as if she were doing him the greatest favour in the world by letting him care for her” — what it had meant — reassured by the maxim “Anything that is worth doing is worth doing poorly!” His uncle asked for the poem to be read to him every day until he died three weeks later.",
+  hook:"“You did a good job on that report.” What could possibly be wrong with a compliment - and why is it the thing you almost never say?",
+  story:"It is a judgment, and it “establishes the speaker as someone who sits in judgment. I define judgments - both positive and negative - as life-alienating communication.” Rosenberg's three components instead: the actions that contributed to our well-being, the needs of ours they fulfilled, and the pleasurable feelings that came from it. “This is what you did; this is what I feel; this is the need of mine that was met.” And people are starving for it: asked at a party what appreciation would leave her jumping for joy, the director of a shelter for battered women began to cry - she could not remember ever having received any.",
+  mech:"Praise used as a reward decays. Told that praised employees work harder, he agrees - “but only initially. Once they sense the manipulation behind the appreciation, their productivity drops.” Hence: “Express appreciation to celebrate, not to manipulate.” Receiving it is its own skill, between egotism and false humility (“oh, it was nothing”); Golda Meir told one of her ministers, “Don't be so humble, you're not that great.” His third way is to receive “in the awareness that God has given everyone the power to enrich the lives of others” - as Nafez Assailey, a Palestinian trainee, did when he locked his thumb onto Rosenberg's in the Sufi manner: “I kiss the God in you that allows you to give us what you did.”",
+  term:"Appreciation", def:"action, need met, feeling - a report on your own life rather than a grade on someone else's.",
+  sowhat:"Rosenberg finally told his uncle Julius - who came daily to nurse Rosenberg's totally paralysed grandmother, treating her “as if she were doing him the greatest favour in the world by letting him care for her” - what it had meant - reassured by the maxim “Anything that is worth doing is worth doing poorly!” His uncle asked for the poem to be read to him every day until he died three weeks later.",
   explain:"why praise and blame are the same machine, and what to say instead of both.",
   builds:[["b1-pendulum","praise is that machine, reversed"]], leads:[["b4-principle","and what all of it comes to"]], live:[]},
 
 "b4-principle":{type:"principle", title:"Slow down. Think in needs.", x:1830, y:1560,
   ess:"The practice is not a script. It is a speed, and a place to put attention.",
   hook:"You know all of this now. What actually changes on a Tuesday afternoon when someone snaps at you?",
-  story:"Sam Williams wrote the four components on a three-by-five card and read it mid-argument at work. “It doesn't actually take that much more time, but even if it did, it's still worth it to me. It's important for me to know that I am responding to people the way I really want to.” He put it away after a month — until one evening he and his four-year-old were fighting about television and Scottie said, urgently, “Daddy, get the card!”",
-  mech:"“Probably the most important part of learning how to live the process we have been discussing is to take our time.” Rosenberg's own drill is a judgment inventory: list what floats through your head after “I don't like people who are…”, then ask of each, “When I make that judgment of a person, what am I needing and not getting?” That is the whole discipline — translating verdicts into unmet needs, slowly, and out loud if that is what it takes.",
+  story:"Sam Williams wrote the four components on a three-by-five card and read it mid-argument at work. “It doesn't actually take that much more time, but even if it did, it's still worth it to me. It's important for me to know that I am responding to people the way I really want to.” He put it away after a month - until one evening he and his four-year-old were fighting about television and Scottie said, urgently, “Daddy, get the card!”",
+  mech:"“Probably the most important part of learning how to live the process we have been discussing is to take our time.” Rosenberg's own drill is a judgment inventory: list what floats through your head after “I don't like people who are…”, then ask of each, “When I make that judgment of a person, what am I needing and not getting?” That is the whole discipline - translating verdicts into unmet needs, slowly, and out loud if that is what it takes.",
   term:"The practice", def:"not the words but the consciousness: four components, taken at a speed that leaves room to choose.",
   sowhat:"His grandmother took in a ragged stranger who said his name was Jesus the Lord. He stayed seven years. “She didn't think of what this man was… she thought in terms of what people feel and what they need. If they're hungry, feed them.” Her motto: never walk when you can dance.",
   explain:"what daily practice actually consists of, once the theory is out of the way.",
@@ -753,7 +753,7 @@ document.getElementById('overviewBtn').onclick = ()=>{ closeReader(); overviewCa
 addEventListener('resize', ()=>apply());
 
 /* ============================================================
-   SKY — constellation names, asterisms, ecliptic, stars
+   SKY - constellation names, asterisms, ecliptic, stars
    ============================================================ */
 const BC = (()=>{const ax=Object.keys(N).filter(id=>id[0]==='a');return {x:ax.reduce((s,i)=>s+N[i].x,0)/ax.length, y:ax.reduce((s,i)=>s+N[i].y,0)/ax.length};})();
 { /* Cleared Court: pull the axioms into a tight core, clear any star that intrudes */
@@ -783,7 +783,7 @@ TERRITORIES.forEach(t=>{
 
 
 
-/* minor stars — small nameless flecks inside each figure */
+/* minor stars - small nameless flecks inside each figure */
 {
   const R = mulberry32(11);
   TERRITORIES.forEach(t=>{
@@ -1018,7 +1018,7 @@ function clearHighlight(){
 }
 
 /* ============================================================
-   NAV — top-right cluster drives the default flow
+   NAV - top-right cluster drives the default flow
    ============================================================ */
 function syncNav(){
   const i = focusId ? TOUR.indexOf(focusId) : -1;
@@ -1053,18 +1053,18 @@ function simHTML(kind){
     feeling:"Tap any phrase. Most of them are thoughts wearing a feeling's grammar.",
     request:"Four real complaints from the book, each rewritten into something a person could actually do.",
     translate:"Five hostile or hopeless sentences. Choose a reply and see what happened when Rosenberg chose it.",
-    fourdoors:"One sentence, four doors. Nothing about the stimulus changes — only where attention goes."
+    fourdoors:"One sentence, four doors. Nothing about the stimulus changes - only where attention goes."
   };
   const body = {
     judgment:`<div class="nvcs">
       <div class="q" data-q>Compared with me, <b>my partner</b> wants…</div>
       <div class="meter"><i data-bar style="width:50%"></i></div>
-      <div class="out"><span class="lbl">the label that comes to mind</span><span data-lab class="verdict">—</span></div>
-      <div class="out" style="margin-top:8px"><span class="lbl">what it is actually reporting</span><span data-tr>—</span></div>
+      <div class="out"><span class="lbl">the label that comes to mind</span><span data-lab class="verdict">-</span></div>
+      <div class="out" style="margin-top:8px"><span class="lbl">what it is actually reporting</span><span data-tr>-</span></div>
       <div class="foot" data-foot>The label moved. The person did not.</div></div>`,
     observe:`<div class="nvcs">
       <div class="lbl" data-score>statement 1 of 10</div>
-      <div class="q" data-stmt>—</div>
+      <div class="q" data-stmt>-</div>
       <div class="out" data-out><span class="lbl">verdict</span><span data-v>Sort it below.</span></div></div>`,
     feeling:`<div class="nvcs">
       <div class="row" data-chips></div>
@@ -1073,14 +1073,14 @@ function simHTML(kind){
     request:`<div class="nvcs">
       <div class="q" data-stmt>Pick a complaint below.</div>
       <div class="checks" data-checks></div>
-      <div class="out" data-out><span class="lbl">what happened</span><span data-v>—</span></div></div>`,
+      <div class="out" data-out><span class="lbl">what happened</span><span data-v>-</span></div></div>`,
     translate:`<div class="nvcs">
-      <div class="lbl" data-ctx>—</div>
+      <div class="lbl" data-ctx>-</div>
       <div class="q" data-line>Pick a scene below.</div>
       <div class="row" data-opts></div>
-      <div class="out"><span class="lbl">what followed</span><span data-v>—</span></div></div>`,
+      <div class="out"><span class="lbl">what followed</span><span data-v>-</span></div></div>`,
     fourdoors:`<div class="nvcs">
-      <div class="lbl">the sentence</div><div class="q" data-line>—</div>
+      <div class="lbl">the sentence</div><div class="q" data-line>-</div>
       <div class="row" data-doors></div>
       <div class="out"><span class="lbl">what you say (or think)</span><span data-say>Choose a door.</span>
         <div data-res style="margin-top:.5em"></div></div></div>`
@@ -1169,10 +1169,10 @@ SIMS.judgment = fig=>{
 SIMS.observe = fig=>{
   const Q=[
     ["John was angry with me yesterday for no reason.", false,
-      "&ldquo;For no reason&rdquo; is an evaluation — and so is deciding he was angry.",
+      "&ldquo;For no reason&rdquo; is an evaluation - and so is deciding he was angry.",
       "&ldquo;John told me he was angry,&rdquo; or &ldquo;John pounded his fist on the table.&rdquo;"],
     ["Yesterday evening Nancy bit her fingernails while watching television.", true,
-      "Time, place, behaviour — and no verdict anywhere in it.", ""],
+      "Time, place, behaviour - and no verdict anywhere in it.", ""],
     ["Sam didn't ask for my opinion during the meeting.", true,
       "It reports an absence of a specific act, not a verdict about Sam.", ""],
     ["My father is a good man.", false,
@@ -1185,7 +1185,7 @@ SIMS.observe = fig=>{
       "An adjective turned into an identity. Nothing here happened at a time or place.",
       "&ldquo;Henry hit his sister when she switched the television channel.&rdquo;"],
     ["Pam was first in line every day this week.", true,
-      "&ldquo;Every day this week&rdquo; is countable here — a frequency word used as a count, not an exaggeration.", ""],
+      "&ldquo;Every day this week&rdquo; is countable here - a frequency word used as a count, not an exaggeration.", ""],
     ["My son often doesn't brush his teeth.", false,
       "&ldquo;Often&rdquo; carries an evaluation of frequency rather than reporting one.",
       "&ldquo;Twice this week my son didn't brush his teeth before going to bed.&rdquo;"],
@@ -1207,7 +1207,7 @@ SIMS.observe = fig=>{
     if(answered) return; answered=true;
     const right = isObs===Q[i][1];
     if(right) score++;
-    v.innerHTML=`<span class="${right?'ok':'no'}">${right?'Yes':'No'} — this is an ${Q[i][1]?'observation':'evaluation'}.</span> ${Q[i][2]}`
+    v.innerHTML=`<span class="${right?'ok':'no'}">${right?'Yes':'No'} - this is an ${Q[i][1]?'observation':'evaluation'}.</span> ${Q[i][2]}`
       + (Q[i][3]?`<div style="margin-top:.5em"><span class="lbl">Rosenberg's rewrite</span>${Q[i][3]}</div>`:'');
     sc.textContent=`statement ${i+1} of ${Q.length} · ${score} right`;
   }
@@ -1221,16 +1221,16 @@ SIMS.observe = fig=>{
 
 SIMS.feeling = fig=>{
   const P=[
-    ["I feel that you should know better.", false, "After <b>I feel</b> comes <b>that</b> — an opinion is arriving, not a feeling.", "Underneath, perhaps: irritated, or disappointed."],
+    ["I feel that you should know better.", false, "After <b>I feel</b> comes <b>that</b> - an opinion is arriving, not a feeling.", "Underneath, perhaps: irritated, or disappointed."],
     ["I feel like a failure.", false, "<b>I feel like</b> introduces a self-assessment.", "Underneath: &ldquo;I feel disappointed in myself.&rdquo;"],
     ["I feel misunderstood.", false, "This rates <i>their</i> level of understanding, not your state.", "Underneath: anxious, or annoyed."],
-    ["I feel ignored.", false, "An interpretation of what others are doing.", "Underneath: relieved, if you wanted to be left alone — hurt, if you wanted to be involved."],
+    ["I feel ignored.", false, "An interpretation of what others are doing.", "Underneath: relieved, if you wanted to be left alone - hurt, if you wanted to be involved."],
     ["I feel manipulated.", false, "On Rosenberg's list of words that describe how we think others are behaving toward us.", "Underneath: perhaps distrustful, or angry, or scared."],
     ["I feel inadequate as a guitar player.", false, "An assessment of your ability has replaced the emotion.", "Underneath: disappointed, impatient, or frustrated with yourself."],
-    ["I feel it is useless.", false, "<b>I feel</b> followed by <b>it</b> — a thought.", "Underneath: discouraged, or hopeless."],
+    ["I feel it is useless.", false, "<b>I feel</b> followed by <b>it</b> - a thought.", "Underneath: discouraged, or hopeless."],
     ["I feel unimportant to the people I work with.", false, "This describes how you think others are evaluating you.", "Underneath: &ldquo;I feel sad,&rdquo; or &ldquo;I feel discouraged.&rdquo;"],
     ["I'm feeling irritated.", true, "A named emotion, owned, with nobody else inside the sentence.", ""],
-    ["I feel anguished.", true, "A feeling — and note the word <b>feel</b> is doing no work; &ldquo;I'm anguished&rdquo; is the same.", ""],
+    ["I feel anguished.", true, "A feeling - and note the word <b>feel</b> is doing no work; &ldquo;I'm anguished&rdquo; is the same.", ""],
     ["I feel good about that.", true, "Technically a feeling, but too vague to connect with.", "&ldquo;Good could mean happy, excited, relieved, or a number of other emotions.&rdquo;"]];
   const chips=fig.querySelector('[data-chips]'), v=fig.querySelector('[data-v]'), why=fig.querySelector('[data-why]');
   chips.innerHTML=P.map((p,i)=>`<button class="ghost" data-i="${i}">${p[0]}</button>`).join('');
@@ -1252,16 +1252,16 @@ SIMS.request = fig=>{
      out:"Three weeks later he announced he had signed up for a golf tournament.",
      good:"“I would like you to spend at least one evening a week at home with the children and me.”",
      gc:[1,1,1,1],
-     note:"He now knows exactly what would meet the need — and can say yes or no to it."},
+     note:"He now knows exactly what would meet the need - and can say yes or no to it."},
     {bad:"“I want you to let me be me.”",
      bc:[1,0,0,1],
-     out:"“I do!” — “No, you don't!” The argument had nowhere to land.",
+     out:"“I do!” - “No, you don't!” The argument had nowhere to land.",
      good:"“I want you to smile and say that anything I do is okay.”",
      gc:[1,1,0,0],
-     note:"Concreteness cuts both ways. Said plainly, this one turns out to be a demand — which is exactly why Rosenberg wants it said plainly."},
+     note:"Concreteness cuts both ways. Said plainly, this one turns out to be a demand - which is exactly why Rosenberg wants it said plainly."},
     {bad:"“I want you to stop drinking.”",
      bc:[0,1,0,0],
-     out:"A request to stop is a request for an absence — and it arrives as a verdict on the person.",
+     out:"A request to stop is a request for an absence - and it arrives as a verdict on the person.",
      good:"“Tell me what needs of yours are met by drinking, and discuss with me other ways of meeting those needs.”",
      gc:[1,1,1,1],
      note:"Doable today, and it goes at the need rather than the strategy."},
@@ -1292,24 +1292,24 @@ SIMS.request = fig=>{
 SIMS.translate = fig=>{
   const S=[
     {ctx:"A mosque at Dheisheh refugee camp, Bethlehem. About 170 men. Outside, spent tear-gas canisters marked Made in U.S.A.",
-     line:"“Murderer!” — and a dozen voices join in. “Assassin!” “Child-killer!”",
+     line:"“Murderer!” - and a dozen voices join in. “Assassin!” “Child-killer!”",
      opts:[["“I'm not responsible for my government's policy.”","Defence. True, and it answers a question nobody asked. The shouting has more to say."],
        ["“Let's all calm down and discuss this civilly.”","A correction. It tells a man in pain that his pain is the problem."],
-       ["“Are you angry because you would like my government to use its resources differently?”","Rosenberg's actual reply — a guess he had no way of knowing was right. The man talked for twenty more minutes. An hour later he invited Rosenberg home for Ramadan dinner."]]},
+       ["“Are you angry because you would like my government to use its resources differently?”","Rosenberg's actual reply - a guess he had no way of knowing was right. The man talked for twenty more minutes. An hour later he invited Rosenberg home for Ramadan dinner."]]},
     {ctx:"Half an hour into a workshop.",
      line:"“You're the most arrogant speaker we've ever had!”",
      opts:[["Grovel, defend, explain.","Taking it personally. Rosenberg knows the sign: “a strong urge to either grovel, defend myself, or make excuses.”"],
-       ["“You're being unfair — you've barely heard me out.”","Counterattack. Well-rehearsed, and it ends the exchange."],
-       ["“Are you reacting to my not having said that the process can be difficult for me at times?”","Third guess, after two wrong ones. “That's right.” He then admitted the process is often a struggle for him too — and said what keeps him in it."]]},
+       ["“You're being unfair - you've barely heard me out.”","Counterattack. Well-rehearsed, and it ends the exchange."],
+       ["“Are you reacting to my not having said that the process can be difficult for me at times?”","Third guess, after two wrong ones. “That's right.” He then admitted the process is often a struggle for him too - and said what keeps him in it."]]},
     {ctx:"A husband, mid-argument.",
      line:"“What good does talking to you do? You never listen.”",
-     opts:[["“I do listen — I listened yesterday.”","Now you are arguing about the evidence rather than hearing the person."],
+     opts:[["“I do listen - I listened yesterday.”","Now you are arguing about the evidence rather than hearing the person."],
        ["“You're unhappy with me because you feel I don't understand you?”","Closer, but this hears what he is <i>thinking about you</i>. “People are less threatening if you hear what they're needing rather than what they're thinking about you.”"],
        ["“Are you feeling unhappy because you are needing to be heard?”","The need, with nothing about you inside it. “I see what's going on for him without hearing that I had done anything wrong.”"]]},
     {ctx:"An elderly patient who has repeated one sentence for weeks. Staff have tried everything.",
      line:"“I want to die. I want to die.”",
      opts:[["“You don't mean that. You have so much to live for.”","Reassurance as correction. The chant continues, because nothing has been received."],
-       ["“Why do you feel that way? When did this start?”","Interrogation — the most common response Rosenberg found among professionals, and one of the least useful."],
+       ["“Why do you feel that way? When did this start?”","Interrogation - the most common response Rosenberg found among professionals, and one of the least useful."],
        ["“So you would like to die.”","She broke off, looked relieved, and began to talk. She had needed “connection with another human being who could hear her profound despair.” Afterwards she ate, and took her medicine."]]},
     {ctx:"A Toronto detox centre, 11 p.m. A man on drugs has thrown the night worker to the floor with a knife at her throat.",
      line:"“Don't lie to me! You do too have a room!”",
@@ -1337,16 +1337,16 @@ SIMS.fourdoors = fig=>{
   const S=[
     {line:"“You're the most self-centred person I've ever met!”",
      doors:[
-      ["blame yourself","“Oh, I should've been more sensitive!”","Guilt, shame, depression — and, in Rosenberg's words, “at great cost to our self-esteem.” You have accepted the other person's judgment as a verdict."],
-      ["blame them","“You have no right to say that! You're the one who is really self-centred.”","Anger. This is the door where anger is manufactured — not by their sentence, but by the fault you find in return."],
+      ["blame yourself","“Oh, I should've been more sensitive!”","Guilt, shame, depression - and, in Rosenberg's words, “at great cost to our self-esteem.” You have accepted the other person's judgment as a verdict."],
+      ["blame them","“You have no right to say that! You're the one who is really self-centred.”","Anger. This is the door where anger is manufactured - not by their sentence, but by the fault you find in return."],
       ["your feelings and needs","“When I hear you say that, I feel hurt, because I need some recognition of my efforts to be considerate of your preferences.”","The sentence becomes information about you. Nothing has been conceded and nothing has been thrown back."],
       ["their feelings and needs","“Are you feeling hurt because you need more consideration for your preferences?”","A connection. You have not agreed with them; you have found out what the sentence was for."]]},
-    {line:"“Look, you just messed up again.” — your own voice, to you.",
+    {line:"“Look, you just messed up again.” - your own voice, to you.",
      doors:[
       ["blame yourself","“What's wrong with you? You're always messing up.”","Shame, which Rosenberg calls a form of self-hatred. Even when it changes the behaviour, the change is not a free act."],
       ["blame them","“Well, they gave me no time and terrible instructions.”","Anger, and the mistake stays unexamined. The energy goes outward instead of into learning."],
-      ["your feelings and needs","“What unmet need of mine is being expressed through this judgment?”","Sadness, frustration or disappointment instead of shame — feelings that “mobilize us to pursue and fulfill what we need,” rather than shutting us down."],
-      ["their feelings and needs","“And what were they needing, in the part of this that was theirs?”","The same move, pointed outward — which is what makes repair possible rather than only regret."]]}];
+      ["your feelings and needs","“What unmet need of mine is being expressed through this judgment?”","Sadness, frustration or disappointment instead of shame - feelings that “mobilize us to pursue and fulfill what we need,” rather than shutting us down."],
+      ["their feelings and needs","“And what were they needing, in the part of this that was theirs?”","The same move, pointed outward - which is what makes repair possible rather than only regret."]]}];
   const line=fig.querySelector('[data-line]'), doors=fig.querySelector('[data-doors]'),
         say=fig.querySelector('[data-say]'), res=fig.querySelector('[data-res]');
   function load(i){

@@ -10,16 +10,16 @@ Books I've read recently. I tend to gravitate toward memoirs, decision-making, a
 
 ## 2026
 
-- Everything I Know About Love — Dolly Alderton
-- The Outsider: A Memoir for Misfits — Vir Das
-- Notes on Heartbreak — Annie Lord
-- Never Logged Out — Ria Chopra
-- Maybe You Should Talk to Someone — Lori Gottlieb
-- Project Hail Mary — Andy Weir
-- The Book Of Clarity — Paras Chopra
-- The Hard Thing About Hard Things — Ben Horowitz
-- Why we sleep — Matthew Walker
-- Famous Last Questions — Sanjana Ramachandran
+- Everything I Know About Love - Dolly Alderton
+- The Outsider: A Memoir for Misfits - Vir Das
+- Notes on Heartbreak - Annie Lord
+- Never Logged Out - Ria Chopra
+- Maybe You Should Talk to Someone - Lori Gottlieb
+- Project Hail Mary - Andy Weir
+- The Book Of Clarity - Paras Chopra
+- The Hard Thing About Hard Things - Ben Horowitz
+- Why we sleep - Matthew Walker
+- Famous Last Questions - Sanjana Ramachandran
 - Fluke: Chance, Chaos, and Why Everything We Do Matters - Brian Klaas
 - The Year of Magical Thinking - Joan Didion
 - Dear Dolly - Dolly Alderton
@@ -27,12 +27,12 @@ Books I've read recently. I tend to gravitate toward memoirs, decision-making, a
 
 ## 2025
 
-- The Three-Body Problem — Liu Cixin
-- A Mysterious Affair at Styles — Agatha Christie
-- What I Talk About When I Talk About Running — Haruki Murakami
-- Recursion — Blake Crouch
-- The Power Law — Sebastian Mallaby
-- Courage to Be Disliked — Ichiro Kishimi & Fumitake Koga
-- The School of Life — Alain de Botton
-- Thinking in Bets — Annie Duke
-- Man's Search for Meaning — Viktor Frankl
+- The Three-Body Problem - Liu Cixin
+- A Mysterious Affair at Styles - Agatha Christie
+- What I Talk About When I Talk About Running - Haruki Murakami
+- Recursion - Blake Crouch
+- The Power Law - Sebastian Mallaby
+- Courage to Be Disliked - Ichiro Kishimi & Fumitake Koga
+- The School of Life - Alain de Botton
+- Thinking in Bets - Annie Duke
+- Man's Search for Meaning - Viktor Frankl

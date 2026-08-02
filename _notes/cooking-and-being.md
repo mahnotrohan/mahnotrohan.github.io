@@ -3,7 +3,6 @@ layout: notes
 title: Cooking and Being
 date: 2025-03-12
 tags: [food, attention]
-stage: cooked
 description: "Why I like washing up. On silence, process, and feeding people."
 ---
 I love being in my kitchen. As a child, I would always want to help - chopping, making sandwiches, or just stirring whatever was on the stove.

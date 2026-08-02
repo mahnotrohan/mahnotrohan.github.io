@@ -13,7 +13,7 @@ catch(e){document.documentElement.setAttribute('data-theme','light');}})();
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
-<title>Interpersonal & Communication Skills — Orrery</title>
+<title>Interpersonal & Communication Skills - Orrery</title>
 <style>
 :root{
   /* site parity: --ground/--surface-* mirror the main site's --bg/--bg-2/--chip */
@@ -61,7 +61,7 @@ h1,h2,h3{color:var(--ink-strong); font-weight:600; line-height:1.3;}
 .kicker{font-size:11px; letter-spacing:.14em; text-transform:uppercase;
   color:var(--ink-muted); font-weight:500;}
 
-/* header — all navigation lives top right */
+/* header - all navigation lives top right */
 #hdr{position:fixed; top:0; left:0; right:0; z-index:40; height:56px;
   display:flex; align-items:center; gap:1.1rem; padding:0 1.4rem;
   background:var(--hdr-fade);
@@ -131,7 +131,7 @@ body.reader-open #hdr{right:var(--reader-w);}
 .mk.neighbor .lbl{color:var(--ink-strong);}
 .mk.dimmed{opacity:.35;}
 
-/* connection overlay — few, directional, labeled plainly */
+/* connection overlay - few, directional, labeled plainly */
 #tsvg, #astsvg, #flowsvg{position:absolute; top:0; left:0; pointer-events:none; overflow:visible;}
 @keyframes dashdrift{to{stroke-dashoffset:-64;}}
 .tline{animation:dashdrift 6s linear infinite;}
@@ -303,7 +303,7 @@ function syncSimColours(){
 syncSimColours();
 
 /* ============================================================
-   CONTENT v2 — every idea: hook → story → (sim) → mechanism
+   CONTENT v2 - every idea: hook → story → (sim) → mechanism
    fold → the idea named → where it bites → you can now explain.
    Connections: ≤4 per idea, in three plain buckets.
    ============================================================ */
@@ -312,9 +312,9 @@ const N = {
 a1:{type:"axiom", title:"Warmth is judged first", x:1259, y:512,
   ess:"Before anything else, people ask: are you on my side?",
   hook:"Two questions run silently under every interaction you'll ever have. Why does one of them count double?",
-  story:"Fiske's warmth–competence model: in every interaction, people subconsciously score you on two axes. Warmth — do you care about me? are you on my side? — and competence — can you actually deliver? Warmth is judged first and weighted more.",
+  story:"Fiske's warmth–competence model: in every interaction, people subconsciously score you on two axes. Warmth - do you care about me? are you on my side? - and competence - can you actually deliver? Warmth is judged first and weighted more.",
   mech:"Leading with competence but no warmth reads as cold or threatening; warmth without competence reads as nice but ineffective. The order matters: people decide whether you're an ally before they audit your ability.",
-  term:"Warmth–competence model", def:"every interaction is scored on two axes — and warmth is judged first, weighted more.",
+  term:"Warmth–competence model", def:"every interaction is scored on two axes - and warmth is judged first, weighted more.",
   sowhat:"Most interpersonal failures are warmth failures, not competence failures. When something went wrong, audit the warmth signal before the content.",
   explain:"why being right and capable is never enough on its own.",
   builds:[], leads:[["b1-laplace","warmth made operational: how trust is actually banked"]], live:[]},
@@ -323,18 +323,18 @@ a2:{type:"axiom", title:"You act on stories, not facts", x:1057, y:627,
   ess:"Between what happened and what you did about it sits a ladder of guesses.",
   hook:"Your friend glanced at their phone mid-sentence. By dinner, you're 'being disrespected'. What happened in between?",
   story:"The Ladder of Inference (Argyris): observable data → you select some of it → you add meaning → you make assumptions → you draw conclusions → you act. The climb takes milliseconds and feels exactly like seeing.",
-  mech:"Most conflict is two people standing on the top rungs of different ladders, each mistaking their conclusion for the data. Neither is lying; both are editing. The fix is to climb down — out loud.",
+  mech:"Most conflict is two people standing on the top rungs of different ladders, each mistaking their conclusion for the data. Neither is lying; both are editing. The fix is to climb down - out loud.",
   term:"Ladder of Inference", def:"the invisible climb from observation to conclusion: selection, meaning, assumption, action.",
   sowhat:"Every grievance you're carrying right now includes rungs you added yourself. Worth checking which ones.",
-  explain:"where conclusions actually come from — and why two honest people can watch one event and fight about it.",
+  explain:"where conclusions actually come from - and why two honest people can watch one event and fight about it.",
   builds:[], leads:[["b1-lorenz-story","the climb-down, as one usable sentence"]], live:[]},
 
 a3:{type:"axiom", title:"Between stimulus and response, a space", x:1462, y:627,
   ess:"You can't choose what you feel. You can choose what happens next.",
-  hook:"Someone cuts you off mid-meeting and heat rises in your chest. What happens in the next half-second — and who decides?",
-  story:"Frankl's line: between stimulus and response there is a space. That space is where every interpersonal skill in this sky actually operates — and when a conversation goes wrong, the failure usually happened right here: you reacted instead of responding.",
-  mech:"In heated moments: breathe, slow down, lower your volume — whoever stays calmest usually steers. Everything downstream in this sky assumes you can reach this space; none of it works while you're hijacked.",
-  term:"The pause", def:"the gap between feeling something and acting on it — widen it and everything downstream improves.",
+  hook:"Someone cuts you off mid-meeting and heat rises in your chest. What happens in the next half-second - and who decides?",
+  story:"Frankl's line: between stimulus and response there is a space. That space is where every interpersonal skill in this sky actually operates - and when a conversation goes wrong, the failure usually happened right here: you reacted instead of responding.",
+  mech:"In heated moments: breathe, slow down, lower your volume - whoever stays calmest usually steers. Everything downstream in this sky assumes you can reach this space; none of it works while you're hijacked.",
+  term:"The pause", def:"the gap between feeling something and acting on it - widen it and everything downstream improves.",
   sowhat:"This is the skill under all the skills. Every framework here is unusable in the moments you need it most, unless the pause comes first.",
   explain:"why self-regulation is the prerequisite hiding inside every other interpersonal skill.",
   builds:[], leads:[["b1-pendulum","the four-layer stack built on this space"],["b1-sensitive","how to widen the space on demand"]], live:[]},
@@ -342,18 +342,18 @@ a3:{type:"axiom", title:"Between stimulus and response, a space", x:1462, y:627,
 a4:{type:"axiom", title:"The tiny moments are the relationship", x:1259, y:771,
   ess:"Trust is built in seconds and small kept promises, not grand gestures.",
   hook:"Your partner sighs at the window. A colleague shares a link. Why do these throwaway seconds decide more than your anniversary speech?",
-  story:"Gottman: people constantly make small bids for connection — a comment, a shared link, a sigh. You can turn toward (engage), turn away (ignore), or turn against (snap). Relationship quality is largely the accumulated ratio of turning toward.",
+  story:"Gottman: people constantly make small bids for connection - a comment, a shared link, a sigh. You can turn toward (engage), turn away (ignore), or turn against (snap). Relationship quality is largely the accumulated ratio of turning toward.",
   mech:"The same pattern shows up in trust: the fastest trust-builder is many small kept promises; the fastest destroyer is visible self-interest. And stable relationships run about five positive interactions to every negative one. Nothing here is a grand gesture; all of it compounds.",
-  term:"Bids", def:"the constant small invitations to connect — each one engaged, ignored, or snapped at.",
+  term:"Bids", def:"the constant small invitations to connect - each one engaged, ignored, or snapped at.",
   sowhat:"You are answering bids all day today. The relationship is being written in those answers, not in the big conversations.",
   explain:"why relationships are decided by accumulation, not by highlights.",
   builds:[], leads:[["b4-explore","the everyday habits built on this"]], live:[["b4-explore","watch the 5:1 account run"]]},
 
 "b1-laplace":{type:"mechanism · simulation", title:"The trust equation", sim:"trusteq", x:404, y:355,
   ess:"Trust = (credibility + reliability + intimacy) ÷ self-orientation.",
-  hook:"Two advisors: one brilliant but visibly self-interested, one modest but plainly on your side. Who do you trust — and why isn't it close?",
-  story:"Maister's trust equation. The numerator: credibility — your words: expertise, honesty ('I don't know' builds it); reliability — your actions: do you do what you said, when you said; intimacy — safety: can people share things with you without them leaking or being judged.",
-  mech:"The denominator is the trap: self-orientation — how much you seem to be in it for yourself. High self-orientation destroys trust even when the numerator is strong, which is why the brilliant-but-self-serving advisor loses. Slide the dials below and watch the division do its work.",
+  hook:"Two advisors: one brilliant but visibly self-interested, one modest but plainly on your side. Who do you trust - and why isn't it close?",
+  story:"Maister's trust equation. The numerator: credibility - your words: expertise, honesty ('I don't know' builds it); reliability - your actions: do you do what you said, when you said; intimacy - safety: can people share things with you without them leaking or being judged.",
+  mech:"The denominator is the trap: self-orientation - how much you seem to be in it for yourself. High self-orientation destroys trust even when the numerator is strong, which is why the brilliant-but-self-serving advisor loses. Slide the dials below and watch the division do its work.",
   term:"Trust equation", def:"credibility + reliability + intimacy, divided by how much you seem in it for yourself.",
   sowhat:"When trust feels low, audit self-orientation and reliability first. The fastest builder is many small kept promises; the fastest destroyer is visible self-interest.",
   explain:"why competence can't buy back the trust that visible self-interest spends.",
@@ -362,8 +362,8 @@ a4:{type:"axiom", title:"The tiny moments are the relationship", x:1259, y:771,
 "b1-pendulum":{type:"mechanism", title:"The EQ stack", x:884, y:309,
   ess:"Four skills in strict dependency: notice, pause, read, connect.",
   hook:"Why do smart, well-meaning people still blow up conversations they genuinely care about?",
-  story:"Goleman's emotional intelligence comes in four domains with a strict dependency order: self-awareness — noticing your own emotions in real time; self-management — pausing between stimulus and response; social awareness — reading others' emotions and the room; relationship management — influencing, resolving, connecting.",
-  mech:"You can't do three and four well without one and two — reading a room is impossible while flooded. When a conversation goes wrong, the failure usually happened at step two: you reacted instead of responding.",
+  story:"Goleman's emotional intelligence comes in four domains with a strict dependency order: self-awareness - noticing your own emotions in real time; self-management - pausing between stimulus and response; social awareness - reading others' emotions and the room; relationship management - influencing, resolving, connecting.",
+  mech:"You can't do three and four well without one and two - reading a room is impossible while flooded. When a conversation goes wrong, the failure usually happened at step two: you reacted instead of responding.",
   term:"EQ stack", def:"self-awareness → self-management → social awareness → relationship management, in dependency order.",
   sowhat:"Debug your bad conversations bottom-up: before asking 'what should I have said', ask 'when did I stop noticing what I was feeling?'",
   explain:"why relationship skills fail from the bottom of the stack, not the top.",
@@ -372,89 +372,89 @@ a4:{type:"axiom", title:"The tiny moments are the relationship", x:1259, y:771,
 "b1-sensitive":{type:"mechanism", title:"Name it to tame it", x:520, y:522,
   ess:"Labeling an emotion measurably loosens its grip.",
   hook:"Mid-argument, you say silently: 'I'm getting defensive.' Why does that tiny sentence change what happens next?",
-  story:"Affect labeling measurably dampens the amygdala response: naming the emotion — 'I'm getting defensive' — reduces its grip, moving it from something you are to something you're watching. A direct, measurable way to widen the space between stimulus and response.",
-  mech:"The supporting kit for hot moments: the 24-hour rule for angry messages — draft it, don't send it, reread tomorrow. The HALT check — Hungry, Angry, Lonely, Tired: don't have important conversations in those states if you can help it. And in the moment: breathe, slow down, lower your volume.",
+  story:"Affect labeling measurably dampens the amygdala response: naming the emotion - 'I'm getting defensive' - reduces its grip, moving it from something you are to something you're watching. A direct, measurable way to widen the space between stimulus and response.",
+  mech:"The supporting kit for hot moments: the 24-hour rule for angry messages - draft it, don't send it, reread tomorrow. The HALT check - Hungry, Angry, Lonely, Tired: don't have important conversations in those states if you can help it. And in the moment: breathe, slow down, lower your volume.",
   term:"Name it to tame it", def:"labeling your emotion as it happens, which measurably dampens the reaction.",
-  sowhat:"Triggered mid-conversation is exactly when you'll need this — practice on small irritations so it's there for the big ones.",
+  sowhat:"Triggered mid-conversation is exactly when you'll need this - practice on small irritations so it's there for the big ones.",
   explain:"the mechanics of staying usable while emotionally activated.",
   builds:[["a3","the space this widens"]], leads:[["b1-lorenz-story","now check the story you're telling"]], live:[]},
 
 "b1-lorenz-story":{type:"mechanism · story", title:"'The story I'm telling myself…'", x:254, y:656,
   ess:"One sentence that climbs you down the ladder in public.",
   hook:"Your message sat on 'read' for two days. What's the difference between 'you're ignoring me' and 'the story I'm telling myself is that this doesn't matter to you'?",
-  story:"Brené Brown's phrase — 'the story I'm telling myself is…' — is one of the most useful sentences in any relationship. It splits what you observed from the meaning you added, and hands your ladder to the other person for inspection: 'Here's what I observed… here's the story I'm telling myself about it… is that right?'",
-  mech:"Pair it with a default: assume noble intent, verify with curiosity. Most offenses are incompetence, oversight, or a bad day — not malice (Hanlon's razor, applied socially). The sentence works because it owns the inference instead of asserting it as fact.",
-  term:"The story I'm telling myself", def:"announcing your inference as a story, not a fact — so it can be corrected before it hardens.",
+  story:"Brené Brown's phrase - 'the story I'm telling myself is…' - is one of the most useful sentences in any relationship. It splits what you observed from the meaning you added, and hands your ladder to the other person for inspection: 'Here's what I observed… here's the story I'm telling myself about it… is that right?'",
+  mech:"Pair it with a default: assume noble intent, verify with curiosity. Most offenses are incompetence, oversight, or a bad day - not malice (Hanlon's razor, applied socially). The sentence works because it owns the inference instead of asserting it as fact.",
+  term:"The story I'm telling myself", def:"announcing your inference as a story, not a fact - so it can be corrected before it hardens.",
   sowhat:"Use it the next time you feel wronged and haven't checked. Half the time the story dies on contact with their actual reason.",
   explain:"how to surface your ladder of inference before it starts a fight.",
   builds:[["a2","the ladder this climbs down"]], leads:[["b1-principle","the inner game, summarized"]], live:[]},
 
 "b1-principle":{type:"principle", title:"Master yourself first", x:716, y:679,
   ess:"Every outer skill runs on the inner ones. Regulate, then relate.",
-  hook:"Why does every framework in this sky — listening, feedback, negotiation — quietly assume the same prerequisite?",
+  hook:"Why does every framework in this sky - listening, feedback, negotiation - quietly assume the same prerequisite?",
   story:"Because it does. You can't loop back what someone said while rehearsing your defense, can't restore safety while flooded, can't hear the real objection through your own alarm. Self-awareness and self-management aren't one skill among many; they're the platform the rest stand on.",
-  mech:"The inner game in one sequence: notice the feeling (name it to tame it) → reach the pause → check the story you're telling → then choose the response. And accept the boundary that comes with it: you control the transcript of your side only. Be clear, fair, and calm — and release the outcome.",
+  mech:"The inner game in one sequence: notice the feeling (name it to tame it) → reach the pause → check the story you're telling → then choose the response. And accept the boundary that comes with it: you control the transcript of your side only. Be clear, fair, and calm - and release the outcome.",
   term:"The inner game", def:"self-regulation as the prerequisite layer under every interpersonal skill.",
-  sowhat:"Before your next hard conversation, spend prep time on your state, not just your script — HALT-check yourself and plan where your pause will go.",
+  sowhat:"Before your next hard conversation, spend prep time on your state, not just your script - HALT-check yourself and plan where your pause will go.",
   explain:"why working on yourself is the highest-leverage way to get better with other people.",
   builds:[["b1-pendulum","the stack that proves the order"],["a3","a space everything else runs through"]], leads:[["b2-logistic","now point the regulated attention outward"]], live:[]},
 
 "b2-logistic":{type:"mechanism", title:"Three levels of listening", x:1837, y:233,
   ess:"Level 1 waits to reply. Level 2 understands. Level 3 hears what's unsaid.",
-  hook:"While the other person talks, where is your attention actually pointed — at them, or at the reply you're rehearsing?",
-  story:"Level 1 — listening to reply: waiting for your turn, rehearsing your response. Level 2 — listening to understand: full attention on their words and meaning. Level 3 — listening for what's unsaid: emotion, energy, what they're avoiding, what they need.",
-  mech:"Most people live at Level 1 — which is why simply operating at Level 2 consistently puts you in the top decile of listeners. Level 3 is where the real information sits: the hesitation before 'fine', the topic that keeps not coming up.",
+  hook:"While the other person talks, where is your attention actually pointed - at them, or at the reply you're rehearsing?",
+  story:"Level 1 - listening to reply: waiting for your turn, rehearsing your response. Level 2 - listening to understand: full attention on their words and meaning. Level 3 - listening for what's unsaid: emotion, energy, what they're avoiding, what they need.",
+  mech:"Most people live at Level 1 - which is why simply operating at Level 2 consistently puts you in the top decile of listeners. Level 3 is where the real information sits: the hesitation before 'fine', the topic that keeps not coming up.",
   term:"Levels of listening", def:"reply-listening, understanding-listening, and listening for what isn't being said.",
-  sowhat:"The bar is embarrassingly low. Consistent Level 2 — just that — beats almost everyone you know.",
+  sowhat:"The bar is embarrassingly low. Consistent Level 2 - just that - beats almost everyone you know.",
   explain:"what listening actually consists of, and why almost nobody does it.",
   builds:[["b1-principle","freed-up attention, pointed outward"]], leads:[["b2-attractors","what to do with what you hear"]], live:[]},
 
 "b2-attractors":{type:"mechanism", title:"Looping for understanding", x:2069, y:401,
   ess:"Summarize back in your own words, then ask: did I get that right?",
   hook:"People rarely feel heard when you agree with them. What actually does it?",
-  story:"The core active-listening move: listen fully (don't formulate your reply), summarize back what you heard in your own words, check — 'Did I get that right?' — then let them correct you, and loop again if needed.",
-  mech:"The counterintuitive truth: people don't feel heard when you agree with them; they feel heard when you can accurately state their position — especially when you disagree. Agreement is cheap. Accurate restatement is proof of attention.",
-  term:"Looping", def:"restating their position in your words and checking it, until they say 'yes — that's it'.",
+  story:"The core active-listening move: listen fully (don't formulate your reply), summarize back what you heard in your own words, check - 'Did I get that right?' - then let them correct you, and loop again if needed.",
+  mech:"The counterintuitive truth: people don't feel heard when you agree with them; they feel heard when you can accurately state their position - especially when you disagree. Agreement is cheap. Accurate restatement is proof of attention.",
+  term:"Looping", def:"restating their position in your words and checking it, until they say 'yes - that's it'.",
   sowhat:"In your next disagreement, loop before you argue. It costs thirty seconds and changes the temperature of everything after.",
-  explain:"the single move that makes another person feel heard — even mid-disagreement.",
+  explain:"the single move that makes another person feel heard - even mid-disagreement.",
   builds:[["b2-logistic","Level 2, made mechanical"]], leads:[["b2-tension-random","when they bring you a problem"],["b4-coinflip","carried into hard conversations"]], live:[]},
 
 "b2-lorenz-attractor":{type:"mechanism", title:"Better questions", x:2300, y:282,
-  ess:"Open beats closed — and the follow-up is the highest-signal move.",
+  ess:"Open beats closed - and the follow-up is the highest-signal move.",
   hook:"Someone answers your question. Why is what you say next worth more than the question itself?",
-  story:"Open beats closed: 'What happened?' beats 'Did it go badly?'. Follow-ups are the highest-signal social move — they prove you were listening. And 'What else?' is the most powerful follow-up there is, because the first answer is rarely the real one.",
-  mech:"When someone brings a problem, replace advice with questions first: 'What have you already tried?' — 'What do you think the options are?' Questions keep the thinking, and the ownership, on their side of the table.",
-  term:"The follow-up", def:"a question built from their last answer — proof of listening that invites the real answer out.",
-  sowhat:"Count your follow-ups in your next conversation — the number is usually smaller than you'd guess.",
+  story:"Open beats closed: 'What happened?' beats 'Did it go badly?'. Follow-ups are the highest-signal social move - they prove you were listening. And 'What else?' is the most powerful follow-up there is, because the first answer is rarely the real one.",
+  mech:"When someone brings a problem, replace advice with questions first: 'What have you already tried?' - 'What do you think the options are?' Questions keep the thinking, and the ownership, on their side of the table.",
+  term:"The follow-up", def:"a question built from their last answer - proof of listening that invites the real answer out.",
+  sowhat:"Count your follow-ups in your next conversation - the number is usually smaller than you'd guess.",
   explain:"why question quality, not answer quality, is what people remember about talking to you.",
   builds:[["b2-logistic","what Level 2 attention makes possible"]], leads:[["b2-principle","the through-line"]], live:[]},
 
 "b2-tension-random":{type:"tension", title:"Validate before you fix", x:2392, y:470,
-  ess:"They want to feel understood before — or instead of — being fixed.",
+  ess:"They want to feel understood before - or instead of - being fixed.",
   hook:"You offered a perfectly good solution and they got more upset. What did they actually come for?",
-  story:"Order of operations when someone brings you a problem: acknowledge the emotion ('That sounds frustrating'), confirm you understand the situation (loop it back), then ask outright: 'Do you want ideas, or do you want to vent?' Asking is fine — and often appreciated.",
+  story:"Order of operations when someone brings you a problem: acknowledge the emotion ('That sounds frustrating'), confirm you understand the situation (loop it back), then ask outright: 'Do you want ideas, or do you want to vent?' Asking is fine - and often appreciated.",
   mech:"Validation ≠ agreement. 'It makes sense you're upset' endorses the feeling, not the conclusion. You can fully validate someone's emotion and still disagree with their read of the facts.",
-  term:"Validate-first", def:"emotion acknowledged, situation confirmed, then — only if wanted — solutions.",
+  term:"Validate-first", def:"emotion acknowledged, situation confirmed, then - only if wanted - solutions.",
   sowhat:"The fix reflex is strongest with the people you love. That's exactly where it backfires most.",
   explain:"why premature problem-solving reads as dismissal, and what to do instead.",
   builds:[["b2-attractors","looping is step two"]], leads:[["b2-principle","why this works"]], live:[]},
 
 "b2-principle":{type:"principle", title:"Feeling heard beats being agreed with", x:1895, y:598,
   ess:"Accurate understanding, proven out loud, is the connection.",
-  hook:"If you could give people only one experience in conversation with you — why should it be 'accurately understood' rather than 'agreed with'?",
-  story:"Every move in this constellation — levels, looping, follow-ups, validation — cashes out to one deliverable: the other person's confidence that what they meant arrived intact. That confidence, not agreement, is what lands as warmth.",
-  mech:"It's the warmth axiom, executed: sustained attention is how 'I'm on your side' is actually transmitted. And it's why these skills survive disagreement — you can hold your position entirely and still send the signal.",
+  hook:"If you could give people only one experience in conversation with you - why should it be 'accurately understood' rather than 'agreed with'?",
+  story:"Every move in this constellation - levels, looping, follow-ups, validation - cashes out to one deliverable: the other person's confidence that what they meant arrived intact. That confidence, not agreement, is what lands as warmth.",
+  mech:"It's the warmth axiom, executed: sustained attention is how 'I'm on your side' is actually transmitted. And it's why these skills survive disagreement - you can hold your position entirely and still send the signal.",
   term:"Understanding as the deliverable", def:"the output of listening is their verified confidence that you got it.",
   sowhat:"Someone venting at you is a which-tool moment: levels, validate first, 'ideas or vent?'. The answer is never 'debate them'.",
-  explain:"what listening is actually for — and why it outperforms agreement.",
+  explain:"what listening is actually for - and why it outperforms agreement.",
   builds:[["b2-attractors","the move that proves it"],["a1","axiom one: the warmth being transmitted"]], leads:[["b3-kokura","now the other direction: being understood"]], live:[]},
 
 "b3-kokura":{type:"mechanism", title:"BLUF: lead with the point", x:271, y:962,
-  ess:"Bottom Line Up Front — conclusion first, support after.",
+  ess:"Bottom Line Up Front - conclusion first, support after.",
   hook:"Context, history, caveats, and… eventually, your point. What is your listener doing while they wait?",
   story:"Minto's Pyramid Principle: lead with the conclusion, then the two or three reasons, then supporting detail if asked. Bad: context → history → caveats → eventually the point. Good: the point, then its defense. Works for emails, updates, meetings, and asking for anything.",
   mech:"If your listener has to wait to find out why you're talking, you're burning their attention. Attention spent waiting is attention unavailable for your actual argument.",
-  term:"BLUF", def:"Bottom Line Up Front — the conclusion leads; everything else supports it.",
+  term:"BLUF", def:"Bottom Line Up Front - the conclusion leads; everything else supports it.",
   sowhat:"Rule of thumb: your first sentence should survive alone if the rest gets cut. Draft, then test the first sentence against that.",
   explain:"why answer-first structure wins in every professional channel.",
   builds:[["b2-principle","understanding, now flowing the other way"]], leads:[["b3-contingency","before structure: what's the one thing?"]], live:[]},
@@ -472,7 +472,7 @@ a4:{type:"axiom", title:"The tiny moments are the relationship", x:1259, y:771,
 "b3-timeline":{type:"mechanism", title:"Match the channel to the message", x:312, y:1210,
   ess:"Complex or emotional → voice. Simple → text. Careful → written.",
   hook:"Why did that perfectly reasonable text land like an insult?",
-  story:"Complex or emotional content needs face-to-face or a call — bandwidth for tone and real-time repair. Simple and factual fits text or chat. Anything needing a record or careful wording goes written.",
+  story:"Complex or emotional content needs face-to-face or a call - bandwidth for tone and real-time repair. Simple and factual fits text or chat. Anything needing a record or careful wording goes written.",
   mech:"Text strips tone, and people fill the gap with the worst interpretation. That's why criticism, bad news, or conflict should never travel over text if you can avoid it.",
   term:"Channel matching", def:"choosing the medium by the message's emotional and complexity load.",
   sowhat:"The channel is itself a message: 'this mattered enough to call about.'",
@@ -483,7 +483,7 @@ a4:{type:"axiom", title:"The tiny moments are the relationship", x:1259, y:771,
   ess:"Words carry content; tone, face, and body carry the emotional message.",
   hook:"Your words said 'I'm listening'. Your phone, face-down on the table, said something else. Which one did they believe?",
   story:"Tone, face, and body carry the emotional message; words carry the content. When the two conflict, people believe the nonverbal.",
-  mech:"Practical basics: face the person, uncross, make comfortable (not constant) eye contact, put the phone away — face-down on the table still signals divided attention.",
+  mech:"Practical basics: face the person, uncross, make comfortable (not constant) eye contact, put the phone away - face-down on the table still signals divided attention.",
   term:"Nonverbal primacy", def:"when words and body disagree, the body's message wins.",
   sowhat:"You're always broadcasting on this channel. The only choice is whether it matches your words.",
   explain:"which channel people actually believe when your signals conflict.",
@@ -500,61 +500,61 @@ a4:{type:"axiom", title:"The tiny moments are the relationship", x:1259, y:771,
   builds:[["b3-contingency","the fixed point everything flexes around"],["a1","attention to the listener, visible in the fit"]], leads:[["b4-coinflip","now the hard ones"]], live:[]},
 
 "b4-coinflip":{type:"mechanism", title:"Every hard conversation is three", x:1583, y:979,
-  ess:"What happened; the feelings; and underneath — what does this say about me?",
+  ess:"What happened; the feelings; and underneath - what does this say about me?",
   hook:"You're mid-argument about the facts. So why does it feel like you're defending your whole self?",
-  story:"Stone, Patton and Heen: every difficult conversation is three at once. The 'What Happened' conversation — stop arguing about who's right; explore each side's story. The Feelings conversation — unexpressed feelings leak out as tone, sarcasm, or withdrawal; name them plainly instead. And the hidden Identity conversation: what does this say about me — am I competent? Am I a good person?",
-  mech:"Two shifts unlock the first conversation: from certainty to curiosity, and from blame to contribution — 'we both contributed; here's my part.' And a diagnostic for the third: when you feel disproportionately defensive, your identity is under threat. Notice it.",
+  story:"Stone, Patton and Heen: every difficult conversation is three at once. The 'What Happened' conversation - stop arguing about who's right; explore each side's story. The Feelings conversation - unexpressed feelings leak out as tone, sarcasm, or withdrawal; name them plainly instead. And the hidden Identity conversation: what does this say about me - am I competent? Am I a good person?",
+  mech:"Two shifts unlock the first conversation: from certainty to curiosity, and from blame to contribution - 'we both contributed; here's my part.' And a diagnostic for the third: when you feel disproportionately defensive, your identity is under threat. Notice it.",
   term:"The Three Conversations", def:"every hard talk = what happened + feelings + identity, running simultaneously.",
-  sowhat:"Disproportionate reactions — yours or theirs — are the identity conversation announcing itself. Address that one, not the facts.",
+  sowhat:"Disproportionate reactions - yours or theirs - are the identity conversation announcing itself. Address that one, not the facts.",
   explain:"why difficult conversations derail on layers nobody is naming.",
   builds:[["b2-attractors","looping, now under fire"],["a2","two ladders, colliding"]], leads:[["b4-ergodicity","a sentence-structure for raising it"]], live:[]},
 
 "b4-ergodicity":{type:"mechanism", title:"OFNR: the four-part sentence", x:1901, y:945,
-  ess:"Observation, feeling, need, request — in that order.",
-  hook:"'You always flake on me' — true or not, why is that sentence guaranteed to start a fight?",
-  story:"Rosenberg's Nonviolent Communication. Observation — facts, no evaluation: 'the last three times we planned to meet, it was rescheduled' (not 'you always flake'). Feeling — yours, owned: 'I feel deprioritized.' Need — the underlying need: 'I need to know this matters to you too.' Request — specific and doable: 'could we lock a time that's genuinely protected?'",
+  ess:"Observation, feeling, need, request - in that order.",
+  hook:"'You always flake on me' - true or not, why is that sentence guaranteed to start a fight?",
+  story:"Rosenberg's Nonviolent Communication. Observation - facts, no evaluation: 'the last three times we planned to meet, it was rescheduled' (not 'you always flake'). Feeling - yours, owned: 'I feel deprioritized.' Need - the underlying need: 'I need to know this matters to you too.' Request - specific and doable: 'could we lock a time that's genuinely protected?'",
   mech:"The magic is in the first step: separating observation from evaluation removes 80% of the defensiveness. An evaluation invites a rebuttal; an observation invites a shared look at the same facts.",
   term:"OFNR", def:"observation → feeling → need → request: the structure for raising anything hard.",
-  sowhat:"Raising a recurring frustration is the OFNR moment. Write the observation down first — it's harder than it sounds.",
+  sowhat:"Raising a recurring frustration is the OFNR moment. Write the observation down first - it's harder than it sounds.",
   explain:"how to say a hard thing so it can actually be heard.",
   builds:[["b4-coinflip","the feelings conversation, given a grammar"],["a2","evaluation is the ladder talking"]], leads:[["b4-domains","when it still gets hot"]], live:[]},
 
 "b4-domains":{type:"mechanism", title:"Restore safety before content", x:2219, y:979,
-  ess:"People go silent or sharp when they feel unsafe — not when they're wrong.",
-  hook:"Mid-discussion, they've gone quiet — or gone on the attack. Why is continuing your argument now completely useless?",
+  ess:"People go silent or sharp when they feel unsafe - not when they're wrong.",
+  hook:"Mid-discussion, they've gone quiet - or gone on the attack. Why is continuing your argument now completely useless?",
   story:"A conversation becomes crucial when stakes are high, opinions differ, and emotions run strong (Patterson et al.). The core insight: people get defensive not because of the content but because they feel unsafe. When someone goes to silence (withdrawing) or violence (attacking), stop debating content and restore safety.",
-  mech:"The toolkit: establish mutual purpose explicitly — 'we both want this project to succeed' — before the hard part. Fix misunderstandings by contrasting: 'I don't mean X. I do mean Y.' And STATE for delivery: Share facts → Tell your story → Ask for their path → Talk tentatively → Encourage testing.",
-  term:"Safety first", def:"defensiveness signals unsafety, not disagreement — restore safety, then resume content.",
+  mech:"The toolkit: establish mutual purpose explicitly - 'we both want this project to succeed' - before the hard part. Fix misunderstandings by contrasting: 'I don't mean X. I do mean Y.' And STATE for delivery: Share facts → Tell your story → Ask for their path → Talk tentatively → Encourage testing.",
+  term:"Safety first", def:"defensiveness signals unsafety, not disagreement - restore safety, then resume content.",
   sowhat:"Silence is as loud an alarm as shouting. The quiet ones haven't agreed; they've left.",
   explain:"what defensiveness is actually made of, and the repair sequence for it.",
   builds:[["b4-coinflip","what the heat actually is"]], leads:[["b4-survive","feedback: the recurring crucial conversation"]], live:[]},
 
 "b4-survive":{type:"mechanism · simulation", title:"Feedback: SBI × radical candor", sim:"candor", x:2438, y:1094,
-  ess:"Care personally × challenge directly — delivered as situation, behavior, impact.",
+  ess:"Care personally × challenge directly - delivered as situation, behavior, impact.",
   hook:"You've been softening the feedback 'to be nice'. Who is that actually protecting?",
-  story:"Kim Scott's two axes: care personally × challenge directly. Challenge without care is obnoxious aggression. Care without challenge is ruinous empathy — the most common failure: withholding feedback 'to be nice' and letting people fail. Neither is manipulative insincerity. Both is radical candor.",
-  mech:"The delivery mechanics are SBI. Situation: 'in yesterday's review meeting…'. Behavior — observable, not interpreted: 'you interrupted Priya twice mid-sentence' (not 'you were disrespectful'). Impact: 'she stopped contributing for the rest of the meeting.' Then stop and let them respond; optionally add a request.",
+  story:"Kim Scott's two axes: care personally × challenge directly. Challenge without care is obnoxious aggression. Care without challenge is ruinous empathy - the most common failure: withholding feedback 'to be nice' and letting people fail. Neither is manipulative insincerity. Both is radical candor.",
+  mech:"The delivery mechanics are SBI. Situation: 'in yesterday's review meeting…'. Behavior - observable, not interpreted: 'you interrupted Priya twice mid-sentence' (not 'you were disrespectful'). Impact: 'she stopped contributing for the rest of the meeting.' Then stop and let them respond; optionally add a request.",
   term:"SBI + Radical Candor", def:"the stance (care × challenge, both high) and the sentence (situation → behavior → impact).",
-  sowhat:"Earning the right to be direct is done through demonstrated care, not by softening the message into uselessness. And SBI works identically for praise — specific positive feedback is the most underused relationship tool that exists.",
-  explain:"how to give feedback that is both kind and useful — and why 'nice' is neither.",
+  sowhat:"Earning the right to be direct is done through demonstrated care, not by softening the message into uselessness. And SBI works identically for praise - specific positive feedback is the most underused relationship tool that exists.",
+  explain:"how to give feedback that is both kind and useful - and why 'nice' is neither.",
   builds:[["b4-domains","safety is what makes candor receivable"],["a1","care is what licenses challenge"]], leads:[["b4-signal","when it ruptures anyway: repair"]], live:[]},
 
 "b4-signal":{type:"mechanism", title:"Repair beats not fighting", x:1612, y:1181,
-  ess:"Relationship health isn't less conflict — it's better repair, at 5:1.",
-  hook:"Gottman can watch a couple argue and predict their future. What is he actually looking for — and why isn't it the arguing?",
-  story:"Gottman's research: the health of a relationship isn't predicted by how much conflict there is, but by how well people repair. His 5:1 ratio: stable relationships run about five positive interactions per negative one. And his Four Horsemen to watch for in yourself: criticism (attacking character instead of behavior), contempt — the single strongest predictor of relationship failure — defensiveness, and stonewalling.",
+  ess:"Relationship health isn't less conflict - it's better repair, at 5:1.",
+  hook:"Gottman can watch a couple argue and predict their future. What is he actually looking for - and why isn't it the arguing?",
+  story:"Gottman's research: the health of a relationship isn't predicted by how much conflict there is, but by how well people repair. His 5:1 ratio: stable relationships run about five positive interactions per negative one. And his Four Horsemen to watch for in yourself: criticism (attacking character instead of behavior), contempt - the single strongest predictor of relationship failure - defensiveness, and stonewalling.",
   mech:"A good apology has no 'but': name what you did, name the impact, say what you'll do differently. 'I'm sorry you felt that way' is not an apology; it's a counterattack in disguise.",
-  term:"Repair", def:"the skill of coming back well after conflict — a stronger predictor than conflict frequency.",
-  sowhat:"Audit yourself for the horsemen, especially contempt — the eye-roll, the sneer, the 'obviously'. It's the one that kills.",
+  term:"Repair", def:"the skill of coming back well after conflict - a stronger predictor than conflict frequency.",
+  sowhat:"Audit yourself for the horsemen, especially contempt - the eye-roll, the sneer, the 'obviously'. It's the one that kills.",
   explain:"why fighting less matters less than repairing well.",
   builds:[["a4","the ratio is banked in tiny moments"]], leads:[["b4-danger","disagreeing without rupturing"]], live:[["b4-explore","watch the 5:1 account run"]]},
 
 "b4-danger":{type:"mechanism", title:"Disagreeing well", x:1959, y:1152,
   ess:"Steelman first; attack ideas, never identity; then commit.",
   hook:"You won the argument. The relationship cooled by two degrees. What did you actually win?",
-  story:"Steelman, don't strawman: state their argument so well they'd endorse it — then disagree. Attack ideas, never identity: 'I see it differently' beats 'you're wrong'. And ask 'what would change your mind?' — of them, and honestly of yourself.",
-  mech:"Then disagree and commit: fight hard for your view before the decision; support it fully after — relitigating decided things erodes trust. The governing question: do I want to win this exchange, or win the long game? You can be right and still lose the relationship.",
-  term:"Steelman", def:"the strongest version of their argument, stated by you, endorsed by them — before your rebuttal.",
+  story:"Steelman, don't strawman: state their argument so well they'd endorse it - then disagree. Attack ideas, never identity: 'I see it differently' beats 'you're wrong'. And ask 'what would change your mind?' - of them, and honestly of yourself.",
+  mech:"Then disagree and commit: fight hard for your view before the decision; support it fully after - relitigating decided things erodes trust. The governing question: do I want to win this exchange, or win the long game? You can be right and still lose the relationship.",
+  term:"Steelman", def:"the strongest version of their argument, stated by you, endorsed by them - before your rebuttal.",
   sowhat:"'What would change your mind?' asked of yourself is the cheapest honesty check available. If the answer is 'nothing', you're not in a discussion.",
   explain:"how to disagree at full strength without spending the relationship.",
   builds:[["b4-coinflip","curiosity over certainty, applied"]], leads:[["b4-process","from defending views to moving minds"]], live:[]},
@@ -562,52 +562,52 @@ a4:{type:"axiom", title:"The tiny moments are the relationship", x:1259, y:771,
 "b4-process":{type:"mechanism", title:"Persuasion: their reasons, not yours", x:1650, y:1330,
   ess:"People are persuaded by their own reasons. Help them find them.",
   hook:"Your argument was airtight and they still didn't move. Whose reasons were you using?",
-  story:"People are persuaded by their own reasons, not yours — so ask questions that let them discover the conclusion ('what would happen if…?'), and address the actual objection, which is often unstated and emotional (fear of looking bad, loss of control), rather than the stated one.",
-  mech:"The classical scaffolding still holds. Aristotle: ethos — credibility, why should they listen to you; pathos — stories, stakes, vividness (facts inform; feelings move); logos — structure and evidence. Most professionals over-index on logos. Cialdini's six levers: reciprocity — give first (help, information, concessions); commitment/consistency — small yeses lead to big yeses, get people to state positions themselves; social proof — 'teams like yours already do this'; liking — similarity, compliments, cooperation toward shared goals; authority — credible expertise, honestly signaled; scarcity — what's rare or closing is more compelling. Use the six as diagnostics too: notice when they're being used on you.",
+  story:"People are persuaded by their own reasons, not yours - so ask questions that let them discover the conclusion ('what would happen if…?'), and address the actual objection, which is often unstated and emotional (fear of looking bad, loss of control), rather than the stated one.",
+  mech:"The classical scaffolding still holds. Aristotle: ethos - credibility, why should they listen to you; pathos - stories, stakes, vividness (facts inform; feelings move); logos - structure and evidence. Most professionals over-index on logos. Cialdini's six levers: reciprocity - give first (help, information, concessions); commitment/consistency - small yeses lead to big yeses, get people to state positions themselves; social proof - 'teams like yours already do this'; liking - similarity, compliments, cooperation toward shared goals; authority - credible expertise, honestly signaled; scarcity - what's rare or closing is more compelling. Use the six as diagnostics too: notice when they're being used on you.",
   term:"Self-persuasion", def:"the conclusion they reach themselves, prompted by your questions, beats the one you argued.",
-  sowhat:"A story about one user beats a table of statistics for moving people to act — then use the table to justify the decision they now want to make.",
-  explain:"why minds move on their own reasons — and the levers that invite the movement.",
+  sowhat:"A story about one user beats a table of statistics for moving people to act - then use the table to justify the decision they now want to make.",
+  explain:"why minds move on their own reasons - and the levers that invite the movement.",
   builds:[["b2-lorenz-attractor","questions were always the engine"],["a1","ethos is warmth × competence, spoken"]], leads:[["b4-destination","persuasion with stakes on the table"]], live:[]},
 
 "b4-destination":{type:"mechanism", title:"Negotiate interests, not positions", x:2330, y:1255,
   ess:"A position is what they want; an interest is why. Trade across the whys.",
   hook:"Both sides want the corner office. What question dissolves the deadlock?",
-  story:"Fisher & Ury: a position is what they say they want; an interest is why they want it. Weak negotiators argue positions; strong ones trade across interests. And know your BATNA — best alternative to no deal — because power comes from being able to walk away.",
-  mech:"Voss adds tactical empathy: label their emotions — 'it seems like you're worried this sets a precedent' — because labeling defuses. And aim for the other side to feel the process was fair: deals that feel unfair get quietly sabotaged later.",
-  term:"Interests vs positions", def:"the want behind the demand — where the trades live that positions can't see.",
-  sowhat:"Before your next negotiation, know three things: your interests, their likely interests, and your BATNA — power comes from being able to walk away.",
+  story:"Fisher & Ury: a position is what they say they want; an interest is why they want it. Weak negotiators argue positions; strong ones trade across interests. And know your BATNA - best alternative to no deal - because power comes from being able to walk away.",
+  mech:"Voss adds tactical empathy: label their emotions - 'it seems like you're worried this sets a precedent' - because labeling defuses. And aim for the other side to feel the process was fair: deals that feel unfair get quietly sabotaged later.",
+  term:"Interests vs positions", def:"the want behind the demand - where the trades live that positions can't see.",
+  sowhat:"Before your next negotiation, know three things: your interests, their likely interests, and your BATNA - power comes from being able to walk away.",
   explain:"where negotiating room actually hides, and what walking-away power is made of.",
   builds:[["b4-process","persuasion under conflict of interest"],["b2-attractors","labeling is looping, for emotions"]], leads:[["b4-explore","out of the arena: the everyday layer"]], live:[]},
 
 "b4-explore":{type:"mechanism · simulation", title:"Everyday connection", sim:"bids", x:2470, y:1430,
   ess:"Interested beats interesting; turn toward the bids; remember and follow up.",
   hook:"The person everyone loves talking to barely talks. What are they doing instead?",
-  story:"Carnegie's evergreen basics: be genuinely interested in people (not interesting — interested), use their names, let others do most of the talking and ask about their interests, give sincere specific appreciation, admit your own mistakes quickly and emphatically, and never say 'you're wrong' outright — 'curious how you got there, walk me through it?'",
-  mech:"Two accelerants. Vulnerability: appropriate sharing of struggles, uncertainty, and 'I don't know' escalates reciprocally and deepens trust — the Beautiful Mess Effect: we judge our own vulnerability as weakness but perceive others' as courage. Calibrate to context — over-disclosure early reverses the effect. And the highest-ROI habit: remember what people tell you — their kid's exam, their launch, their health scare — and ask about it later; keep notes if your memory won't. It proves the listening was real.",
-  term:"Turning toward", def:"engaging the small bids — the accumulated ratio that is the relationship.",
-  sowhat:"Charisma decomposes (Cabane) into presence (full attention — the rarest gift) + power (calm confidence, taking up space) + warmth (goodwill, visible care). All three are behaviors, not traits — and presence, actually being where you are, accounts for most of it.",
+  story:"Carnegie's evergreen basics: be genuinely interested in people (not interesting - interested), use their names, let others do most of the talking and ask about their interests, give sincere specific appreciation, admit your own mistakes quickly and emphatically, and never say 'you're wrong' outright - 'curious how you got there, walk me through it?'",
+  mech:"Two accelerants. Vulnerability: appropriate sharing of struggles, uncertainty, and 'I don't know' escalates reciprocally and deepens trust - the Beautiful Mess Effect: we judge our own vulnerability as weakness but perceive others' as courage. Calibrate to context - over-disclosure early reverses the effect. And the highest-ROI habit: remember what people tell you - their kid's exam, their launch, their health scare - and ask about it later; keep notes if your memory won't. It proves the listening was real.",
+  term:"Turning toward", def:"engaging the small bids - the accumulated ratio that is the relationship.",
+  sowhat:"Charisma decomposes (Cabane) into presence (full attention - the rarest gift) + power (calm confidence, taking up space) + warmth (goodwill, visible care). All three are behaviors, not traits - and presence, actually being where you are, accounts for most of it.",
   explain:"the small daily mechanics that add up to being someone people feel close to.",
   builds:[["a4","the axiom, lived daily"],["b2-logistic","interested = listening, made visible"]], leads:[["b4-fence","the same moves at work"]], live:[]},
 
 "b4-fence":{type:"mechanism", title:"The workplace patterns", x:2090, y:1430,
   ess:"Psychological safety, managing up, meetings, and writing that respects the reader.",
   hook:"Google studied what separates its best teams. Why did the answer turn out to be a feeling?",
-  story:"Psychological safety (Edmondson) — can people take interpersonal risks: admit mistakes, ask 'dumb' questions, dissent, without punishment — is the #1 predictor of team performance (Google's Project Aristotle). You build it in the ten seconds after someone admits an error or challenges you, and by modeling fallibility: 'I might be missing something here.'",
-  mech:"The surrounding craft. Managing up: bring problems with a recommendation ('here's the issue, here are options, I suggest B because…'); no surprises — bad news travels first, and fast; learn your manager's preferred bandwidth and format and serve it; close loops explicitly — 'done, shipped Tuesday' — because silence reads as dropped. Meetings: no agenda, no meeting — state the desired outcome in the invite; open with purpose ('we're here to decide X'); draw out the quiet ('Priya, you've been closest to this — what's your read?'); end with owner + action + date, said out loud; praise publicly, correct privately. Writing: subject lines that carry the ask ('decision needed by Fri: vendor choice'); one email, one topic, the ask in the first two lines; bullets for scanability, bold the action items and deadlines; reread anything sensitive after an hour, aloud — tone you can't hear on screen shows up in your voice.",
-  term:"Psychological safety", def:"the shared belief that interpersonal risk won't be punished — the top predictor of team performance.",
+  story:"Psychological safety (Edmondson) - can people take interpersonal risks: admit mistakes, ask 'dumb' questions, dissent, without punishment - is the #1 predictor of team performance (Google's Project Aristotle). You build it in the ten seconds after someone admits an error or challenges you, and by modeling fallibility: 'I might be missing something here.'",
+  mech:"The surrounding craft. Managing up: bring problems with a recommendation ('here's the issue, here are options, I suggest B because…'); no surprises - bad news travels first, and fast; learn your manager's preferred bandwidth and format and serve it; close loops explicitly - 'done, shipped Tuesday' - because silence reads as dropped. Meetings: no agenda, no meeting - state the desired outcome in the invite; open with purpose ('we're here to decide X'); draw out the quiet ('Priya, you've been closest to this - what's your read?'); end with owner + action + date, said out loud; praise publicly, correct privately. Writing: subject lines that carry the ask ('decision needed by Fri: vendor choice'); one email, one topic, the ask in the first two lines; bullets for scanability, bold the action items and deadlines; reread anything sensitive after an hour, aloud - tone you can't hear on screen shows up in your voice.",
+  term:"Psychological safety", def:"the shared belief that interpersonal risk won't be punished - the top predictor of team performance.",
   sowhat:"Your team is calibrating on your next ten-second reaction to bad news. That's the lever.",
-  explain:"the workplace-specific moves — and the team condition that makes all of them possible.",
+  explain:"the workplace-specific moves - and the team condition that makes all of them possible.",
   builds:[["b3-kokura","BLUF, institutionalized"],["a1","safety is warmth at team scale"]], leads:[["b4-principle","the whole kit, chosen well"]], live:[]},
 
 "b4-principle":{type:"principle", title:"Play the long game", x:1830, y:1560,
-  ess:"Right frame, right moment — and always the relationship over the exchange.",
+  ess:"Right frame, right moment - and always the relationship over the exchange.",
   hook:"You now hold a dozen frameworks. In the heat of a real moment, how do you know which one to reach for?",
   story:"Match the tool to the situation. Someone upset with you → Three Conversations + looping + repair. Giving feedback → SBI + radical candor. A recurring frustration → OFNR. High-stakes disagreement → safety, mutual purpose, STATE. Pitching → BLUF + ethos/pathos/logos + interests-not-positions. Someone venting → validate first, 'ideas or vent?'. Building a new relationship → Carnegie basics + questions + follow-ups + bids. Triggered yourself → name it, pause, check the ladder, HALT. Team not speaking up → psychological safety + draw out the quiet. Trust feels low → audit self-orientation and reliability first.",
-  mech:"And under every choice, one orientation: you can be right and still lose the relationship. The exchange is one round; the relationship is the game. Optimize for the accumulated ratio — kept promises, turned-toward bids, repairs made well — because that ratio, not any single conversation, is what people remember you as.",
+  mech:"And under every choice, one orientation: you can be right and still lose the relationship. The exchange is one round; the relationship is the game. Optimize for the accumulated ratio - kept promises, turned-toward bids, repairs made well - because that ratio, not any single conversation, is what people remember you as.",
   term:"The long game", def:"choosing moves by their effect on the relationship's ledger, not the exchange's scoreboard.",
-  sowhat:"Keep the person; release the scoreboard. Knowing which framework fits is itself a skill — learnable one hard moment at a time.",
+  sowhat:"Keep the person; release the scoreboard. Knowing which framework fits is itself a skill - learnable one hard moment at a time.",
   explain:"how the whole sky compresses into one governing question: exchange, or relationship?",
-  builds:[["b4-signal","repair is the proof of intent"],["b4-danger","the question that decides it"],["a4","accumulation — the ledger it all posts to"]], leads:[], live:[]}
+  builds:[["b4-signal","repair is the proof of intent"],["b4-danger","the question that decides it"],["a4","accumulation - the ledger it all posts to"]], leads:[], live:[]}
 };
 const TERRITORIES = [
   {label:"I · The Inner Game", sum:"regulate yourself; bank trust", hue:"#4a6684", lx:508, ly:100, rx:184, ry:158, rw:745, rh:590},
@@ -750,7 +750,7 @@ document.getElementById('overviewBtn').onclick = ()=>{ closeReader(); overviewCa
 addEventListener('resize', ()=>apply());
 
 /* ============================================================
-   SKY — constellation names, asterisms, ecliptic, stars
+   SKY - constellation names, asterisms, ecliptic, stars
    ============================================================ */
 const BC = (()=>{const ax=Object.keys(N).filter(id=>id[0]==='a');return {x:ax.reduce((s,i)=>s+N[i].x,0)/ax.length, y:ax.reduce((s,i)=>s+N[i].y,0)/ax.length};})();
 { /* Cleared Court: pull the axioms into a tight core, clear any star that intrudes */
@@ -780,7 +780,7 @@ TERRITORIES.forEach(t=>{
 
 
 
-/* minor stars — small nameless flecks inside each figure */
+/* minor stars - small nameless flecks inside each figure */
 {
   const R = mulberry32(11);
   TERRITORIES.forEach(t=>{
@@ -1015,7 +1015,7 @@ function clearHighlight(){
 }
 
 /* ============================================================
-   NAV — top-right cluster drives the default flow
+   NAV - top-right cluster drives the default flow
    ============================================================ */
 function syncNav(){
   const i = focusId ? TOUR.indexOf(focusId) : -1;
@@ -1045,8 +1045,8 @@ function setActive(fig, btn){
 }
 function simHTML(kind){
   const caps = {
-    trusteq:"Credibility, reliability, intimacy — divided by self-orientation. Watch the denominator do the damage.",
-    candor:"Two dials, four quadrants. The same feedback, said from each — find where it becomes both kind and useful.",
+    trusteq:"Credibility, reliability, intimacy - divided by self-orientation. Watch the denominator do the damage.",
+    candor:"Two dials, four quadrants. The same feedback, said from each - find where it becomes both kind and useful.",
     bids:"A stream of small bids over time. Each turn-toward is +1; each miss costs 5 (negatives weigh more). The account is the relationship."
   };
   const ctl = {
@@ -1081,7 +1081,7 @@ SIMS.trusteq = fig=>{
     ctx.fillStyle=SUNK;ctx.fillRect(0,0,W,H);
     ctx.font='14px Inter, sans-serif';
     // numerator bars
-    ctx.fillStyle=GRAY;ctx.fillText('the numerator — what you bring',36,34);
+    ctx.fillStyle=GRAY;ctx.fillText('the numerator - what you bring',36,34);
     for(let i=0;i<3;i++){
       const x=44+i*120,h=v[i]*13,y=200-h;
       ctx.fillStyle=FAINT;ctx.fillRect(x,70,64,130);
@@ -1091,7 +1091,7 @@ SIMS.trusteq = fig=>{
       ctx.fillText(names[i],x,220);ctx.font='14px Inter, sans-serif';
     }
     // denominator bar
-    ctx.fillStyle=GRAY;ctx.fillText('÷ the denominator — how much it looks like it\'s about you',36,262);
+    ctx.fillStyle=GRAY;ctx.fillText('÷ the denominator - how much it looks like it\'s about you',36,262);
     ctx.fillStyle=`rgba(${RGB_AMBER},0.15)`;ctx.fillRect(44,274,400,26);
     ctx.fillStyle=AMBER;ctx.fillRect(44,274,v[3]*40,26);
     ctx.fillStyle=INKC;ctx.fillText('self-orientation: '+v[3],460,292);
@@ -1105,7 +1105,7 @@ SIMS.trusteq = fig=>{
     ctx.fillText(T.toFixed(1),110+tw+10,341);
     ctx.font='12.5px Inter, sans-serif';ctx.fillStyle=GRAY;
     let verdict;
-    if(v[3]>=7&&v[0]+v[1]+v[2]>=18)verdict='strong numerator — and nobody buys it. Visible self-interest divides everything you built.';
+    if(v[3]>=7&&v[0]+v[1]+v[2]>=18)verdict='strong numerator - and nobody buys it. Visible self-interest divides everything you built.';
     else if(v[3]<=2)verdict='a modest numerator over a tiny denominator: this is why the humble ally out-trusts the star.';
     else verdict='the fastest builder: many small kept promises (reliability). The fastest destroyer: the denominator.';
     ctx.fillText(verdict,36,376);
@@ -1128,10 +1128,10 @@ SIMS.candor = fig=>{
   let care=8,challenge=3;
   const quad=()=>{
     const c=care>5,ch=challenge>5;
-    if(c&&ch)return['radical candor','"You\'re better than this draft — here\'s specifically what\'s missing, and I\'ll help."'];
-    if(c&&!ch)return['ruinous empathy','"Don\'t worry about it, really." — kindness that lets them keep failing. The most common failure.'];
-    if(!c&&ch)return['obnoxious aggression','"This is sloppy. Do it again." — right content, no license to deliver it.'];
-    return['manipulative insincerity','"Great job as always!" — flattery you don\'t mean, to keep things smooth.'];
+    if(c&&ch)return['radical candor','"You\'re better than this draft - here\'s specifically what\'s missing, and I\'ll help."'];
+    if(c&&!ch)return['ruinous empathy','"Don\'t worry about it, really." - kindness that lets them keep failing. The most common failure.'];
+    if(!c&&ch)return['obnoxious aggression','"This is sloppy. Do it again." - right content, no license to deliver it.'];
+    return['manipulative insincerity','"Great job as always!" - flattery you don\'t mean, to keep things smooth.'];
   };
   function draw(){
     ctx.fillStyle=SUNK;ctx.fillRect(0,0,W,H);
@@ -1201,9 +1201,9 @@ SIMS.bids = fig=>{
     ctx.fillText(`turning toward ${pPct}% of bids · positive:negative ≈ ${ratio>50?'∞':ratio.toFixed(1)}:1`,24,H-58);
     ctx.fillStyle=GRAY;ctx.font='13px Inter, sans-serif';
     let verdict;
-    if(pPct<80)verdict='the account bleeds — "mostly positive" is not enough, because negatives weigh about five times more.';
+    if(pPct<80)verdict='the account bleeds - "mostly positive" is not enough, because negatives weigh about five times more.';
     else if(pPct<87)verdict='the knife edge Gottman measured: about 5:1 is where stable relationships live.';
-    else verdict='compounding goodwill — the tiny moments, banked.';
+    else verdict='compounding goodwill - the tiny moments, banked.';
     ctx.fillText(verdict,24,H-36);
   }
   draw(70);
