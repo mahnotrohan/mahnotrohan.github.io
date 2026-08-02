@@ -1,0 +1,18 @@
+{%- comment -%}
+  A post as a card, for side-by-side rows like "Start here".
+  Include it with a "note" parameter set to the note object.
+{%- endcomment -%}
+{%- assign n = include.note -%}
+{%- assign rt = n.content | strip_html | number_of_words | divided_by: 220.0 | ceil -%}
+{%- if rt < 1 %}{% assign rt = 1 %}{% endif -%}
+{%- if n.stage == "served" %}{% assign dots = 3 %}
+{%- elsif n.stage == "cooked" %}{% assign dots = 2 %}
+{%- else %}{% assign dots = 1 %}{% endif -%}
+<a class="pick" href="{{ n.url }}">
+  <span class="pick-t">{{ n.title }}</span>
+  {%- if n.description %}<span class="pick-h">{{ n.description }}</span>{% endif -%}
+  <span class="pick-f">
+    <span class="pick-m">{{ n.date | date: "%b %Y" }} &middot; {{ rt }} min</span>
+    <span class="dots" data-s="{{ dots }}" title="{{ n.stage }}"><i></i><i></i><i></i></span>
+  </span>
+</a>

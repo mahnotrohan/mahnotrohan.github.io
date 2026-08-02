@@ -16,10 +16,10 @@ permalink: /
 
 <div class="secth">Start here</div>
 
-<div class="w-list">
+<div class="picks">
 {%- for slug in starts -%}
 {%- assign note = site.notes | where_exp: "n", "n.path contains slug" | first -%}
-{%- if note %}{% include post-row.html note=note %}{% endif -%}
+{%- if note %}{% include post-card.html note=note %}{% endif -%}
 {%- endfor -%}
 </div>
 
@@ -45,9 +45,9 @@ permalink: /
   </a>
 </div>
 
-<div class="secth">Tastes</div>
+<div class="secth">Off the clock</div>
 
-<div class="tastes">
+<div class="blurbs">
   <div>
     <h3><a href="{{ site.baseurl }}/thoughts/on-coffee">Coffee</a></h3>
     <p>My setup, the beans I've loved, and the best cortado in Bangalore.</p>

@@ -16,7 +16,7 @@ This website is my place to think, somewhere between a journal and a conversatio
 
 <div class="secth">Around here</div>
 
-<div class="tastes">
+<div class="blurbs">
   <div>
     <h3><a href="{{ site.baseurl }}/blog">Writing</a></h3>
     <p>On suppressed conflict turning into resentment, why memory matters more than what happened, and why nobody is happy in the ride hailing business.</p>
