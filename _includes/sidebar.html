@@ -12,18 +12,17 @@
   <nav class="sb-nav" aria-label="Sections">
     <div class="sb-prim">
       <a href="{{ site.baseurl }}/blog"{% if page.url contains "/blog" or page.collection == "notes" %} class="cur"{% endif %}>Writing</a>
-      <a href="{{ site.baseurl }}/now"{% if page.url == "/now" %} class="cur"{% endif %}>Now</a>
+      <a href="{{ site.baseurl }}/orrery"{% if page.url contains "orrery" %} class="cur"{% endif %}>Orrery</a>
       <a href="{{ site.baseurl }}/about"{% if page.url == "/about" %} class="cur"{% endif %}>About</a>
     </div>
 
     <div class="sb-grp">Made</div>
     <div class="sb-subs">
-      <a href="{{ site.baseurl }}/orrery"{% if page.url contains "orrery" %} class="cur"{% endif %}>Orrery</a><s>&middot;</s>
       <a class="ext" href="https://bloom.rohanmahnot.space">Bloom</a><s>&middot;</s>
       <a class="ext" href="https://www.are.na/rohan-mahnot-rh85hxg6yum/project-monet-oeekarcnrdy">Monet</a>
     </div>
 
-    <div class="sb-grp">Tastes</div>
+    <div class="sb-grp">Off the clock</div>
     <div class="sb-subs">
       <a href="{{ site.baseurl }}/bookshelf"{% if page.url == "/bookshelf" %} class="cur"{% endif %}>Shelf</a><s>&middot;</s>
       <a href="{{ site.baseurl }}/thoughts/on-coffee"{% if page.url contains "on-coffee" %} class="cur"{% endif %}>Coffee</a><s>&middot;</s>
