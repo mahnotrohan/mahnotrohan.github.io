@@ -156,6 +156,8 @@ body.reader-open #hdr{right:var(--reader-w);}
 #rbody::-webkit-scrollbar{width:6px;}
 #rbody::-webkit-scrollbar-thumb{background:var(--border-strong); border-radius:3px;}
 #rbody>*{max-width:66ch;}
+/* block-level children span the column; the reader width holds the measure */
+#rbody>.ideablock, #rbody>.linkrow{max-width:none;}
 .hook{font-size:18.5px; color:var(--ink-strong); line-height:1.65;
   padding-left:1em; border-left:2px solid var(--accent-dim); margin-bottom:1.1em;}
 .story{font-size:15.5px; color:var(--ink-body); margin-top:.9em;}
