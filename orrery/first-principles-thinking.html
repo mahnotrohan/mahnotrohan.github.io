@@ -77,12 +77,13 @@ body.reader-open #hdr{right:var(--reader-w);}
   transition:all var(--move-fast); white-space:nowrap;}
 .hbtn:hover{color:var(--ink); border-color:var(--ink-muted);}
 .hbtn:disabled{opacity:.35; cursor:default;}
-#navcluster{display:flex; align-items:center; gap:10px; opacity:0; pointer-events:none; transition:opacity .2s ease;
-  background:var(--surface-sunk); border:1px solid var(--border-strong); border-radius:8px; padding:3px 6px;}
+#navcluster{display:flex; align-items:center; gap:2px; opacity:0; pointer-events:none;
+  transition:opacity .2s ease;}
 #navcluster.on{opacity:1; pointer-events:auto;}
-#navcluster .hbtn{background:none; border:none; font-size:24px; font-weight:300; color:var(--ink-faint); padding:0 6px; line-height:1;}
-#navcluster .hbtn:hover{color:var(--ink-muted);}
-#navcluster .hbtn:disabled{opacity:.25;}
+#navcluster .hbtn{background:none; border:none; font-size:19px; font-weight:300;
+  color:var(--ink-faint); padding:1px 8px; line-height:1.2; border-radius:5px;}
+#navcluster .hbtn:hover{color:var(--ink); background:var(--accent-wash);}
+#navcluster .hbtn:disabled{opacity:.28; background:none;}
 
 /* viewport & sky */
 #vp{position:fixed; inset:0; cursor:grab; touch-action:none;
@@ -149,8 +150,10 @@ body.reader-open #hdr{right:var(--reader-w);}
   box-shadow:-24px 0 70px var(--shadow);}
 #reader.open{right:0;}
 #reader .top{padding:1.5em 2.2em 1em; border-bottom:1px solid var(--border); position:relative;}
-#reader .close{position:absolute; top:14px; right:16px; background:none; border:none;
-  color:var(--ink-faint); font-size:18px; cursor:pointer;}
+#reader .rtools{position:absolute; top:13px; right:15px; display:flex; align-items:center; gap:9px;}
+#reader .top .typechip{max-width:calc(100% - 108px);}
+#reader .close{background:none; border:none; padding:0 2px; line-height:1;
+  color:var(--ink-faint); font-size:17px; cursor:pointer;}
 #reader .close:hover{color:var(--ink);}
 #reader h2{font-size:24px; margin:.45em 0 .3em;}
 #reader .terrline{font-size:11.5px; color:var(--ink-faint); margin-top:2px;}
@@ -160,7 +163,18 @@ body.reader-open #hdr{right:var(--reader-w);}
 #rbody>*{max-width:66ch;}
 .hook{font-size:18.5px; color:var(--ink-strong); line-height:1.65;
   padding-left:1em; border-left:2px solid var(--accent-dim); margin-bottom:1.1em;}
-.story{font-size:15.5px; color:var(--ink-body);}
+.story{font-size:15.5px; color:var(--ink-body); margin-top:.9em;}
+/* the idea block — the idea / how it works / failure mode / description */
+.ideablock{border:1px solid var(--border); border-radius:10px;
+  background:var(--surface-sunk); overflow:hidden;}
+.ideablock .ib{padding:1.15em 1.35em; border-top:1px solid var(--border);}
+.ideablock .ib:first-child{border-top:none;}
+.ideablock .kicker{display:block; margin-bottom:.45em; color:var(--accent);}
+.ideablock .term{color:var(--ink-strong); font-weight:600; font-size:17px; display:block;}
+.ideablock .def{font-size:14.5px; color:var(--ink-soft); margin-top:.25em;}
+.ideablock .txt{font-size:15px; color:var(--ink-body);}
+.ideablock .hook{margin-bottom:0;}
+.ideablock figure.frame{background:var(--surface-raised);}
 .typechip{display:inline-block; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase;
   color:var(--ink-muted); border:1px solid var(--border-strong); border-radius:3px; padding:1px 8px;}
 details.fold{margin:1.2em 0 0; border:1px solid var(--border); border-radius:var(--r); background:var(--surface-sunk);}
@@ -186,6 +200,7 @@ details.fold .inner{padding:0 1.05em .9em; font-size:14.5px; color:var(--ink-sof
   display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:.6em 2em;}
 .lgroup .kicker{display:block; margin-bottom:.25em;}
 .lgroup a{display:block; font-size:14px; padding:.2em 0 .45em; color:var(--ink-soft); cursor:pointer; text-decoration:none;}
+.lgroup .kicker .ar{font-size:19px; line-height:1; color:var(--accent); letter-spacing:0;}
 .lgroup a .t{border-bottom:1px dotted transparent; transition:border-color var(--move-fast); color:var(--ink);}
 .lgroup a:hover .t{border-bottom-color:var(--accent);}
 .lgroup a .why{display:block; font-size:12px; color:var(--ink-faint); line-height:1.5;}
@@ -232,8 +247,8 @@ figure.frame input[type=range]{flex:1; min-width:100px; accent-color:var(--accen
   padding:.5rem 2.2em .6rem;border-top:1px solid var(--border);
   background:var(--surface-raised);flex:none;border-top-color:transparent}
 #rfoot:has(#navcluster.on){border-top-color:var(--border)}
-#reader #navcluster{background:var(--surface-sunk);border:1px solid var(--border);
-  border-radius:8px;padding:1px 5px}
+#reader #navcluster{background:var(--surface-sunk);border:1px solid var(--border-strong);
+  border-radius:7px;padding:1px 2px}
 /* Forward affordance sits on the right edge, where the thumb already is.
    Needs #rbody> to beat the (1,0,0) of `#rbody > *`. */
 #rbody>.nextbtn{width:auto;min-width:min(100%,24ch);max-width:min(100%,44ch);
@@ -271,16 +286,18 @@ html[data-theme="dark"] #astsvg line{stroke-opacity:.55}
 
 <div id="reader">
   <div class="top">
-    <button class="close" id="rClose">✕</button>
+    <div class="rtools">
+      <div id="navcluster">
+        <button class="hbtn" id="navPrev" title="previous idea">‹</button>
+        <button class="hbtn" id="navNext" title="next idea">›</button>
+      </div>
+      <button class="close" id="rClose" title="close">✕</button>
+    </div>
     <span class="typechip" id="rChip"></span>
     <h2 id="rTitle"></h2>
     <div class="terrline" id="rTerr"></div>
   </div>
   <div id="rbody"></div>
-  <div id="rfoot"><div id="navcluster">
-    <button class="hbtn" id="navPrev" title="previous idea">‹</button>
-    <button class="hbtn" id="navNext" title="next idea">›</button>
-  </div></div>
 </div>
 
 <script>
@@ -303,9 +320,10 @@ function syncSimColours(){
 syncSimColours();
 
 /* ============================================================
-   CONTENT v2 - every idea: hook → story → (sim) → mechanism
-   fold → the idea named → where it bites → you can now explain.
-   Connections: ≤4 per idea, in three plain buckets.
+   CONTENT v2 - the reader shows one block per idea, definition-first:
+   the idea (term+def) → how it works (mech) → failure mode (sowhat) →
+   description (hook → story → sim).
+   Connections: ≤4 per idea, as arrows — ← builds on, → leads to, ▶ see it live.
    ============================================================ */
 const N = {
 
@@ -903,9 +921,13 @@ function lod(){
    ============================================================ */
 let focusId = null, stopSim = null;
 
-function linkGroup(kicker, items){
+const REL = {builds:{glyph:'\u2190', label:'builds on'},
+             leads: {glyph:'\u2192', label:'leads to'},
+             live:  {glyph:'\u25B6', label:'see it live'}};
+function linkGroup(rel, items){
   if (!items.length) return '';
-  return `<div class="lgroup"><span class="kicker">${kicker}</span>
+  const r = REL[rel];
+  return `<div class="lgroup"><span class="kicker" title="${r.label}"><span class="ar">${r.glyph}</span></span>
     ${items.map(([t,why])=>`<a data-t="${t}"><span class="t">${N[t].title}</span>
       <span class="why">${why}</span></a>`).join('')}
   </div>`;
@@ -922,17 +944,22 @@ function openIdea(id){
   document.getElementById('rTerr').textContent = terrOf(id) + (SEQ[id]?` · step ${SEQ[id]} of ${TOUR.length}`:'');
   const nextId = SEQ[id] && SEQ[id] < TOUR.length ? TOUR[SEQ[id]] : null;
   document.getElementById('rbody').innerHTML = `
-    <div class="hook">${n.hook}</div>
-    <div class="story">${n.story}</div>
-    ${n.sim ? simHTML(n.sim) : ''}
-    ${n.mech ? `<details class="fold"><summary>How it actually works</summary><div class="inner">${n.mech}</div></details>` : ''}
-    <div class="named"><span class="kicker">the idea, named</span>
-      <b>${n.term}</b><div class="def">${n.def}</div></div>
-    <div class="sowhat"><span class="kicker">where it bites</span>${n.sowhat}</div>
+    <div class="ideablock">
+      <section class="ib"><span class="kicker">the idea</span>
+        <b class="term">${n.term}</b><div class="def">${n.def}</div></section>
+      ${n.mech ? `<section class="ib"><span class="kicker">how it works</span>
+        <div class="txt">${n.mech}</div></section>` : ''}
+      <section class="ib"><span class="kicker">failure mode</span>
+        <div class="txt">${n.sowhat}</div></section>
+      <section class="ib"><span class="kicker">description</span>
+        <div class="hook">${n.hook}</div>
+        <div class="story">${n.story}</div>
+        ${n.sim ? simHTML(n.sim) : ''}</section>
+    </div>
     <div class="linkrow">
-      ${linkGroup('builds on', n.builds)}
-      ${linkGroup('leads to', n.leads)}
-      ${linkGroup('see it live', n.live)}
+      ${linkGroup('builds', n.builds)}
+      ${linkGroup('leads', n.leads)}
+      ${linkGroup('live', n.live)}
     </div>
     ${nextId ? `<button class="nextbtn" data-t="${nextId}"><span class="k">next in the flow · ${SEQ[nextId]} of ${TOUR.length}</span>${N[nextId].title}<span class="arr">→</span></button>`
              : (SEQ[id]===TOUR.length ? `<button class="nextbtn" id="finishBtn"><span class="k">end of the flow</span>Back to the chart<span class="arr">↑</span></button>` : '')}`;
@@ -966,9 +993,9 @@ function highlight(id){
   const n = N[id];
   const nb = new Set([id]);
   const conns = [
-    ...n.builds.map(([t])=>({t, lab:'builds on', into:true})),
-    ...n.leads.map(([t])=>({t, lab:'leads to', into:false})),
-    ...n.live.map(([t])=>({t, lab:'see it live', into:false}))
+    ...n.builds.map(([t])=>({t, lab:REL.builds.glyph, title:REL.builds.label, into:true})),
+    ...n.leads.map(([t])=>({t, lab:REL.leads.glyph, title:REL.leads.label, into:false})),
+    ...n.live.map(([t])=>({t, lab:REL.live.glyph, title:REL.live.label, into:false}))
   ];
   conns.forEach(c=>nb.add(c.t));
   ALL.forEach(x=>{
@@ -1003,6 +1030,7 @@ function highlight(id){
     lbl.style.left = (.25*from.x+.5*cx+.25*to.x)+'px';
     lbl.style.top = (.25*from.y+.5*cy+.25*to.y)+'px';
     lbl.textContent = c.lab;
+    lbl.title = c.title;
     lbl.addEventListener('click', e=>{ e.stopPropagation(); openIdea(c.t); });
     world.appendChild(lbl);
     tlabels.push(lbl);
@@ -1065,11 +1093,20 @@ function simHTML(kind){
     <figcaption>${caps[kind]}</figcaption>
   </figure>`;
 }
+/* Canvas backing store follows the device pixel ratio, so canvas text stays
+   crisp in the ~570px reader column. Sims still draw in logical 700-wide units. */
+const _DPR = Math.max(1, Math.min(2, (typeof devicePixelRatio === 'number' ? devicePixelRatio : 1) || 1));
+function fitCanvas(cv, w, h){
+  cv.width = Math.round(w*_DPR); cv.height = Math.round(h*_DPR);
+  const ctx = cv.getContext('2d');
+  if (ctx.setTransform) ctx.setTransform(_DPR,0,0,_DPR,0,0);
+  return ctx;
+}
 const SIMS = {};
 
 SIMS.trace = fig=>{
-  const cv=fig.querySelector('canvas'); cv.width=700; cv.height=400;
-  const ctx=cv.getContext('2d');
+  const cv=fig.querySelector('canvas');
+  const ctx=fitCanvas(cv,700,400);
   const W=700,H=400;
   const nodes=[
     {x:565,y:150,l1:"your belief",l2:"“this is just how it's done”"},
@@ -1127,8 +1164,8 @@ SIMS.trace = fig=>{
 };
 
 SIMS.drill = fig=>{
-  const cv=fig.querySelector('canvas'); cv.width=700; cv.height=460;
-  const ctx=cv.getContext('2d');
+  const cv=fig.querySelector('canvas');
+  const ctx=fitCanvas(cv,700,460);
   const W=700,H=460;
   const layers=[
     {t:"“I need a lot of capital to get started.”",s:"feels like a fact",kind:"claim"},
@@ -1192,8 +1229,8 @@ SIMS.drill = fig=>{
 };
 
 SIMS.travel = fig=>{
-  const cv=fig.querySelector('canvas'); cv.width=700; cv.height=430;
-  const ctx=cv.getContext('2d');
+  const cv=fig.querySelector('canvas');
+  const ctx=fitCanvas(cv,700,430);
   const W=700,H=430,NC=8;
   let prog=0,factsChanged=false,raf=null,running=false;
   const colX=i=>70+i*(W-120)/(NC-1);
