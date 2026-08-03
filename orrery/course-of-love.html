@@ -1,0 +1,1495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+/* Theme is shared with the main site: same origin, same localStorage key. */
+(function(){try{var t=localStorage.getItem('theme');
+if(!t)t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+document.documentElement.setAttribute('data-theme',t);}
+catch(e){document.documentElement.setAttribute('data-theme','light');}})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<title>The Course of Love - Orrery</title>
+<style>
+:root{
+  /* site parity: --ground/--surface-* mirror the main site's --bg/--bg-2/--chip */
+  --ground:#fbf8f3; --surface-sunk:#f2ede4; --surface-raised:#fdfcf9;
+  --border:#e3dccf; --border-strong:#d2c8b5;
+  --ink:#211f1c; --ink-strong:#14120f; --ink-muted:#5c5751; --ink-faint:#8c867f;
+  --accent:#8f6220; --accent-dim:#c2a47c; --accent-wash:rgba(143,98,32,0.08);
+  --accent-rgb:143,98,32;
+  --font:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --r:4px; --reader-w:min(760px, 58vw); --move-fast:150ms ease;
+  --ink-body:#2b2823; --ink-soft:#332f29;
+  --hdr-fade:linear-gradient(180deg, rgba(251,248,243,.96), rgba(251,248,243,.75), transparent);
+  --vp-bg:radial-gradient(ellipse at 50% 40%, #fdfbf7 0%, #fbf8f3 55%, #f2ede4 100%);
+  --btn-bg:rgba(253,252,249,.92);
+  --line-soft:rgba(33,31,28,0.10); --line-flow:rgba(143,98,32,0.45);
+  --sim-ink:#3a352e; --sim-gray:#8c867f; --sim-faint:#b3ac9f;
+  --sim-amber:#8f6220; --sim-sunk:#f2ede4; --sim-brd:#ddd4c3;
+  --grid-1:rgba(110,95,65,.13); --grid-2:rgba(110,95,65,.07);
+  --shadow:rgba(90,75,50,.16);
+}
+
+/* Night sky, sharing the main site's dark surfaces exactly. */
+html[data-theme="dark"]{
+  --ground:#1a1a1a; --surface-sunk:#232322; --surface-raised:#262523;
+  --border:#2e2e2e; --border-strong:#3e3e3b;
+  --ink:#e8e6e3; --ink-strong:#f5f3f0; --ink-muted:#a5a09a; --ink-faint:#7d7873;
+  --accent:#d9a25e; --accent-dim:#8b6c41; --accent-wash:rgba(217,162,94,0.10);
+  --accent-rgb:217,162,94;
+  --ink-body:#dddad5; --ink-soft:#d3cfc9;
+  --hdr-fade:linear-gradient(180deg, rgba(26,26,26,.96), rgba(26,26,26,.75), transparent);
+  --vp-bg:radial-gradient(ellipse at 50% 40%, #202020 0%, #1a1a1a 55%, #141414 100%);
+  --btn-bg:rgba(38,37,35,.92);
+  --line-soft:rgba(232,230,227,0.10); --line-flow:rgba(217,162,94,0.45);
+  --sim-ink:#e8e6e3; --sim-gray:#9d988f; --sim-faint:#6b6660;
+  --sim-amber:#d9a25e; --sim-sunk:#232322; --sim-brd:#393936;
+  --grid-1:rgba(210,203,190,.09); --grid-2:rgba(210,203,190,.045);
+  --shadow:rgba(0,0,0,.5);
+}
+html{color-scheme:light}
+html[data-theme="dark"]{color-scheme:dark}
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{height:100%; overflow:hidden; background:var(--ground); color:var(--ink);
+  font-family:var(--font); font-size:15.5px; line-height:1.75; overscroll-behavior:none;}
+h1,h2,h3{color:var(--ink-strong); font-weight:600; line-height:1.3;}
+.kicker{font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-muted); font-weight:500;}
+
+/* header - all navigation lives top right */
+#hdr{position:fixed; top:0; left:0; right:0; z-index:40; height:56px;
+  display:flex; align-items:center; gap:1.1rem; padding:0 1.4rem;
+  background:var(--hdr-fade);
+  pointer-events:none; transition:right .3s cubic-bezier(.25,.7,.3,1);}
+body.reader-open #hdr{right:var(--reader-w);}
+#hdr>*{pointer-events:auto;}
+#hdr .t{font-size:15px; font-weight:600; color:var(--ink-strong);}
+#hdr .sub{font-size:11.5px; color:var(--ink-muted);}
+#hdr .spacer{flex:1;}
+#count{font-size:12px; color:var(--ink-faint); white-space:nowrap;}
+.hbtn{background:var(--btn-bg); border:1px solid var(--border-strong); color:var(--ink-muted);
+  font-family:var(--font); font-size:12.5px; padding:6px 13px; border-radius:var(--r); cursor:pointer;
+  transition:all var(--move-fast); white-space:nowrap;}
+.hbtn:hover{color:var(--ink); border-color:var(--ink-muted);}
+.hbtn:disabled{opacity:.35; cursor:default;}
+#navcluster{display:flex; align-items:center; gap:10px; opacity:0; pointer-events:none; transition:opacity .2s ease;
+  background:var(--surface-sunk); border:1px solid var(--border-strong); border-radius:8px; padding:3px 6px;}
+#navcluster.on{opacity:1; pointer-events:auto;}
+#navcluster .hbtn{background:none; border:none; font-size:24px; font-weight:300; color:var(--ink-faint); padding:0 6px; line-height:1;}
+#navcluster .hbtn:hover{color:var(--ink-muted);}
+#navcluster .hbtn:disabled{opacity:.25;}
+
+/* viewport & sky */
+#vp{position:fixed; inset:0; cursor:grab; touch-action:none;
+  background:var(--vp-bg);}
+#vp.dragging{cursor:grabbing;}
+#vp.dragging, #vp.dragging *{user-select:none;}
+#world{position:absolute; top:0; left:0; width:2750px; height:1750px;
+  transform-origin:0 0; will-change:transform;}
+#world::before{content:''; position:absolute; inset:0; pointer-events:none;
+  background-image:radial-gradient(circle, var(--grid-1) 1.2px, transparent 1.2px),
+                   radial-gradient(circle, var(--grid-2) 1px, transparent 1px);
+  background-size:380px 380px, 150px 150px;
+  background-position:0 0, 70px 100px; opacity:.8;}
+
+/* constellation names */
+.tlab{position:absolute; pointer-events:auto; cursor:pointer; user-select:none; text-align:center;}
+.tlab .big{font-size:40px; font-weight:500; letter-spacing:.5em; line-height:1.3;
+  text-transform:uppercase; white-space:nowrap;}
+.tlab .sum{text-shadow:0 0 5px var(--ground),0 0 5px var(--ground),0 0 3px var(--ground);
+  font-size:19px; color:var(--ink-muted); margin-top:.5em; letter-spacing:.18em; text-transform:uppercase;}
+.tlab:hover .big{filter:brightness(1.35);}
+.tlab.core .big{font-size:19px; letter-spacing:.26em;}
+.tlab.core .sum{font-size:9px; letter-spacing:.14em;}
+.tlab.core .big{text-shadow:0 0 6px var(--ground),0 0 6px var(--ground),0 0 3px var(--ground);}
+.mk.coredot{width:auto; gap:0;}
+.mk.coredot .dot{box-shadow:0 0 0 3px rgba(var(--accent-rgb),0.14);}
+
+/* stars */
+.mk{position:absolute; cursor:pointer; user-select:none;
+  display:flex; gap:14px; width:330px; align-items:flex-start;}
+.mk .dot{border-radius:50%; flex-shrink:0;
+  transition:transform .2s ease, box-shadow .4s ease, opacity .4s ease, background .4s ease;}
+.mk:hover .dot{transform:scale(1.3);}
+.mk .dtext{min-width:0; padding-top:1px;}
+.mk .lbl{text-shadow:0 0 5px var(--ground),0 0 5px var(--ground),0 0 3px var(--ground),0 0 3px var(--ground);
+  font-size:19px; color:var(--ink); font-weight:500; line-height:1.3;}
+.mk .lbl .seq{font-size:12px; color:var(--ink-faint); font-weight:400; margin-right:.5em;}
+.mk .ess{text-shadow:0 0 5px var(--ground),0 0 5px var(--ground),0 0 3px var(--ground),0 0 3px var(--ground);
+  font-size:14px; color:var(--ink-muted); line-height:1.45; margin-top:4px; max-width:290px;
+  opacity:0; transition:opacity .3s ease;}
+.mk.showess .ess{opacity:1;}
+.mk .sims-badge{font-size:12px; color:var(--accent-dim); margin-top:3px; display:none;}
+.mk.hasim .sims-badge{display:block;}
+.mk.focused .dot{transform:scale(1.35);}
+.mk.focused .lbl{color:var(--ink-strong);}
+.mk.neighbor .lbl{color:var(--ink-strong);}
+.mk.dimmed{opacity:.35;}
+
+/* connection overlay - few, directional, labeled plainly */
+#tsvg, #astsvg, #flowsvg{position:absolute; top:0; left:0; pointer-events:none; overflow:visible;}
+@keyframes dashdrift{to{stroke-dashoffset:-64;}}
+.tline{animation:dashdrift 6s linear infinite;}
+.tlabel{position:absolute; transform:translate(-50%,-50%); background:var(--ground);
+  border:1px solid var(--accent-dim); color:var(--accent); border-radius:12px;
+  font-size:12px; letter-spacing:.06em; padding:2px 11px; white-space:nowrap; cursor:pointer;
+  pointer-events:auto; transition:background var(--move-fast); text-transform:uppercase;}
+.tlabel:hover{background:var(--accent-wash);}
+
+/* ---------- READER ---------- */
+#reader{position:fixed; top:0; right:calc(-1 * var(--reader-w) - 20px); width:var(--reader-w);
+  height:100%; z-index:45; background:var(--surface-raised);
+  border-left:1px solid var(--border); display:flex; flex-direction:column;
+  transition:right .3s cubic-bezier(.25,.7,.3,1);
+  box-shadow:-24px 0 70px var(--shadow);}
+#reader.open{right:0;}
+#reader .top{padding:1.5em 2.2em 1em; border-bottom:1px solid var(--border); position:relative;}
+#reader .close{position:absolute; top:14px; right:16px; background:none; border:none;
+  color:var(--ink-faint); font-size:18px; cursor:pointer;}
+#reader .close:hover{color:var(--ink);}
+#reader h2{font-size:24px; margin:.45em 0 .3em;}
+#reader .terrline{font-size:11.5px; color:var(--ink-faint); margin-top:2px;}
+#rbody{flex:1; overflow-y:auto; padding:1.6em 2.2em 2.5em;}
+#rbody::-webkit-scrollbar{width:6px;}
+#rbody::-webkit-scrollbar-thumb{background:var(--border-strong); border-radius:3px;}
+#rbody>*{max-width:66ch;}
+.hook{font-size:18.5px; color:var(--ink-strong); line-height:1.65;
+  padding-left:1em; border-left:2px solid var(--accent-dim); margin-bottom:1.1em;}
+.story{font-size:15.5px; color:var(--ink-body);}
+.typechip{display:inline-block; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-muted); border:1px solid var(--border-strong); border-radius:3px; padding:1px 8px;}
+details.fold{margin:1.2em 0 0; border:1px solid var(--border); border-radius:var(--r); background:var(--surface-sunk);}
+details.fold summary{cursor:pointer; padding:.6em 1.05em; color:var(--ink-muted);
+  font-size:13px; list-style:none; user-select:none;}
+details.fold summary::-webkit-details-marker{display:none;}
+details.fold summary::before{content:'+  '; color:var(--accent); font-weight:500;}
+details.fold[open] summary::before{content:'−  ';}
+details.fold summary:hover{color:var(--ink);}
+details.fold .inner{padding:0 1.05em .9em; font-size:14.5px; color:var(--ink-soft);}
+.named{margin-top:1.5em; background:var(--surface-sunk); border:1px solid var(--border);
+  border-radius:8px; padding:1em 1.3em;}
+.named .kicker{display:block; margin-bottom:.35em;}
+.named b{color:var(--ink-strong); font-weight:600; font-size:16px;}
+.named .def{font-size:14.5px; color:var(--ink-soft); margin-top:.2em;}
+.sowhat{margin-top:1.4em; font-size:15px; color:var(--ink-body);}
+.sowhat .kicker{display:block; margin-bottom:.3em;}
+.closure{margin-top:1.5em; border:1px solid var(--accent-dim); border-radius:8px;
+  background:var(--accent-wash); padding:1em 1.3em;}
+.closure .kicker{color:var(--accent); display:block; margin-bottom:.3em;}
+.closure .txt{font-size:14.5px; color:var(--ink-body); line-height:1.65;}
+.linkrow{margin-top:1.6em; border-top:1px solid var(--border); padding-top:1em;
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:.6em 2em;}
+.lgroup .kicker{display:block; margin-bottom:.25em;}
+.lgroup a{display:block; font-size:14px; padding:.2em 0 .45em; color:var(--ink-soft); cursor:pointer; text-decoration:none;}
+.lgroup a .t{border-bottom:1px dotted transparent; transition:border-color var(--move-fast); color:var(--ink);}
+.lgroup a:hover .t{border-bottom-color:var(--accent);}
+.lgroup a .why{display:block; font-size:12px; color:var(--ink-faint); line-height:1.5;}
+.nextbtn{margin-top:1.8em; width:100%; max-width:66ch; text-align:left;
+  background:var(--surface-sunk); border:1px solid var(--border-strong); border-radius:8px;
+  color:var(--ink); font-family:var(--font); font-size:14.5px; padding:.9em 1.3em; cursor:pointer;
+  transition:all var(--move-fast);}
+.nextbtn:hover{border-color:var(--accent-dim); background:var(--accent-wash);}
+.nextbtn .k{color:var(--ink-faint); font-size:11px; letter-spacing:.12em; text-transform:uppercase;
+  display:block; margin-bottom:.15em;}
+.nextbtn .arr{color:var(--accent); float:right;}
+
+/* sim figure */
+figure.frame{background:var(--surface-sunk); border:1px solid var(--border); border-radius:var(--r);
+  margin:1.3em 0 0; overflow:hidden;}
+figure.frame canvas{width:100%; display:block;}
+figure.frame .controls{display:flex; gap:8px; padding:8px 12px; border-top:1px solid var(--border);
+  align-items:center; flex-wrap:wrap;}
+figure.frame .controls .cl{font-size:11.5px; color:var(--ink-faint);}
+figure.frame figcaption{padding:7px 13px 10px; font-size:12.5px; color:var(--ink-muted); line-height:1.55;}
+.ghost{background:none; border:1px solid var(--border-strong); color:var(--ink-muted);
+  font-family:var(--font); font-size:12px; padding:3px 11px; border-radius:var(--r); cursor:pointer;
+  transition:all var(--move-fast);}
+.ghost:hover{color:var(--ink); border-color:var(--ink-muted);}
+.ghost.active{color:var(--accent); border-color:var(--accent-dim); background:var(--accent-wash);}
+figure.frame input[type=range]{flex:1; min-width:100px; accent-color:var(--accent);}
+
+@media(max-width:760px){ :root{--reader-w:100vw;} }
+
+/* ---- site exits + chart switcher (present on every chart) ---- */
+#hdr .sub a{color:var(--accent);text-decoration:none;border-bottom:1px solid transparent}
+#hdr .sub a:hover{border-bottom-color:var(--accent)}
+#hdr .sub s{text-decoration:none;color:var(--ink-faint);opacity:.75;margin:0 4px}
+#chartSwitch{-webkit-appearance:none;appearance:none;padding-right:26px;max-width:190px;
+  background-image:linear-gradient(45deg,transparent 50%,var(--ink-muted) 50%),
+                   linear-gradient(135deg,var(--ink-muted) 50%,transparent 50%);
+  background-position:calc(100% - 14px) 52%,calc(100% - 9.5px) 52%;
+  background-size:5px 5px,5px 5px;background-repeat:no-repeat}
+#chartSwitch:hover{color:var(--ink-strong);border-color:var(--accent-dim)}
+@media (max-width:700px){#hdr .sub{font-size:10.5px}#chartSwitch{max-width:118px}}
+
+/* ---- reader footer: step nav lives bottom-right, inside the panel ---- */
+#rfoot{display:flex;align-items:center;justify-content:flex-end;gap:.75rem;
+  padding:.5rem 2.2em .6rem;border-top:1px solid var(--border);
+  background:var(--surface-raised);flex:none;border-top-color:transparent}
+#rfoot:has(#navcluster.on){border-top-color:var(--border)}
+#reader #navcluster{background:var(--surface-sunk);border:1px solid var(--border);
+  border-radius:8px;padding:1px 5px}
+/* Forward affordance sits on the right edge, where the thumb already is.
+   Needs #rbody> to beat the (1,0,0) of `#rbody > *`. */
+#rbody>.nextbtn{width:auto;min-width:min(100%,24ch);max-width:min(100%,44ch);
+  margin-left:auto;margin-right:0;display:block}
+@media (max-width:700px){
+  #rfoot{padding:.45rem 1.2em .55rem}
+  #rbody>.nextbtn{max-width:100%}
+}
+
+/* ---- theming: lines, discs, marker, toggle ---- */
+.lnk-base{stroke:var(--line-soft)}
+.lnk-flow{stroke:var(--line-flow)}
+.disc-bg{fill:var(--surface-sunk)}
+#tsvg marker path{fill:var(--accent)}
+/* band hues are mid-tone and kept in both themes; lift them on dark ground */
+html[data-theme="dark"] #tsvg line,
+html[data-theme="dark"] #astsvg line{stroke-opacity:.55}
+#themeBtn{font-size:14px;line-height:1;padding:5px 11px}
+</style>
+</head>
+<body>
+
+<div id="hdr">
+  <div>
+    <div class="t">The Course of Love</div>
+    <div class="sub"><a href="/">Rohan's space</a><s>/</s><a href="/orrery">Orrery</a></div>
+  </div>
+  <div class="spacer"></div>
+  <select class="hbtn" id="chartSwitch" aria-label="Jump to another chart"><option value="">Other charts&hellip;</option><option value="/orrery/building-taste.html">Building Taste</option><option value="/orrery/chaos-luck-ergodicity.html">Chaos, Luck &amp; Ergodicity</option><option value="/orrery/decision-theory.html">Decision Theory</option><option value="/orrery/first-principles-thinking.html">First Principles Thinking</option><option value="/orrery/how-to-know-a-person.html">How to Know a Person</option><option value="/orrery/interpersonal-communication.html">Interpersonal &amp; Communication Skills</option><option value="/orrery/nonviolent-communication.html">Nonviolent Communication</option><option value="/orrery/systems-thinking.html">Systems Thinking</option><option value="/orrery/the-power-law.html">The Power Law</option><option value="/orrery/the-school-of-life.html">The School of Life</option><option value="/orrery/thinking-fast-and-slow.html">Thinking, Fast and Slow</option><option value="/orrery/thinking-in-bets.html">Thinking in Bets</option><option value="/orrery/why-we-sleep.html">Why We Sleep</option></select>
+  <button class="hbtn" id="themeBtn" type="button" title="Light / dark" aria-label="Toggle light or dark">◐</button>
+  <button class="hbtn" id="overviewBtn">Overview&nbsp;·&nbsp;Esc</button>
+</div>
+
+<div id="vp"><div id="world"></div></div>
+
+<div id="reader">
+  <div class="top">
+    <button class="close" id="rClose">✕</button>
+    <span class="typechip" id="rChip"></span>
+    <h2 id="rTitle"></h2>
+    <div class="terrline" id="rTerr"></div>
+  </div>
+  <div id="rbody"></div>
+  <div id="rfoot"><div id="navcluster">
+    <button class="hbtn" id="navPrev" title="previous idea">‹</button>
+    <button class="hbtn" id="navNext" title="next idea">›</button>
+  </div></div>
+</div>
+
+<script>
+'use strict';
+
+let INKC, GRAY, FAINT, AMBER, SUNK, BRD;
+let RGB_INK, RGB_GRAY, RGB_FAINT, RGB_AMBER;
+/* Canvas takes no var(), so pull the resolved values and refresh on theme flip.
+   Animated sims pick these up on their next frame; the open one is remounted. */
+function syncSimColours(){
+  const cs = getComputedStyle(document.documentElement);
+  const v = n => cs.getPropertyValue(n).trim();
+  const trip = h => { h = h.replace('#','').trim();
+    if (h.length === 3) h = h.split('').map(c=>c+c).join('');
+    return [0,2,4].map(i=>parseInt(h.slice(i,i+2),16)).join(','); };
+  INKC=v('--sim-ink'); GRAY=v('--sim-gray'); FAINT=v('--sim-faint');
+  AMBER=v('--sim-amber'); SUNK=v('--sim-sunk'); BRD=v('--sim-brd');
+  RGB_INK=trip(INKC); RGB_GRAY=trip(GRAY); RGB_FAINT=trip(FAINT); RGB_AMBER=trip(AMBER);
+}
+syncSimColours();
+
+/* ============================================================
+   CONTENT v2 - every idea: hook → story → (sim) → mechanism
+   fold → the idea named → where it bites → you can now explain.
+   Connections: ≤4 per idea, in three plain buckets.
+   ============================================================ */
+const N = {
+
+a1:{type:"axiom", title:"Love is a skill", x:1259, y:512,
+  ess:"Not a feeling you have. A competence you get better at, or don’t.",
+  hook:"You were taught to drive, to swim, to add fractions. Who taught you how to be married?",
+  story:"Nobody did. We treat love as an instinct requiring no instruction — which is why de Botton’s fifteen-year-old Rabih, staring at a French girl by a hotel water slide near Málaga, believes he already knows all he needs to. The book’s thesis is the sentence he will spend decades earning: “love is a skill rather than an enthusiasm.”",
+  mech:"Everything rests here. The feelings that start a relationship are not the capacities that sustain one, and the first actively obstruct the second: Rabih “will surmise that love can endure only when one is unfaithful to its beguiling opening ambitions, and that, for his relationships to work, he will need to give up on the feelings that got him into them in the first place.” Skills, unlike enthusiasms, can be named, practised and taught — which is the only reason a chart like this can exist. The therapist Mrs Fairbairn is described as “the champion of a truth… woefully prone to get lost in the surrounding noise: that love is a skill, not just an enthusiasm.”",
+  term:"Love as a skill", def:"a competence you can be bad at, get better at, and be taught — not a state you fall into.",
+  sowhat:"If love is a skill, then trouble in your relationship is not a verdict on whether you picked the right person. It is a curriculum, and you are behind on the reading.",
+  explain:"why difficulty in a relationship is evidence of a missing skill rather than a missing soul mate.",
+  builds:[], leads:[["b1-laplace","the feeling that convinces us no skill is needed"],["b3-timeline","and why the skill is so hard to teach each other"]], live:[["b4-fence","the skill, itemised as nine criteria"]]},
+
+a2:{type:"axiom", title:"Romanticism is recent", x:1057, y:627,
+  ess:"A few centuries old in its authority, and running inside you like an operating system.",
+  hook:"Where did you learn what love is supposed to feel like — and would anyone in 1650 have ranked that feeling as you do?",
+  story:"They would have recognised the feeling and filed it very differently. “The Romantic faith must always have existed, but only in the past few centuries has it been judged anything more than an illness; only recently has the search for a soul mate been allowed to take on the status of something close to the purpose of life.” What is modern is not the emotion but its promotion — from symptom to purpose.",
+  mech:"Its central manoeuvre is idealism rerouted from gods onto human beings. De Botton also names why it won: reason’s own crimes. “The prestige of instinct is the legacy of a collective traumatized reaction against too many centuries of unreasonable ‘reason.’” Centuries of coerced, mercenary, dynastic marriage discredited analysis so completely that feeling was granted a permanent exemption from justifying itself — which is why it is still faintly rude to ask an engaged couple <em>why</em>. It also inherited its content: Christianity’s insistence that sex belong to love was absorbed into Romanticism once shorn of its theology, which is where monogamy’s prestige comes from — policed still by “that most dispiriting, caustic and shameful of all epithets: <em>pervert</em>.”",
+  term:"Romanticism", def:"the modern ideology that love is an instinct, that the right person needs no explanations, and that finding them is the point of a life.",
+  sowhat:"Most of what you “just feel” about love is inherited software, not intuition. Software can be inspected — and some of it uninstalled.",
+  explain:"why your deepest convictions about love have a publication date.",
+  builds:[], leads:[["b1-laplace","its first and most powerful promise"],["b1-sensitive","and its most expensive one"]], live:[["b1-pendulum","watch where its stories stop"]]},
+
+a3:{type:"axiom", title:"No one arrives undamaged", x:1462, y:627,
+  ess:"Everyone was less than ideally parented. Everyone. Including you.",
+  hook:"Every partner you have had has let you down. What are the odds the next one is different?",
+  story:"Nil, and not because of your luck. “The facts of life have deformed all of our natures. No one among us has come through unscathed. We were all (necessarily) less than ideally parented: we fight rather than explain, we nag rather than teach, we fret instead of analyzing our worries, we lie and scatter blame where it doesn’t belong.”",
+  mech:"De Botton takes the damage as given rather than arguing for it. Inside the novel, his invented therapist’s invented textbook reports that “a third of the population of Western Europe and North America is estimated to have experienced some form of early parental disappointment (see C. B. Vassily, 2013)” — a fictional citation, and a deliberate one: he builds a fake authority partly to dramatise how such authority feels. The consequence is combinatorial: “The chances of a perfect human emerging from the perilous gauntlet are nonexistent.” Their particular way of being maddening “won’t be immediately apparent — it could take as long as a couple of years — but its existence can be theoretically assumed from the start.”",
+  term:"The universal deformation", def:"childhood necessarily leaves everyone with some incapacity for love; the only variable is which one.",
+  sowhat:"Stop auditioning candidates for undamagedness — the category is empty. Ask instead which specific damage you can live alongside, and warn people clearly about yours.",
+  explain:"why “they turned out to be flawed” is information about the species, not about your judgement.",
+  builds:[], leads:[["b1-lorenz-story","and what the damage makes attractive"]], live:[["b2-logistic","the two shapes the damage usually takes"]]},
+
+a4:{type:"axiom", title:"We want two incompatible things", x:1259, y:771,
+  ess:"Security and adventure — two appetites, permanently, and they do not fit.",
+  hook:"You want to be safe and you want to be surprised. Which of those are you prepared to give up?",
+  story:"Neither, which is the problem. “Our romantic lives are fated to be sad and incomplete, because we are creatures driven by two essential desires which point powerfully in entirely opposing directions.”",
+  mech:"This is why skill cannot make love painless — only survivable. De Botton lets Rabih arrive at it as a discovery rather than stating it as doctrine: “Adventure and security are irreconcilable, he sees. A loving marriage and children kill erotic spontaneity, and an affair kills a marriage.” Note that the axiom is about appetites, not arrangements: no rearrangement of a life abolishes either want. What follows from it — the invariant cost, and what to do about it — is the fourth section’s business.",
+  term:"Irreconcilable desires", def:"two permanent, opposed appetites — for safety and for novelty — that no arrangement satisfies simultaneously.",
+  sowhat:"You are not choosing between happiness and suffering. You are “deciding exactly what kind of suffering we want to endure.”",
+  explain:"why the search for an arrangement with no cost is itself the thing causing the pain.",
+  builds:[], leads:[["b4-danger","and why the obvious escape hatch fails"]], live:[["b4-signal","the trade-off, drawn"]]},
+
+"b1-laplace":{type:"story · phenomenon", title:"The soul mate", x:404, y:355,
+  ess:"Certainty about a stranger, prized precisely because it skipped thinking.",
+  hook:"Rabih is fifteen. He never speaks a single word to her. Why does he feel he knows her completely?",
+  story:"By a water slide half an hour east of Málaga, three years after his mother’s death, he sees a girl in a striped sailor top and lemon-yellow flip-flops — Alice Saure of Clermont-Ferrand, whose name he gets from the hotel guest book. “It is as if he has in some way always known her, as if she holds out an answer to his very existence and, especially, to a zone of confused pain inside him.” They never exchange a word; she leaves at dawn. And this, de Botton says, is when the marriage starts: “A marriage doesn’t begin with a proposal, or even an initial meeting. It begins far earlier, when the idea of love is born, and more specifically the dream of a soul mate.”",
+  mech:"“Objective knowledge doesn’t come into it. What matters instead is intuition, a spontaneous feeling that seems all the more accurate and worthy of respect because it bypasses the normal processes of reason.” The feeling is trusted <em>because</em> it is unreasoned. “For the Romantic, it is only the briefest of steps from a glimpse of a stranger to the formulation of a majestic and substantial conclusion: that he or she may constitute a comprehensive answer to the unspoken questions of existence.” And that reverence “is the underlying central sun around which contemporary ideals of love revolve.”",
+  term:"Soul-mate certainty", def:"instant conviction about a near-stranger, held to be authoritative in proportion to how little reasoning produced it.",
+  sowhat:"Catch yourself trusting a feeling <em>because</em> it arrived unreasoned. That is the tell — and it shows up in job offers, flats and business partners too.",
+  explain:"why the most convincing feeling in love is the one with the least evidence behind it.",
+  builds:[["a2","the ideology this feeling belongs to"]], leads:[["b1-pendulum","and so every story stops here"],["b1-lorenz-story","what the certainty is recognising"]], live:[]},
+
+"b1-pendulum":{type:"phenomenon · simulation", title:"Where the story stops", sim:"attention", x:884, y:309,
+  ess:"Every love story ends at the wedding. That is where love begins.",
+  hook:"How much of a forty-year marriage does a love story actually show you?",
+  story:"“The start receives such disproportionate attention because it isn’t deemed to be just one phase among many; for the Romantic, it contains in a concentrated form everything significant about love as a whole.” Narrators either consign couples to a vague contented future “or kill them off.” Everyone asks Rabih and Kirsten how they met — rain drove them off an A720 roundabout survey into the Taj Mahal for tea and papadums. Nobody ever asks what it is like to have been married a while.",
+  mech:"De Botton’s correction is a re-dating of the whole genre: “Love stories begin not when we fear someone may be unwilling to see us again but when they decide they would have no objection to seeing us all the time.” The start also produces a category error about what is being married: “Rabih is not marrying — and therefore fixing forever — a feeling. He is marrying a person with whom, under a very particular, privileged, and fugitive set of circumstances, he has been fortunate enough to have a feeling.” Hence the diagnosis: “We seem to know far too much about how love starts, and recklessly little about how it might continue.”",
+  term:"The sacred start", def:"the courtship phase, mistaken for the whole of love because it is the only part our stories depict.",
+  sowhat:"You are navigating forty years of terrain with a map of the first six months. That is why every ordinary difficulty registers as being lost.",
+  explain:"how a storytelling convention became a false standard for your own relationship.",
+  builds:[["b1-laplace","the feeling the start is made of"]], leads:[["b1-sensitive","and what the start seems to promise"]], live:[]},
+
+"b1-sensitive":{type:"mechanism", title:"Never having to explain", x:520, y:522,
+  ess:"The belief that real love means being understood without speaking.",
+  hook:"Twenty minutes of escalating cruelty about which Ikea glasses to buy. What were they actually fighting about?",
+  story:"Fabulös or Godis. A few weeks into the new flat on Merchiston Avenue the argument turns vicious and ends in a silent drive home; they settle, eventually, on twelve Svalka tumblers. She associates plain glasses with school cafeterias and prisons; he is unnerved by anything too decorative. Underneath sits the premise: “Romanticism is a philosophy of intuitive agreement. In real love, there is no need tiresomely to articulate or spell things out.”",
+  mech:"This is the most expensive Romantic belief, because it recodes the ordinary work of a couple — explaining, negotiating, teaching, repeating yourself — as evidence that the love is wrong. We grant that trade, immigration and oncology are complicated; at home we presume ease. It is also the direct parent of the sulk, in which being asked to explain is itself the injury.",
+  term:"Intuitive agreement", def:"the assumption that a well-matched couple will see the world identically without having to say so.",
+  sowhat:"Every time you think “I shouldn’t have to tell them,” this belief is speaking. The sentence is the problem; the telling is the job.",
+  explain:"why explaining yourself feels like a failure of love instead of an act of it.",
+  builds:[["a2","the ideology it comes from"]], leads:[["b3-contingency","its purest expression: the sulk"],["b1-principle","and the question to swap in"]], live:[]},
+
+"b1-lorenz-story":{type:"mechanism", title:"Familiarity, not happiness", x:254, y:656,
+  ess:"What feels like destiny is often just the emotional weather you grew up in.",
+  hook:"Why do the balanced, kind, available ones feel faintly boring?",
+  story:"Because they feel foreign. “We believe we are seeking happiness in love, but what we are really after is familiarity” — and so, de Botton writes, “how logical, then, that we should as adults find ourselves rejecting certain candidates not because they are wrong but because they are a little too right — in the sense of seeming somehow excessively balanced, mature, understanding, and reliable — given that, in our hearts, such rightness feels foreign and unearnt.”",
+  mech:"Love recruits from the past. Rabih is drawn to Kirsten’s calm and reticence — qualities that turn out to be a fortification built after her father walked out when she was seven — and he “has described certain women he has been out on dates with as ‘boring’ when anyone else might more generously and accurately have labeled them ‘healthy.’” Alongside the search for completion (“love means admiration for qualities in the lover that promise to correct our weaknesses and imbalances”) runs something more precise: “love is a dividend of gratitude for our lover’s insight into our own confused and troubled psyche.” Attraction is partly a homing signal, and home was not, for most people, an unmixed place.",
+  term:"The familiarity template", def:"attraction tracks the emotional climate of childhood rather than the conditions for adult wellbeing.",
+  sowhat:"Ask of a powerful attraction: is this promise, or is this recognition? And check the vocabulary — how often does “boring” turn out to mean “healthy”?",
+  explain:"why the person who feels like fate may simply feel like your childhood.",
+  builds:[["a3","the childhood that set the template"]], leads:[["b1-principle","the question that gets underneath it"]], live:[]},
+
+"b1-principle":{type:"principle", title:"Ask “in what ways are you mad?”", x:716, y:679,
+  ess:"Swap the compatibility test for the craziness question.",
+  hook:"First date, one question, and “what do you do?” is a wasted turn. What do you ask?",
+  story:"De Botton’s answer arrives as a prediction about a saner future: “A few centuries from now, the level of self-knowledge that our own age judges necessary to get married might be thought puzzling if not outright barbaric. By then, a standard, wholly nonjudgmental line of inquiry — appropriate even on a first date — to which everyone would be expected to have a tolerant, good-natured and nondefensive answer, would simply be: ‘So, in what ways are you mad?’”",
+  mech:"It works by inverting what is screened for: Romanticism screens for the absence of flaws, which guarantees their later discovery and a sense of having been deceived. Two facts make the question urgent. Being single hides the answer — “the single state has a habit of promoting a mistaken self-image of normalcy” — because there is no witness to the compulsive tidying, the fury over a lost T-shirt, the work done purely to manage anxiety. And the motive for marrying is less noble than it looks: “To a shameful extent, the charm of marriage boils down to how unpleasant it is to be alone,” which is why de Botton adds a harsher second test — “the success of any relationship should be determined, not just by how happy a couple are to be together, but by how worried each partner would be about not being in a relationship at all.”",
+  term:"The madness question", def:"“So, in what ways are you mad?” — a screen for self-knowledge and non-defensiveness rather than for the absence of faults.",
+  sowhat:"Answer it in specifics yourself before you ask anyone else. If nothing comes to mind, that is the mistaken self-image of normalcy talking, not evidence.",
+  explain:"how to replace an unanswerable screening question with an answerable one.",
+  builds:[["a3","all of us have an answer to it"],["b1-sensitive","the belief it replaces"]], leads:[["b2-attractors","and what your madness usually turns out to be made of"]], live:[["b2-logistic","vocabulary for the answer"]]},
+
+"b2-logistic":{type:"mechanism · simulation", title:"Anxious attacks, avoidant withdraws", sim:"spiral", x:1837, y:233,
+  ess:"One partner closes in, one retreats — and each move confirms the other’s fear.",
+  hook:"He shouts, she goes quiet, he shouts louder — so which of them is escalating?",
+  story:"After Rabih knocks over a chair and breaks its arm over a credit-card query, they climb three flights of a gloomy tenement to Mrs Joanna Fairbairn — dark blue smock, a large helmet of tightly curled grey hair, feet a significant distance off the floor — at £75 for fifty minutes. Her own textbook names it: Bowlby’s anxious and avoidant attachment. “Up to 70 percent of patients seeking couples’ therapy will exhibit either the anxious or the avoidant mode of behavior. Very frequently, couples will contain one avoidant partner and one anxious one, with each set of responses aggravating the other in a spiral of declining trust.”",
+  mech:"The anxious party reads any silence, delay or noncommittal remark as an attack: “Inside, anxiously attached people often feel as if they were fighting for their lives — though they are typically unable to explain their fragility to those around them, who, understandably, may instead label them as cantankerous, irritable, or cruel.” The avoidant party pulls up the drawbridge, and here is the inversion that matters: “the avoidant party cares very deeply indeed, it is just that loving has come to feel far too risky.” Kirsten’s version has content, not just a shape: “Her history has taught her that men have a proclivity for overbearing behavior — and that it is a woman’s role to resist it through strength and formality.” Named in five words — “Rabih anxiously attacks; Kirsten avoidantly withdraws” — the loop then runs itself: an unconsummated evening becomes “the disguised spur to sarcastic or wounding remarks made by Rabih the next day,” which sends her further into “a sad but oddly comforting and familiar place inside her head.”",
+  term:"The anxious–avoidant spiral", def:"a self-feeding loop in which pursuit reads as aggression and withdrawal reads as contempt, so both escalate.",
+  sowhat:"Find out which of the two you are; it is the cheapest useful thing you can do this year. The book prints the three Hazan–Shaver statements — “I worry that others don’t value me as much as I value them” against “I don’t mind spending time on my own” — and they take under a minute.",
+  explain:"why the two most common defences in love are perfectly designed to provoke each other.",
+  builds:[["a3","the childhood that installs the style"]], leads:[["b2-attractors","what is underneath both moves"],["b2-principle","and what to do with the diagnosis"]], live:[]},
+
+"b2-lorenz-attractor":{type:"mechanism", title:"Which era is this?", x:2300, y:282,
+  ess:"Some reactions are correct — just decades late, and addressed to the wrong person.",
+  hook:"He asked for a hug over the phone and got car insurance and the drain. Why did that hurt so much?",
+  story:"Two years married, Rabih is on the South Shields job, in a Premier Inn “sandwiched between a women’s prison and a goods yard,” eating sweating mutton at Taybarns. His plea — “I’d pay a lot for a hug from you right now” — meets logistics, and the disappointment is out of all proportion. His own version runs the other way: a pile of dry cleaning in the hall and a disordered cutlery drawer read, by way of the hulk of the InterContinental Phoenicia and a bombed-out embassy, as the onset of civil war.",
+  mech:"“Our minds are, oddly, not always good at knowing what era they are in. They jump a little too easily, like an erstwhile victim of burglary who keeps a gun by the bed and is startled awake by every rustle.” More compactly: “There is a good deal of history in his hysteria.” The cruelty is that transference cannot be narrated from the inside — “We behave according to an archaic logic which now escapes us, following a meaning we can’t properly lay bare to those we depend on most.” So your partner’s available conclusion is the unflattering one: that you are “distinctly odd — and maybe even a little mad.”",
+  term:"Transference", def:"an emotion imported wholesale from the past and discharged onto a present person who did not earn it.",
+  sowhat:"The diagnostic is disproportion: when the size of your reaction exceeds the size of the event, ask who you are really talking to. De Botton calls the work “repatriating emotions… one of the most delicate and necessary tasks of love.”",
+  explain:"how to tell an emotion about now from an emotion about a decade you have left.",
+  builds:[["a3","the past that gets imported"]], leads:[["b2-attractors","and what it always turns out to be"]], live:[]},
+
+"b2-attractors":{type:"mechanism", title:"Under the anger, hurt", x:2069, y:401,
+  ess:"Rage and coldness are both costumes. The fact underneath is injury.",
+  hook:"Asked what it is like when he thinks his wife has let him down, Rabih drops the argument and says three words. Which?",
+  story:"“Scared. Abandoned. Helpless.” Then, with tears welling up: “I feel I’m alone. That I don’t matter. That she doesn’t give a damn about me.” Kirsten resists the reframing — “A man who screams and swears at his wife hardly seems a prime candidate to be thought of as a poor scared lambie” — so, in “one of her few more directive moments,” Fairbairn asks the question that reorganises the marriage: “Kirsten, do you think shouting, and sometimes swearing, are the actions of a man who feels strong?”",
+  mech:"The tragedy of both styles is that each conceals exactly what it is trying to communicate. Rabih’s “way of responding to his vulnerabilities takes a form that masks them entirely and seems guaranteed to alienate the person he wants so badly to be comforted by,” and Kirsten expresses disappointment “in such a way that they are guaranteed not to draw sympathy from those whose love she needs most urgently.” Neither “stays with an injury long enough truly to acknowledge or feel it, or to explain it to the person who inflicted it.” What they are is never angry or cold but “something far more basic, touching, and deserving of affection: hurt.”",
+  term:"Hurt beneath anger", def:"anger and coldness are symptoms; the underlying state, in almost every case, is injury.",
+  sowhat:"In your next fight, try saying the hurt instead of performing it — “that frightened me” in place of raising your voice. It is harder, and much shorter.",
+  explain:"why the loudest emotion in a fight is never the real one.",
+  builds:[["b2-logistic","both styles do this"]], leads:[["b2-tension-random","and here is where the hurt gets aimed"],["b2-principle","the gift this makes possible"]], live:[]},
+
+"b2-tension-random":{type:"tension", title:"You shout at the kindest person available", x:2392, y:470,
+  ess:"Anger goes not to the guilty but to whoever is guaranteed to stay.",
+  hook:"Rabih loses his phone at Edinburgh Airport and concludes, on the airport bus, that it is his wife’s fault. How?",
+  story:"“I knew all along we shouldn’t have gone on this crazy, unnecessary trip” — of a third-anniversary weekend in Prague. Weeks later, warned of redundancies at work, he weeps in front of a painting of the Virgin Mary in St Mary’s Cathedral, comes home, and snaps at Kirsten over her factual questions and her zucchini, basil and feta salad.",
+  mech:"“It is because we cannot scream at the forces who are really responsible that we get angry with those we are sure will best tolerate us for blaming them. We take it out on the very nicest, most sympathetic, most loyal people in the vicinity… the ones most likely to stick around while we pitilessly rant at them.” Why the partner gets cast as omnipotent is itself explained: it is “a curious sort of homage… to a small child’s awe at their own parents’ apparently miraculous capacities.” De Botton keeps the scoring honest — “eight times a year at least they have scenes a little like this,” and Kirsten’s own list of grievances “is neither any shorter nor more reasonable.” The tension is that the charge is flagrantly unjust and also “a peculiar proof of intimacy,” and that no amount of love repairs the residue: “He must be readier to expect to be, where it counts, all alone.”",
+  term:"Displaced blame", def:"the redirection of anger from its real cause onto the safest available target, who is by definition the person who loves you.",
+  sowhat:"Before delivering a grievance, ask what happened to you today that has nothing to do with them. Then expect to be the target yourself sometimes, and hear it as evidence of trust rather than as a verdict.",
+  explain:"why being blamed for the weather is, structurally, a compliment.",
+  builds:[["b2-attractors","the hurt looking for somewhere to go"]], leads:[["b3-kokura","which is why small fights are never small"],["b4-ergodicity","the same tribute, seen from the nursery"]], live:[]},
+
+"b2-principle":{type:"principle", title:"Write your own manual", x:1895, y:598,
+  ess:"The most useful thing you can hand a partner is a guide to your own faults.",
+  hook:"What would you put on a one-page briefing titled “how to survive me”?",
+  story:"De Botton calls it “that most romantically necessary of gifts: a guide to their own vulnerabilities” — and the whole therapy sequence exists to show that Rabih and Kirsten cannot produce one. They are “experts in attack strategy and fortress construction; what they are rather less good at, like fighters adjusting badly to civilian life after an armistice, is tolerating the anxieties that come with letting down their guard and admitting to their own fragilities and sorrows.”",
+  mech:"The bar is deliberately, encouragingly low: “We don’t need to be constantly reasonable in order to have good relationships; all we need to have mastered is the occasional capacity to acknowledge with good grace that we may, in one or two areas, be somewhat insane.” Kirsten’s version, offered on his return from England, is eight words — “I’m a bit of a nut job sometimes” — with the diagnosis set beside it: “I seem to be trying to punish you for leaving me, which is ridiculous, because you’re only trying to pay off our mortgage.” What makes that sayable is not courage but self-acceptance: good communicators have “an ability not to be fazed by the more problematic or offbeat aspects of their own characters… a priceless sense of their own acceptability,” usually learnt from caregivers who could tolerate a child being “odd, violent, angry, mean, peculiar, or sad.” Which is also why being reduced to a generic type helps rather than insults: <em>avoidant</em> and <em>anxious</em> “turn out to be among the most romantic words Kirsten and Rabih will ever stumble upon.”",
+  term:"A guide to your own vulnerabilities", def:"a plainly stated account of your recurring faults, their origins and their early warning signs, handed to the person who has to live with them.",
+  sowhat:"Write four lines: what sets me off, what it is about, how it looks from outside, what helps. Then hand them over — the claim is that the guide, not the reassurance, is the gift.",
+  explain:"how to convert self-knowledge into something a partner can use.",
+  builds:[["a1","a skill, and this is its central drill"],["b2-logistic","the diagnosis it writes down"]], leads:[["b3-kokura","now: the daily fights"],["b4-process","and what it lets you say aloud"]], live:[]},
+
+"b3-kokura":{type:"story", title:"There are no small issues", x:271, y:962,
+  ess:"Every trivial squabble is a large one that was never given attention.",
+  hook:"The bedroom window. The cab at seven or eight. Why do these get so bad?",
+  story:"Because they are not the subject. “The small issues are really just large ones that haven’t been accorded the requisite attention. Their everyday disputes are the loose threads that catch on fundamental contrasts in their personalities.” De Botton shows the working by writing the speeches neither of them manages: on the window, “you’d ideally like to push me out of the window in your charming but brusque, sensible, daunting way”; on lateness, “I spent my childhood waiting for a father who never showed up. It’s my own crazy way of trying to stay sane.”",
+  mech:"What has to change is the mesh: from here on we must “stand for longer in the stream and use a smaller-meshed sieve.” Some grievances additionally lack prestige — there is no dignified way to say that the manner of loading a dishwasher made you feel unseen — so they get raised as something else, or not at all. Left unattended they set hard: “Without patience for negotiation, there is bitterness: anger that forgot where it came from.” Which is why the struggle is not itself the warning sign — “our struggles are… evidence that our marriages are essentially going entirely according to plan.”",
+  term:"The small-issue fallacy", def:"the belief that a fight about something trivial is a fight about something trivial.",
+  sowhat:"In the next petty row, ask one question out loud: what is this about? And note the two curatives de Botton actually credits — a poor memory, and nature’s “sublime indifference,” the Lammermuir rock laid down “some four hundred fifty million years before Ikea was founded.”",
+  explain:"why the stupidest arguments are the most informative ones.",
+  builds:[["b2-tension-random","the misaimed anger arriving"]], leads:[["b3-contingency","what happens when you don’t ask"],["b3-plan","and who can help you ask"]], live:[]},
+
+"b3-contingency":{type:"mechanism", title:"The sulk", x:601, y:1008,
+  ess:"Fury plus a refusal to say why — because having to say why is the insult.",
+  hook:"“What’s wrong?” “Nothing.” Why does the sulker refuse the one thing that would help?",
+  story:"In the Bow Bar, Murray makes a Great Pyramid of Giza jibe at Rabih’s expense and — decisively — Kirsten laughs along. Then: “Nothing,” the slammed door of the den, “Fuck you, leave me alone,” a night on the sofa bed among the architecture books, one spine reading MIES VAN DER ROHE in silver foil. Boiled eggs and soldiers the next morning; at lunchtime, an email: “I’m a bit mad, forgive me.”",
+  mech:"“At the heart of a sulk lies a confusing mixture of intense anger and an equally intense desire not to communicate what one is angry about. The sulker both desperately needs the other person to understand and yet remains utterly committed to doing nothing to help them do so. The very need to explain forms the kernel of the insult: if the partner requires an explanation, he or she is clearly not worthy of one.” It is a bid for the wordless understanding of infancy: “only when we don’t have to explain can we feel certain that we are genuinely understood.” The message being sent is real, and it is the message of a child.",
+  term:"The sulk", def:"anger combined with a refusal to communicate it, on the grounds that a true intimate would not have needed telling.",
+  sowhat:"Sulking: say the thing, and accept that having to say it is not proof of being unloved. Sulked at: “It is a privilege to be the recipient of a sulk… It is one of the odder gifts of love” — so take the compliment, and parent the furious, inarticulate child in front of you.",
+  explain:"why silence in a fight is a demand rather than a withdrawal.",
+  builds:[["b1-sensitive","the belief that makes silence feel justified"]], leads:[["b3-principle","and how to read it generously"]], live:[]},
+
+"b3-timeline":{type:"tension", title:"Why you can’t teach the person you love", x:312, y:1210,
+  ess:"You hold the best data on them and the worst possible position to use it.",
+  hook:"One a.m., over the dishes, you have something true and important to tell your partner about themselves. Why will it go badly?",
+  story:"The trigger is Clare and Christopher’s summer villa in Greece with its private olive grove. Rabih’s lesson — that Kirsten is materialistic — arrives as sarcasm, shouting and two slammed doors. Her defence: “Why can’t you be just as blind if you love me?” His answer, which is the whole problem in one line: “A way that makes me want to help you to confront certain issues.”",
+  mech:"Romanticism demands total endorsement — “to be properly loved must always mean being endorsed for all that one is” — whereas the Greek view de Botton prefers held love to be “a feeling of admiration for the better sides of another human being,” from which a duty follows: “Sincere lovers could never be content to accept one another just as they were; this would constitute a lazy and cowardly betrayal of the whole purpose of relationships.” But teaching requires calm, and calm requires not minding much: “an ability not to care too much is a critical aspect of unruffled and successful pedagogy… But calm is precisely what is absent from love’s classroom. There is simply too much on the line.” And harshness immunises the pupil: “Harsh lessons allow pupils to fall back on the comforting thought that their instructor is simply crazy or nasty and that they themselves must therefore be, by logic, beyond criticism.”",
+  term:"Love’s classroom", def:"the paradox that a partner is the best-informed and worst-positioned teacher you will ever have.",
+  sowhat:"Two rules from the chapter: “at least ten compliments for every one delicately inserted negative remark,” and implicate yourself first — de Botton’s model script has Rabih confess his own envy (“I’m so sorry for letting us both down”) rather than name her fault. If you cannot deliver it without raising your voice, you are not teaching.",
+  explain:"why the person best placed to help you change is the one least able to.",
+  builds:[["a1","the skill both people are short of"]], leads:[["b3-plan","hence: a third person in the room"],["b4-fence","and the readiness it demands"]], live:[]},
+
+"b3-principle":{type:"principle", title:"Read them the way you’d read a child", x:774, y:1152,
+  ess:"“What has upset them,” not “how mean you are.”",
+  hook:"When a two-year-old screams at you, you don’t conclude they are a bad person. Why is that instinct switched off for adults?",
+  story:"“When children cry, we don’t accuse them of being mean or self-pitying; we wonder what has upset them… How kind we would be if we managed to import even a little of this instinct into adult relationships — if here, too, we could look past the grumpiness and viciousness and recognize the fear, confusion, and exhaustion which almost invariably underlie them… This is what it would mean to gaze upon the human race with love.”",
+  mech:"This is generous interpretation, grounded in fact rather than in niceness: “Few in this world are ever simply nasty; those who hurt us are themselves in pain. The appropriate response is hence never cynicism nor aggression but, at the rare moments one can manage it, always love.” Nor is it softness — it takes force to hold back: “The barbarian must will himself to hold the crystal goblet lightly, in a meaty fist that could otherwise crush it like a dry autumn leaf.” In the book, Rabih learns it as a father: loving Esther “means striving to have the courage not to be entirely himself.” Whether it transfers from the nursery to the marriage is the harder question — and Kirsten’s verdict is that in his case, for years, it does not.",
+  term:"Generous interpretation", def:"defaulting to the most sympathetic available explanation of behaviour, because it is usually also the accurate one. (De Botton’s idea; the label is not his phrase here.)",
+  sowhat:"One substitution, available immediately: replace “how could they” with “what happened to them.” It costs nothing and it changes what you say next.",
+  explain:"how to make charity a default setting rather than an effort of will.",
+  builds:[["a3","and so the charitable reading is usually the true one"],["b2-attractors","the hurt you are reading for"]], leads:[["b4-coinflip","the teachers who taught de Botton this"]], live:[]},
+
+"b3-plan":{type:"mechanism", title:"The referee", x:543, y:1326,
+  ess:"A paid stranger who will not let either of you leave the room.",
+  hook:"£75 for fifty minutes on how he reacted to being called downstairs to lay the table. Value for money?",
+  story:"Emphatically yes, in de Botton’s accounting. “Mrs. Fairbairn is helping to defuse bombs… these are the breeding grounds for issues that, if left unchecked, could develop into the sort of catastrophes that society is more prepared to focus its attention on: domestic violence, family breakups, the interventions of social services, court orders… Everything begins with small humiliations and letdowns.”",
+  mech:"What the third party supplies is not wisdom but containment: “a sanctuary where weekly they can confess to being furious or sad under the benevolent watch of a referee who is guaranteed to contain the other’s reaction long enough to secure a necessary degree of understanding and perhaps empathy.” Her genius is refusing to adjudicate: “She doesn’t care for anyone being ‘in the right.’ She wants to sort out what each side is feeling and then make sure the other side hears it sympathetically.” The obstacle is prestige — “Like most things that stand properly to help with the course of love, counseling seems gravely unromantic” — so the request gets read as a sign of trouble rather than of robustness. The book’s verdict is put in the couple’s mouths, not the author’s: “Therapy is, Kirsten and Rabih conclude, in some ways the greatest invention of the age.”",
+  term:"The contained conversation", def:"a structured setting with a neutral third party in which neither person can storm out, swear, or win.",
+  sowhat:"Asking to go is evidence of a marriage’s seriousness, not of its failure. And the mechanism is borrowable for free: between sessions they start asking each other “What would Joanna [a name they never use in her presence] say?”",
+  explain:"what a third party adds that two intelligent people cannot supply themselves.",
+  builds:[["b3-timeline","the teaching neither can do alone"]], leads:[["b3-principle","the habit it installs"]], live:[]},
+
+"b4-coinflip":{type:"mechanism", title:"Children, the unexpected teachers", x:1583, y:979,
+  ess:"Love as service — learnt from someone who can do nothing whatever for you.",
+  hook:"What can a newborn possibly teach two grown adults about love?",
+  story:"“The average home appliance comes with more detailed instructions than a baby.” Esther Katrin arrives after a seven-hour ordeal, and then: nappies, night bottles, burps, boredom, and an inconsolable, undiagnosable Christmas crying jag in Inverness that ends in vomit on a linen dress embroidered <em>Esther</em>. What she teaches is a change of verb: “Children teach us that love is, in its purest form, a kind of service.”",
+  mech:"“Yet babies can do precisely nothing. There is, as slightly older children sometimes conclude with serious discomfiture, no ‘point’ to them; that is their point.” Which reframes the entire Romantic project: “Maturity means acknowledging that Romantic love might only constitute a narrow and perhaps rather mean-minded aspect of emotional life, one principally focused on a quest to find love rather than to give it, to be loved rather than to love.” The reward is not moral credit but relief — being another’s servant “sets us free from the wearying responsibility of continuously catering to our own twisted, insatiable natures.” It is also honest about the bill: once the baby monitor goes quiet the parents turn to their own “bitterness, vengeance, and carping,” because “the tired child inside each of them is furious at how long it has been neglected.”",
+  term:"Love as service", def:"love defined by what you give to someone who cannot reciprocate, rather than by what you receive.",
+  sowhat:"Test any complaint about love by asking which of the two you mean. Most heartbreak is a shortfall in <em>being loved</em>, described as a shortfall in love — and “anyone who urgently needs us deserves, in the true book of love, to be our friend.”",
+  explain:"why the least reciprocal relationship you will ever have is the one that teaches you love.",
+  builds:[["a1","the skill children accidentally teach"]], leads:[["b4-ergodicity","and the second lesson they bring"]], live:[]},
+
+"b4-ergodicity":{type:"mechanism", title:"Be nicer to the childlike sides", x:1901, y:945,
+  ess:"The tantrum is a compliment. So is being taken for granted.",
+  hook:"Why does a child save their worst behaviour for you and their best for strangers?",
+  story:"Because you are safe. “A person has to feel rather safe around someone else in order to be this difficult. Before a child can throw a tantrum, the background atmosphere needs to be profoundly benevolent.” William attempts to kick his father in the shins when the orange remote-controlled helicopter breaks after six minutes. Esther, at eleven, finds her father’s clothes, his accent and his cooking intolerable, and her mother’s habit of keeping lemon halves in the fridge.",
+  mech:"The logic runs upward too: “good parents must, if things have gone well, end up as the special targets of intense resentment and indignation,” because they are the ones who bring the unwelcome news — and into marriage: “Being taken a bit for granted is, they implicitly feel, the best possible indication of the quality of their love.” Childhood is meanwhile “a laboratory for what humanity in general might be like if there were no such thing as ridicule,” sweetness being goodness before suffering and therefore “a vital part of ourselves — in exile”; societies, de Botton adds, “become sensitive to the qualities they are missing.” Hence the small, exact request: “It would be even better if we lived in one where we were a little nicer to the childlike sides of one another.” With a caveat he insists on: kindness has limits — “Being outright cold, frightening, and cruel turns out to be only the first of many different means of ensuring alienation,” the second being overprotection — and Kirsten notes that the kindness Rabih shows their daughter “is available from him only in his role as a father, not as a husband.”",
+  term:"The safety tribute", def:"difficult behaviour aimed at you is often evidence of trust rather than of contempt.",
+  sowhat:"Reread your partner’s worst moments as things they only dared do near you. Then notice how much of your own bad behaviour you save exclusively for home — and whether your patience, like Rabih’s, is rationed by role.",
+  explain:"why the people who get your worst self are the ones who earned your trust.",
+  builds:[["b3-principle","the reading being extended to adults"]], leads:[["b4-domains","and the labour nobody gets credit for"]], live:[]},
+
+"b4-domains":{type:"phenomenon · simulation", title:"The prestige of laundry", sim:"laundry", x:2219, y:979,
+  ess:"Two exhausting days, no shared unit of measurement, no gratitude either way.",
+  hook:"Below: his Thursday and her Thursday, hour by hour. Which one was harder?",
+  story:"His: four meetings, a failing tile supplier, tax rebates, the new CFO, half an hour standing on the commuter bus each way. Hers: school run, beds, three work calls, two bathrooms, vacuuming, summer clothes, plumber, dry cleaning, upholsterer, dentist, homework, supper, bath, ink stains. Both days end in identical exhaustion and word-for-word identical hopes — and then: “Will you remember to iron the duvet covers tomorrow?”",
+  mech:"Modern equality produced an equality of suffering that cannot be calibrated, and so cannot be repaid. “It takes a superhuman wisdom to avoid the consoling conclusion that one has the harder life.” De Botton’s remedy is a reallocation of prestige, and he insists the word is not decorative: “stripped to its essence, prestige merely refers to whatever is most noble and important in life.” He also blames art for the invisibility — this life is almost never reflected back to the people living it, which is why the novel stops to offer “a brief but helpful burst of pity.”",
+  term:"Incommensurable exhaustion", def:"two partners’ labours are equally depleting and not comparable, which is why neither ever feels adequately thanked.",
+  sowhat:"Stop comparing days: the comparison has no unit and reliably manufactures grievance. Take the counter-claim whole instead — the glory of the species may lie “not only in the launching of satellites, the founding of companies, and the manufacturing of miraculously thin semiconductors but also in an ability… to spoon yogurt into small mouths, find missing socks, clean toilets, deal with tantrums, and wipe congealed things off tables.”",
+  explain:"why “I do more than you” is not so much a false claim as an unmeasurable one.",
+  builds:[["a1","the least glamorous skill in the set"]], leads:[["b4-survive","and what all this does to desire"]], live:[]},
+
+"b4-survive":{type:"mechanism · simulation", title:"Desire needs distance", sim:"distance", x:2438, y:1094,
+  ess:"Eros is a bridge. Remove the gap and there is nothing left to cross.",
+  hook:"Below: desire plotted against closeness. Why isn’t the peak at zero distance?",
+  story:"A Friday night is booked into the diary. Blueberries arranged in a smiling face and refused; the German rabbit story; the lullaby “Griogal Cridhe”; then oesophageal cancer, then university savings. Then William’s card — “Happy Bithrdey Mumy” — on the night-table deflates Rabih mid-caress.",
+  mech:"“Sexual desire is driven by a wish to establish closeness — and is hence contingent on a preexisting sense of distance, which it is a perpetually distinctive pleasure and relief to try to bridge.” Parenthood attacks this from both sides: it reinstates the parental archetype that has to be switched off for sex to work, and it abolishes distance altogether. What is needed first is autonomy and rest: “We can, at last, have desire without needing to bring the rest of our exhaustingly encumbered lives into the bed with us.” Which is also why sexiness was never really physiological — it is about “the idea of acceptance and the promise of an end to loneliness and shame,” and the oddest particulars carry “echoes of qualities we long for in other, purportedly saner areas of existence: understanding, sympathy, trust, unity, generosity, and kindness.”",
+  term:"Distance as fuel", def:"desire is the pleasure of bridging a gap, and therefore requires a gap to exist.",
+  sowhat:"Separateness is not a symptom; it is an input. And the private mind gets a firm defence: fantasy “spares those we care about from the full irresponsibility and scary strangeness of our urges… an emblem of civilization — and an act of kindness.”",
+  explain:"why total closeness is the enemy of desire rather than its completion.",
+  builds:[["a4","one half of the impossible pair"]], leads:[["b4-danger","and the exit that does not work"]], live:[]},
+
+"b4-signal":{type:"tension · simulation", title:"Two desires, one life", sim:"desires", x:1612, y:1181,
+  ess:"Move the dial anywhere you like; the unmet half never gets any smaller.",
+  hook:"Pumpernickel and Monopoly with the children, or a summer Edinburgh street at half past six — which are you giving up?",
+  story:"De Botton stages exactly this as two competing evenings, then has Rabih end things with Lauren over FaceTime and sob in the kitchen until Kirsten’s key turns in the lock. “Adventure and security are irreconcilable, he sees… Neither the love rat nor the faithful spouse gets it right. There is no solution.”",
+  mech:"The error is not the wanting but the utopianism: “what is worse is our utopian refusal to countenance the divergence, our naive hope that a cost-free synchronization might somehow be found.” Two things follow. Infatuation stops being a delusion and becomes a failure of memory — “The only people who can still strike us as normal are those we don’t yet know very well. The best cure for love is to get to know them better.” And melancholy becomes the correct response instead of a malfunction: “a species of intelligent grief which arises when we come face-to-face with the certainty that disappointment is written into the script from the start… We have not been singled out. Marrying anyone, even the most suitable of beings, comes down to a case of identifying which variety of suffering we would most like to sacrifice ourselves for.”",
+  term:"The unsolvable trade", def:"security and adventure are structurally opposed, so every arrangement buys one with the other.",
+  sowhat:"Name the cost of the arrangement you are in instead of shopping for one without a cost. De Botton’s rewritten vow does exactly that: “We accept not to panic when, some years from now, what we are doing today will seem like the worst decision of our lives… Everyone is always impossible. We are a demented species… We have surveyed the different options for unhappiness, and it is to each other we have chosen to bind ourselves.”",
+  explain:"why no configuration of a life pays for both desires at once.",
+  builds:[["a4","the axiom this draws"]], leads:[["b4-danger","so why not simply have both?"]], live:[]},
+
+"b4-danger":{type:"tension", title:"Why the reasonable case for adultery fails", x:1959, y:1152,
+  ess:"The arguments for it are decent. They are also useless.",
+  hook:"“Love isn’t like a cake.” The logic holds — so why does it help nobody?",
+  story:"De Botton builds the case honestly, in and around Rabih’s reasoning on the night after Berlin: that an affair proves nothing, since “the mind has many chambers, and a dazzling capacity for building firewalls”; that insisting on monogamy may be “a kind of small-minded and hypocritical possessiveness, a desire to make one’s partner happy if, but only if, that happiness involves oneself.” He even turns the question round: “Would it be rational to trust anyone who wasn’t, under certain circumstances, really pretty interested in being unfaithful?” Then he demolishes the whole case — not on morals, but on psychology.",
+  mech:"“However unedifying and plain silly attacks of jealousy may be, they cannot be skirted… But we are not amenable to reason here. To be wise is to recognize when wisdom will simply not be an option.” Hence the ruling: “adultery cannot be a workable answer, for no one can be its victim and not feel forever cut to the core… To insist on any other conclusion is like arguing against the tide.” The motive is usually misread — an affair is “all too often simply a face-saving attempt to pretend we don’t need someone, an arduous proof of indifference that we reserve for… the person we truly care about” — and in therapy Rabih concludes he slept with Lauren “not out of desire but out of anger.” The most original move is a redefinition of what got broken: not a body but a pact — “I was relying on you to be loyal to the specific variety of compromise and unhappiness which our hard-won marriage represents.” With a counter-intuitive corollary: “Never having been betrayed sets up poor preconditions for remaining faithful.”",
+  term:"Unavailable wisdom", def:"an argument can be philosophically respectable and still worthless, because the person it must persuade is constitutionally unable to receive it.",
+  sowhat:"Read the impulse as a message rather than a plan: what have you failed to say about feeling let down? And give the last word where the book gives it — to Kirsten, who throws a pack of flour across the kitchen and says: “Being nice is not boring; it’s an enormous achievement, one that ninety-nine percent of humanity can’t manage from day to day. If ‘nice’ is boring, then I love boring.”",
+  explain:"how to tell a good argument from a usable one.",
+  builds:[["b4-signal","the trade this pretends to solve"],["a4","and the desires underneath it"]], leads:[["b4-process","then what do you do with what you know?"],["b4-destination","and how do you live with yourself afterwards"]], live:[]},
+
+"b4-process":{type:"tension", title:"Honesty and its limits", x:1650, y:1330,
+  ess:"Withhold the wrong truth and you are kind. Withhold too many and you are lying.",
+  hook:"You could tell them everything. Should you?",
+  story:"Rabih resolves never to tell Kirsten about Berlin, and quietly stops treating marriage as a shrine to feelings and starts treating it as an institution. De Botton backs him: “The person who can’t tolerate secrets, who in the name of ‘being honest’ shares information so wounding to the other that it can never be forgotten — this person is no friend of love.” And elsewhere in the same book he argues the reverse: “It is precisely when we hear little from our partner which frightens, shocks, or sickens us that we should begin to be concerned, for this may be the surest sign that we are being gently lied to or shielded from the other’s imagination.”",
+  mech:"Both are held at once, and what decides between them is not sincerity but capacity. On one side: “It may be kinder, wiser, and closer to the true spirit of love to pretend we simply didn’t notice,” because “the truth risks distorting the relationship far more than the untruth.” On the other, the speech Kirsten never gives about the fantasy she silenced ends: “The alternative is silence and lies, which are the real enemies of love.” The deciding skill is named precisely — a good listener has “a capacity not to be thrown off course by, or buckle under the weight of, information that may deeply challenge certain settled assumptions.” Where that exists, tell; where it does not, disclosure is an assault dressed as candour — which is why in therapy Rabih concludes that understanding <em>why</em> it happened mattered more than confessing <em>that</em> it did.",
+  term:"Usable truth", def:"the test for disclosure is not whether it is true but whether the person it lands on can carry it — and whether you have built the capacity to carry theirs.",
+  sowhat:"Before disclosing something painful, ask who it is for; if the answer is your own relief, it is a confession, not honesty. Then run the check in the other direction: when did your partner last tell you something that shocked you? If never, you are being shielded.",
+  explain:"where the duty of honesty stops and the duty of kindness starts — and why silence is not automatically the safe option.",
+  builds:[["b4-danger","the knowledge that needs handling"],["b2-principle","the self-acceptance that makes speech possible"]], leads:[["b4-principle","the institution this serves"]], live:[]},
+
+"b4-destination":{type:"mechanism", title:"Good enough", x:2330, y:1255,
+  ess:"Perfectionism dies, sanity turns out to be luck, and a snowdrop becomes worth noticing.",
+  hook:"Three a.m., the gymnasium commission cancelled. What does an honest audit of your own life sound like?",
+  story:"“He is a coward, a dreamer, an unfaithful husband, and an overly possessive, clingy father. His life is held together by string.” One building bears his name — a data-storage shed in Hertfordshire — against the boy who was going to be another Le Corbusier or Mies van der Rohe. Later he passes a florist’s window he has walked by many, many times without noticing, and buys his wife snowdrops: “The love of flowers is a consequence of modesty and an accommodation with disappointment.”",
+  mech:"Three shifts arrive together. Perfectionism dies: “If the car was scratched, he couldn’t enjoy driving it; if the room was untidy, he couldn’t rest; if his lover didn’t understand parts of him, the entire relationship was a charade. Now ‘good enough’ is becoming good enough” — and the standard transfers to the marriage itself, since “there can only ever be a ‘good enough’ marriage.” Sanity is reclassified as luck rather than virtue: “What enables him to think of himself as sane is only a certain fragile chemical good fortune.” And parents stop being culpable, revealed in the hospital as “uncertain vulnerable creatures motivated more by anxiety, fear, a clumsy love, and unconscious compulsions than by godlike wisdom and moral clarity — and cannot, therefore, forever be held responsible for either their own shortcomings or our many disappointments”; his dying mother-in-law, who never approved of him, takes his hand and says “Look after her, will you,” and then, “with the old sharpness,” “If she lets you.” Insomnia is the instrument that permits all of it: “Crucial insights that we need to convey to ourselves can often be received only at night, like city church bells that have to wait until dark to be heard.”",
+  term:"Good enough", def:"the abandonment of the flawless version as the only acceptable one — in work, in a partner, in a marriage, and in yourself.",
+  sowhat:"Self-forgiveness here is an obligation, not an indulgence: “There is valor in being able to identify a forgiving, hopeful perspective on one’s life, in knowing how to be a friend to oneself, because one has a responsibility to others to endure.” Rabih’s own verdict on the process: “This isn’t a midlife crisis; it’s more that he is finally, some thirty years too late, leaving adolescence behind.”",
+  explain:"why lowering your standards is, in this one domain, the mature move.",
+  builds:[["a3","the damage nobody escaped"]], leads:[["b4-explore","and what it lets you accept in someone else"]], live:[]},
+
+"b4-explore":{type:"mechanism", title:"Compatibility is an achievement", x:2470, y:1430,
+  ess:"Not a precondition you screen for. An outcome the two of you build, slowly.",
+  hook:"Are the two of you compatible — and is that even the right thing to be asking?",
+  story:"“The Romantic vision of marriage stresses the importance of finding the ‘right’ person, which is taken to mean someone in sympathy with the raft of our interests and values. There is no such person over the long term. We are too varied and peculiar. There cannot be lasting congruence.”",
+  mech:"So the marker moves. “The partner truly best suited to us is not the one who miraculously happens to share every taste but the one who can negotiate differences in taste with intelligence and good grace. Rather than some notional idea of perfect complementarity, it is the capacity to tolerate dissimilarity that is the true marker of the ‘right’ person. Compatibility is an achievement of love; it shouldn’t be its precondition.” Which also disposes of the fantasy that someone was right all along: “Pronouncing a lover ‘perfect’ can only be a sign that we have failed to understand them. We can claim to have begun to know someone only when they have substantially disappointed us.” And it comes with a rule for choosing: Kirsten’s flair for property — she sells the flat, secures the mortgage, buys the Newbattle Terrace house at an advantageous price — is the same trait as her anxiety about status. “Identical qualities produce both amazing house deals and insecurities around status,” so you cannot take the upside alone; you take the weaknesses of her strengths.",
+  term:"Compatibility as achievement", def:"fit between two people is a skill they develop over years, not a property one detects in advance.",
+  sowhat:"Stop auditing whether you match; audit how the two of you handle <em>not</em> matching. And note what de Botton says previous lovers are for: not locating the right person but discovering at first hand “that there isn’t any such a person.”",
+  explain:"why the standard test for a partner measures the wrong thing entirely.",
+  builds:[["a3","because no one is the right person"],["b3-timeline","the negotiating skill it requires"]], leads:[["b4-fence","the full readiness list"]], live:[]},
+
+"b4-fence":{type:"mechanism · simulation", title:"Ready for marriage", sim:"readiness", x:2090, y:1430,
+  ess:"Nine criteria. Rabih finally meets them thirteen years in.",
+  hook:"Below: de Botton’s nine conditions, worked out on a pre-dawn drive to Manchester. How many do you meet?",
+  story:"“They have been married for thirteen years and yet only now, a little late, does Rabih feel ready for marriage. It’s not the paradox it seems. Given that marriage yields its important lessons only to those who have enrolled in its curriculum, it’s normal that readiness should tend to follow rather than precede the ceremony itself, perhaps by a decade or two.”",
+  mech:"The nine: he has given up on perfection; despaired of being fully understood; realised he is crazy; understood that it isn’t Kirsten who is difficult but the institution; become prepared to love rather than be loved; accepted that sex will always cohabit uneasily with love; become happy to be taught and calm about teaching; grasped that they are not compatible; and got fed up with most love stories. Note what these replace: once you were ready when you had “a home to your name, a trousseau full of linen… or a few cows and a parcel of land,” after which Romanticism substituted the right feelings — “a recipe for disaster.” The load-bearing item is the fifth: “We start out knowing only about ‘being loved’… In a secret corner of our mind, we picture a lover who will anticipate our needs, read our hearts, act selflessly, and make everything better. It sounds ‘romantic,’ yet it is a blueprint for disaster.” And the summary condition: “We are properly ready for marriage when we are strong enough to embrace a life of frustration.”",
+  term:"Readiness for marriage", def:"nine renunciations of Romantic expectation, normally acquired a decade or two after the wedding.",
+  sowhat:"Score yourself on the nine above; the low ones are your work for this year. And take the strange arithmetic seriously — what looks like one marriage “in fact sits across… at least a dozen divorces and remarriages — just to the same person.”",
+  explain:"what a mature person has to have given up before marriage becomes workable.",
+  builds:[["a1","a skill, itemised into nine parts"],["b4-explore","the eighth item, in full"]], leads:[["b4-principle","and what all nine are for"]], live:[]},
+
+"b4-principle":{type:"principle", title:"Sticking around is the achievement", x:1830, y:1560,
+  ess:"Breaking up is the natural move. Staying is the exotic one.",
+  hook:"After thirteen years of all of this, what exactly has been accomplished?",
+  story:"“There could have been so many reasons not to be together still. Breaking up would have been the natural, almost inevitable thing to do. It’s the sticking around that is the weird and exotic achievement — and they feel a loyalty to their battle-hardened, scarred version of love.” It is also, finally, where Kirsten’s own wound gets addressed: at a Highland castle hotel for her birthday she speaks of her father for the first time, says “she’s tired of being angry with him her whole life long,” and decides to look for him.",
+  mech:"Three instructions close the book. Re-see rather than restart: “The trick is perhaps not to start a new life but to learn to reconsider the old one with less jaded and habituated eyes.” Downgrade the unit of happiness: “perfect happiness comes in tiny, incremental units only, perhaps no more than five minutes at a time. This is what one has to take with both hands and cherish.” And change the stories, since they are the source of the standard we keep failing: “The fault lies with art, not life. Rather than split up, we may need to tell ourselves more accurate stories — stories that don’t dwell so much on the beginning, that don’t promise us complete understanding, that strive to normalize our troubles and show us a melancholy yet hopeful path through the course of love.”",
+  term:"Perseverance as heroism", def:"the ordinary continuation of a difficult marriage, counted as courage rather than as a failure to escape.",
+  sowhat:"De Botton refuses to let this settle into consolation: the photograph on Ben Nevis may turn out to have been taken “just hours before the crash,” or “a month before he found out about Kirsten’s affair and she moved out,” or “the year before Esther’s symptoms started” — and Rabih “has no right to call himself a happy man; he is simply an ordinary human being passing through a small phase of contentment.” What is claimed is only the courage: “not to be vanquished by anxiety, not to hurt others out of frustration… and somehow to manage to persevere in a more or less adequate way through the difficulties of married life — this is true courage; this is a heroism in a class all its own.”",
+  explain:"why an unremarkable marriage that lasted is the least recognised achievement there is.",
+  builds:[["a1","a skill, finally practised"],["b4-fence","the readiness that made it possible"]], leads:[["b1-pendulum","and this is where the stories should have begun"]], live:[]}
+};
+const TERRITORIES = [
+  {label:"I · Uninstall the Promises", sum:"the Romantic script, and what to swap in", hue:"#4a6684", lx:508, ly:100, rx:184, ry:158, rw:745, rh:590},
+  {label:"II · Read Your Own Wiring", sum:"what is actually happening inside you", hue:"#4f7050", lx:2114, ly:100, rx:1739, ry:158, rw:745, rh:590},
+  {label:"The Bedrock", sum:"four assumptions beneath everything", hue:"#6f6455", lx:1265, ly:352, rx:964, ry:436, rw:722, rh:439},
+  {label:"III · Fight Better", sum:"the skills of the domestic quarrel", hue:"#8a5c5c", lx:520, ly:869, rx:184, ry:846, rw:745, rh:590},
+  {label:"IV · The Practice of Staying", sum:"what love asks of you daily", hue:"#96702f", lx:2011, ly:820, rx:1479, ry:869, rw:1069, rh:745}
+];
+const ASTERISMS = [
+  ["#4a6684", [["b1-laplace","b1-pendulum"],["b1-laplace","b1-sensitive"],["b1-sensitive","b1-lorenz-story"],["b1-sensitive","b1-principle"]]],
+  ["#4f7050", [["b2-logistic","b2-attractors"],["b2-lorenz-attractor","b2-attractors"],["b2-attractors","b2-tension-random"],["b2-attractors","b2-principle"]]],
+  ["#6f6455", [["a1","a2"],["a1","a3"],["a2","a4"],["a3","a4"]]],
+  ["#8a5c5c", [["b3-kokura","b3-contingency"],["b3-contingency","b3-timeline"],["b3-contingency","b3-principle"],["b3-timeline","b3-plan"],["b3-principle","b3-plan"]]],
+  ["#96702f", [["b4-coinflip","b4-ergodicity"],["b4-ergodicity","b4-domains"],["b4-domains","b4-survive"],
+    ["b4-coinflip","b4-signal"],["b4-signal","b4-danger"],["b4-survive","b4-danger"],
+    ["b4-danger","b4-process"],["b4-danger","b4-destination"],["b4-destination","b4-explore"],
+    ["b4-explore","b4-fence"],["b4-process","b4-principle"],["b4-fence","b4-principle"]]]
+];
+const ALL = Object.keys(N);
+const TERRNAME = {b1:"I · Uninstall the Promises", b2:"II · Read Your Own Wiring",
+  b3:"III · Fight Better", b4:"IV · The Practice of Staying", a:"The Bedrock"};
+const HUES = {b1:"#4a6684", b2:"#4f7050", b3:"#8a5c5c", b4:"#96702f", a:"#6f6455"};
+const hueOf = id => id.startsWith('a') ? HUES.a : HUES[id.slice(0,2)];
+const terrOf = id => id.startsWith('a') ? TERRNAME.a : TERRNAME[id.slice(0,2)];
+
+const TOUR = ["b1-laplace","b1-pendulum","b1-sensitive","b1-lorenz-story","b1-principle",
+  "b2-logistic","b2-lorenz-attractor","b2-attractors","b2-tension-random","b2-principle",
+  "b3-kokura","b3-contingency","b3-timeline","b3-plan","b3-principle",
+  "b4-coinflip","b4-ergodicity","b4-domains","b4-survive","b4-signal","b4-danger",
+  "b4-process","b4-destination","b4-explore","b4-fence","b4-principle"];
+const SEQ = {}; TOUR.forEach((id,i)=>SEQ[id]=i+1);
+
+/* degree from curated links (for star size) */
+const DEG = {};
+ALL.forEach(id=>DEG[id]=0);
+ALL.forEach(id=>{
+  const n = N[id];
+  [...n.builds, ...n.leads, ...n.live].forEach(([t])=>{ DEG[id]++; DEG[t]=(DEG[t]||0)+1; });
+});
+const dotSize = id => id[0]==='a' ? 15 : (16 + Math.min(DEG[id],8)*2.2);
+const dotCenter = id => ({x:N[id].x+dotSize(id)/2, y:N[id].y+dotSize(id)/2});
+
+/* ============================================================
+   CAMERA
+   ============================================================ */
+const vp = document.getElementById('vp');
+const world = document.getElementById('world');
+const reader = document.getElementById('reader');
+const WW = 2750, WH = 1750;
+let cam = {s:0.12, tx:0, ty:0};
+let anim = null;
+function apply(){
+  world.style.transform = `translate(${cam.tx}px, ${cam.ty}px) scale(${cam.s})`;
+  lod();
+}
+function readerW(){ return reader.classList.contains('open') ? (reader.getBoundingClientRect().width||430) : 0; }
+function visW(){ return innerWidth - readerW(); }
+function centerOn(cx, cy, s){
+  cam.s = s;
+  cam.tx = visW()/2 - cx*s;
+  cam.ty = innerHeight/2 - cy*s;
+  apply();
+}
+function flyTo(cx, cy, s, dur=700){
+  if (anim) cancelAnimationFrame(anim);
+  const s0=cam.s, cx0=(visW()/2-cam.tx)/s0, cy0=(innerHeight/2-cam.ty)/s0;
+  const ls0=Math.log(s0), ls1=Math.log(s);
+  const t0=performance.now();
+  function step(t){
+    let p=Math.min(1,(t-t0)/dur);
+    p = p<.5 ? 4*p*p*p : 1-Math.pow(-2*p+2,3)/2;
+    centerOn(cx0+(cx-cx0)*p, cy0+(cy-cy0)*p, Math.exp(ls0+(ls1-ls0)*p));
+    if (p<1) anim=requestAnimationFrame(step);
+  }
+  anim=requestAnimationFrame(step);
+}
+function overviewCam(fly=true){
+  const cx=BC.x, cy=BC.y;
+  const s = Math.min(visW()/(2*Math.max(cx,WW-cx)), innerHeight/(2*Math.max(cy,WH-cy)))*0.92;
+  if (fly) flyTo(cx, cy, s, 800); else centerOn(cx, cy, s);
+}
+vp.addEventListener('wheel', e=>{
+  e.preventDefault();
+  if (anim) cancelAnimationFrame(anim);
+  const f = Math.exp(-e.deltaY*0.0016);
+  const s2 = Math.min(2.2, Math.max(0.06, cam.s*f));
+  const wx=(e.clientX-cam.tx)/cam.s, wy=(e.clientY-cam.ty)/cam.s;
+  cam.s=s2; cam.tx=e.clientX-wx*s2; cam.ty=e.clientY-wy*s2;
+  apply();
+}, {passive:false});
+const ptrs = new Map();
+let panStart=null, pinchStart=null, moved=0;
+vp.addEventListener('pointerdown', e=>{
+  if (e.target.closest('.tlabel')) return;
+  ptrs.set(e.pointerId, {x:e.clientX, y:e.clientY});
+  if (ptrs.size===1){
+    moved=0;
+    panStart={mx:e.clientX, my:e.clientY, tx:cam.tx, ty:cam.ty};
+    vp.classList.add('dragging');
+  } else if (ptrs.size===2){
+    const [p1,p2]=[...ptrs.values()];
+    pinchStart={d:Math.hypot(p1.x-p2.x,p1.y-p2.y), s:cam.s,
+      wx:((p1.x+p2.x)/2-cam.tx)/cam.s, wy:((p1.y+p2.y)/2-cam.ty)/cam.s};
+    panStart=null;
+  }
+});
+addEventListener('pointermove', e=>{
+  if (!ptrs.has(e.pointerId)) return;
+  ptrs.set(e.pointerId, {x:e.clientX, y:e.clientY});
+  if (ptrs.size===1 && panStart){
+    if (anim) cancelAnimationFrame(anim);
+    moved += Math.abs(e.movementX||0)+Math.abs(e.movementY||0);
+    cam.tx = panStart.tx + (e.clientX-panStart.mx);
+    cam.ty = panStart.ty + (e.clientY-panStart.my);
+    apply();
+  } else if (ptrs.size===2 && pinchStart){
+    if (anim) cancelAnimationFrame(anim);
+    const [p1,p2]=[...ptrs.values()];
+    const d=Math.hypot(p1.x-p2.x,p1.y-p2.y);
+    const s2=Math.min(2.2, Math.max(0.06, pinchStart.s*d/pinchStart.d));
+    const cx=(p1.x+p2.x)/2, cy=(p1.y+p2.y)/2;
+    cam.s=s2; cam.tx=cx-pinchStart.wx*s2; cam.ty=cy-pinchStart.wy*s2;
+    apply();
+  }
+});
+function ptrUp(e){ ptrs.delete(e.pointerId);
+  if (ptrs.size<2) pinchStart=null;
+  if (ptrs.size===0){ panStart=null; vp.classList.remove('dragging'); } }
+addEventListener('pointerup', ptrUp);
+addEventListener('pointercancel', ptrUp);
+vp.addEventListener('dblclick', e=>{
+  if (!e.target.closest('.mk')){ closeReader(); overviewCam(); }
+});
+addEventListener('keydown', e=>{
+  if (e.key==='Escape'){ closeReader(); overviewCam(); }
+  if (e.key==='ArrowRight') navStep(1);
+  if (e.key==='ArrowLeft') navStep(-1);
+});
+document.getElementById('overviewBtn').onclick = ()=>{ closeReader(); overviewCam(); };
+addEventListener('resize', ()=>apply());
+
+/* ============================================================
+   SKY - constellation names, asterisms, ecliptic, stars
+   ============================================================ */
+const BC = (()=>{const ax=Object.keys(N).filter(id=>id[0]==='a');return {x:ax.reduce((s,i)=>s+N[i].x,0)/ax.length, y:ax.reduce((s,i)=>s+N[i].y,0)/ax.length};})();
+{ /* Cleared Court: pull the axioms into a tight core, clear any star that intrudes */
+  const AX=Object.keys(N).filter(id=>id[0]==='a');
+  const AR=46, offs={a1:[0,-AR],a2:[-AR,0],a3:[AR,0],a4:[0,AR]};
+  AX.forEach(id=>{ const o=offs[id]||[0,0]; N[id].x=BC.x+o[0]-dotSize(id)/2; N[id].y=BC.y+o[1]-dotSize(id)/2; });
+  const Rc=230;
+  Object.keys(N).filter(id=>id[0]!=='a').forEach(id=>{
+    const dx=N[id].x-BC.x, dy=N[id].y-BC.y, d=Math.hypot(dx,dy);
+    if(d>0 && d<Rc){ const k=Rc/d; N[id].x=BC.x+dx*k; N[id].y=BC.y+dy*k; }
+  });
+}
+TERRITORIES.forEach(t=>{
+  const rgb = [parseInt(t.hue.slice(1,3),16), parseInt(t.hue.slice(3,5),16), parseInt(t.hue.slice(5,7),16)].join(',');
+  const l = document.createElement('div');
+  const isCore = t.label==='The Bedrock';
+  l.className = isCore ? 'tlab core' : 'tlab';
+  l.style.cssText = isCore ? `left:${BC.x}px; top:${BC.y+120}px; transform:translateX(-50%);`
+                           : `left:${t.lx}px; top:${t.ly}px; transform:translateX(-50%);`;
+  l.innerHTML = `<div class="big" style="color:rgba(${rgb},0.92)">${t.label}</div>
+    <div class="sum">${t.sum}</div>`;
+  l.addEventListener('click', ()=>{
+    flyTo(t.rx+t.rw/2, t.ry+Math.min(t.rh/2, 1000), Math.min(visW()/(t.rw+300), 0.5));
+  });
+  world.appendChild(l);
+});
+
+
+
+/* minor stars - small nameless flecks inside each figure */
+{
+  const R = mulberry32(11);
+  TERRITORIES.forEach(t=>{
+    for (let i=0;i<16;i++){
+      const d=document.createElement('div');
+      const sz=(2.5+R()*3).toFixed(1);
+      d.style.cssText=`position:absolute; left:${Math.round(t.rx+40+R()*(t.rw-80))}px;`+
+        `top:${Math.round(t.ry+40+R()*(t.rh-80))}px; width:${sz}px; height:${sz}px;`+
+        `border-radius:50%; background:${t.hue}; opacity:${(0.18+R()*0.22).toFixed(2)}; pointer-events:none;`;
+      world.appendChild(d);
+    }
+  });
+}
+
+const flowsvg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+flowsvg.setAttribute('width',WW); flowsvg.setAttribute('height',WH);
+flowsvg.style.cssText='position:absolute;top:0;left:0;pointer-events:none;overflow:visible;';
+world.appendChild(flowsvg);
+
+const astsvg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+astsvg.id='astsvg'; astsvg.setAttribute('width',WW); astsvg.setAttribute('height',WH);
+ASTERISMS.forEach(([hue, pairs])=>{
+  pairs.forEach(([a,b])=>{
+    const pa=dotCenter(a), pb=dotCenter(b);
+    const dx=pb.x-pa.x, dy=pb.y-pa.y, L=Math.hypot(dx,dy)||1;
+    const ux=dx/L, uy=dy/L, off=30;
+    const ln = document.createElementNS('http://www.w3.org/2000/svg','line');
+    ln.setAttribute('x1',pa.x+ux*off); ln.setAttribute('y1',pa.y+uy*off);
+    ln.setAttribute('x2',pb.x-ux*off); ln.setAttribute('y2',pb.y-uy*off);
+    ln.setAttribute('stroke',hue); ln.setAttribute('stroke-opacity','0.38');
+    ln.setAttribute('stroke-width','1.6');
+    astsvg.appendChild(ln);
+  });
+});
+world.appendChild(astsvg);
+{ /* radiant-core spokes: bedrock -> each section, behind the asterisms */
+  const p2h={b1:HUES.b1,b2:HUES.b2,b3:HUES.b3,b4:HUES.b4};
+  const disc=document.createElementNS('http://www.w3.org/2000/svg','circle');
+  disc.setAttribute('cx',BC.x); disc.setAttribute('cy',BC.y); disc.setAttribute('r','86');
+  disc.setAttribute('class','disc-bg'); disc.setAttribute('fill','#efe6d4'); disc.setAttribute('fill-opacity','0.92');
+  disc.setAttribute('stroke','#6f6455'); disc.setAttribute('stroke-opacity','0.28');
+  const ring=document.createElementNS('http://www.w3.org/2000/svg','circle');
+  ring.setAttribute('cx',BC.x); ring.setAttribute('cy',BC.y); ring.setAttribute('r','108');
+  ring.setAttribute('fill','none'); ring.setAttribute('stroke','#6f6455');
+  ring.setAttribute('stroke-opacity','0.16'); ring.setAttribute('stroke-dasharray','3,7');
+  astsvg.insertBefore(ring, astsvg.firstChild);
+  astsvg.insertBefore(disc, astsvg.firstChild);
+  Object.keys(p2h).forEach(pref=>{
+    const ids=Object.keys(N).filter(id=>id.slice(0,2)===pref);
+    if(!ids.length) return;
+    const c={x:ids.reduce((s,i)=>s+N[i].x,0)/ids.length, y:ids.reduce((s,i)=>s+N[i].y,0)/ids.length};
+    const dx=c.x-BC.x, dy=c.y-BC.y, L=Math.hypot(dx,dy)||1, ux=dx/L, uy=dy/L;
+    const ln=document.createElementNS('http://www.w3.org/2000/svg','line');
+    ln.setAttribute('x1',BC.x+ux*112); ln.setAttribute('y1',BC.y+uy*112);
+    ln.setAttribute('x2',c.x-ux*120); ln.setAttribute('y2',c.y-uy*120);
+    ln.setAttribute('stroke',p2h[pref]); ln.setAttribute('stroke-opacity','0.28'); ln.setAttribute('stroke-width','2');
+    astsvg.insertBefore(ln, astsvg.firstChild);
+  });
+}
+
+{
+  const pts = TOUR.map(id=>dotCenter(id));
+  let d = `M ${pts[0].x} ${pts[0].y}`;
+  for (let i=1;i<pts.length;i++){
+    const a=pts[i-1], b=pts[i];
+    const mx=(a.x+b.x)/2, my=(a.y+b.y)/2;
+    d += ` Q ${mx + (b.y-a.y)*0.08} ${my - (b.x-a.x)*0.08} ${b.x} ${b.y}`;
+  }
+  const p = document.createElementNS('http://www.w3.org/2000/svg','path');
+  p.setAttribute('d',d); p.setAttribute('fill','none');
+  p.setAttribute('class','lnk-base'); p.setAttribute('stroke',`rgba(${RGB_INK},0.08)`); p.setAttribute('stroke-width','4');
+  p.setAttribute('stroke-dasharray','2,14');
+  flowsvg.appendChild(p);
+}
+
+const tsvg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+tsvg.id='tsvg'; tsvg.setAttribute('width',WW); tsvg.setAttribute('height',WH);
+const defs = document.createElementNS('http://www.w3.org/2000/svg','defs');
+defs.innerHTML = `<marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="#96702f" opacity="0.8"/></marker>`;
+tsvg.appendChild(defs);
+world.appendChild(tsvg);
+const tlabels = [];
+
+const mkEls = {};
+ALL.forEach(id=>{
+  const n = N[id];
+  const hue = hueOf(id);
+  const size = dotSize(id);
+  const isAx = id[0]==='a';
+  const m = document.createElement('div');
+  m.className = 'mk' + (n.sim ? ' hasim' : '') + (isAx ? ' coredot' : '');
+  m.style.cssText = `left:${n.x}px; top:${n.y}px;`;
+  m.dataset.id = id;
+  m.innerHTML = isAx
+    ? `<div class="dot" style="width:${size}px; height:${size}px; background:${hue};"></div>`
+    : `<div class="dot" style="width:${size}px; height:${size}px; background:${hue};"></div>
+    <div class="dtext">
+      <div class="lbl">${SEQ[id]?`<span class="seq">${SEQ[id]}</span>`:''}${n.title}</div>
+      <div class="ess">${n.ess}</div>
+      <div class="sims-badge">▸ live model</div>
+    </div>`;
+  world.appendChild(m);
+  mkEls[id] = m;
+  m.addEventListener('click', e=>{
+    if (moved>6) return;
+    e.stopPropagation();
+    openIdea(id);
+  });
+});
+
+function lod(){
+  const ess = cam.s > 0.55;
+  if (lod._k===ess) return;
+  lod._k = ess;
+  Object.values(mkEls).forEach(m=>m.classList.toggle('showess', ess));
+}
+
+/* ============================================================
+   READER
+   ============================================================ */
+let focusId = null, stopSim = null;
+
+function linkGroup(kicker, items){
+  if (!items.length) return '';
+  return `<div class="lgroup"><span class="kicker">${kicker}</span>
+    ${items.map(([t,why])=>`<a data-t="${t}"><span class="t">${N[t].title}</span>
+      <span class="why">${why}</span></a>`).join('')}
+  </div>`;
+}
+
+function openIdea(id){
+  const n = N[id];
+  if (stopSim){ stopSim(); stopSim=null; }
+  focusId = id;
+  const chip = document.getElementById('rChip');
+  chip.textContent = n.type;
+  chip.style.borderColor = hueOf(id)+'66'; chip.style.color = hueOf(id);
+  document.getElementById('rTitle').textContent = n.title;
+  document.getElementById('rTerr').textContent = terrOf(id) + (SEQ[id]?` · step ${SEQ[id]} of ${TOUR.length}`:'');
+  const nextId = SEQ[id] && SEQ[id] < TOUR.length ? TOUR[SEQ[id]] : null;
+  document.getElementById('rbody').innerHTML = `
+    <div class="hook">${n.hook}</div>
+    <div class="story">${n.story}</div>
+    ${n.sim ? simHTML(n.sim) : ''}
+    ${n.mech ? `<details class="fold"><summary>How it actually works</summary><div class="inner">${n.mech}</div></details>` : ''}
+    <div class="named"><span class="kicker">the idea, named</span>
+      <b>${n.term}</b><div class="def">${n.def}</div></div>
+    <div class="sowhat"><span class="kicker">where it bites</span>${n.sowhat}</div>
+    <div class="linkrow">
+      ${linkGroup('builds on', n.builds)}
+      ${linkGroup('leads to', n.leads)}
+      ${linkGroup('see it live', n.live)}
+    </div>
+    ${nextId ? `<button class="nextbtn" data-t="${nextId}"><span class="k">next in the flow · ${SEQ[nextId]} of ${TOUR.length}</span>${N[nextId].title}<span class="arr">→</span></button>`
+             : (SEQ[id]===TOUR.length ? `<button class="nextbtn" id="finishBtn"><span class="k">end of the flow</span>Back to the chart<span class="arr">↑</span></button>` : '')}`;
+  document.querySelectorAll('#rbody [data-t]').forEach(a=>
+    a.addEventListener('click', ()=>openIdea(a.dataset.t)));
+  const fin = document.getElementById('finishBtn');
+  if (fin) fin.onclick = ()=>{ closeReader(); overviewCam(); };
+  const fig = document.querySelector('#rbody figure.frame');
+  if (fig) stopSim = SIMS[fig.dataset.sim](fig);
+  document.getElementById('rbody').scrollTop = 0;
+  reader.classList.add('open');
+  document.body.classList.add('reader-open');
+  highlight(id);
+  syncNav();
+  const rs = Math.min(0.95, Math.max(0.62, cam.s));
+  setTimeout(()=>flyTo(n.x+180, n.y+60, rs), 60);
+}
+function closeReader(){
+  if (stopSim){ stopSim(); stopSim=null; }
+  reader.classList.remove('open');
+  document.body.classList.remove('reader-open');
+  focusId = null;
+  clearHighlight();
+  syncNav();
+}
+document.getElementById('rClose').onclick = closeReader;
+
+/* map highlight: few directional lines with plain labels */
+function highlight(id){
+  clearHighlight();
+  const n = N[id];
+  const nb = new Set([id]);
+  const conns = [
+    ...n.builds.map(([t])=>({t, lab:'builds on', into:true})),
+    ...n.leads.map(([t])=>({t, lab:'leads to', into:false})),
+    ...n.live.map(([t])=>({t, lab:'see it live', into:false}))
+  ];
+  conns.forEach(c=>nb.add(c.t));
+  ALL.forEach(x=>{
+    mkEls[x].classList.toggle('dimmed', !nb.has(x));
+    mkEls[x].classList.toggle('neighbor', nb.has(x) && x!==id);
+    mkEls[x].classList.toggle('focused', x===id);
+  });
+  const here = dotCenter(id);
+  conns.forEach(c=>{
+    const there = dotCenter(c.t);
+    let from = c.into ? {...there} : {...here};
+    let to   = c.into ? {...here} : {...there};
+    {
+      const ddx=to.x-from.x, ddy=to.y-from.y, LL=Math.hypot(ddx,ddy)||1;
+      const ux=ddx/LL, uy=ddy/LL, off=30;
+      from = {x:from.x+ux*off, y:from.y+uy*off};
+      to   = {x:to.x-ux*off,   y:to.y-uy*off};
+    }
+    const dx=to.x-from.x, dy=to.y-from.y, dist=Math.hypot(dx,dy)||1;
+    const cx=(from.x+to.x)/2 - dy/dist*dist*0.12, cy=(from.y+to.y)/2 + dx/dist*dist*0.12;
+    const p = document.createElementNS('http://www.w3.org/2000/svg','path');
+    p.setAttribute('d',`M ${from.x} ${from.y} Q ${cx} ${cy} ${to.x} ${to.y}`);
+    p.setAttribute('fill','none');
+    p.setAttribute('class','lnk-flow'); p.setAttribute('stroke',`rgba(${RGB_AMBER},0.45)`);
+    p.setAttribute('stroke-width','2.5');
+    p.setAttribute('stroke-dasharray','9,8');
+    p.setAttribute('class','tline');
+    p.setAttribute('marker-end','url(#arr)');
+    tsvg.appendChild(p);
+    const lbl = document.createElement('div');
+    lbl.className='tlabel';
+    lbl.style.left = (.25*from.x+.5*cx+.25*to.x)+'px';
+    lbl.style.top = (.25*from.y+.5*cy+.25*to.y)+'px';
+    lbl.textContent = c.lab;
+    lbl.addEventListener('click', e=>{ e.stopPropagation(); openIdea(c.t); });
+    world.appendChild(lbl);
+    tlabels.push(lbl);
+  });
+}
+function clearHighlight(){
+  ALL.forEach(x=>mkEls[x].classList.remove('dimmed','neighbor','focused'));
+  [...tsvg.querySelectorAll('path')].forEach(p=>p.remove());
+  tlabels.forEach(l=>l.remove()); tlabels.length=0;
+}
+
+/* ============================================================
+   NAV - top-right cluster drives the default flow
+   ============================================================ */
+function syncNav(){
+  const i = focusId ? TOUR.indexOf(focusId) : -1;
+  document.getElementById('navcluster').classList.toggle('on', !!focusId);
+  document.getElementById('navPrev').disabled = i===0;
+  document.getElementById('navNext').disabled = i===TOUR.length-1;
+}
+function navStep(dir){
+  const i = focusId ? TOUR.indexOf(focusId) : -1;
+  if (i<0){ openIdea(TOUR[0]); return; }
+  const j = i+dir;
+  if (j>=0 && j<TOUR.length) openIdea(TOUR[j]);
+}
+document.getElementById('navPrev').onclick = ()=>navStep(-1);
+document.getElementById('navNext').onclick = ()=>navStep(1);
+
+/* ============================================================
+   SIMULATIONS
+   ============================================================ */
+
+function mulberry32(a){ return function(){ a|=0; a=a+0x6D2B79F5|0;
+  let t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t;
+  return ((t^t>>>14)>>>0)/4294967296; }; }
+function setActive(fig, btn){
+  fig.querySelectorAll('.ghost').forEach(b=>{ if(b.dataset.d!==undefined||b.dataset.m!==undefined) b.classList.remove('active');});
+  if (btn) btn.classList.add('active');
+}
+function simHTML(kind){
+  const caps = {
+    attention:"Forty years of a marriage. Amber = the part our love stories actually depict. Drag the marker and watch which of the book’s own events fall outside the frame.",
+    spiral:"Amber pursues, gray withdraws — each move triggering the other. Run the loop, then press ‘name the hurt’ and watch the same two people, with the same wiring, behave differently.",
+    laundry:"His Thursday and her Thursday, hour by hour, from ‘The Prestige of Laundry’. When the day ends, say who had it worse — and see what the other column was doing.",
+    distance:"A schematic of desire against closeness. Both ends are flat: nothing has been granted at one, nothing is left to bridge at the other.",
+    desires:"A schematic of the two desires. Move the dial anywhere; the total unmet desire keeps exactly the same width.",
+    readiness:"De Botton’s nine criteria from ‘Ready for Marriage’. Click a row to claim it. Rabih needed thirteen years of marriage to claim all nine."
+  };
+  const ctl = {
+    attention:`<span class="cl">story ends at</span><input type="range" min="0.25" max="40" step="0.25" value="0.5">
+      <button class="ghost active" data-m="story">the love story</button>
+      <button class="ghost" data-m="whole">the whole course</button>`,
+    spiral:`<button class="ghost active" data-m="loop">run the loop</button>
+      <button class="ghost" data-m="repair">name the hurt</button>
+      <span class="cl">avoidance</span><input type="range" min="0.6" max="1.8" step="0.05" value="1">`,
+    laundry:`<button class="ghost" data-a="replay">replay the Thursday ↻</button>
+      <button class="ghost" data-m="his">his was harder</button>
+      <button class="ghost" data-m="hers">hers was harder</button>`,
+    distance:`<span class="cl">closeness</span><input type="range" min="0" max="1" step="0.01" value="0.93">
+      <button class="ghost" data-m="free">no children in the house</button>
+      <button class="ghost active" data-m="kids">children in the house</button>`,
+    desires:`<span class="cl">fortress</span><input type="range" min="0" max="1" step="0.01" value="0.25"><span class="cl">open sea</span>
+      <button class="ghost" data-a="solve">find a setting with no cost</button>`,
+    readiness:`<button class="ghost" data-a="clear">clear</button>
+      <button class="ghost" data-a="rabih">Rabih, year thirteen</button>`
+  };
+  return `<figure class="frame" data-sim="${kind}">
+    <canvas></canvas>
+    <div class="controls">${ctl[kind]}</div>
+    <figcaption>${caps[kind]}</figcaption>
+  </figure>`;
+}
+const SIMS = {};
+
+/* Shared helper: crisp canvas on hi-dpi, logical drawing space stays w x h. */
+const _DPR = Math.max(1, Math.min(2, (typeof devicePixelRatio === 'number' ? devicePixelRatio : 1) || 1));
+function fitCanvas(cv, w, h){
+  cv.width = Math.round(w*_DPR); cv.height = Math.round(h*_DPR);
+  const ctx = cv.getContext('2d');
+  if (ctx.setTransform) ctx.setTransform(_DPR,0,0,_DPR,0,0);
+  return ctx;
+}
+/* logical-x/y from a click, given the canvas is displayed at some scaled width */
+function logicalXY(cv, e, w){
+  const r = cv.getBoundingClientRect();
+  const k = r.width ? w/r.width : 1;
+  return [(e.clientX-r.left)*k, (e.clientY-r.top)*k];
+}
+
+/* ---------- I · where the story stops --------------------------------- */
+SIMS.attention = fig=>{
+  const cv=fig.querySelector('canvas');
+  const W=700,H=400, ctx=fitCanvas(cv,W,H);
+  const X0=44,X1=666,YB=104,YEARS=40;
+  const EV=[[0.0,"they meet, on an A720 roundabout"],[0.5,"the vows, in Inverness"],
+    [0.6,"the Ikea war: Fabulös or Godis"],[1.0,"“Just great,” to Hannah on the phone"],
+    [2.0,"the sulk, and the boiled eggs"],[2.1,"transference: the Premier Inn call"],
+    [3.0,"Prague, and the lost phone"],[4.0,"Esther, after a seven-hour ordeal"],
+    [5.0,"the olive-grove fight at one a.m."],[7.0,"William, and Lady William"],
+    [11.0,"Berlin, and Lauren"],[12.0,"three flights up to Mrs Fairbairn"],
+    [13.0,"ready for marriage, at last"],[13.6,"the photograph on Ben Nevis"]];
+  let cut=0.5;
+  const px=y=>X0+(y/YEARS)*(X1-X0);
+  function draw(){
+    ctx.fillStyle=SUNK; ctx.fillRect(0,0,W,H);
+    ctx.textAlign='left'; ctx.font='12px Inter, sans-serif';
+    ctx.fillStyle=GRAY; ctx.fillText('a forty-year marriage',X0,58);
+    ctx.fillStyle=`rgba(${RGB_GRAY},0.16)`; ctx.fillRect(X0,YB-22,X1-X0,30);
+    ctx.strokeStyle=BRD; ctx.lineWidth=1; ctx.strokeRect(X0,YB-22,X1-X0,30);
+    const cx=px(cut);
+    ctx.fillStyle=`rgba(${RGB_AMBER},0.30)`; ctx.fillRect(X0,YB-22,cx-X0,30);
+    ctx.strokeStyle=AMBER; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(cx,YB-30); ctx.lineTo(cx,YB+16); ctx.stroke();
+    ctx.fillStyle=AMBER; ctx.font='12.5px Inter, sans-serif';
+    const nearEnd = cx > W-170;
+    ctx.textAlign = nearEnd ? 'right' : 'left';
+    ctx.fillText('the story ends here', cx + (nearEnd?-7:7), YB-27);
+    ctx.textAlign='left';
+    ctx.strokeStyle=BRD; ctx.fillStyle=FAINT; ctx.font='11px Inter, sans-serif';
+    for(let y=0;y<=YEARS;y+=10){ const x=px(y);
+      ctx.beginPath(); ctx.moveTo(x,YB+8); ctx.lineTo(x,YB+14); ctx.stroke();
+      ctx.fillText(y===0?'wedding':'year '+y, x-(y===0?21:18), YB+28); }
+    ctx.fillStyle=FAINT; ctx.font='11.5px Inter, sans-serif';
+    ctx.fillText('the novel itself stops at year fourteen; the marriage does not',X0,YB+48);
+    ctx.font='12.5px Inter, sans-serif';
+    EV.forEach((e,i)=>{
+      const col=i<7?0:1, row=i%7;
+      const x=X0+col*318, y=186+row*23;
+      const inside=e[0]<=cut;
+      ctx.fillStyle=inside?AMBER:FAINT;
+      ctx.beginPath(); ctx.arc(x+4,y-4,3.2,0,7); ctx.fill();
+      ctx.fillStyle=inside?INKC:FAINT;
+      ctx.fillText(e[1],x+16,y);
+    });
+    const months=Math.round(cut*12), tot=YEARS*12;
+    const shown=EV.filter(e=>e[0]<=cut).length;
+    ctx.fillStyle=INKC; ctx.font='14px Inter, sans-serif';
+    ctx.fillText(`depicted: ${months} month${months===1?'':'s'} of ${tot} — ${(cut/YEARS*100).toFixed(1)}% of the marriage`,X0,364);
+    ctx.fillStyle=GRAY; ctx.font='13px Inter, sans-serif';
+    ctx.fillText(`${EV.length-shown} of the ${EV.length} events in this book fall outside the frame`,X0,386);
+  }
+  draw();
+  const sl=fig.querySelector('input');
+  sl.oninput=()=>{cut=parseFloat(sl.value);draw();};
+  fig.querySelectorAll('.ghost').forEach(b=>b.onclick=()=>{
+    setActive(fig,b);
+    cut = b.dataset.m==='story' ? 0.5 : 40;
+    sl.value=cut; draw();});
+  return ()=>{};
+};
+
+/* ---------- II · the anxious–avoidant spiral -------------------------- */
+SIMS.spiral = fig=>{
+  const cv=fig.querySelector('canvas');
+  const W=700,H=400, ctx=fitCanvas(cv,W,H);
+  const CX=350,LY=96,COMFORT=70;
+  let d=90, kv=1, mode='loop', hist=[], raf;
+  function step(){
+    if(mode==='loop'){
+      const pressure=Math.max(0,(d-COMFORT))*0.012+0.16;  // anxious pursuit, worse the further away
+      d += kv*pressure*7 - 0.20;                           // avoidant retreat, minus a little drift back
+    } else {
+      d += (COMFORT-d)*0.018;                              // the hurt is named; the loop unwinds
+    }
+    d=Math.max(34,Math.min(540,d));
+    hist.push(d); if(hist.length>330) hist.shift();
+  }
+  function draw(){
+    ctx.fillStyle=SUNK; ctx.fillRect(0,0,W,H);
+    ctx.strokeStyle=BRD; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(40,LY); ctx.lineTo(660,LY); ctx.stroke();
+    const ax=CX-d/2, bx=CX+d/2;
+    ctx.strokeStyle=`rgba(${RGB_AMBER},0.35)`; ctx.lineWidth=1.6;
+    ctx.beginPath(); ctx.moveTo(ax,LY); ctx.lineTo(bx,LY); ctx.stroke();
+    ctx.fillStyle=AMBER; ctx.beginPath(); ctx.arc(ax,LY,9,0,7); ctx.fill();
+    ctx.fillStyle=GRAY;  ctx.beginPath(); ctx.arc(bx,LY,9,0,7); ctx.fill();
+    ctx.font='12.5px Inter, sans-serif'; ctx.textAlign='center';
+    ctx.fillStyle=AMBER; ctx.fillText('anxious · pursues',Math.max(76,ax),LY-20);
+    ctx.fillStyle=GRAY;  ctx.fillText('avoidant · withdraws',Math.min(W-86,bx),LY-20);
+    ctx.textAlign='left';
+    const PY0=170,PH=150;
+    ctx.strokeStyle=BRD; ctx.beginPath(); ctx.moveTo(40,PY0+PH); ctx.lineTo(660,PY0+PH); ctx.stroke();
+    ctx.setLineDash([4,4]); ctx.strokeStyle=FAINT;
+    const cy=PY0+PH-(COMFORT/560)*PH;
+    ctx.beginPath(); ctx.moveTo(40,cy); ctx.lineTo(660,cy); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle=FAINT; ctx.font='11.5px Inter, sans-serif'; ctx.fillText('bearable distance',44,cy-6);
+    ctx.strokeStyle=AMBER; ctx.lineWidth=2.2; ctx.beginPath();
+    hist.forEach((v,i)=>{const x=40+i/329*620, y=PY0+PH-(v/560)*PH; i?ctx.lineTo(x,y):ctx.moveTo(x,y);});
+    ctx.stroke();
+    ctx.fillStyle=GRAY; ctx.font='12px Inter, sans-serif'; ctx.fillText('distance between them, over time',44,PY0-8);
+    const rising = hist.length>12 && hist[hist.length-1] > hist[hist.length-12]+0.4;
+    ctx.font='14px Inter, sans-serif';
+    if(mode==='loop'){
+      ctx.fillStyle = d>380 ? INKC : GRAY;
+      ctx.fillText(d>380
+        ? 'Nobody changed their mind. The loop did all of this on its own.'
+        : (rising ? 'He reads the silence as an attack. She reads the pursuit as one. Both are right, and both escalate.'
+                  : 'Held, for now — at a distance neither of them would have chosen.'),44,368);
+    } else {
+      ctx.fillStyle=INKC;
+      ctx.fillText('“Not angry. Not cold. Hurt.” Same two people, same wiring, different distance.',44,368);
+    }
+  }
+  function frame(){ step(); draw(); raf=requestAnimationFrame(frame); }
+  raf=requestAnimationFrame(frame);
+  const sl=fig.querySelector('input');
+  sl.oninput=()=>{kv=parseFloat(sl.value);};
+  fig.querySelectorAll('.ghost').forEach(b=>b.onclick=()=>{
+    setActive(fig,b); mode=b.dataset.m;
+    if(mode==='loop'){ d=90; hist=[]; }});
+  return ()=>cancelAnimationFrame(raf);
+};
+
+/* ---------- IV · the prestige of laundry ------------------------------ */
+SIMS.laundry = fig=>{
+  const cv=fig.querySelector('canvas');
+  const W=700,H=470, ctx=fitCanvas(cv,W,H);
+  const HIS=[[6.6,"the commuter bus — standing, 30 min"],[8.25,"the failing tile supplier"],
+    [10.0,"a meeting about tax rebates"],[12.5,"a meeting with the new CFO"],
+    [15.0,"a fourth meeting, cause forgotten"],[18.3,"the commuter bus — standing, 30 min"],
+    [20.5,"hoping nothing more is needed of him"]];
+  const HERS=[[7.3,"the school run"],[8.5,"the beds"],[9.2,"three work calls"],
+    [11.0,"two bathrooms"],[12.0,"the vacuuming"],[13.0,"the summer clothes, out"],
+    [14.0,"the plumber"],[14.7,"the dry cleaning"],[15.5,"the upholsterer"],
+    [16.2,"the dentist"],[17.3,"the homework"],[18.5,"the supper"],
+    [19.7,"the bath"],[20.4,"the ink stains"]];
+  let clock=6.4, raf, pick=null;
+  function draw(){
+    ctx.fillStyle=SUNK; ctx.fillRect(0,0,W,H);
+    ctx.textAlign='left';
+    const hh=Math.floor(clock), mm=Math.min(59,Math.round((clock-hh)*60));
+    ctx.fillStyle=GRAY; ctx.font='13px Inter, sans-serif';
+    ctx.fillText(`Thursday, ${String(hh).padStart(2,'0')}:${String(mm).padStart(2,'0')}`,30,30);
+    const hisHue  = pick==='his'  ? AMBER : GRAY;
+    const hersHue = pick==='hers' ? AMBER : GRAY;
+    ctx.font='13px Inter, sans-serif';
+    ctx.fillStyle=hisHue;  ctx.fillText('his day',30,56);
+    ctx.fillStyle=hersHue; ctx.fillText('her day',362,56);
+    ctx.font='12.5px Inter, sans-serif';
+    const col=(L,x,hue)=>{ let n=0;
+      L.forEach((e,i)=>{ const done=clock>=e[0]; if(done) n++;
+        const y=82+i*23;
+        ctx.fillStyle=done?hue:FAINT;
+        ctx.beginPath(); ctx.arc(x+4,y-4,3,0,7); ctx.fill();
+        ctx.fillStyle=done?INKC:FAINT;
+        ctx.fillText(e[1],x+15,y); });
+      return n; };
+    const nH=col(HIS,30,hisHue), nR=col(HERS,362,hersHue);
+    const BY=406, BW=280;
+    const frac=L=>L.filter(e=>clock>=e[0]).length/L.length;
+    ctx.fillStyle=GRAY; ctx.font='11.5px Inter, sans-serif';
+    ctx.fillText('depleted — no shared unit',30,BY-8);
+    ctx.fillText('depleted — no shared unit',362,BY-8);
+    [[30,frac(HIS),pick==='his'],[362,frac(HERS),pick==='hers']].forEach(([x,r,hot])=>{
+      ctx.strokeStyle=BRD; ctx.lineWidth=1; ctx.strokeRect(x,BY,BW,14);
+      ctx.fillStyle = hot ? `rgba(${RGB_AMBER},0.45)` : `rgba(${RGB_GRAY},0.42)`;
+      ctx.fillRect(x,BY,BW*r,14); });
+    ctx.font='13.5px Inter, sans-serif';
+    if(pick){
+      const other = pick==='his' ? 'hers' : 'his';
+      const cnt   = pick==='his' ? HERS.length : HIS.length;
+      ctx.fillStyle=INKC;
+      ctx.fillText(`While that happened, ${other==='hers'?'she':'he'} got through ${cnt} of them. Both days: entirely spent.`,30,BY+38);
+      ctx.fillStyle=GRAY; ctx.font='12.5px Inter, sans-serif';
+      ctx.fillText('There is no unit in which this comparison resolves — which is why neither gets thanked.',30,BY+58);
+    } else if(clock>=22.4){
+      ctx.fillStyle=INKC;
+      ctx.fillText('Identical exhaustion. Then: “Will you remember to iron the duvet covers tomorrow?”',30,BY+38);
+      ctx.fillStyle=GRAY; ctx.font='12.5px Inter, sans-serif';
+      ctx.fillText('Now say who had it worse.',30,BY+58);
+    } else {
+      ctx.fillStyle=FAINT; ctx.fillText('…',30,BY+38);
+    }
+  }
+  function frame(){ if(clock<22.5) clock+=0.052; draw(); raf=requestAnimationFrame(frame); }
+  raf=requestAnimationFrame(frame);
+  fig.querySelectorAll('.ghost').forEach(b=>b.onclick=()=>{
+    if(b.dataset.a==='replay'){
+      pick=null; clock=6.4;
+      fig.querySelectorAll('.ghost').forEach(x=>{ if(x.dataset.m) x.classList.remove('active'); });
+    } else { setActive(fig,b); pick=b.dataset.m; clock=22.5; }});
+  return ()=>cancelAnimationFrame(raf);
+};
+
+/* ---------- IV · desire needs distance -------------------------------- */
+SIMS.distance = fig=>{
+  const cv=fig.querySelector('canvas');
+  const W=700,H=400, ctx=fitCanvas(cv,W,H);
+  const X0=52,X1=664,YB=300,YT=64;
+  let c=0.93, kids=true;
+  const base=x=>Math.exp(-Math.pow(x-0.52,2)/0.052);
+  const f=x=>base(x)*(kids?0.46:1);
+  const px=x=>X0+x*(X1-X0), py=v=>YB-v*(YB-YT);
+  const MARK=[[0.06,"strangers"],[0.32,"new lovers"],[0.56,"five years in"],[0.93,"co-parents, 22:40"]];
+  function draw(){
+    ctx.fillStyle=SUNK; ctx.fillRect(0,0,W,H);
+    ctx.textAlign='left';
+    ctx.strokeStyle=BRD; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(X0,YB); ctx.lineTo(X1,YB); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(X0,YT-12); ctx.lineTo(X0,YB); ctx.stroke();
+    ctx.fillStyle=GRAY; ctx.font='12px Inter, sans-serif';
+    ctx.fillText('desire',X0+6,YT-18);
+    ctx.fillText('all gap',X0,YB+20);
+    ctx.fillText('no gap',X1-40,YB+20);
+    if(kids){
+      ctx.strokeStyle=FAINT; ctx.setLineDash([5,5]); ctx.lineWidth=1.4; ctx.beginPath();
+      for(let i=0;i<=240;i++){const x=i/240; i?ctx.lineTo(px(x),py(base(x))):ctx.moveTo(px(x),py(base(x)));}
+      ctx.stroke(); ctx.setLineDash([]);
+      ctx.fillStyle=FAINT; ctx.font='11.5px Inter, sans-serif';
+      ctx.fillText('before the children',px(0.52)-48,py(1)-8);
+    }
+    ctx.strokeStyle=GRAY; ctx.lineWidth=2.4; ctx.beginPath();
+    for(let i=0;i<=240;i++){const x=i/240; i?ctx.lineTo(px(x),py(f(x))):ctx.moveTo(px(x),py(f(x)));}
+    ctx.stroke();
+    ctx.font='11.5px Inter, sans-serif';
+    MARK.forEach(([x,l])=>{ ctx.fillStyle=FAINT;
+      ctx.beginPath(); ctx.arc(px(x),YB,2.5,0,7); ctx.fill();
+      ctx.fillText(l,Math.min(Math.max(X0,px(x)-l.length*2.9),W-116),YB+38); });
+    ctx.strokeStyle=AMBER; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(px(c),YB); ctx.lineTo(px(c),py(f(c))); ctx.stroke();
+    ctx.fillStyle=AMBER; ctx.beginPath(); ctx.arc(px(c),py(f(c)),5.5,0,7); ctx.fill();
+    let msg;
+    if(c<0.18) msg='All gap and no acceptance — nothing has been granted yet to feel relieved about.';
+    else if(c>0.82) msg='No gap left to bridge. Nothing is withheld, so nothing can be crossed.';
+    else msg='A gap worth bridging — which is the whole of what desire is doing.';
+    ctx.fillStyle=INKC; ctx.font='14px Inter, sans-serif'; ctx.fillText(msg,X0-8,364);
+    ctx.fillStyle=GRAY; ctx.font='12.5px Inter, sans-serif';
+    ctx.fillText(kids?'With children: the parental self is reinstated, and the distance is closed from both ends.'
+                     :'Without them: more distance available, and more self left over to bring to it.',X0-8,386);
+  }
+  draw();
+  const sl=fig.querySelector('input');
+  sl.oninput=()=>{c=parseFloat(sl.value);draw();};
+  fig.querySelectorAll('.ghost').forEach(b=>b.onclick=()=>{
+    setActive(fig,b); kids=b.dataset.m==='kids'; draw();});
+  return ()=>{};
+};
+
+/* ---------- IV · two desires, one life -------------------------------- */
+SIMS.desires = fig=>{
+  const cv=fig.querySelector('canvas');
+  const W=700,H=430, ctx=fitCanvas(cv,W,H);
+  const X0=52,X1=664,YB=252,YT=52;
+  let s=0.25, solving=0, failed=false, raf=null;
+  const sec=x=>1-x, adv=x=>x;
+  const px=x=>X0+x*(X1-X0), py=v=>YB-v*(YB-YT);
+  function draw(){
+    ctx.fillStyle=SUNK; ctx.fillRect(0,0,W,H);
+    ctx.textAlign='left';
+    ctx.strokeStyle=BRD; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(X0,YB); ctx.lineTo(X1,YB); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(X0,YT-10); ctx.lineTo(X0,YB); ctx.stroke();
+    ctx.fillStyle=GRAY; ctx.font='12px Inter, sans-serif';
+    ctx.fillText('desire met',X0+6,YT-16);
+    ctx.fillText('all fortress',X0,YB+20);
+    ctx.fillText('all open sea',X1-64,YB+20);
+    ctx.strokeStyle=GRAY; ctx.lineWidth=2.4; ctx.beginPath();
+    ctx.moveTo(px(0),py(sec(0))); ctx.lineTo(px(1),py(sec(1))); ctx.stroke();
+    ctx.fillStyle=GRAY; ctx.font='12.5px Inter, sans-serif';
+    ctx.fillText('security',X0+8,py(sec(0.05))-8);
+    ctx.strokeStyle=GRAY; ctx.setLineDash([6,5]); ctx.lineWidth=2; ctx.beginPath();
+    ctx.moveTo(px(0),py(adv(0))); ctx.lineTo(px(1),py(adv(1))); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle=GRAY; ctx.fillText('adventure (dashed)',X1-140,py(adv(0.94))-8);
+    ctx.strokeStyle=AMBER; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(px(s),YT-10); ctx.lineTo(px(s),YB); ctx.stroke();
+    ctx.fillStyle=AMBER;
+    ctx.beginPath(); ctx.arc(px(s),py(sec(s)),5,0,7); ctx.fill();
+    ctx.beginPath(); ctx.arc(px(s),py(adv(s)),5,0,7); ctx.fill();
+    const BY=306, BW=X1-X0;
+    ctx.fillStyle=GRAY; ctx.font='11.5px Inter, sans-serif';
+    ctx.fillText('unmet desire, total',X0,BY-8);
+    ctx.strokeStyle=BRD; ctx.strokeRect(X0,BY,BW,20);
+    const u1=(1-sec(s))*BW, u2=(1-adv(s))*BW;
+    ctx.fillStyle=`rgba(${RGB_GRAY},0.34)`; ctx.fillRect(X0,BY,u2,20);
+    ctx.fillStyle=`rgba(${RGB_AMBER},0.40)`; ctx.fillRect(X0+u2,BY,u1,20);
+    ctx.fillStyle=GRAY; ctx.font='11.5px Inter, sans-serif';
+    if(u2>120) ctx.fillText('adventure unmet',X0+8,BY+14);
+    if(u1>120) ctx.fillText('security unmet',X0+u2+8,BY+14);
+    ctx.fillStyle=INKC; ctx.font='14px Inter, sans-serif';
+    ctx.fillText(`security met ${Math.round(sec(s)*100)}% · adventure met ${Math.round(adv(s)*100)}% · unmet in total: 100%, unchanged`,X0,360);
+    ctx.fillStyle=failed?INKC:GRAY; ctx.font='13px Inter, sans-serif';
+    ctx.fillText(failed
+      ? '“There is no solution.” Every setting pays in full; you are only choosing the currency.'
+      : 'Move the dial anywhere. The bar above never gets shorter.',X0,386);
+    ctx.fillStyle=FAINT; ctx.font='12px Inter, sans-serif';
+    ctx.fillText('Schematic, not measurement — the point is the invariance, not the numbers.',X0,410);
+  }
+  function sweep(){
+    solving+=0.012; s=Math.min(1,solving);
+    fig.querySelector('input').value=s;
+    draw();
+    if(solving<1){ raf=requestAnimationFrame(sweep); } else { failed=true; draw(); raf=null; }
+  }
+  draw();
+  const sl=fig.querySelector('input');
+  sl.oninput=()=>{ if(raf){cancelAnimationFrame(raf);raf=null;} s=parseFloat(sl.value); draw(); };
+  fig.querySelectorAll('.ghost').forEach(b=>b.onclick=()=>{
+    if(raf) cancelAnimationFrame(raf);
+    solving=0; failed=false; s=0; sl.value=0; raf=requestAnimationFrame(sweep);});
+  return ()=>{ if(raf) cancelAnimationFrame(raf); };
+};
+
+/* ---------- IV · ready for marriage ---------------------------------- */
+SIMS.readiness = fig=>{
+  const cv=fig.querySelector('canvas');
+  const W=700,H=470, ctx=fitCanvas(cv,W,H);
+  const X0=34,Y0=64,RH=34,ROWW=560;
+  const Q=["I have given up on perfection — in them and in myself",
+    "I have despaired of ever being fully understood",
+    "I know I am crazy, and can say so without defensiveness",
+    "It is the institution that is difficult, not this person",
+    "I am ready to love, not merely to be loved",
+    "I accept that sex will always sit uneasily with love",
+    "I am happy to be taught, and calm when I teach",
+    "I know we are not compatible, and expect to build it",
+    "I am fed up with most love stories"];
+  const on=Q.map(()=>false);
+  function verdict(n){
+    if(n<=2) return ["Romantic.","This is where everyone begins — and where almost all the trouble lives."];
+    if(n<=4) return ["Enrolled.","You are in the curriculum, which on de Botton’s argument is the only thing that teaches this."];
+    if(n<=6) return ["Most of the way.","The remaining ones are the expensive ones; they tend to require an actual crisis."];
+    if(n<=8) return ["Nearly ready.","Rabih needed thirteen years of marriage and one affair to get this far."];
+    return ["Ready for marriage.","Which is a state that arrives after the wedding — not before it."];
+  }
+  function draw(){
+    ctx.fillStyle=SUNK; ctx.fillRect(0,0,W,H);
+    ctx.textAlign='left';
+    ctx.fillStyle=GRAY; ctx.font='12.5px Inter, sans-serif';
+    ctx.fillText('Click each one you can honestly claim today.',X0,36);
+    ctx.font='13.5px Inter, sans-serif';
+    Q.forEach((q,i)=>{
+      const y=Y0+i*RH;
+      ctx.strokeStyle=on[i]?AMBER:BRD; ctx.lineWidth=1.4;
+      ctx.strokeRect(X0,y,15,15);
+      if(on[i]){ ctx.strokeStyle=AMBER; ctx.lineWidth=2.2; ctx.beginPath();
+        ctx.moveTo(X0+3,y+8); ctx.lineTo(X0+6.5,y+11.5); ctx.lineTo(X0+12,y+3.5); ctx.stroke(); }
+      ctx.fillStyle=on[i]?INKC:GRAY;
+      ctx.fillText(`${i+1}. ${q}`,X0+27,y+12);
+    });
+    const n=on.filter(Boolean).length;
+    const BY=Y0+9*RH+18, BW=W-2*X0;
+    ctx.strokeStyle=BRD; ctx.lineWidth=1; ctx.strokeRect(X0,BY,BW,13);
+    ctx.fillStyle=`rgba(${RGB_AMBER},0.42)`; ctx.fillRect(X0,BY,BW*n/9,13);
+    const v=verdict(n);
+    ctx.fillStyle=INKC; ctx.font='15px Inter, sans-serif';
+    ctx.fillText(`${n} of 9 — ${v[0]}`,X0,BY+38);
+    ctx.fillStyle=GRAY; ctx.font='12.5px Inter, sans-serif';
+    ctx.fillText(v[1],X0,BY+58);
+  }
+  draw();
+  const hit=e=>{
+    const [x,y]=logicalXY(cv,e,W);
+    if(x<X0-6 || x>X0+ROWW) return;
+    const i=Math.floor((y-Y0)/RH);
+    if(i<0||i>8) return;
+    if(y-(Y0+i*RH) > 22) return;          // dead band between rows
+    on[i]=!on[i]; draw();
+  };
+  cv.style.cursor='pointer';
+  cv.addEventListener('click',hit);
+  fig.querySelectorAll('.ghost').forEach(b=>b.onclick=()=>{
+    const v=b.dataset.a==='rabih';
+    on.forEach((_,i)=>on[i]=v); draw();});
+  return ()=>cv.removeEventListener('click',hit);
+};/* ============================================================
+   BOOT
+   ============================================================ */
+syncNav();
+overviewCam(false);
+
+
+/* ---- light / dark, shared with the main site ---- */
+document.getElementById('themeBtn').addEventListener('click', function(){
+  const r = document.documentElement;
+  const next = r.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  r.setAttribute('data-theme', next);
+  try { localStorage.setItem('theme', next); } catch(e) {}
+  syncSimColours();
+  if (focusId) openIdea(focusId);   // repaint the open simulation
+});
+</script>
+
+<script>
+/* Chart switcher: jump straight to another constellation. */
+(function(){var s=document.getElementById('chartSwitch');
+if(s)s.addEventListener('change',function(){if(s.value)window.location.href=s.value;});})();
+</script>
+</body>
+</html>

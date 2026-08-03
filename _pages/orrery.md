@@ -27,3 +27,4 @@ Follow the guided flow, or just wander - every thread rejoins the chart.
 - [Interpersonal & Communication Skills](/orrery/interpersonal-communication.html) - the inner game, the listening half, being understood, and moving people through hard moments.
 - [First Principles Thinking](/orrery/first-principles-thinking.html) - the borrowed mind, the two moves of deconstruct and rebuild, why it's hard, and what it lets you build.
 - [Nonviolent Communication](/orrery/nonviolent-communication.html) - what blocks compassion, expressing honestly, receiving empathically, and the hard hours: anger, self, force, and gratitude.
+- [The Course of Love](/orrery/course-of-love.html) - uninstalling the Romantic script, reading your own wiring, fighting better, and the daily practice of staying.
