@@ -5,14 +5,14 @@ date: 2026-07-30
 tags: [people]
 description: "A conflict you suppress translates into resentment, it doesn't differentiate disagreement and dismissal."
 ---
-A conflict you suppress has inertia. It stays until you process it. Over time it turns into resentment — a sense of unfair treatment.
+A conflict you suppress (or repress) has inertia, and it there stays until you process it. Over time it turns into resentment, a sense of unfair treatment.
 Resentment blurs the difference between disagreement and dismissal. Someone disagrees with your plan, and you read it as: I don't matter to them.
 
 So what do you do? You fall inward, or you push harder. You say it louder. You bring up the old ledger, because this time you have to be heard.
 
-After that it becomes a self-reinforcing pattern, a negative one. Each move is a fair response to the one before it. That's what makes it so hard to point at and stop.
+After that it becomes a (negative) self-reinforcement. Each move is a fair response to the one before it. And it becomes so hard to point at and stop.
 
-Addressing the conflict the first time costs you one awkward conversation. That is cheap, compared to what it costs once it turns ugly and there is more damage to repair.
+Addressing the conflict the first time costs you one awkward conversation. That is inexpensive, compared to what it costs once it turns ugly and there is more damage to repair.
 
 The irony is, its rare to notice it, on the first instance. But the longer it goes unnoticed, and the resentment accumulates, the cheap conversation is long behind you. What you hold instead is a ledger, with a list of things that were unfair and never got acknowledged.
 
