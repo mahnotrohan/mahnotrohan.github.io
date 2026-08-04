@@ -1,0 +1,1460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+/* Theme is shared with the main site: same origin, same localStorage key. */
+(function(){try{var t=localStorage.getItem('theme');
+if(!t)t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+document.documentElement.setAttribute('data-theme',t);}
+catch(e){document.documentElement.setAttribute('data-theme','light');}})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<title>Never Split the Difference - Orrery</title>
+<style>
+:root{
+  /* site parity: --ground/--surface-* mirror the main site's --bg/--bg-2/--chip */
+  --ground:#fbf8f3; --surface-sunk:#f2ede4; --surface-raised:#fdfcf9;
+  --border:#e3dccf; --border-strong:#d2c8b5;
+  --ink:#211f1c; --ink-strong:#14120f; --ink-muted:#5c5751; --ink-faint:#8c867f;
+  --accent:#8f6220; --accent-dim:#c2a47c; --accent-wash:rgba(143,98,32,0.08);
+  --accent-rgb:143,98,32;
+  --font:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --r:4px; --reader-w:min(760px, 58vw); --move-fast:150ms ease;
+  --ink-body:#2b2823; --ink-soft:#332f29;
+  --hdr-fade:linear-gradient(180deg, rgba(251,248,243,.96), rgba(251,248,243,.75), transparent);
+  --vp-bg:radial-gradient(ellipse at 50% 40%, #fdfbf7 0%, #fbf8f3 55%, #f2ede4 100%);
+  --btn-bg:rgba(253,252,249,.92);
+  --line-soft:rgba(33,31,28,0.10); --line-flow:rgba(143,98,32,0.45);
+  --sim-ink:#3a352e; --sim-gray:#8c867f; --sim-faint:#b3ac9f;
+  --sim-amber:#8f6220; --sim-sunk:#f2ede4; --sim-brd:#ddd4c3;
+  --grid-1:rgba(110,95,65,.13); --grid-2:rgba(110,95,65,.07);
+  --shadow:rgba(90,75,50,.16);
+}
+
+/* Night sky, sharing the main site's dark surfaces exactly. */
+html[data-theme="dark"]{
+  --ground:#1a1a1a; --surface-sunk:#232322; --surface-raised:#262523;
+  --border:#2e2e2e; --border-strong:#3e3e3b;
+  --ink:#e8e6e3; --ink-strong:#f5f3f0; --ink-muted:#a5a09a; --ink-faint:#7d7873;
+  --accent:#d9a25e; --accent-dim:#8b6c41; --accent-wash:rgba(217,162,94,0.10);
+  --accent-rgb:217,162,94;
+  --ink-body:#dddad5; --ink-soft:#d3cfc9;
+  --hdr-fade:linear-gradient(180deg, rgba(26,26,26,.96), rgba(26,26,26,.75), transparent);
+  --vp-bg:radial-gradient(ellipse at 50% 40%, #202020 0%, #1a1a1a 55%, #141414 100%);
+  --btn-bg:rgba(38,37,35,.92);
+  --line-soft:rgba(232,230,227,0.10); --line-flow:rgba(217,162,94,0.45);
+  --sim-ink:#e8e6e3; --sim-gray:#9d988f; --sim-faint:#6b6660;
+  --sim-amber:#d9a25e; --sim-sunk:#232322; --sim-brd:#393936;
+  --grid-1:rgba(210,203,190,.09); --grid-2:rgba(210,203,190,.045);
+  --shadow:rgba(0,0,0,.5);
+}
+html{color-scheme:light}
+html[data-theme="dark"]{color-scheme:dark}
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{height:100%; overflow:hidden; background:var(--ground); color:var(--ink);
+  font-family:var(--font); font-size:15.5px; line-height:1.75; overscroll-behavior:none;}
+h1,h2,h3{color:var(--ink-strong); font-weight:600; line-height:1.3;}
+.kicker{font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-muted); font-weight:500;}
+
+/* header - all navigation lives top right */
+#hdr{position:fixed; top:0; left:0; right:0; z-index:40; height:56px;
+  display:flex; align-items:center; gap:1.1rem; padding:0 1.4rem;
+  background:var(--hdr-fade);
+  pointer-events:none; transition:right .3s cubic-bezier(.25,.7,.3,1);}
+body.reader-open #hdr{right:var(--reader-w);}
+#hdr>*{pointer-events:auto;}
+#hdr .t{font-size:15px; font-weight:600; color:var(--ink-strong);}
+#hdr .sub{font-size:11.5px; color:var(--ink-muted);}
+#hdr .spacer{flex:1;}
+#count{font-size:12px; color:var(--ink-faint); white-space:nowrap;}
+.hbtn{background:var(--btn-bg); border:1px solid var(--border-strong); color:var(--ink-muted);
+  font-family:var(--font); font-size:12.5px; padding:6px 13px; border-radius:var(--r); cursor:pointer;
+  transition:all var(--move-fast); white-space:nowrap;}
+.hbtn:hover{color:var(--ink); border-color:var(--ink-muted);}
+.hbtn:disabled{opacity:.35; cursor:default;}
+#navcluster{display:flex; align-items:center; gap:2px; opacity:0; pointer-events:none;
+  transition:opacity .2s ease;}
+#navcluster.on{opacity:1; pointer-events:auto;}
+#navcluster .hbtn{background:none; border:none; font-size:19px; font-weight:300;
+  color:var(--ink-faint); padding:1px 8px; line-height:1.2; border-radius:5px;}
+#navcluster .hbtn:hover{color:var(--ink); background:var(--accent-wash);}
+#navcluster .hbtn:disabled{opacity:.28; background:none;}
+
+/* viewport & sky */
+#vp{position:fixed; inset:0; cursor:grab; touch-action:none;
+  background:var(--vp-bg);}
+#vp.dragging{cursor:grabbing;}
+#vp.dragging, #vp.dragging *{user-select:none;}
+#world{position:absolute; top:0; left:0; width:2750px; height:1750px;
+  transform-origin:0 0; will-change:transform;}
+#world::before{content:''; position:absolute; inset:0; pointer-events:none;
+  background-image:radial-gradient(circle, var(--grid-1) 1.2px, transparent 1.2px),
+                   radial-gradient(circle, var(--grid-2) 1px, transparent 1px);
+  background-size:380px 380px, 150px 150px;
+  background-position:0 0, 70px 100px; opacity:.8;}
+
+/* constellation names */
+.tlab{position:absolute; pointer-events:auto; cursor:pointer; user-select:none; text-align:center;}
+.tlab .big{font-size:40px; font-weight:500; letter-spacing:.5em; line-height:1.3;
+  text-transform:uppercase; white-space:nowrap;}
+.tlab .sum{text-shadow:0 0 5px var(--ground),0 0 5px var(--ground),0 0 3px var(--ground);
+  font-size:19px; color:var(--ink-muted); margin-top:.5em; letter-spacing:.18em; text-transform:uppercase;}
+.tlab:hover .big{filter:brightness(1.35);}
+
+/* stars */
+.mk{position:absolute; cursor:pointer; user-select:none;
+  display:flex; gap:14px; width:330px; align-items:flex-start;}
+.mk .dot{border-radius:50%; flex-shrink:0;
+  transition:transform .2s ease, box-shadow .4s ease, opacity .4s ease, background .4s ease;}
+.mk:hover .dot{transform:scale(1.3);}
+.mk .dtext{min-width:0; padding-top:1px;}
+.mk .lbl{text-shadow:0 0 5px var(--ground),0 0 5px var(--ground),0 0 3px var(--ground),0 0 3px var(--ground);
+  font-size:19px; color:var(--ink); font-weight:500; line-height:1.3;}
+.mk .lbl .seq{font-size:12px; color:var(--ink-faint); font-weight:400; margin-right:.5em;}
+.mk .ess{text-shadow:0 0 5px var(--ground),0 0 5px var(--ground),0 0 3px var(--ground),0 0 3px var(--ground);
+  font-size:14px; color:var(--ink-muted); line-height:1.45; margin-top:4px; max-width:290px;
+  opacity:0; transition:opacity .3s ease;}
+.mk.showess .ess{opacity:1;}
+.mk .sims-badge{font-size:12px; color:var(--accent-dim); margin-top:3px; display:none;}
+.mk.hasim .sims-badge{display:block;}
+.mk.focused .dot{transform:scale(1.35);}
+.mk.focused .lbl{color:var(--ink-strong);}
+.mk.neighbor .lbl{color:var(--ink-strong);}
+.mk.dimmed{opacity:.35;}
+
+/* connection overlay - few, directional, labeled plainly */
+#tsvg, #astsvg, #flowsvg{position:absolute; top:0; left:0; pointer-events:none; overflow:visible;}
+@keyframes dashdrift{to{stroke-dashoffset:-64;}}
+.tline{animation:dashdrift 6s linear infinite;}
+.tlabel{position:absolute; transform:translate(-50%,-50%); background:var(--ground);
+  border:1px solid var(--accent-dim); color:var(--accent); border-radius:12px;
+  font-size:12px; letter-spacing:.06em; padding:2px 11px; white-space:nowrap; cursor:pointer;
+  pointer-events:auto; transition:background var(--move-fast); text-transform:uppercase;}
+.tlabel:hover{background:var(--accent-wash);}
+
+/* ---------- READER ---------- */
+#reader{position:fixed; top:0; right:calc(-1 * var(--reader-w) - 20px); width:var(--reader-w);
+  height:100%; z-index:45; background:var(--surface-raised);
+  border-left:1px solid var(--border); display:flex; flex-direction:column;
+  transition:right .3s cubic-bezier(.25,.7,.3,1);
+  box-shadow:-24px 0 70px var(--shadow);}
+#reader.open{right:0;}
+#reader .top{padding:1.5em 2.2em 1em; border-bottom:1px solid var(--border); position:relative;}
+#reader .rtools{position:absolute; top:13px; right:15px; display:flex; align-items:center; gap:9px;}
+#reader .top .typechip{max-width:calc(100% - 108px);}
+#reader .close{background:none; border:none; padding:0 2px; line-height:1;
+  color:var(--ink-faint); font-size:17px; cursor:pointer;}
+#reader .close:hover{color:var(--ink);}
+#reader h2{font-size:24px; margin:.45em 0 .3em;}
+#reader .terrline{font-size:11.5px; color:var(--ink-faint); margin-top:2px;}
+#rbody{flex:1; overflow-y:auto; padding:1.6em 2.2em 2.5em;}
+#rbody::-webkit-scrollbar{width:6px;}
+#rbody::-webkit-scrollbar-thumb{background:var(--border-strong); border-radius:3px;}
+#rbody>*{max-width:66ch;}
+/* block-level children span the column; the reader width holds the measure */
+#rbody>.ideablock, #rbody>.linkrow{max-width:none;}
+.hook{font-size:18.5px; color:var(--ink-strong); line-height:1.65;
+  padding-left:1em; border-left:2px solid var(--accent-dim); margin-bottom:1.1em;}
+.story{font-size:15.5px; color:var(--ink-body); margin-top:.9em;}
+/* the idea block — the idea / how it works / failure mode / description */
+.ideablock{border:1px solid var(--border); border-radius:10px;
+  background:var(--surface-sunk); overflow:hidden;}
+.ideablock .ib{padding:1.15em 1.35em; border-top:1px solid var(--border);}
+.ideablock .ib:first-child{border-top:none;}
+.ideablock .kicker{display:block; margin-bottom:.45em; color:var(--accent);}
+.ideablock .term{color:var(--ink-strong); font-weight:600; font-size:17px; display:block;}
+.ideablock .def{font-size:14.5px; color:var(--ink-soft); margin-top:.25em;}
+.ideablock .txt{font-size:15px; color:var(--ink-body);}
+.ideablock .hook{margin-bottom:0;}
+.ideablock figure.frame{background:var(--surface-raised);}
+.typechip{display:inline-block; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-muted); border:1px solid var(--border-strong); border-radius:3px; padding:1px 8px;}
+details.fold{margin:1.2em 0 0; border:1px solid var(--border); border-radius:var(--r); background:var(--surface-sunk);}
+details.fold summary{cursor:pointer; padding:.6em 1.05em; color:var(--ink-muted);
+  font-size:13px; list-style:none; user-select:none;}
+details.fold summary::-webkit-details-marker{display:none;}
+details.fold summary::before{content:'+  '; color:var(--accent); font-weight:500;}
+details.fold[open] summary::before{content:'−  ';}
+details.fold summary:hover{color:var(--ink);}
+details.fold .inner{padding:0 1.05em .9em; font-size:14.5px; color:var(--ink-soft);}
+.named{margin-top:1.5em; background:var(--surface-sunk); border:1px solid var(--border);
+  border-radius:8px; padding:1em 1.3em;}
+.named .kicker{display:block; margin-bottom:.35em;}
+.named b{color:var(--ink-strong); font-weight:600; font-size:16px;}
+.named .def{font-size:14.5px; color:var(--ink-soft); margin-top:.2em;}
+.sowhat{margin-top:1.4em; font-size:15px; color:var(--ink-body);}
+.sowhat .kicker{display:block; margin-bottom:.3em;}
+.closure{margin-top:1.5em; border:1px solid var(--accent-dim); border-radius:8px;
+  background:var(--accent-wash); padding:1em 1.3em;}
+.closure .kicker{color:var(--accent); display:block; margin-bottom:.3em;}
+.closure .txt{font-size:14.5px; color:var(--ink-body); line-height:1.65;}
+.linkrow{margin-top:1.6em; border-top:1px solid var(--border); padding-top:1em;
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:.6em 2em;}
+.lgroup .kicker{display:block; margin-bottom:.25em;}
+.lgroup a{display:block; font-size:14px; padding:.2em 0 .45em; color:var(--ink-soft); cursor:pointer; text-decoration:none;}
+.lgroup .kicker .ar{font-size:19px; line-height:1; color:var(--accent); letter-spacing:0;}
+.lgroup a .t{border-bottom:1px dotted transparent; transition:border-color var(--move-fast); color:var(--ink);}
+.lgroup a:hover .t{border-bottom-color:var(--accent);}
+.lgroup a .why{display:block; font-size:12px; color:var(--ink-faint); line-height:1.5;}
+.nextbtn{margin-top:1.8em; width:100%; max-width:66ch; text-align:left;
+  background:var(--surface-sunk); border:1px solid var(--border-strong); border-radius:8px;
+  color:var(--ink); font-family:var(--font); font-size:14.5px; padding:.9em 1.3em; cursor:pointer;
+  transition:all var(--move-fast);}
+.nextbtn:hover{border-color:var(--accent-dim); background:var(--accent-wash);}
+.nextbtn .k{color:var(--ink-faint); font-size:11px; letter-spacing:.12em; text-transform:uppercase;
+  display:block; margin-bottom:.15em;}
+.nextbtn .arr{color:var(--accent); float:right;}
+
+/* sim figure */
+figure.frame{background:var(--surface-sunk); border:1px solid var(--border); border-radius:var(--r);
+  margin:1.3em 0 0; overflow:hidden;}
+figure.frame canvas{width:100%; display:block;}
+figure.frame .controls{display:flex; gap:8px; padding:8px 12px; border-top:1px solid var(--border);
+  align-items:center; flex-wrap:wrap;}
+figure.frame .controls .cl{font-size:11.5px; color:var(--ink-faint);}
+figure.frame figcaption{padding:7px 13px 10px; font-size:12.5px; color:var(--ink-muted); line-height:1.55;}
+.ghost{background:none; border:1px solid var(--border-strong); color:var(--ink-muted);
+  font-family:var(--font); font-size:12px; padding:3px 11px; border-radius:var(--r); cursor:pointer;
+  transition:all var(--move-fast);}
+.ghost:hover{color:var(--ink); border-color:var(--ink-muted);}
+.ghost.active{color:var(--accent); border-color:var(--accent-dim); background:var(--accent-wash);}
+figure.frame input[type=range]{flex:1; min-width:100px; accent-color:var(--accent);}
+
+@media(max-width:760px){ :root{--reader-w:100vw;} }
+
+/* ---- site exits + chart switcher (present on every chart) ---- */
+#hdr .sub a{color:var(--accent);text-decoration:none;border-bottom:1px solid transparent}
+#hdr .sub a:hover{border-bottom-color:var(--accent)}
+#hdr .sub s{text-decoration:none;color:var(--ink-faint);opacity:.75;margin:0 4px}
+#chartSwitch{-webkit-appearance:none;appearance:none;padding-right:26px;max-width:190px;
+  background-image:linear-gradient(45deg,transparent 50%,var(--ink-muted) 50%),
+                   linear-gradient(135deg,var(--ink-muted) 50%,transparent 50%);
+  background-position:calc(100% - 14px) 52%,calc(100% - 9.5px) 52%;
+  background-size:5px 5px,5px 5px;background-repeat:no-repeat}
+#chartSwitch:hover{color:var(--ink-strong);border-color:var(--accent-dim)}
+@media (max-width:700px){#hdr .sub{font-size:10.5px}#chartSwitch{max-width:118px}}
+
+/* ---- reader footer: step nav lives bottom-right, inside the panel ---- */
+#rfoot{display:flex;align-items:center;justify-content:flex-end;gap:.75rem;
+  padding:.5rem 2.2em .6rem;border-top:1px solid var(--border);
+  background:var(--surface-raised);flex:none;border-top-color:transparent}
+#rfoot:has(#navcluster.on){border-top-color:var(--border)}
+#reader #navcluster{background:var(--surface-sunk);border:1px solid var(--border-strong);
+  border-radius:7px;padding:1px 2px}
+/* Forward affordance sits on the right edge, where the thumb already is.
+   Needs #rbody> to beat the (1,0,0) of `#rbody > *`. */
+#rbody>.nextbtn{width:auto;min-width:min(100%,24ch);max-width:min(100%,44ch);
+  margin-left:auto;margin-right:0;display:block}
+@media (max-width:700px){
+  #rfoot{padding:.45rem 1.2em .55rem}
+  #rbody>.nextbtn{max-width:100%}
+}
+
+/* ---- theming: lines, marker, toggle ---- */
+.lnk-base{stroke:var(--line-soft)}
+.lnk-flow{stroke:var(--line-flow)}
+#tsvg marker path{fill:var(--accent)}
+/* band hues are mid-tone and kept in both themes; lift them on dark ground */
+html[data-theme="dark"] #tsvg line,
+html[data-theme="dark"] #astsvg line{stroke-opacity:.55}
+#themeBtn{font-size:14px;line-height:1;padding:5px 11px}
+</style>
+</head>
+<body>
+
+<div id="hdr">
+  <div>
+    <div class="t">Never Split the Difference</div>
+    <div class="sub"><a href="/">Rohan's space</a><s>/</s><a href="/orrery">Orrery</a></div>
+  </div>
+  <div class="spacer"></div>
+  <select class="hbtn" id="chartSwitch" aria-label="Jump to another chart"><option value="">Other charts&hellip;</option><option value="/orrery/building-taste.html">Building Taste</option><option value="/orrery/chaos-luck-ergodicity.html">Chaos, Luck &amp; Ergodicity</option><option value="/orrery/decision-theory.html">Decision Theory</option><option value="/orrery/first-principles-thinking.html">First Principles Thinking</option><option value="/orrery/how-to-know-a-person.html">How to Know a Person</option><option value="/orrery/interpersonal-communication.html">Interpersonal &amp; Communication Skills</option><option value="/orrery/nonviolent-communication.html">Nonviolent Communication</option><option value="/orrery/systems-thinking.html">Systems Thinking</option><option value="/orrery/course-of-love.html">The Course of Love</option><option value="/orrery/the-power-law.html">The Power Law</option><option value="/orrery/the-school-of-life.html">The School of Life</option><option value="/orrery/thinking-fast-and-slow.html">Thinking, Fast and Slow</option><option value="/orrery/thinking-in-bets.html">Thinking in Bets</option><option value="/orrery/why-we-sleep.html">Why We Sleep</option></select>
+  <button class="hbtn" id="themeBtn" type="button" title="Light / dark" aria-label="Toggle light or dark">◐</button>
+  <button class="hbtn" id="overviewBtn">Overview&nbsp;·&nbsp;Esc</button>
+</div>
+
+<div id="vp"><div id="world"></div></div>
+
+<div id="reader">
+  <div class="top">
+    <div class="rtools">
+      <div id="navcluster">
+        <button class="hbtn" id="navPrev" title="previous idea">‹</button>
+        <button class="hbtn" id="navNext" title="next idea">›</button>
+      </div>
+      <button class="close" id="rClose" title="close">✕</button>
+    </div>
+    <span class="typechip" id="rChip"></span>
+    <h2 id="rTitle"></h2>
+    <div class="terrline" id="rTerr"></div>
+  </div>
+  <div id="rbody"></div>
+</div>
+
+<script>
+'use strict';
+
+let INKC, GRAY, FAINT, AMBER, SUNK, BRD;
+let RGB_INK, RGB_GRAY, RGB_FAINT, RGB_AMBER;
+/* Canvas takes no var(), so pull the resolved values and refresh on theme flip.
+   Animated sims pick these up on their next frame; static ones are remounted. */
+function syncSimColours(){
+  const cs = getComputedStyle(document.documentElement);
+  const v = n => cs.getPropertyValue(n).trim();
+  const trip = h => { h = h.replace('#','').trim();
+    if (h.length === 3) h = h.split('').map(c=>c+c).join('');
+    return [0,2,4].map(i=>parseInt(h.slice(i,i+2),16)).join(','); };
+  INKC=v('--sim-ink'); GRAY=v('--sim-gray'); FAINT=v('--sim-faint');
+  AMBER=v('--sim-amber'); SUNK=v('--sim-sunk'); BRD=v('--sim-brd');
+  RGB_INK=trip(INKC); RGB_GRAY=trip(GRAY); RGB_FAINT=trip(FAINT); RGB_AMBER=trip(AMBER);
+}
+syncSimColours();
+
+/* ============================================================
+   CONTENT v2 - the reader shows one block per idea, definition-first:
+   the idea (term+def) → how it works (mech) → failure mode (sowhat) →
+   description (hook → story → sim).
+   Connections: ≤4 per idea, as arrows — ← builds on, → leads to, ▶ see it live.
+   ============================================================ */
+const N = {
+
+a1:{type:"axiom", title:"We are animals first", x:1259, y:512,
+  ess:"Irrational — but predictably so, which is what makes technique possible.",
+  hook:"If negotiation were a logic problem, why would the best-prepared case so often lose to the better-delivered one?",
+  story:"Because you are not talking to a calculator. Voss’s premise: “without a deep understanding of human psychology, without the acceptance that we are all crazy, irrational, impulsive, emotionally driven animals, all the raw intelligence and mathematical logic in the world is little help in the fraught, shifting interplay of two people negotiating.”",
+  mech:"The move that follows is the whole book: emotion is not the obstacle, it is the instrument — of Kahneman and Tversky, Voss writes “Feeling, they discovered, is a form of thinking.” So the lever is System 1 — “if you know how to affect your counterpart’s System 1 thinking, his inarticulate feelings, by how you frame and deliver your questions and statements, then you can guide his System 2 rationality.” Working the rational layer alone “was like trying to make an omelet without first knowing how to crack an egg.” And crucially, the irrationality is patterned: “We are emotional, irrational beasts who are emotional and irrational in predictable, pattern-filled ways. Using that knowledge is only, well, rational.”",
+  term:"Emotional substrate", def:"feeling is not interference with thinking; it is the layer thinking runs on, and therefore the only real point of leverage.",
+  sowhat:"Preparing better arguments is the wrong preparation. Prepare how you will land them — “it’s how we are (our general demeanor and delivery) that is both the easiest thing to enact and the most immediately effective mode of influence.”",
+  explain:"why the most rational-looking negotiation model is the least effective one.",
+  builds:[], leads:[["b1-laplace","so start with delivery, not content"],["b3-principle","and this is what makes reality bendable"]], live:[]},
+
+a2:{type:"axiom", title:"Everyone needs to be understood", x:1057, y:627,
+  ess:"Being heard is worth more to people than being agreed with — and they will pay for it.",
+  hook:"What is the cheapest thing you can give someone that they will trade real money for?",
+  story:"Your attention. “It all starts with the universally applicable premise that people want to be understood and accepted. Listening is the cheapest, yet most effective concession we can make to get there.” Voss means this literally: three armed fugitives in a Harlem apartment came out after six hours because “we finally believed you wouldn’t go away, so we just came out.”",
+  mech:"So listening is reclassified from politeness to technique: “Contrary to popular opinion, listening is not a passive activity. It is the most active thing you can do.” It is also the one concession that costs you nothing material, which is why it is the first thing to spend. And it has a deadline of its own — “Many of us wear fears upon fears, like layers against the cold, so getting to safety takes time.”",
+  term:"Listening as concession", def:"attention treated as currency — the one thing you can give away in quantity without giving up anything you wanted.",
+  sowhat:"Before you make your case, spend attention. And notice how rarely you do: “It’s really not that easy to listen well.”",
+  explain:"why the cheapest concession available is the one almost nobody spends.",
+  builds:[], leads:[["b1-principle","the skill built on this"]], live:[["b2-tension-random","the two words that prove it landed"]]},
+
+a3:{type:"axiom", title:"Everyone needs to feel in control", x:1462, y:627,
+  ess:"Autonomy is non-negotiable, which is why “yes” frightens people and “no” calms them.",
+  hook:"Why does asking someone for a “yes” make them defensive before you have even said what you want?",
+  story:"Because a yes is a surrender of autonomy and they can feel it coming. “Though the intensity may differ from person to person, you can be sure that everyone you meet is driven by two primal urges: the need to feel safe and secure, and the need to feel in control. If you satisfy those drives, you’re in the door.” Voss grounds it in “the deep and universal human need for autonomy. People need to feel in control.”",
+  mech:"Two consequences run through every tactic downstream. First, protection: “Saying ‘No’ makes the speaker feel safe, secure, and in control, so trigger it. By saying what they don’t want, your counterpart defines their space and gains the confidence and comfort to listen to you.” Second, ownership — people act only on conclusions they believe are theirs, so “persuasion is not about how bright or smooth or forceful you are. It’s about the other party convincing themselves that the solution you want is their own idea.” Hence the method’s signature: “giving him the illusion of control while you, in fact, were the one defining the conversation.”",
+  term:"The autonomy need", def:"the requirement to feel in charge of one’s own decisions, which any request for agreement threatens.",
+  sowhat:"Stop hunting for agreement and start handing over control. It is the cheaper route to the same place — “negotiation is often called ‘the art of letting someone else have your way.’”",
+  explain:"why the feeling of being in charge is worth more to people than the substance of what they get.",
+  builds:[], leads:[["b2-lorenz-attractor","which is why no is safety"],["b4-coinflip","and why questions beat statements"]], live:[]},
+
+a4:{type:"axiom", title:"Something is always hidden", x:1259, y:771,
+  ess:"Three things you cannot guess would change everything, on each side, every time.",
+  hook:"What would you do differently in your next negotiation if you knew for certain the other side was sitting on three facts you have not imagined?",
+  story:"Voss offers it as a hypothesis he then tested: “I began to hypothesize that in every negotiation each side is in possession of at least three Black Swans, three pieces of information that, were they to be discovered by the other side, would change everything” — adding, “My experience since has proven this to be true.” Black Swans are “those hidden and unexpected pieces of information — those unknown unknowns — whose unearthing has game-changing effects on a negotiation dynamic.”",
+  mech:"The taxonomy matters: known knowns are their name and their offer; known unknowns are the wild cards you know exist; “but most important are those things we don’t know that we don’t know.” Broadest definition: “they are anything that you don’t know that changes things.” And the asymmetry is the opportunity — “Your counterpart always has pieces of information whose value they do not understand.” It is a working assumption rather than a proof, and it is why he treats every negotiation as an investigation rather than a contest.",
+  term:"Black Swan", def:"an unknown unknown whose discovery reorders the negotiation — hypothesised at three per side, and treated as reliably present.",
+  sowhat:"If something in their behaviour looks irrational, you are missing information rather than dealing with a fool. “It takes negotiation from being a one-dimensional move-countermove game of checkers to a three-dimensional game.”",
+  explain:"why assuming hidden information changes how you behave even before you find any.",
+  builds:[], leads:[["b4-principle","the posture this demands"]], live:[]},
+
+"b1-laplace":{type:"mechanism", title:"The voice", x:404, y:355,
+  ess:"Three tones. One of them is your default and it is the wrong one.",
+  hook:"You can change someone’s emotional state before they process a single word — how?",
+  story:"With tone. “Your most powerful tool in any verbal communication is your voice. You can use your voice to intentionally reach into someone’s brain and flip an emotional switch.” Voss gives three: the late-night FM DJ voice (calm, slow, downward inflection) for driving home a point; the positive, playful voice, which is the default and “the voice of an easygoing, good-natured person”; and the direct or assertive voice, used rarely.",
+  mech:"The FM DJ voice works by signalling that you are in control without claiming it, which is why it de-escalates: “when you slow the process down, you also calm it down. After all, if someone is talking, they’re not shooting.” The assertive voice is the one to distrust in yourself — it invites a fight. And directness is survivable if the tone carries safety: “You can be very direct and to the point as long as you create safety by a tone of voice that says I’m okay, you’re okay, let’s figure things out.”",
+  term:"The three voices", def:"late-night FM DJ (calm, downward), positive and playful (the default), and direct or assertive (rarely, and never by accident).",
+  sowhat:"Pick your voice before you pick your words, and notice which one you fall into under pressure. If you are naturally assertive, Voss’s instruction is blunt: soften the tone deliberately, because “you will not intend to be overly harsh but you will often come off that way.”",
+  explain:"how tone routes around someone’s reasoning entirely.",
+  builds:[["a1","delivery beats content"]], leads:[["b1-pendulum","the first thing to say in that voice"]], live:[]},
+
+"b1-pendulum":{type:"mechanism · simulation", title:"Mirroring", sim:"mirror", x:884, y:309,
+  ess:"Repeat their last three words. Then say nothing at all.",
+  hook:"Below: four ways to answer the same sentence. Which one makes them tell you more?",
+  story:"“For the FBI, a ‘mirror’ is when you repeat the last three words (or the critical one to three words) of what someone has just said.” It works on a bias Voss states plainly: “We fear what’s different and are drawn to what’s similar… Mirroring, then, when practiced consciously, is the art of insinuating similarity. ‘Trust me,’ a mirror signals to another’s unconscious, ‘You and I — we’re alike.’”",
+  mech:"The silence after it is not optional. “For a mirror to be effective, you’ve got to let it sit there and do its work. It needs a bit of silence. I stepped all over my mirror.” The intention behind it should always be “Please, help me understand” — and the effect is reliable: “Every time you mirror someone, they will reword what they’ve said.” Voss scripts the whole confrontation-without-confrontation sequence as: “1. Use the late-night FM DJ voice. 2. Start with ‘I’m sorry . . .’ 3. Mirror. 4. Silence. At least four seconds, to let the mirror work its magic on your counterpart. 5. Repeat.”",
+  term:"Mirroring (isopraxism)", def:"repeating the critical one to three words of what someone just said, then staying silent while they elaborate.",
+  sowhat:"Four seconds of silence feels unbearable and is where the whole technique lives. Practise the discomfort before you need it — “I promise you that they will feel awkward and artificial at first, but keep at it. Learning to walk felt awfully strange, too.”",
+  explain:"why the shortest possible reply extracts the most information.",
+  builds:[["b1-laplace","said in the right voice"]], leads:[["b1-sensitive","and the move that goes further"]], live:[]},
+
+"b1-sensitive":{type:"mechanism", title:"Labeling", x:520, y:522,
+  ess:"Name the emotion out loud — and not in the first person.",
+  hook:"Three men with guns, six hours of silence behind a door — what got them to open it?",
+  story:"Three sentences. “It looks like you don’t want to come out. It seems like you worry that if you open the door, we’ll come in with guns blazing. It looks like you don’t want to go back to jail.” Voss: “Labeling is a way of validating someone’s emotion by acknowledging it… Think of labeling as a shortcut to intimacy, a time-saving emotional hack.”",
+  mech:"The stems are fixed — “It seems like . . . It sounds like . . . It looks like . . .” — and the omission is deliberate: “the word ‘I’ gets people’s guard up. When you say ‘I,’ it says you’re more interested in yourself than the other person.” Because the label is a guess rather than a claim, it costs nothing to be wrong: “I didn’t say that was what it was. I just said it seems like that.” Then stop talking — “the last rule of labeling is silence… a label’s power is that it invites the other person to reveal himself.” Direction matters too: “Labeling negatives diffuses them (or defuses them, in extreme cases); labeling positives reinforces them.”",
+  term:"Labeling", def:"naming your counterpart’s emotion in a neutral, egoless stem — “it seems like…” — and then going quiet.",
+  sowhat:"Go at the bad feeling first: “The reasons why a counterpart will not make an agreement with you are often more powerful than why they will make a deal, so focus first on clearing the barriers to agreement”, and “the fastest and most efficient means of establishing a quick working relationship is to acknowledge the negative and diffuse it.” On Matthew Lieberman’s fMRI work, Voss adds that “labeling an emotion — applying rational words to a fear — disrupts its raw intensity.”",
+  explain:"why saying someone’s fear aloud makes it smaller rather than bigger.",
+  builds:[["a2","the need this satisfies"]], leads:[["b1-lorenz-story","labels used in advance, in bulk"]], live:[]},
+
+"b1-lorenz-story":{type:"story · mechanism", title:"The accusation audit", x:254, y:656,
+  ess:"Say the worst thing they think about you, before they get to.",
+  hook:"What if you opened by listing every accusation the other side is holding against you?",
+  story:"That is the tactic. “The first step of doing so is listing every terrible thing your counterpart could say about you, in what I call an accusation audit.” Voss opens a class he knows will go badly with: “In case you’re worried about volunteering to role-play with me in front of the class, I want to tell you in advance . . . it’s going to be horrible.” And to a hostile client: “It sounds like you think we are the big, bad prime contractor trying to push out the small business.”",
+  mech:"It works because the unspoken accusation is doing damage while it stays unspoken: “These labels are so powerful because they bathe the fears in sunlight, bleaching them of their power.” The failure mode is the polite instinct — denying it. “The small but critical mistake this commits is denying the negative. That actually gives it credence.” Voss goes further than most would: “I’ve found the phrase ‘Look, I’m an asshole’ to be an amazingly effective way to make problems go away.” There is a second mechanism most people miss: “because these accusations often sound exaggerated when said aloud, speaking them will encourage the other person to claim that quite the opposite is true.” In prep it is mechanical — three to five labels, listing accusations “no matter how unfair or ridiculous they might be.”",
+  term:"Accusation audit", def:"pre-emptively naming, in label form, every accusation the other side could level at you — before they voice it.",
+  sowhat:"Write the list before your next hard conversation. Then note the order Voss insists on: “Label, tactical empathy, label. And only then a request.”",
+  explain:"why naming the accusation against you defuses it, while denying it confirms it.",
+  builds:[["b1-sensitive","labels, applied in advance"]], leads:[["b1-principle","what all four moves add up to"]], live:[]},
+
+"b1-principle":{type:"principle", title:"Tactical empathy", x:716, y:679,
+  ess:"Not being nice. Understanding them out loud, on purpose, for an outcome.",
+  hook:"How can empathy be a weapon rather than a kindness?",
+  story:"By being deliberate and vocal. Voss defines empathy as “the ability to recognize the perspective of a counterpart, and the vocalization of that recognition” — then guards it: “Notice I didn’t say anything about agreeing with the other person’s values and beliefs or giving out hugs. That’s sympathy.” His own term sharpens further: “Tactical empathy is understanding the feelings and mindset of another in the moment and also hearing what is behind those feelings so you increase your influence in all the moments that follow.”",
+  mech:"It resolves the objection the rational model never answers: “How can you separate people from the problem when their emotions are the problem? Especially when they are scared people with guns.” Voss’s answer — “Emotions aren’t the obstacles, they are the means.” Note the two halves: recognising, and <em>saying</em>. Silent understanding does no work at the table. And Voss is careful about the ethics, putting the relationship ahead of the win: “That they might help you extract what you want is a bonus; human connection is the first goal.”",
+  term:"Tactical empathy", def:"recognising your counterpart’s perspective and voicing that recognition, in order to increase influence later.",
+  sowhat:"The test is whether you said it aloud. Understanding someone privately and then arguing with them is the most common way this fails.",
+  explain:"the difference between feeling for someone and using their perspective on purpose.",
+  builds:[["a2","the universal premise it rests on"],["b1-lorenz-story","the four moves it names"]], leads:[["b2-logistic","now: why yes is the wrong target"]], live:[]},
+
+"b2-logistic":{type:"mechanism", title:"Three kinds of yes", x:1837, y:233,
+  ess:"Only one of them means anything, and it is the rarest.",
+  hook:"You got a yes — which of the three did you get?",
+  story:"“There are actually three kinds of ‘Yes’: Commitment, Confirmation, and Counterfeit.” A counterfeit yes is the one where your counterpart plans to say no but wants an easier exit. A confirmation yes is reflexive, an answer to a black-and-white question. Only commitment means action. “‘Yes’ and ‘Maybe’ are often worthless” — though Voss is careful that yes is still the destination: “‘Yes’ is the final goal of a negotiation, but don’t aim for it at the start.”",
+  mech:"Which is why chasing agreement is a trap of your own making: “if your biggest fear is ‘No,’ you can’t negotiate. You’re the hostage of ‘Yes.’ You’re handcuffed. You’re done.” The counterfeit is detectable if you are listening past the word — “I heard you say, ‘Yes,’ but it seemed like there was hesitation in your voice.” And even a real yes is only half the job: “In hostage negotiations, we never tried to get to ‘yes’ as an endpoint. We knew that ‘yes’ is nothing without ‘how.’”",
+  term:"Counterfeit, confirmation, commitment", def:"three yeses — an escape hatch, a reflex, and an actual promise to act. Most negotiators celebrate the first two.",
+  sowhat:"When you get a yes, find out which one it was before you relax. The tell is usually in the tone, not the word.",
+  explain:"why a yes is the least informative thing your counterpart can say.",
+  builds:[["a3","the autonomy that yes threatens"]], leads:[["b2-lorenz-attractor","so aim at the other word"]], live:[]},
+
+"b2-lorenz-attractor":{type:"mechanism", title:"“No” is protection", x:2300, y:282,
+  ess:"Not rejection. A boundary — and boundaries are where negotiation starts.",
+  hook:"Why do skilled negotiators try to get turned down early?",
+  story:"Because it changes the conversation and nothing else does. “‘Yes’ and ‘Maybe’ are often worthless. But ‘No’ always alters the conversation.” Voss is unambiguous: “‘No’ is the start of the negotiation, not the end of it.” And: “Great negotiators seek ‘No’ because they know that’s often when the real negotiation begins.”",
+  mech:"The word almost never means what you fear. Voss lists what it actually says: I am not yet ready to agree; you are making me uncomfortable; I do not understand; I do not think I can afford it; I want something else; I need more information; I want to talk it over with someone else. None of those is a closed door. And saying it is what makes someone safe enough to listen — by defining their space, “your counterpart defines their space and gains the confidence and comfort to listen to you.”",
+  term:"Protective no", def:"a refusal read as a boundary-setting move rather than a verdict — the point at which a real conversation becomes possible.",
+  sowhat:"Stop treating a no as a failed call and find out which of the seven it was. Voss gives the three questions that do it: “What about this doesn’t work for you?”, “What would you need to make it work?”, and “It seems like there’s something here that bothers you.”",
+  explain:"what the word no actually communicates, as against what we hear.",
+  builds:[["a3","the safety it manufactures"]], leads:[["b2-attractors","so engineer one deliberately"]], live:[]},
+
+"b2-attractors":{type:"mechanism", title:"Ask for the no", x:2069, y:401,
+  ess:"Invert the question so a refusal is the easy answer.",
+  hook:"Which gets a reply: “Do you have a few minutes to talk?” or “Is now a bad time to talk?”",
+  story:"The second, reliably. “That’s why ‘Is now a bad time to talk?’ is always better than ‘Do you have a few minutes to talk?’” The first asks them to surrender control; the second hands it to them. Same request, opposite feeling.",
+  mech:"When someone has gone silent, Voss escalates to a deliberate provocation: “Sometimes the only way to get your counterpart to listen and engage with you is by forcing them into a ‘No.’ That means intentionally mislabeling one of their emotions or desires or asking a ridiculous question — like, ‘It seems like you want this project to fail’ — that can only be answered negatively.” The one-line version he claims never fails on a non-responder: “Have you given up on this project?” — or, at year end, “Have you given up on finalizing this deal this year?” Voss reports using this one-sentence email “successfully not just in North America, but with people in two different cultures”, and his rule for silence is flat: “No ‘No’ means no go.”",
+  term:"No-oriented question", def:"a question phrased so that “no” is the agreeable answer, letting your counterpart assert control by giving you what you wanted.",
+  sowhat:"Rewrite your next ask so that a no gets you what a yes would have. And keep the one-sentence email for the third time someone ignores you.",
+  explain:"how to phrase a request so that refusing it is cooperation.",
+  builds:[["b2-lorenz-attractor","the safety no provides"]], leads:[["b2-tension-random","and the two words to aim at instead"]], live:[]},
+
+"b2-tension-random":{type:"tension · simulation", title:"“That’s right” beats “You’re right”", sim:"ladder", x:2392, y:470,
+  ess:"One is a breakthrough. The other is how people get rid of you.",
+  hook:"Below: six tools, in order. Which order gets you the breakthrough rather than the brush-off?",
+  story:"“The sweetest two words in any negotiation are actually ‘That’s right.’” And its near-twin is a defeat: “Driving toward ‘that’s right’ is a winning strategy in all negotiations. But hearing ‘you’re right’ is a disaster.” Voss explains why — “Tell people ‘you’re right’ and they get a happy smile on their face and leave you alone for at least twenty-four hours. But you haven’t agreed to their position.”",
+  mech:"You get there with a summary, and a summary has a formula: “A good summary is the combination of rearticulating the meaning of what is said plus the acknowledgment of the emotions underlying that meaning (paraphrasing + labeling = summary).” The ladder to it is six tools — effective pauses, minimal encouragers (“Yes,” “OK,” “Uh-huh,” “I see”), mirroring, labeling, paraphrasing, and then the summary — which sit inside the FBI’s Behavioral Change Stairway Model: “five stages — active listening, empathy, rapport, influence, and behavioral change.” Its licence is Carl Rogers’s unconditional positive regard: creating it “opens the door to changing thoughts and behaviors.” Done fully, “the only possible response for Sabaya, and anyone faced with a good summary, would be ‘that’s right.’” And the reader never sees it happen: “It’s invisible to the counterpart when it occurs, and they embrace what you’ve said. To them, it’s a subtle epiphany.”",
+  term:"“That’s right”", def:"the confirmation that your summary of their world was accurate — earned, unlike “you’re right”, which is a polite dismissal.",
+  sowhat:"Before asking for anything, summarise their position until they say it. If you hear “you’re right” instead, you have been dismissed and should notice.",
+  explain:"why two nearly identical phrases mean opposite things.",
+  builds:[["a2","the need being satisfied"],["b2-attractors","after the no has cleared the ground"]], leads:[["b2-principle","the target this replaces"]], live:[]},
+
+"b2-principle":{type:"principle", title:"Aim for understanding, not agreement", x:1895, y:598,
+  ess:"Stop collecting yeses. Collect the moment they say you got it right.",
+  hook:"If “yes” is worthless and “no” is only the start, what are you actually driving at?",
+  story:"At being demonstrably right about their position. “Before you convince them to see what you’re trying to accomplish, you have to say the things to them that will get them to say, ‘That’s right.’” Voss packages it as instruction: “Use a summary to trigger a ‘that’s right.’ The building blocks of a good summary are a label combined with paraphrasing. Identify, rearticulate, and emotionally affirm ‘the world according to . . .’”",
+  mech:"The reframe underneath is that persuasion is not transmission. “It’s about the other party convincing themselves that the solution you want is their own idea. So don’t beat them with logic or brute force.” Which also means one crucial piece of homework: “One crucial aspect of any negotiation is to figure out how your adversary arrived at his position.” And the standard is testable — in preparation, “you must be able to summarize a situation in a way that your counterpart will respond with a ‘That’s right.’ If they don’t, you haven’t done it right.”",
+  term:"The that’s-right standard", def:"the test of whether you have understood a counterpart: can you state their position back so accurately that they confirm it?",
+  sowhat:"Write their side of your next negotiation in two sentences and imagine reading it to them. If they would not say “that’s right”, you are not ready.",
+  explain:"how to know whether you have understood someone, rather than assuming you have.",
+  builds:[["a2","the premise it tests"],["b2-tension-random","the two words it targets"]], leads:[["b3-kokura","now: the money"]], live:[]},
+
+"b3-kokura":{type:"story", title:"Never split the difference", x:271, y:962,
+  ess:"One black shoe and one brown shoe is not a compromise. It is the worst outcome.",
+  hook:"She wants black shoes, he wants brown — what does meeting in the middle actually get you?",
+  story:"“He wears one black and one brown shoe. Is this the best outcome? No! In fact, that’s the worst possible outcome… Next time you want to compromise, remind yourself of those mismatched shoes.” Voss is blunt about why we do it anyway: “We don’t compromise because it’s right; we compromise because it is easy and because it saves face… we compromise to be safe.”",
+  mech:"Which produces the rule the book is named for: “So don’t settle and — here’s a simple rule — never split the difference.” And its companion mantra, which is what makes the rule survivable: “No deal is better than a bad deal.” The same logic dissolves deadlines, which Voss treats as mostly imaginary — “Deadlines are the bogeymen of negotiation, almost exclusively self-inflicted figments of our imagination.” Counter-intuitively, he says reveal yours: “hiding a deadline means you’re negotiating with yourself, and you always lose when you do so.”",
+  term:"The compromise trap", def:"splitting the difference as a face-saving reflex rather than a solution — reliably producing an outcome neither side wanted.",
+  sowhat:"Before you offer the midpoint, ask what it actually buys either of you. Usually the answer is the end of an uncomfortable conversation, which is not the same as a deal.",
+  explain:"why the fair-looking middle is often the only outcome that serves nobody.",
+  builds:[["a1","the face-saving instinct behind it"]], leads:[["b3-contingency","so who sets the number?"]], live:[]},
+
+"b3-contingency":{type:"mechanism · simulation", title:"Anchors", sim:"anchor", x:601, y:1008,
+  ess:"The “middle” is not a fact. It is a function of whoever spoke first.",
+  hook:"Below: drag your opening number and watch the fair midpoint follow it. So who decides what is fair?",
+  story:"Whoever anchors. Voss’s general preference is to let them go first — “that’s why I suggest you let the other side anchor monetary negotiations” — but the section is titled “let the other guy go first . . . most of the time”, and he refuses to make a rule of it: “That’s not to say, ‘Never open.’ Rules like that are easy to remember, but, like most simplistic approaches, they are not always good advice.” Open first against a rookie, or in a market you know well against a pro.",
+  mech:"When you must go first, the tools are specific. Use a range, with the number you want at the bottom: applicants “who named a range received significantly higher overall salaries than those who offered a number, especially if their range was a ‘bolstering range,’ in which the low number in the range was what they actually wanted” — but “expect them to come in at the low end.” Pivot off money entirely where you can. And never use a round number: “numbers that end in 0 inevitably feel like temporary placeholders… anything you throw out that sounds less rounded — say, $37,263 — feels like a figure that you came to as a result of thoughtful calculation.” A Haitian kidnapping closed at exactly that kind of number — $4,751 — with a portable CD stereo thrown in as the surprise gift, a separate tool: “you can get your counterpart into a mood of generosity by staking an extreme anchor and then, after their inevitable first rejection, offering them a wholly unrelated surprise gift.”",
+  term:"Anchoring", def:"the first number spoken, which silently defines the range and therefore what both sides will later call the middle.",
+  sowhat:"Let them name a number first where you can, avoid round numbers, and open with a bolstering range attributed to a comparable — “at top places like X Corp., people in this job get between $130,000 and $170,000.” Then prepare to be hit: “kick-ass negotiators usually lead with an extreme anchor to knock you off your game. If you’re not ready, you’ll flee to your maximum without a fight.”",
+  explain:"why the midpoint of a negotiation is manufactured rather than discovered.",
+  builds:[["b3-kokura","the middle this exposes"]], leads:[["b3-timeline","and the word they will use against you"]], live:[]},
+
+"b3-timeline":{type:"mechanism", title:"The F-word: fair", x:312, y:1210,
+  ess:"“We just want what’s fair” is an attack. There are two better uses of the word.",
+  hook:"Someone says “we just want what’s fair” — what have they actually just done?",
+  story:"Destabilised you. “The most common use is a judo-like defensive move that destabilizes the other side. This manipulation usually takes the form of something like, ‘We just want what’s fair.’” It works because fairness outranks arithmetic in the human mind: “the negative emotional value of unfairness outweighs the positive rational value of the money.”",
+  mech:"Voss gives three uses. The attack above; a second where the speaker implies you have been treated fairly already and should stop asking; and a legitimate third — declare it up front. “I want you to feel like you are being treated fairly at all times. So please stop me at any time if you feel I’m being unfair, and we’ll address it.” Against the attack, do not defend. Repeat the word, pause, then label: “‘Fair?’ you’d respond, pausing to let the word’s power do to them as it was intended to do to you. Follow that with a label: ‘It seems like you’re ready to provide the evidence that supports that’… Right away, you declaw the attack.” Or invite the audit: “Okay, I apologize. Let’s stop everything and go back to where I started treating you unfairly and we’ll fix it.”",
+  term:"The fairness lever", def:"“fair” as a word with three jobs — to destabilise you, to shame you into stopping, or (used well) to invite correction.",
+  sowhat:"Notice the word when it lands on you, and answer it with a pause rather than a justification. Then use the third form yourself, early, before anyone needs it.",
+  explain:"why one word can move a negotiation more than an argument can.",
+  builds:[["a1","fairness outranking arithmetic"]], leads:[["b3-plan","and the ladder that does the arguing for you"]], live:[]},
+
+"b3-plan":{type:"mechanism · simulation", title:"The Ackerman model", sim:"ackerman", x:774, y:1152,
+  ess:"65, 85, 95, 100 — and the shrinking gaps do the persuading.",
+  hook:"Below: step through the four offers. What is the halving of each increment telling them?",
+  story:"That you are at your limit. Voss learned the system from Mike Ackerman, “an ex-CIA type who founded a kidnap-for-ransom consulting company based out of Miami.” Its purpose is to defeat the default: “a very effective system for beating the usual lackluster bargaining dynamic, which has the predictable result of meeting in the middle.”",
+  mech:"The steps, as the book gives them: set your target; open at 65 percent of it; calculate three raises of decreasing increments, to 85, 95 and 100 percent; “use lots of empathy and different ways of saying ‘No’ to get the other side to counter before you increase your offer”; make the final number precise and non-round; and “on your final number, throw in a nonmonetary item (that they probably don’t want) to show you’re at your limit.” The 65 percent is not merely low — it is “an extreme anchor, a big slap in the face” whose shock “will induce a fight-or-flight reaction in all but the most experienced negotiators, limiting their cognitive abilities and pushing them into rash action.” The raises then work on two levers: “they play on the norm of reciprocity; they inspire your counterpart to make a concession, too”, and “the diminishing size of the increases — notice that they decrease by half each time — convinces your counterpart that he’s squeezing you to the point of breaking. By the time they get to the last one, they’ll feel that they’ve really gotten every last drop.” And research backs the feeling: people given concessions “feel better even when they end up paying more.”",
+  term:"The Ackerman model", def:"open at 65% of target, then raise to 85, 95 and 100 in halving increments, ending on a precise number plus a token non-cash item.",
+  sowhat:"Work out your four numbers before the conversation, then hold each one until they counter. The discipline is not the arithmetic; it is refusing to move until they do.",
+  explain:"how a fixed sequence of numbers manufactures the feeling of having won.",
+  builds:[["b3-contingency","the extreme anchor it opens with"]], leads:[["b3-principle","the bias it exploits"],["b4-domains","and the refusals that hold each rung"]], live:[]},
+
+"b3-principle":{type:"principle", title:"Frame the loss, not the gain", x:543, y:1326,
+  ess:"People will risk more to avoid losing than to win. Give them something to lose.",
+  hook:"Why does the same offer feel generous on Monday and insulting on Tuesday?",
+  story:"Because value is relative to a reference point you can move. “Take the same person, change one or two variables, and $100 can be a glorious victory or a vicious insult.” Voss leans on prospect theory: “people are drawn to sure things over probabilities, even when the probability is a better choice. That’s called the Certainty Effect. And people will take greater risks to avoid losses than to achieve gains. That’s called Loss Aversion.”",
+  mech:"So the instruction is to relocate the loss onto their side of the table: “To get real leverage, you have to persuade them that they have something concrete to lose if the deal falls through.” It reaches down to word choice — “Even changing a single word when you present options — like using ‘not lose’ instead of ‘keep’ — can unconsciously influence the conscious choices your counterpart makes.” Voss opens with the loss on purpose, and the opener is an accusation audit rather than a mood: he tells them they will think him a lousy businessman, then — “once I’d anchored their emotions in a minefield of low expectations I played on their loss aversion” — adds “Still, I wanted to bring this opportunity to you before I took it to someone else.” The key lesson is one line: “Make sure your counterpart sees that there is something to lose by inaction.”",
+  term:"Loss aversion", def:"the asymmetry that makes people risk more to avoid a loss than to secure an equivalent gain.",
+  sowhat:"Rewrite your next proposal so the risk of doing nothing is visible — a loss “stings at least twice as much as an equivalent gain.” The move is to relocate the risk, not to inflate it.",
+  explain:"why identical offers land differently depending on which direction you point them.",
+  builds:[["a1","the predictable irrationality it uses"]], leads:[["b4-coinflip","now: how to ask instead of tell"]], live:[]},
+
+"b4-coinflip":{type:"mechanism", title:"Calibrated questions", x:1583, y:979,
+  ess:"“What” and “how”. “Why” accuses in every language — use it only on purpose.",
+  hook:"How do you tell someone their demand is impossible without ever contradicting them?",
+  story:"Make them explain it. “We call this tactic calibrated questions: queries that the other side can respond to but that have no fixed answers. It buys you time. It gives your counterpart the illusion of control — they are the one with the answers and power after all — and it does all that without giving them any idea of how constrained they are by it.”",
+  mech:"The vocabulary is restricted on purpose: “it’s best to start with ‘what,’ ‘how,’ and sometimes ‘why.’ Nothing else.” That exception is narrow and deliberate: “‘Why’ is always an accusation, in any language”, so “treat ‘why’ like a burner on a hot stove — don’t touch it” — except in the one case Voss names, “unless you want your counterpart to defend a goal that serves you.” The value is pedagogical rather than rhetorical: “Calibrated questions have the power to educate your counterpart on what the problem is rather than causing conflict by telling them what the problem is.” And they conceal the frame: “Calibrated questions make your counterpart feel like they’re in charge, but it’s really you who are framing the conversation. Your counterpart will have no idea how constrained they are by your questions.”",
+  term:"Calibrated question", def:"an open question beginning with what or how, answerable but without a fixed answer, which hands over control while setting the frame.",
+  sowhat:"Convert your next objection into a question starting with how or what, and audit your habits for “why”. Voss’s highest-yield example is a career one, where he says the wording is critical: “What does it take to be successful here?” — because “if someone gives you guidance, they will watch to see if you follow their advice… You’ve just recruited your first unofficial mentor.”",
+  explain:"why a question constrains a conversation more effectively than a statement.",
+  builds:[["a3","the illusion of control it grants"]], leads:[["b4-ergodicity","and the single best one"]], live:[]},
+
+"b4-ergodicity":{type:"mechanism", title:"“How am I supposed to do that?”", x:1901, y:945,
+  ess:"A refusal disguised as a request for help. It never backfired.",
+  hook:"What do you say to a demand you cannot possibly meet?",
+  story:"Ask them to solve it. Voss calls it “one of the greatest-of-all-time calibrated questions: ‘How am I supposed to do that?’ The critical part of this approach is that you really are asking for help and your delivery must convey that.” It works because “it’s a ‘how’ question, and ‘how’ engages because ‘how’ asks for help.”",
+  mech:"What it produces has a name: “This positive dynamic is what I refer to as ‘forced empathy’… Starting with José’s kidnapping, ‘How am I supposed to do that?’ became our primary response to a kidnapper demanding a ransom. And we never had it backfire.” In that case, “by constantly asking questions and making minuscule offers, Julie drove the ransom down to $16,500.” More generally: “The trick to ‘How’ questions is that, correctly used, they are gentle and graceful ways to say ‘No’ and guide your counterpart to develop a better solution — your solution.” And when you are attacked, it is the defence too: “when you are verbally assaulted, do not counterattack. Instead, disarm your counterpart by asking a calibrated question.”",
+  term:"Forced empathy", def:"a how-question that makes your counterpart take on your constraints and argue against their own demand.",
+  sowhat:"Say it deferentially or not at all — the same words with an edge are a challenge, and it stops working. Voss’s consultant Kelly gets it exactly right on a client who will not pay: “I’d love to help,” she said, “but how am I supposed to do that?”",
+  explain:"how to decline something without ever refusing it.",
+  builds:[["b4-coinflip","the question form it uses"]], leads:[["b4-domains","and three more refusals like it"]], live:[]},
+
+"b4-domains":{type:"mechanism · simulation", title:"Four ways to say no", sim:"noladder", x:2219, y:979,
+  ess:"Four refusals, escalating — and only the last one needs the word.",
+  hook:"Below: four refusals, only the last of which needs the word — what happens to their offer as you use them?",
+  story:"It improves. “We’ve found that you can usually express ‘No’ four times before actually saying the word” — usually, and Voss keeps a blunter fifth in reserve. The ladder runs: “How am I supposed to do that?”; then “Your offer is very generous, I’m sorry, that just doesn’t work for me”; then “I’m sorry but I’m afraid I just can’t do that”; then a plain “I’m sorry, no.”",
+  mech:"Each rung is doing separate work. The word “generous” is a nudge with a hook in it: “the use of ‘generous’ nurtures your counterpart to live up to the word.” The inability formulation recruits their sympathy: “By expressing an inability to perform, it can trigger the other side’s empathy toward you.” When you do reach the word, delivery decides whether it lands: “Verbally, it should be delivered with a downward inflection and a tone of regard; it’s not meant to be ‘NO!’” The purpose of the whole ladder is to make them do the moving — the aim is to “get them to bid against themselves.”",
+  term:"The no ladder", def:"four escalating refusals that decline without rupture, each inviting your counterpart to improve their own offer.",
+  sowhat:"Learn the four lines verbatim, because under pressure you will reach for whatever is closest. And avoid the one thing that reliably breaks it: “If there’s one way to put off your counterpart, it’s by implying that disagreeing with you is unfair.”",
+  explain:"how to hold a position through four rounds without a confrontation.",
+  builds:[["b4-ergodicity","the first rung"],["b3-plan","the offers it holds in place"]], leads:[["b4-survive","and then: will they actually do it?"]], live:[]},
+
+"b4-survive":{type:"mechanism", title:"Yes is nothing without how", x:2438, y:1094,
+  ess:"An agreement is not an outcome. Ask how it will be carried out.",
+  hook:"They agreed. Who exactly is going to do it, and what happens when they don’t?",
+  story:"“‘Yes’ is nothing without ‘How.’ While an agreement is nice, a contract is better, and a signed check is best.” The two questions Voss uses to convert one into the other: “How will we know we’re on track?” and “How will we address things if we find we’re off track?” — “When they answer, you summarize their answers until you get a ‘That’s right.’”",
+  mech:"There is a phrase to fear: “when you push for implementation and they say, ‘I’ll try,’ you should get a sinking feeling in your stomach. Because this really means, ‘I plan to fail.’” The bigger risk is everyone not in the room. “If your negotiation efforts don’t reach past your counterpart and into the team behind him, then you’ve got a ‘hope’-based deal — and hope is not a strategy.” So ask about them directly: “How does this affect the rest of your team?” or “How on board are the people not on this call?” Voss’s warning is memorable: “At the end of the day, the deal killers often are more important than the deal makers… It only takes one bit player to screw up a deal.”",
+  term:"Implementation questions", def:"the how-questions that convert an agreement into a plan, and that surface the people behind the table who can kill it.",
+  sowhat:"Never end on a yes. End on who, when, and what the two of you will do when it slips. And treat “I’ll try” as a no that has not been said yet.",
+  explain:"why most deals fail after the agreement rather than before it.",
+  builds:[["b4-coinflip","the question form again"]], leads:[["b4-signal","and how to tell if they mean it"]], live:[]},
+
+"b4-signal":{type:"mechanism · simulation", title:"7-38-55", sim:"tells", x:1612, y:1181,
+  ess:"Words carry 7 percent. When the channels disagree, believe the other 93.",
+  hook:"Below: set the words, the tone and the body separately. What does the message actually say?",
+  story:"Rarely what the words say. UCLA’s Albert Mehrabian found that “only 7 percent of a message is based on the words while 38 percent comes from the tone of voice and 55 percent from the speaker’s body language and face.” Voss is careful about the scope — “while these figures mainly relate to situations where we are forming an attitude about somebody, the rule nonetheless offers a useful ratio for negotiators” — and uses it for one job: catching a yes that is not one. “I heard you say, ‘Yes,’ but it seemed like there was hesitation in your voice.”",
+  mech:"When the channels disagree, Voss’s instruction is to label the mismatch out loud rather than accept the words. His second instrument is repetition: “The Rule of Three is simply getting the other guy to agree to the same thing three times in the same conversation… It’s really hard to repeatedly lie or fake conviction.” The first pass is simply their commitment; the next two can be a calibrated question and a summary, “or the three times might just be the same calibrated question phrased three different ways.”",
+  term:"The 7-38-55 rule", def:"Mehrabian’s split of a message across words, tone and body — used to detect incongruence rather than as a law of communication.",
+  sowhat:"When words and tone disagree, say so out loud and let them resolve it. Then get the same commitment at least three times before you rely on it.",
+  explain:"why the content of what someone said is the least of the information available.",
+  builds:[["a1","the substrate below the words"]], leads:[["b4-danger","and the tells in the words themselves"]], live:[]},
+
+"b4-danger":{type:"mechanism", title:"The Pinocchio effect", x:1959, y:1152,
+  ess:"On average, liars use more words — and more of other people’s pronouns.",
+  hook:"What changes in someone’s speech when they are not telling you the truth?",
+  story:"The volume and the pronouns. Harvard’s Deepak Malhotra and his coauthors found that, on average, “liars use more words than truth tellers and use far more third-person pronouns… The researchers dubbed this the Pinocchio Effect.” The reasoning is that a lie needs more work to be believed, and distance to be bearable.",
+  mech:"Pronouns are also a status instrument, pointing the opposite way to intuition: “The more in love they are with ‘I,’ ‘me,’ and ‘my’ the less important they are.” Voss states the same rule about self-presentation earlier: “The less important he makes himself, the more important he probably is (and vice versa).” The lightest tactic in the book uses a name rather than a pronoun — walking up and saying “My name is Chris. What’s the Chris discount?” — which works because it makes you a person rather than a transaction.",
+  term:"The Pinocchio effect", def:"the tendency of deception to inflate word count and third-person pronouns while shrinking the speaker’s use of “I”.",
+  sowhat:"Count pronouns when you are trying to work out who actually decides. And when someone answers a simple question at length, treat the length itself as data.",
+  explain:"what someone’s grammar reveals that their claims do not.",
+  builds:[["b4-signal","the same listening, applied to words"]], leads:[["b4-process","and who you are dealing with"]], live:[]},
+
+"b4-process":{type:"mechanism", title:"Three negotiator types", x:1650, y:1330,
+  ess:"Analyst, Accommodator, Assertive — and silence means something different to each.",
+  hook:"You go quiet. Do they think you are thinking, angry, or waiting for them to talk?",
+  story:"All three, depending on who they are. “People fall into three broad categories. Some people are Accommodators; others — like me — are basically Assertive; and the rest are data-loving Analysts.” The tell is time: “time = preparation; time = relationship; time = money.”",
+  mech:"Analysts are methodical and hate surprises; their motto is “As much time as it takes to get it right”, they may need days to answer, and “silence to them is an opportunity to think.” Accommodators are sociable and relationship-first, “most likely to build great rapport without actually accomplishing anything” — and for them, “silence is anger”, so their real objections stay hidden out of fear of conflict. Assertives want above all to be heard: “not only do they want to be heard, but they don’t actually have the ability to listen to you until they know that you’ve heard them”, and they read your silence as an invitation to keep talking. Voss adds the caveats that stop this becoming astrology: “your personal negotiating style is not a straitjacket. No one is exclusively one style”; “each of the styles can be effective. And to truly be effective you need elements from all three”; and, against the obvious reading of his own type, “blunt assertion is actually counterproductive most of the time.”",
+  term:"Analyst, Accommodator, Assertive", def:"three bargaining temperaments, distinguished by what they spend time on and by what they take your silence to mean.",
+  sowhat:"Work out which one you are first, because your default is what you will over-apply. If you are Assertive, soften the tone; if you are an Analyst, smile when you speak; if you are an Accommodator, stop trading objections for goodwill.",
+  explain:"why the same tactic lands differently on three kinds of counterpart.",
+  builds:[["a1","predictable patterns, again"]], leads:[["b4-destination","and what you actually have on them"]], live:[]},
+
+"b4-destination":{type:"mechanism", title:"Three kinds of leverage", x:2330, y:1255,
+  ess:"Positive, negative, normative — and the middle one leaves a residue.",
+  hook:"What do you have on someone who does not need anything from you?",
+  story:"More than you think, because leverage is a feeling rather than a fact. “In theory, leverage is the ability to inflict loss and withhold gain” — but “it often doesn’t matter what leverage actually exists against you; what really matters is the leverage they think you have on them. That’s why I say there’s always leverage: as an essentially emotional concept, it can be manufactured whether it exists or not.” And the floor is low: “If they’re talking to you, you have leverage.”",
+  mech:"Positive leverage is “your ability as a negotiator to provide — or withhold — things that your counterpart wants”; it appears the moment they say “I want”. Negative leverage is “a negotiator’s ability to make his counterpart suffer. And it is based on threats”, and Voss renounces it personally — “I do not believe in making direct threats and am extremely careful with even subtle ones… Threats can be like nuclear bombs. There will be a toxic residue that will be difficult to clean up”, because forcing it “might be perceived as you taking away their autonomy. People will often sooner die than give up their autonomy.” Normative leverage is the usable one: “using the other party’s norms and standards to advance your position. If you can show inconsistencies between their beliefs and their actions, you have normative leverage. No one likes to look like a hypocrite.”",
+  term:"Positive, negative, normative leverage", def:"what they want from you, what you could cost them, and where their own stated standards commit them.",
+  sowhat:"Before reaching for pressure, find their standard and quote it back. And if you must use negative leverage, label it rather than brandish it: “It seems like you don’t care what position you are leaving me in.”",
+  explain:"why the strongest-looking form of leverage is the one most likely to cost you the deal.",
+  builds:[["a4","leverage as a hidden-information problem"],["a3","and the autonomy threats violate"]], leads:[["b4-explore","so learn what they actually believe"]], live:[]},
+
+"b4-explore":{type:"mechanism", title:"Their religion", x:2470, y:1430,
+  ess:"Find the worldview they defer to. Then make your ask inside it.",
+  hook:"Why does an argument that should convince anyone fail to convince this particular person?",
+  story:"Because it is not framed in their terms. Voss uses “religion” as a term of art: “Access to this hidden space very often comes through understanding the other side’s worldview, their reason for being, their religion.” One line closed a stalled deal with an Ohio CEO: “This is really stewardship for you, isn’t it?”",
+  mech:"It works by borrowing an authority you do not have: “The other guy’s ‘religion’ is what the market, the experts, God, or society — whatever matters to him — has determined to be fair and just. And people defer to that authority.” So “by positioning your demands within the worldview your counterpart uses to make decisions, you show them respect and that gets you attention and results.” Similarity is the same instinct at a shallower depth — “we trust people more when we view them as being similar or familiar… Belonging is a primal instinct.” Even a bad reason beats none: in Langer’s copy-machine study, giving any reason took compliance from 60 to over 90 percent, and “it didn’t matter if the reason made sense” — but Voss caps it, since “while idiotic reasons worked with something simple like photocopying, on more complicated issues you can increase your effectiveness by offering reasons that reference your counterpart’s religion.”",
+  term:"Religion", def:"the worldview and set of standards a counterpart defers to, inside which a request stops sounding like a demand.",
+  sowhat:"Ask what they believe and listen without arguing — “you want to see what language they speak, and speak it back to them.” Then get in the room, because “ten minutes of face time often reveals more than days of research”, and bring “backup listeners whose only job is to listen between the lines.”",
+  explain:"why the same request succeeds or fails depending on whose terms it is stated in.",
+  builds:[["b4-destination","normative leverage, in practice"]], leads:[["b4-fence","and how to prepare all of it"]], live:[]},
+
+"b4-fence":{type:"mechanism", title:"The one sheet", x:2090, y:1430,
+  ess:"Five sections, written down. Not a script — a set of prepared instruments.",
+  hook:"What can you actually prepare, if scripting the conversation makes you worse at it?",
+  story:"Your tools, not your lines. “Negotiation is a psychological investigation… Basically, it’s a list of the primary tools you anticipate using, such as labels and calibrated questions, customized to the particular negotiation.” The reason to bother: “When the pressure is on, you don’t rise to the occasion — you fall to your highest level of preparation.”",
+  mech:"Five sections. <em>The goal</em> — think through best and worst cases but write down only the best, because “obsessing over a BATNA turns it into your target”, and “people who expect more (and articulate it) get more.” <em>Summary</em> — the known facts in two sentences, tested against whether they would say “that’s right”. <em>Labels and accusation audit</em> — three to five, on fill-in-the-blank forms: “It seems like ___ is valuable to you”, “It seems like you’re reluctant to ___.” <em>Calibrated questions</em> — three to five from a standing set (“What are we trying to accomplish?”, “What’s the core issue here?”, “What’s the biggest challenge you face?”), plus the ones that surface people behind the table and price inaction: “What happens if you do nothing?” <em>Non-cash offers</em> — “What could they give that would almost get us to do it for free?”",
+  term:"The negotiation one sheet", def:"a one-page kit of prepared labels, questions and non-cash options — deliberately not a script, because a script makes you rigid.",
+  sowhat:"Write the goal down and tell a colleague, which “makes it harder to wimp out”. And resist over-preparing — of a preordained script, Voss warns: “Not only will such an approach make you less agile and creative at the table, it will make you more susceptible to those who are.”",
+  explain:"what preparation should consist of when the conversation cannot be predicted.",
+  builds:[["b4-explore","the listening it plans for"],["b1-lorenz-story","the audit it schedules"]], leads:[["b4-principle","and the stance behind all of it"]], live:[]},
+
+"b4-principle":{type:"principle", title:"Discovery, not battle", x:1830, y:1560,
+  ess:"You are not there to win the argument. You are there to find out what you don’t know.",
+  hook:"If you had to keep one sentence from this book, which one changes the most?",
+  story:"This one: “Negotiation is not an act of battle; it’s a process of discovery. The goal is to uncover as much information as possible.” Everything else in the chart is an instrument of that: “all negotiation, done well, should be an information-gathering process that vests your counterpart in an outcome that serves you.”",
+  mech:"Three consequences. Certainty is the enemy — “until you know what you’re dealing with, you don’t know what you’re dealing with”, so you go in with hypotheses rather than assumptions. Being right is not the objective — “being right isn’t the key to a successful negotiation — having the right mindset is.” And the counterpart is not the obstacle: Voss’s image is a tightrope rather than an opponent. Even the persuasion is smaller than it looks: “Our job as persuaders is easier than we think. It’s not to get others believing what we say. It’s just to stop them unbelieving.”",
+  term:"Negotiation as discovery", def:"treating an exchange as an investigation into what the other side knows and needs, rather than a contest to be won.",
+  sowhat:"Judge your next negotiation by what you learned, not by whether you held your position. And take the invitation seriously: “In this world, you get what you ask for; you just have to ask correctly. So claim your prerogative to ask for what you think is right.”",
+  explain:"what changes when you stop treating a negotiation as something to win.",
+  builds:[["a4","the hidden information it hunts"],["b4-fence","the preparation it needs"]], leads:[["b1-laplace","and back to the first thing you say"]], live:[]}
+};
+const TERRITORIES = [
+  {label:"I · Make Them Feel Heard", sum:"four moves that build rapport fast", hue:"#4a6684", lx:508, ly:100, rx:184, ry:158, rw:745, rh:590},
+  {label:"II · Get to No, Not Yes", sum:"why yes is worthless and no is safety", hue:"#4f7050", lx:2114, ly:100, rx:1739, ry:158, rw:745, rh:590},
+  {label:"The Bedrock", sum:"four assumptions about people", hue:"#6f6455", lx:1265, ly:352, rx:964, ry:436, rw:722, rh:439},
+  {label:"III · Bend Their Reality", sum:"anchors, fairness and the number ladder", hue:"#8a5c5c", lx:520, ly:869, rx:184, ry:846, rw:745, rh:590},
+  {label:"IV · Discover, Don’t Debate", sum:"questions, tells, leverage, black swans", hue:"#96702f", lx:2011, ly:820, rx:1479, ry:869, rw:1069, rh:745}
+];
+const ASTERISMS = [
+  ["#4a6684", [["b1-laplace","b1-pendulum"],["b1-laplace","b1-sensitive"],["b1-sensitive","b1-lorenz-story"],["b1-sensitive","b1-principle"]]],
+  ["#4f7050", [["b2-logistic","b2-attractors"],["b2-lorenz-attractor","b2-attractors"],["b2-attractors","b2-tension-random"],["b2-attractors","b2-principle"]]],
+  ["#6f6455", [["a1","a2"],["a1","a3"],["a2","a4"],["a3","a4"]]],
+  ["#8a5c5c", [["b3-kokura","b3-contingency"],["b3-contingency","b3-timeline"],["b3-contingency","b3-plan"],["b3-timeline","b3-principle"],["b3-plan","b3-principle"]]],
+  ["#96702f", [["b4-coinflip","b4-ergodicity"],["b4-ergodicity","b4-domains"],["b4-domains","b4-survive"],
+    ["b4-coinflip","b4-signal"],["b4-signal","b4-danger"],["b4-danger","b4-process"],
+    ["b4-process","b4-destination"],["b4-destination","b4-explore"],["b4-explore","b4-fence"],
+    ["b4-process","b4-principle"],["b4-fence","b4-principle"],["b4-survive","b4-destination"]]]
+];
+const ALL = Object.keys(N);
+const TERRNAME = {b1:"I · Make Them Feel Heard", b2:"II · Get to No, Not Yes",
+  b3:"III · Bend Their Reality", b4:"IV · Discover, Don’t Debate", a:"The Bedrock"};
+const HUES = {b1:"#4a6684", b2:"#4f7050", b3:"#8a5c5c", b4:"#96702f", a:"#6f6455"};
+const hueOf = id => id.startsWith('a') ? HUES.a : HUES[id.slice(0,2)];
+const terrOf = id => id.startsWith('a') ? TERRNAME.a : TERRNAME[id.slice(0,2)];
+
+const TOUR = ["b1-laplace","b1-pendulum","b1-sensitive","b1-lorenz-story","b1-principle",
+  "b2-logistic","b2-lorenz-attractor","b2-attractors","b2-tension-random","b2-principle",
+  "b3-kokura","b3-contingency","b3-timeline","b3-plan","b3-principle",
+  "b4-coinflip","b4-ergodicity","b4-domains","b4-survive","b4-signal","b4-danger",
+  "b4-process","b4-destination","b4-explore","b4-fence","b4-principle"];
+const SEQ = {}; TOUR.forEach((id,i)=>SEQ[id]=i+1);
+
+/* degree from curated links (for star size) */
+const DEG = {};
+ALL.forEach(id=>DEG[id]=0);
+ALL.forEach(id=>{
+  const n = N[id];
+  [...n.builds, ...n.leads, ...n.live].forEach(([t])=>{ DEG[id]++; DEG[t]=(DEG[t]||0)+1; });
+});
+const dotSize = id => 16 + Math.min(DEG[id],8)*2.2;
+const dotCenter = id => ({x:N[id].x+dotSize(id)/2, y:N[id].y+dotSize(id)/2});
+
+/* ============================================================
+   CAMERA
+   ============================================================ */
+const vp = document.getElementById('vp');
+const world = document.getElementById('world');
+const reader = document.getElementById('reader');
+const WW = 2750, WH = 1750;
+let cam = {s:0.12, tx:0, ty:0};
+let anim = null;
+function apply(){
+  world.style.transform = `translate(${cam.tx}px, ${cam.ty}px) scale(${cam.s})`;
+  lod();
+}
+function readerW(){ return reader.classList.contains('open') ? (reader.getBoundingClientRect().width||430) : 0; }
+function visW(){ return innerWidth - readerW(); }
+function centerOn(cx, cy, s){
+  cam.s = s;
+  cam.tx = visW()/2 - cx*s;
+  cam.ty = innerHeight/2 - cy*s;
+  apply();
+}
+function flyTo(cx, cy, s, dur=700){
+  if (anim) cancelAnimationFrame(anim);
+  const s0=cam.s, cx0=(visW()/2-cam.tx)/s0, cy0=(innerHeight/2-cam.ty)/s0;
+  const ls0=Math.log(s0), ls1=Math.log(s);
+  const t0=performance.now();
+  function step(t){
+    let p=Math.min(1,(t-t0)/dur);
+    p = p<.5 ? 4*p*p*p : 1-Math.pow(-2*p+2,3)/2;
+    centerOn(cx0+(cx-cx0)*p, cy0+(cy-cy0)*p, Math.exp(ls0+(ls1-ls0)*p));
+    if (p<1) anim=requestAnimationFrame(step);
+  }
+  anim=requestAnimationFrame(step);
+}
+function overviewCam(fly=true){
+  const s = Math.min(visW()/WW, innerHeight/WH)*0.92;
+  if (fly) flyTo(WW/2, WH/2, s, 800); else centerOn(WW/2, WH/2, s);
+}
+vp.addEventListener('wheel', e=>{
+  e.preventDefault();
+  if (anim) cancelAnimationFrame(anim);
+  const f = Math.exp(-e.deltaY*0.0016);
+  const s2 = Math.min(2.2, Math.max(0.06, cam.s*f));
+  const wx=(e.clientX-cam.tx)/cam.s, wy=(e.clientY-cam.ty)/cam.s;
+  cam.s=s2; cam.tx=e.clientX-wx*s2; cam.ty=e.clientY-wy*s2;
+  apply();
+}, {passive:false});
+const ptrs = new Map();
+let panStart=null, pinchStart=null, moved=0;
+vp.addEventListener('pointerdown', e=>{
+  if (e.target.closest('.tlabel')) return;
+  ptrs.set(e.pointerId, {x:e.clientX, y:e.clientY});
+  if (ptrs.size===1){
+    moved=0;
+    panStart={mx:e.clientX, my:e.clientY, tx:cam.tx, ty:cam.ty};
+    vp.classList.add('dragging');
+  } else if (ptrs.size===2){
+    const [p1,p2]=[...ptrs.values()];
+    pinchStart={d:Math.hypot(p1.x-p2.x,p1.y-p2.y), s:cam.s,
+      wx:((p1.x+p2.x)/2-cam.tx)/cam.s, wy:((p1.y+p2.y)/2-cam.ty)/cam.s};
+    panStart=null;
+  }
+});
+addEventListener('pointermove', e=>{
+  if (!ptrs.has(e.pointerId)) return;
+  ptrs.set(e.pointerId, {x:e.clientX, y:e.clientY});
+  if (ptrs.size===1 && panStart){
+    if (anim) cancelAnimationFrame(anim);
+    moved += Math.abs(e.movementX||0)+Math.abs(e.movementY||0);
+    cam.tx = panStart.tx + (e.clientX-panStart.mx);
+    cam.ty = panStart.ty + (e.clientY-panStart.my);
+    apply();
+  } else if (ptrs.size===2 && pinchStart){
+    if (anim) cancelAnimationFrame(anim);
+    const [p1,p2]=[...ptrs.values()];
+    const d=Math.hypot(p1.x-p2.x,p1.y-p2.y);
+    const s2=Math.min(2.2, Math.max(0.06, pinchStart.s*d/pinchStart.d));
+    const cx=(p1.x+p2.x)/2, cy=(p1.y+p2.y)/2;
+    cam.s=s2; cam.tx=cx-pinchStart.wx*s2; cam.ty=cy-pinchStart.wy*s2;
+    apply();
+  }
+});
+function ptrUp(e){ ptrs.delete(e.pointerId);
+  if (ptrs.size<2) pinchStart=null;
+  if (ptrs.size===0){ panStart=null; vp.classList.remove('dragging'); } }
+addEventListener('pointerup', ptrUp);
+addEventListener('pointercancel', ptrUp);
+vp.addEventListener('dblclick', e=>{
+  if (!e.target.closest('.mk')){ closeReader(); overviewCam(); }
+});
+addEventListener('keydown', e=>{
+  if (e.key==='Escape'){ closeReader(); overviewCam(); }
+  if (e.key==='ArrowRight') navStep(1);
+  if (e.key==='ArrowLeft') navStep(-1);
+});
+document.getElementById('overviewBtn').onclick = ()=>{ closeReader(); overviewCam(); };
+addEventListener('resize', ()=>apply());
+
+/* ============================================================
+   SKY - constellation names, asterisms, ecliptic, stars
+   ============================================================ */
+TERRITORIES.forEach(t=>{
+  const rgb = [parseInt(t.hue.slice(1,3),16), parseInt(t.hue.slice(3,5),16), parseInt(t.hue.slice(5,7),16)].join(',');
+  const l = document.createElement('div');
+  l.className = 'tlab';
+  l.style.cssText = `left:${t.lx}px; top:${t.ly}px; transform:translateX(-50%);`;
+  l.innerHTML = `<div class="big" style="color:rgba(${rgb},0.92)">${t.label}</div>
+    <div class="sum">${t.sum}</div>`;
+  l.addEventListener('click', ()=>{
+    flyTo(t.rx+t.rw/2, t.ry+Math.min(t.rh/2, 1000), Math.min(visW()/(t.rw+300), 0.5));
+  });
+  world.appendChild(l);
+});
+
+
+
+/* minor stars - small nameless flecks inside each figure */
+{
+  const R = mulberry32(11);
+  TERRITORIES.forEach(t=>{
+    for (let i=0;i<16;i++){
+      const d=document.createElement('div');
+      const sz=(2.5+R()*3).toFixed(1);
+      d.style.cssText=`position:absolute; left:${Math.round(t.rx+40+R()*(t.rw-80))}px;`+
+        `top:${Math.round(t.ry+40+R()*(t.rh-80))}px; width:${sz}px; height:${sz}px;`+
+        `border-radius:50%; background:${t.hue}; opacity:${(0.18+R()*0.22).toFixed(2)}; pointer-events:none;`;
+      world.appendChild(d);
+    }
+  });
+}
+
+const flowsvg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+flowsvg.setAttribute('width',WW); flowsvg.setAttribute('height',WH);
+flowsvg.style.cssText='position:absolute;top:0;left:0;pointer-events:none;overflow:visible;';
+world.appendChild(flowsvg);
+
+const astsvg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+astsvg.id='astsvg'; astsvg.setAttribute('width',WW); astsvg.setAttribute('height',WH);
+ASTERISMS.forEach(([hue, pairs])=>{
+  pairs.forEach(([a,b])=>{
+    const pa=dotCenter(a), pb=dotCenter(b);
+    const dx=pb.x-pa.x, dy=pb.y-pa.y, L=Math.hypot(dx,dy)||1;
+    const ux=dx/L, uy=dy/L, off=30;
+    const ln = document.createElementNS('http://www.w3.org/2000/svg','line');
+    ln.setAttribute('x1',pa.x+ux*off); ln.setAttribute('y1',pa.y+uy*off);
+    ln.setAttribute('x2',pb.x-ux*off); ln.setAttribute('y2',pb.y-uy*off);
+    ln.setAttribute('stroke',hue); ln.setAttribute('stroke-opacity','0.38');
+    ln.setAttribute('stroke-width','1.6');
+    astsvg.appendChild(ln);
+  });
+});
+world.appendChild(astsvg);
+
+{
+  const pts = TOUR.map(id=>dotCenter(id));
+  let d = `M ${pts[0].x} ${pts[0].y}`;
+  for (let i=1;i<pts.length;i++){
+    const a=pts[i-1], b=pts[i];
+    const mx=(a.x+b.x)/2, my=(a.y+b.y)/2;
+    d += ` Q ${mx + (b.y-a.y)*0.08} ${my - (b.x-a.x)*0.08} ${b.x} ${b.y}`;
+  }
+  const p = document.createElementNS('http://www.w3.org/2000/svg','path');
+  p.setAttribute('d',d); p.setAttribute('fill','none');
+  p.setAttribute('class','lnk-base'); p.setAttribute('stroke',`rgba(${RGB_INK},0.08)`); p.setAttribute('stroke-width','4');
+  p.setAttribute('stroke-dasharray','2,14');
+  flowsvg.appendChild(p);
+}
+
+const tsvg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+tsvg.id='tsvg'; tsvg.setAttribute('width',WW); tsvg.setAttribute('height',WH);
+const defs = document.createElementNS('http://www.w3.org/2000/svg','defs');
+defs.innerHTML = `<marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="#96702f" opacity="0.8"/></marker>`;
+tsvg.appendChild(defs);
+world.appendChild(tsvg);
+const tlabels = [];
+
+const mkEls = {};
+ALL.forEach(id=>{
+  const n = N[id];
+  const hue = hueOf(id);
+  const size = dotSize(id);
+  const m = document.createElement('div');
+  m.className = 'mk' + (n.sim ? ' hasim' : '');
+  m.style.cssText = `left:${n.x}px; top:${n.y}px;`;
+  m.dataset.id = id;
+  m.innerHTML = `
+    <div class="dot" style="width:${size}px; height:${size}px; background:${hue};"></div>
+    <div class="dtext">
+      <div class="lbl">${SEQ[id]?`<span class="seq">${SEQ[id]}</span>`:''}${n.title}</div>
+      <div class="ess">${n.ess}</div>
+      <div class="sims-badge">▸ live model</div>
+    </div>`;
+  world.appendChild(m);
+  mkEls[id] = m;
+  m.addEventListener('click', e=>{
+    if (moved>6) return;
+    e.stopPropagation();
+    openIdea(id);
+  });
+});
+
+function lod(){
+  const ess = cam.s > 0.55;
+  if (lod._k===ess) return;
+  lod._k = ess;
+  Object.values(mkEls).forEach(m=>m.classList.toggle('showess', ess));
+}
+
+/* ============================================================
+   READER
+   ============================================================ */
+let focusId = null, stopSim = null;
+
+const REL = {builds:{glyph:'\u2190', label:'builds on'},
+             leads: {glyph:'\u2192', label:'leads to'},
+             live:  {glyph:'\u25B6', label:'see it live'}};
+function linkGroup(rel, items){
+  if (!items.length) return '';
+  const r = REL[rel];
+  return `<div class="lgroup"><span class="kicker" title="${r.label}"><span class="ar">${r.glyph}</span></span>
+    ${items.map(([t,why])=>`<a data-t="${t}"><span class="t">${N[t].title}</span>
+      <span class="why">${why}</span></a>`).join('')}
+  </div>`;
+}
+
+function openIdea(id){
+  const n = N[id];
+  if (stopSim){ stopSim(); stopSim=null; }
+  focusId = id;
+  const chip = document.getElementById('rChip');
+  chip.textContent = n.type;
+  chip.style.borderColor = hueOf(id)+'66'; chip.style.color = hueOf(id);
+  document.getElementById('rTitle').textContent = n.title;
+  document.getElementById('rTerr').textContent = terrOf(id) + (SEQ[id]?` · step ${SEQ[id]} of ${TOUR.length}`:'');
+  const nextId = SEQ[id] && SEQ[id] < TOUR.length ? TOUR[SEQ[id]] : null;
+  document.getElementById('rbody').innerHTML = `
+    <div class="ideablock">
+      <section class="ib"><span class="kicker">the idea</span>
+        <b class="term">${n.term}</b><div class="def">${n.def}</div></section>
+      ${n.mech ? `<section class="ib"><span class="kicker">how it works</span>
+        <div class="txt">${n.mech}</div></section>` : ''}
+      <section class="ib"><span class="kicker">failure mode</span>
+        <div class="txt">${n.sowhat}</div></section>
+      <section class="ib"><span class="kicker">description</span>
+        <div class="hook">${n.hook}</div>
+        <div class="story">${n.story}</div>
+        ${n.sim ? simHTML(n.sim) : ''}</section>
+    </div>
+    <div class="linkrow">
+      ${linkGroup('builds', n.builds)}
+      ${linkGroup('leads', n.leads)}
+      ${linkGroup('live', n.live)}
+    </div>
+    ${nextId ? `<button class="nextbtn" data-t="${nextId}"><span class="k">next in the flow · ${SEQ[nextId]} of ${TOUR.length}</span>${N[nextId].title}<span class="arr">→</span></button>`
+             : (SEQ[id]===TOUR.length ? `<button class="nextbtn" id="finishBtn"><span class="k">end of the flow</span>Back to the chart<span class="arr">↑</span></button>` : '')}`;
+  document.querySelectorAll('#rbody [data-t]').forEach(a=>
+    a.addEventListener('click', ()=>openIdea(a.dataset.t)));
+  const fin = document.getElementById('finishBtn');
+  if (fin) fin.onclick = ()=>{ closeReader(); overviewCam(); };
+  const fig = document.querySelector('#rbody figure.frame');
+  if (fig) stopSim = SIMS[fig.dataset.sim](fig);
+  document.getElementById('rbody').scrollTop = 0;
+  reader.classList.add('open');
+  document.body.classList.add('reader-open');
+  highlight(id);
+  syncNav();
+  const rs = Math.min(0.95, Math.max(0.62, cam.s));
+  setTimeout(()=>flyTo(n.x+180, n.y+60, rs), 60);
+}
+function closeReader(){
+  if (stopSim){ stopSim(); stopSim=null; }
+  reader.classList.remove('open');
+  document.body.classList.remove('reader-open');
+  focusId = null;
+  clearHighlight();
+  syncNav();
+}
+document.getElementById('rClose').onclick = closeReader;
+
+/* map highlight: few directional lines with plain labels */
+function highlight(id){
+  clearHighlight();
+  const n = N[id];
+  const nb = new Set([id]);
+  const conns = [
+    ...n.builds.map(([t])=>({t, lab:REL.builds.glyph, title:REL.builds.label, into:true})),
+    ...n.leads.map(([t])=>({t, lab:REL.leads.glyph, title:REL.leads.label, into:false})),
+    ...n.live.map(([t])=>({t, lab:REL.live.glyph, title:REL.live.label, into:false}))
+  ];
+  conns.forEach(c=>nb.add(c.t));
+  ALL.forEach(x=>{
+    mkEls[x].classList.toggle('dimmed', !nb.has(x));
+    mkEls[x].classList.toggle('neighbor', nb.has(x) && x!==id);
+    mkEls[x].classList.toggle('focused', x===id);
+  });
+  const here = dotCenter(id);
+  conns.forEach(c=>{
+    const there = dotCenter(c.t);
+    let from = c.into ? {...there} : {...here};
+    let to   = c.into ? {...here} : {...there};
+    {
+      const ddx=to.x-from.x, ddy=to.y-from.y, LL=Math.hypot(ddx,ddy)||1;
+      const ux=ddx/LL, uy=ddy/LL, off=30;
+      from = {x:from.x+ux*off, y:from.y+uy*off};
+      to   = {x:to.x-ux*off,   y:to.y-uy*off};
+    }
+    const dx=to.x-from.x, dy=to.y-from.y, dist=Math.hypot(dx,dy)||1;
+    const cx=(from.x+to.x)/2 - dy/dist*dist*0.12, cy=(from.y+to.y)/2 + dx/dist*dist*0.12;
+    const p = document.createElementNS('http://www.w3.org/2000/svg','path');
+    p.setAttribute('d',`M ${from.x} ${from.y} Q ${cx} ${cy} ${to.x} ${to.y}`);
+    p.setAttribute('fill','none');
+    p.setAttribute('class','lnk-flow'); p.setAttribute('stroke',`rgba(${RGB_AMBER},0.45)`);
+    p.setAttribute('stroke-width','2.5');
+    p.setAttribute('stroke-dasharray','9,8');
+    p.setAttribute('class','tline');
+    p.setAttribute('marker-end','url(#arr)');
+    tsvg.appendChild(p);
+    const lbl = document.createElement('div');
+    lbl.className='tlabel';
+    lbl.style.left = (.25*from.x+.5*cx+.25*to.x)+'px';
+    lbl.style.top = (.25*from.y+.5*cy+.25*to.y)+'px';
+    lbl.textContent = c.lab;
+    lbl.title = c.title;
+    lbl.addEventListener('click', e=>{ e.stopPropagation(); openIdea(c.t); });
+    world.appendChild(lbl);
+    tlabels.push(lbl);
+  });
+}
+function clearHighlight(){
+  ALL.forEach(x=>mkEls[x].classList.remove('dimmed','neighbor','focused'));
+  [...tsvg.querySelectorAll('path')].forEach(p=>p.remove());
+  tlabels.forEach(l=>l.remove()); tlabels.length=0;
+}
+
+/* ============================================================
+   NAV - top-right cluster drives the default flow
+   ============================================================ */
+function syncNav(){
+  const i = focusId ? TOUR.indexOf(focusId) : -1;
+  document.getElementById('navcluster').classList.toggle('on', !!focusId);
+  document.getElementById('navPrev').disabled = i===0;
+  document.getElementById('navNext').disabled = i===TOUR.length-1;
+}
+function navStep(dir){
+  const i = focusId ? TOUR.indexOf(focusId) : -1;
+  if (i<0){ openIdea(TOUR[0]); return; }
+  const j = i+dir;
+  if (j>=0 && j<TOUR.length) openIdea(TOUR[j]);
+}
+document.getElementById('navPrev').onclick = ()=>navStep(-1);
+document.getElementById('navNext').onclick = ()=>navStep(1);
+
+/* ============================================================
+   SIMULATIONS
+   ============================================================ */
+
+function mulberry32(a){ return function(){ a|=0; a=a+0x6D2B79F5|0;
+  let t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t;
+  return ((t^t>>>14)>>>0)/4294967296; }; }
+function setActive(fig, btn){
+  fig.querySelectorAll('.ghost').forEach(b=>{ if(b.dataset.d!==undefined||b.dataset.m!==undefined) b.classList.remove('active');});
+  if (btn) btn.classList.add('active');
+}
+function simHTML(kind){
+  const caps = {
+    mirror:"One sentence from the other side, four ways to answer it. The bar is how much they tell you next — mirroring and labelling open them up, ‘why’ closes them, a solution ends the conversation.",
+    ladder:"The six tools that build a summary, in Voss’s order. Climb them and you earn ‘that’s right’. Jump straight to the ask and you get ‘you’re right’ — the polite brush-off.",
+    anchor:"Move your opening number and watch the ‘fair’ midpoint follow it. The middle is not a fact about the deal; it is a function of who anchored.",
+    ackerman:"65, 85, 95, 100 percent of your target. Step through the offers and watch the increments halve — that shrinking is what signals a limit.",
+    noladder:"Four escalating refusals — only the last needs the word. Each invites your counterpart to improve their own offer rather than argue with yours.",
+    tells:"Set the three channels independently. The verdict is weighted 7-38-55, so words lose every argument they have with tone and body."
+  };
+  const ctl = {
+    mirror:`<button class="ghost" data-m="mirror">mirror 3 words</button>
+      <button class="ghost" data-m="label">label it</button>
+      <button class="ghost" data-m="why">ask why</button>
+      <button class="ghost" data-m="solve">offer a solution</button>
+      <button class="ghost" data-a="reset">reset ↻</button>`,
+    ladder:`<button class="ghost" data-a="next">add the next tool</button>
+      <button class="ghost" data-a="skip">skip to the ask</button>
+      <button class="ghost" data-a="reset">reset ↻</button>`,
+    anchor:`<span class="cl">your opening</span><input type="range" min="0" max="10000" step="100" value="9000">
+      <button class="ghost" data-a="target">open at your target</button>
+      <button class="ghost" data-a="extreme">open at 65%</button>`,
+    ackerman:`<span class="cl">your target</span><input type="range" min="10000" max="120000" step="1000" value="60000">
+      <button class="ghost" data-a="next">next offer</button>
+      <button class="ghost" data-a="reset">reset ↻</button>`,
+    noladder:`<button class="ghost" data-a="next">refuse (again)</button>
+      <button class="ghost" data-a="reset">reset ↻</button>`,
+    tells:`<span class="cl">words</span><button class="ghost active" data-w="1">yes</button><button class="ghost" data-w="0">no</button>
+      <span class="cl">tone</span><button class="ghost" data-t="1">yes</button><button class="ghost active" data-t="0">no</button>
+      <span class="cl">body</span><button class="ghost" data-b="1">yes</button><button class="ghost active" data-b="0">no</button>`
+  };
+  return `<figure class="frame" data-sim="${kind}">
+    <canvas></canvas>
+    <div class="controls">${ctl[kind]}</div>
+    <figcaption>${caps[kind]}</figcaption>
+  </figure>`;
+}
+/* Canvas backing store follows the device pixel ratio, so canvas text stays
+   crisp in the ~570px reader column. Sims still draw in logical 700-wide units. */
+const _DPR = Math.max(1, Math.min(2, (typeof devicePixelRatio === 'number' ? devicePixelRatio : 1) || 1));
+function fitCanvas(cv, w, h){
+  cv.width = Math.round(w*_DPR); cv.height = Math.round(h*_DPR);
+  const ctx = cv.getContext('2d');
+  if (ctx.setTransform) ctx.setTransform(_DPR,0,0,_DPR,0,0);
+  return ctx;
+}
+const SIMS = {};
+
+/* wrap a string to n chars, returning lines */
+function wrapTxt(ctx, s, maxw){
+  const words = s.split(' '); const out = []; let line = '';
+  for (const w of words){
+    const t = line ? line+' '+w : w;
+    if (ctx.measureText(t).width > maxw && line){ out.push(line); line = w; } else line = t;
+  }
+  if (line) out.push(line);
+  return out;
+}
+
+/* ---------- I · mirroring ---------------------------------------------- */
+SIMS.mirror = fig=>{
+  const cv=fig.querySelector('canvas');
+  const W=700,H=430, ctx=fitCanvas(cv,W,H);
+  const THEM = "Look, we've been burned before on a deal exactly like this one.";
+  const R = {
+    mirror:{you:"“Burned before?”", reveal:0.92,
+      them:"Yeah — last year we signed with a vendor who promised the same integration timeline and it slipped two quarters. My board still brings it up. Honestly I'm the one who pushed for it.",
+      note:"Three words and silence. They reworded, then volunteered the board, the timeline and their own exposure."},
+    label:{you:"“It seems like you're the one carrying the risk on this.”", reveal:0.84,
+      them:"That's right. If this goes the way the last one did, it's my name on it. I need something I can show them by March.",
+      note:"A label got a ‘that's right’ and a deadline you did not know existed."},
+    why:{you:"“Why would this be any different?”", reveal:0.22,
+      them:"I didn't say it wouldn't be. I'm just telling you what happened.",
+      note:"‘Why' is an accusation in any language. They defended instead of explaining."},
+    solve:{you:"“We can add a penalty clause to cover that.”", reveal:0.14,
+      them:"Sure, send it over and we'll take a look.",
+      note:"You solved a problem you had not finished hearing. The conversation is over and you learned nothing."}
+  };
+  let pick=null;
+  function draw(){
+    ctx.fillStyle=SUNK; ctx.fillRect(0,0,W,H);
+    ctx.textAlign='left';
+    ctx.fillStyle=GRAY; ctx.font='11.5px Inter, sans-serif';
+    ctx.fillText('THEM',30,28);
+    ctx.fillStyle=INKC; ctx.font='15px Inter, sans-serif';
+    wrapTxt(ctx,THEM,620).forEach((l,i)=>ctx.fillText(l,30,50+i*21));
+    if(!pick){
+      ctx.fillStyle=FAINT; ctx.font='13.5px Inter, sans-serif';
+      ctx.fillText('Choose a reply below.',30,110);
+      return;
+    }
+    const r=R[pick];
+    ctx.fillStyle=AMBER; ctx.font='11.5px Inter, sans-serif'; ctx.fillText('YOU',30,102);
+    ctx.fillStyle=AMBER; ctx.font='15px Inter, sans-serif';
+    let y=124; wrapTxt(ctx,r.you,620).forEach(l=>{ctx.fillText(l,30,y); y+=21;});
+    y+=16;
+    ctx.fillStyle=GRAY; ctx.font='11.5px Inter, sans-serif'; ctx.fillText('THEM',30,y); y+=22;
+    ctx.fillStyle=INKC; ctx.font='15px Inter, sans-serif';
+    wrapTxt(ctx,r.them,620).forEach(l=>{ctx.fillText(l,30,y); y+=21;});
+    /* reveal bar */
+    const BY=340, BW=W-60;
+    ctx.fillStyle=GRAY; ctx.font='11.5px Inter, sans-serif';
+    ctx.fillText('how much they just told you',30,BY-8);
+    ctx.strokeStyle=BRD; ctx.lineWidth=1; ctx.strokeRect(30,BY,BW,14);
+    ctx.fillStyle=`rgba(${RGB_AMBER},0.42)`; ctx.fillRect(30,BY,BW*r.reveal,14);
+    ctx.fillStyle=INKC; ctx.font='13.5px Inter, sans-serif';
+    wrapTxt(ctx,r.note,BW).forEach((l,i)=>ctx.fillText(l,30,BY+38+i*19));
+  }
+  draw();
+  fig.querySelectorAll('.ghost').forEach(b=>b.onclick=()=>{
+    if(b.dataset.a==='reset'){ pick=null;
+      fig.querySelectorAll('.ghost').forEach(x=>{ if(x.dataset.m) x.classList.remove('active'); });
+    } else { setActive(fig,b); pick=b.dataset.m; }
+    draw();});
+  return ()=>{};
+};
+
+/* ---------- II · the summary ladder ----------------------------------- */
+SIMS.ladder = fig=>{
+  const cv=fig.querySelector('canvas');
+  const W=700,H=430, ctx=fitCanvas(cv,W,H);
+  const RUNGS=[
+    ["Effective pause","Silence, used for emphasis, until the emotion drains out"],
+    ["Minimal encouragers","“Yes.” “OK.” “Uh-huh.” “I see.”"],
+    ["Mirroring","Repeat their critical one to three words, then wait"],
+    ["Labeling","“It seems like…” — name the emotion, then go quiet"],
+    ["Paraphrasing","Say their position back in your own words"],
+    ["Summary","Paraphrase + label = summary. The whole world according to them"]
+  ];
+  let step=0, skipped=false;
+  function draw(){
+    ctx.fillStyle=SUNK; ctx.fillRect(0,0,W,H);
+    ctx.textAlign='left';
+    ctx.fillStyle=GRAY; ctx.font='11.5px Inter, sans-serif';
+    ctx.fillText('THE SIX TOOLS, IN ORDER',30,26);
+    RUNGS.forEach((r,i)=>{
+      const y=52+i*44, done=!skipped && i<step;
+      ctx.strokeStyle=done?AMBER:BRD; ctx.lineWidth=1.4;
+      ctx.strokeRect(30,y,15,15);
+      if(done){ ctx.strokeStyle=AMBER; ctx.lineWidth=2.2; ctx.beginPath();
+        ctx.moveTo(33,y+8); ctx.lineTo(36.5,y+11.5); ctx.lineTo(42,y+3.5); ctx.stroke(); }
+      ctx.fillStyle=done?INKC:GRAY; ctx.font='14.5px Inter, sans-serif';
+      ctx.fillText(`${i+1}. ${r[0]}`,58,y+12);
+      ctx.fillStyle=done?GRAY:FAINT; ctx.font='12.5px Inter, sans-serif';
+      ctx.fillText(r[1],58,y+29);
+    });
+    const BY=326;
+    ctx.fillStyle=GRAY; ctx.font='11.5px Inter, sans-serif'; ctx.fillText('trust',30,BY-8);
+    ctx.strokeStyle=BRD; ctx.lineWidth=1; ctx.strokeRect(30,BY,W-60,13);
+    const frac = skipped ? 0.18 : step/6;
+    ctx.fillStyle=`rgba(${RGB_AMBER},0.42)`; ctx.fillRect(30,BY,(W-60)*frac,13);
+    ctx.font='16px Inter, sans-serif';
+    if(skipped){
+      ctx.fillStyle=INKC; ctx.fillText('“You’re right.”',30,BY+42);
+      ctx.fillStyle=GRAY; ctx.font='13px Inter, sans-serif';
+      ctx.fillText('A happy smile, and they leave you alone for twenty-four hours. You have agreed to nothing.',30,BY+64);
+    } else if(step>=6){
+      ctx.fillStyle=AMBER; ctx.fillText('“That’s right.”',30,BY+42);
+      ctx.fillStyle=GRAY; ctx.font='13px Inter, sans-serif';
+      ctx.fillText('Invisible to them when it happens. To them it is a subtle epiphany — and now you can ask.',30,BY+64);
+    } else {
+      ctx.fillStyle=FAINT; ctx.font='13px Inter, sans-serif';
+      ctx.fillText(`${6-step} tool${6-step===1?'':'s'} to go. The summary only works once the rest have run.`,30,BY+44);
+    }
+  }
+  draw();
+  fig.querySelectorAll('.ghost').forEach(b=>b.onclick=()=>{
+    const a=b.dataset.a;
+    if(a==='next'){ skipped=false; step=Math.min(6,step+1); }
+    else if(a==='skip'){ skipped=true; }
+    else { step=0; skipped=false; }
+    draw();});
+  return ()=>{};
+};
+
+/* ---------- III · anchoring ------------------------------------------- */
+SIMS.anchor = fig=>{
+  const cv=fig.querySelector('canvas');
+  const W=700,H=400, ctx=fitCanvas(cv,W,H);
+  const X0=54,X1=650,LY=150,MAXV=10000;
+  const THEIRS=10000, TARGET=6000;
+  let mine=9000;
+  const px=v=>X0+(v/MAXV)*(X1-X0);
+  const money=v=>'$'+Math.round(v).toLocaleString();
+  function draw(){
+    ctx.fillStyle=SUNK; ctx.fillRect(0,0,W,H);
+    ctx.textAlign='left';
+    ctx.fillStyle=GRAY; ctx.font='11.5px Inter, sans-serif';
+    ctx.fillText('THEY ARE ASKING $10,000. YOU WANT TO PAY $6,000.',30,28);
+    /* the line */
+    ctx.strokeStyle=BRD; ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.moveTo(X0,LY); ctx.lineTo(X1,LY); ctx.stroke();
+    const mark=(v,lab,col,up)=>{
+      const x=px(v);
+      ctx.strokeStyle=col; ctx.lineWidth=2;
+      ctx.beginPath(); ctx.moveTo(x,LY-(up?26:0)); ctx.lineTo(x,LY+(up?0:26)); ctx.stroke();
+      ctx.fillStyle=col; ctx.beginPath(); ctx.arc(x,LY,5,0,7); ctx.fill();
+      ctx.font='12.5px Inter, sans-serif';
+      ctx.textAlign = x>W-130 ? 'right' : 'left';
+      ctx.fillText(lab, x + (x>W-130?-8:8), LY+(up?-32:44));
+      ctx.textAlign='left';
+    };
+    const mid=(mine+THEIRS)/2;
+    /* target, faint */
+    ctx.setLineDash([4,4]); ctx.strokeStyle=FAINT; ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.moveTo(px(TARGET),LY-40); ctx.lineTo(px(TARGET),LY+56); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle=FAINT; ctx.font='11.5px Inter, sans-serif';
+    ctx.fillText('your target',px(TARGET)+6,LY+72);
+    mark(THEIRS,'their ask '+money(THEIRS),GRAY,true);
+    mark(mine,'your opening '+money(mine),AMBER,false);
+    /* the midpoint */
+    const x=px(mid);
+    ctx.fillStyle=`rgba(${RGB_INK},0.30)`; ctx.fillRect(px(Math.min(mine,THEIRS)),LY-9,Math.abs(px(THEIRS)-px(mine)),18);
+    ctx.strokeStyle=INKC; ctx.lineWidth=2.5;
+    ctx.beginPath(); ctx.moveTo(x,LY-20); ctx.lineTo(x,LY+20); ctx.stroke();
+    ctx.fillStyle=INKC; ctx.font='13.5px Inter, sans-serif';
+    ctx.textAlign='center'; ctx.fillText('“split the difference” '+money(mid),Math.min(Math.max(x,110),W-110),LY-32);
+    ctx.textAlign='left';
+    /* readout */
+    const gap=mid-TARGET;
+    ctx.fillStyle=INKC; ctx.font='14px Inter, sans-serif';
+    ctx.fillText(`Meeting in the middle costs you ${money(gap)} more than your target.`,30,258);
+    ctx.fillStyle=GRAY; ctx.font='13px Inter, sans-serif';
+    ctx.fillText('Their ask never moved. Only your opening did — and the midpoint followed it.',30,282);
+    ctx.fillStyle=mine<=6500?AMBER:FAINT; ctx.font='13px Inter, sans-serif';
+    ctx.fillText(mine<=6500
+      ? 'At an extreme anchor the “fair” middle finally lands near what you wanted all along.'
+      : 'Open near their number and the “fair” middle is simply their number, slightly discounted.',30,306);
+    ctx.fillStyle=FAINT; ctx.font='12px Inter, sans-serif';
+    ctx.fillText('Schematic. Voss’s own advice is to let them anchor first where you can.',30,336);
+  }
+  draw();
+  const sl=fig.querySelector('input');
+  sl.oninput=()=>{mine=parseFloat(sl.value);draw();};
+  fig.querySelectorAll('.ghost').forEach(b=>b.onclick=()=>{
+    mine = b.dataset.a==='target' ? TARGET : Math.round(TARGET*0.65);
+    sl.value=mine; draw();});
+  return ()=>{};
+};
+
+/* ---------- III · the Ackerman ladder --------------------------------- */
+SIMS.ackerman = fig=>{
+  const cv=fig.querySelector('canvas');
+  const W=700,H=430, ctx=fitCanvas(cv,W,H);
+  const PCT=[65,85,95,100];
+  let target=60000, shown=0;
+  const money=v=>'$'+Math.round(v).toLocaleString();
+  /* precise, non-round final number */
+  const odd=v=>{ const base=Math.round(v/1000)*1000; return base - 137 - (base/1000)%9; };
+  function draw(){
+    ctx.fillStyle=SUNK; ctx.fillRect(0,0,W,H);
+    ctx.textAlign='left';
+    ctx.fillStyle=GRAY; ctx.font='11.5px Inter, sans-serif';
+    ctx.fillText(`YOUR TARGET: ${money(target)}`,30,26);
+    const X0=30,BW=W-60,BY=52,RH=54;
+    PCT.forEach((p,i)=>{
+      const y=BY+i*RH, live=i<shown;
+      const val = (i===3) ? odd(target) : target*p/100;
+      ctx.strokeStyle=BRD; ctx.lineWidth=1; ctx.strokeRect(X0,y,BW,26);
+      if(live){ ctx.fillStyle=`rgba(${RGB_AMBER},0.34)`; ctx.fillRect(X0,y,BW*p/100,26); }
+      ctx.fillStyle=live?INKC:FAINT; ctx.font='14px Inter, sans-serif';
+      ctx.fillText(`${p}%`,X0+8,y+18);
+      ctx.fillText(live?money(val):'—',X0+62,y+18);
+      if(live && i>0){
+        const prev = target*PCT[i-1]/100;
+        ctx.fillStyle=GRAY; ctx.font='12.5px Inter, sans-serif';
+        ctx.fillText(`+${money(val-prev)}`,X0+190,y+18);
+      }
+      ctx.fillStyle=live?GRAY:FAINT; ctx.font='12.5px Inter, sans-serif';
+      const notes=['extreme anchor — a slap that limits their thinking',
+                   'first raise. Only after they counter.',
+                   'second raise, half the size of the first',
+                   'final. Non-round, plus a token non-cash item.'];
+      ctx.fillText(notes[i],X0+8,y+42);
+    });
+    const FY=BY+4*RH+14;
+    ctx.fillStyle=INKC; ctx.font='14px Inter, sans-serif';
+    if(shown===0) ctx.fillText('Press “next offer”. Hold each number until they counter.',30,FY+14);
+    else if(shown<4) ctx.fillText(`Increments so far: ${PCT.slice(1,shown).map((p,i)=>'+'+money(target*(p-PCT[i])/100)).join(', ')||'—'}`,30,FY+14);
+    else {
+      ctx.fillStyle=AMBER;
+      ctx.fillText(`Final: ${money(odd(target))} + a non-monetary item they probably don’t want.`,30,FY+14);
+      ctx.fillStyle=GRAY; ctx.font='13px Inter, sans-serif';
+      ctx.fillText('The raises halved each time, so they feel they squeezed out the last drop.',30,FY+38);
+      ctx.fillText('You arrived at the number you wanted before the conversation started.',30,FY+58);
+    }
+    if(shown>0 && shown<4){
+      ctx.fillStyle=GRAY; ctx.font='13px Inter, sans-serif';
+      ctx.fillText('Say no in a different way and wait. Do not raise until they move.',30,FY+38);
+    }
+  }
+  draw();
+  const sl=fig.querySelector('input');
+  sl.oninput=()=>{target=parseFloat(sl.value); shown=0; draw();};
+  fig.querySelectorAll('.ghost').forEach(b=>b.onclick=()=>{
+    shown = b.dataset.a==='next' ? Math.min(4,shown+1) : 0; draw();});
+  return ()=>{};
+};
+
+/* ---------- IV · four ways to say no ---------------------------------- */
+SIMS.noladder = fig=>{
+  const cv=fig.querySelector('canvas');
+  const W=700,H=430, ctx=fitCanvas(cv,W,H);
+  const STEPS=[
+    ["“How am I supposed to do that?”",
+     "Deferential. It hands them your constraints and asks for help.", 8200],
+    ["“Your offer is very generous, I’m sorry, that just doesn’t work for me.”",
+     "“Generous” nurtures them to live up to the word.", 7400],
+    ["“I’m sorry but I’m afraid I just can’t do that.”",
+     "An inability, not a refusal. It triggers their empathy.", 6800],
+    ["“I’m sorry, no.”",
+     "Downward inflection, tone of regard. Not “NO!”", 6400]
+  ];
+  let n=0;
+  const money=v=>'$'+v.toLocaleString();
+  function draw(){
+    ctx.fillStyle=SUNK; ctx.fillRect(0,0,W,H);
+    ctx.textAlign='left';
+    ctx.fillStyle=GRAY; ctx.font='11.5px Inter, sans-serif';
+    ctx.fillText('THEIR OPENING: $9,000. YOU HAVE NOT SAID THE WORD ONCE.',30,26);
+    STEPS.forEach((s,i)=>{
+      const y=54+i*72, live=i<n;
+      ctx.fillStyle=live?AMBER:FAINT;
+      ctx.beginPath(); ctx.arc(38,y+6,4,0,7); ctx.fill();
+      ctx.fillStyle=live?INKC:FAINT; ctx.font='14.5px Inter, sans-serif';
+      wrapTxt(ctx,s[0],560).forEach((l,k)=>ctx.fillText(l,54,y+11+k*20));
+      ctx.fillStyle=live?GRAY:FAINT; ctx.font='12.5px Inter, sans-serif';
+      ctx.fillText(s[1],54,y+(wrapTxt(ctx,s[0],560).length>1?51:31));
+      if(live){
+        ctx.fillStyle=AMBER; ctx.font='13.5px Inter, sans-serif';
+        ctx.textAlign='right'; ctx.fillText(money(s[2]),W-30,y+11); ctx.textAlign='left';
+      }
+    });
+    const FY=352;
+    ctx.fillStyle=GRAY; ctx.font='11.5px Inter, sans-serif';
+    ctx.fillText('how far their offer still sits above your target',30,FY-8);
+    ctx.strokeStyle=BRD; ctx.lineWidth=1; ctx.strokeRect(30,FY,W-60,13);
+    const start=9000, cur = n?STEPS[n-1][2]:start;
+    ctx.fillStyle=`rgba(${RGB_AMBER},0.42)`;
+    ctx.fillRect(30,FY,(W-60)*((cur-6000)/(start-6000)),13);
+    ctx.fillStyle=INKC; ctx.font='14px Inter, sans-serif';
+    ctx.fillText(n===0
+      ? 'Press “refuse”. Watch who does the moving.'
+      : (n<4 ? `They came down ${money(start-cur)} without you conceding anything.`
+             : `Four refusals, ${money(start-cur)} of movement, and the word used once.`),30,FY+38);
+    if(n>=4){ ctx.fillStyle=GRAY; ctx.font='13px Inter, sans-serif';
+      ctx.fillText('The aim was never to argue. It was to get them bidding against themselves.',30,FY+60); }
+  }
+  draw();
+  fig.querySelectorAll('.ghost').forEach(b=>b.onclick=()=>{
+    n = b.dataset.a==='next' ? Math.min(4,n+1) : 0; draw();});
+  return ()=>{};
+};
+
+/* ---------- IV · 7-38-55 --------------------------------------------- */
+SIMS.tells = fig=>{
+  const cv=fig.querySelector('canvas');
+  const W=700,H=400, ctx=fitCanvas(cv,W,H);
+  const CH=[["words",7,"“Yes, that works for us.”","“No, that doesn’t work.”"],
+            ["tone of voice",38,"warm, unhesitating","flat, a beat too slow"],
+            ["body and face",55,"open, leaning in","closed, eyes elsewhere"]];
+  let v=[1,0,0];
+  function draw(){
+    ctx.fillStyle=SUNK; ctx.fillRect(0,0,W,H);
+    ctx.textAlign='left';
+    ctx.fillStyle=GRAY; ctx.font='11.5px Inter, sans-serif';
+    ctx.fillText('WHAT EACH CHANNEL IS SAYING',30,26);
+    const X0=30, BW=W-60;
+    CH.forEach((c,i)=>{
+      const y=50+i*72, yes=v[i]===1;
+      ctx.fillStyle=INKC; ctx.font='14px Inter, sans-serif';
+      ctx.fillText(`${c[0]} — ${c[1]}%`,X0,y+12);
+      ctx.fillStyle=yes?AMBER:GRAY; ctx.font='13.5px Inter, sans-serif';
+      ctx.textAlign='right'; ctx.fillText(yes?'says yes':'says no',W-30,y+12); ctx.textAlign='left';
+      ctx.strokeStyle=BRD; ctx.lineWidth=1; ctx.strokeRect(X0,y+20,BW,16);
+      ctx.fillStyle = yes ? `rgba(${RGB_AMBER},0.40)` : `rgba(${RGB_GRAY},0.40)`;
+      ctx.fillRect(X0,y+20,BW*c[1]/100,16);
+      ctx.fillStyle=GRAY; ctx.font='12.5px Inter, sans-serif';
+      ctx.fillText(yes?c[2]:c[3],X0,y+52);
+    });
+    const score = v[0]*7 + v[1]*38 + v[2]*55;
+    ctx.fillStyle=INKC; ctx.font='15px Inter, sans-serif';
+    ctx.fillText(`The message reads ${score}% yes, ${100-score}% no.`,30,296);
+    ctx.fillStyle=GRAY; ctx.font='13px Inter, sans-serif';
+    let verdict;
+    if(v[0]===1 && score<50) verdict='A counterfeit yes. Say the mismatch out loud: “I heard you say yes, but it seemed like there was hesitation in your voice.”';
+    else if(score===100) verdict='All three channels agree. Now get it twice more, from different angles — the Rule of Three.';
+    else if(score===0) verdict='A clean no. Useful: it is the start of the negotiation, not the end.';
+    else verdict='The channels disagree. Voss’s move is to label the gap rather than accept the words.';
+    wrapTxt(ctx,verdict,W-60).forEach((l,i)=>ctx.fillText(l,30,322+i*20));
+    ctx.fillStyle=FAINT; ctx.font='12px Inter, sans-serif';
+    ctx.fillText('Words carry 7%. If you are only hearing words, you are hearing almost none of it.',30,H-16);
+  }
+  draw();
+  fig.querySelectorAll('.ghost').forEach(b=>b.onclick=()=>{
+    const d=b.dataset;
+    const idx = d.w!==undefined?0 : d.t!==undefined?1 : 2;
+    const val = parseInt(d.w!==undefined?d.w : d.t!==undefined?d.t : d.b,10);
+    v[idx]=val;
+    const key = idx===0?'w' : idx===1?'t':'b';
+    fig.querySelectorAll('.ghost').forEach(x=>{ if(x.dataset[key]!==undefined) x.classList.remove('active'); });
+    b.classList.add('active');
+    draw();});
+  return ()=>{};
+};
+
+/* ============================================================
+   BOOT
+   ============================================================ */
+syncNav();
+overviewCam(false);
+
+
+/* ---- light / dark, shared with the main site ---- */
+document.getElementById('themeBtn').addEventListener('click', function(){
+  const r = document.documentElement;
+  const next = r.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  r.setAttribute('data-theme', next);
+  try { localStorage.setItem('theme', next); } catch(e) {}
+  syncSimColours();
+  if (focusId) openIdea(focusId);   // repaint the open simulation
+});
+</script>
+
+<script>
+/* Chart switcher: jump straight to another constellation. */
+(function(){var s=document.getElementById('chartSwitch');
+if(s)s.addEventListener('change',function(){if(s.value)window.location.href=s.value;});})();
+</script>
+</body>
+</html>

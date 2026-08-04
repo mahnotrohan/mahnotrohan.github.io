@@ -28,3 +28,4 @@ Follow the guided flow, or just wander - every thread rejoins the chart.
 - [First Principles Thinking](/orrery/first-principles-thinking.html) - the borrowed mind, the two moves of deconstruct and rebuild, why it's hard, and what it lets you build.
 - [Nonviolent Communication](/orrery/nonviolent-communication.html) - what blocks compassion, expressing honestly, receiving empathically, and the hard hours: anger, self, force, and gratitude.
 - [The Course of Love](/orrery/course-of-love.html) - uninstalling the Romantic script, reading your own wiring, fighting better, and the daily practice of staying.
+- [Never Split the Difference](/orrery/never-split-the-difference.html) - negotiation as discovery rather than battle: making people feel heard, hunting for no instead of yes, bending reality, and finding what they never told you.
