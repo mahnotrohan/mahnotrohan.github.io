@@ -2,7 +2,7 @@
 layout: page
 title: About
 permalink: /about
-updated: 2026-07-31
+updated: 2026-08-04
 ---
 
 # About
@@ -11,9 +11,9 @@ Hi, I'm Rohan!
 
 I was born in Bikaner, raised in Delhi, and studied at IIT Kanpur. These days I live in Bangalore and work as a Product Manager at Meesho. Before that, I was a Data Scientist at Microsoft.
 
-Outside of work, I cook a lot, brew coffee, read memoirs, and run - I've been running regularly for about five years now.
+Outside of work, I cook a lot, brew coffee, read memoirs, and run. I've been running regularly for about five years, currently on pause.
 
-This website is my place to think, somewhere between a journal and a conversation, where ideas don't have to be finished to be worth writing down.
+This website is my digital garden.
 
 <div class="secth">Right now</div>
 
@@ -22,23 +22,23 @@ This website is my place to think, somewhere between a journal and a conversatio
 <div class="now-list">
   <div class="now-item">
     <h3>Work</h3>
-    <p>Product Manager at Meesho. Currently deep in forecast accuracy and recovery planning across the pods I review.</p>
+    <p>Product Manager at Meesho</p>
   </div>
   <div class="now-item">
     <h3>Coffee</h3>
-    <p>Still on the "dripper a month" challenge - picking one brewer from my daily drivers and going deep with it. Logging recipes in <a href="https://bloom.rohanmahnot.space">Bloom</a>. More on <a href="{{ site.baseurl }}/thoughts/on-coffee">the coffee page</a>.</p>
+    <p>Learning how to dial in espresso. Logging recipes in <a href="https://bloom.rohanmahnot.space">Bloom</a>. More <a href="{{ site.baseurl }}/thoughts/on-coffee">on Coffee</a>.</p>
   </div>
   <div class="now-item">
     <h3>Running</h3>
-    <p>Year six of running regularly. Mostly easy kilometres.</p>
+    <p>Forced to take a break this year ;).</p>
   </div>
   <div class="now-item">
-    <h3>Kitchen</h3>
-    <p>Experimenting conceptually rather than chasing recipes - if almond milk works, why not peanut milk? More on <a href="{{ site.baseurl }}/thoughts/on-food">food and taste</a>.</p>
+    <h3>Food and Cooking</h3>
+    <p>I love to cook, more than I love to eat. More on <a href="{{ site.baseurl }}/thoughts/on-food">food and taste</a>.</p>
   </div>
   <div class="now-item">
     <h3>Reading</h3>
-    <p>Memoirs, mostly. The full list is on <a href="{{ site.baseurl }}/bookshelf">the shelf</a>.</p>
+    <p>I read a lot of memoirs. Full list of books I've read this year - <a href="{{ site.baseurl }}/bookshelf">the shelf</a>.</p>
   </div>
 </div>
 
@@ -76,21 +76,18 @@ This website is my place to think, somewhere between a journal and a conversatio
 <div class="blurbs">
   <div>
     <h3><a href="{{ site.baseurl }}/blog">Writing</a></h3>
-    <p>On suppressed conflict turning into resentment, why memory matters more than what happened, and why nobody is happy in the ride hailing business.</p>
   </div>
   <div>
     <h3><a href="{{ site.baseurl }}/orrery">Orrery</a></h3>
-    <p>Thirteen subjects worked out from first principles, drawn as star charts you can zoom into and poke.</p>
   </div>
   <div>
     <h3><a href="{{ site.baseurl }}/uses-this">Uses this</a></h3>
-    <p>Five ways to brew coffee and four pieces of software. Draw your own conclusions.</p>
   </div>
 </div>
 
 <div class="secth">Say hello</div>
 
-<p>I'd love to hear from you - about something I wrote, a book you think I'd enjoy, or just to say hi.</p>
+<p>I'd love to hear from you. About something I wrote, a suggestion you enjoyed, or just to say hi.</p>
 
 <p class="hello">
   <a href="mailto:mahnot.who@gmail.com">Email</a> |
