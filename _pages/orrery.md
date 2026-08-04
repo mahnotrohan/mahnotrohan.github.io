@@ -22,6 +22,7 @@ Follow the guided flow, or just wander - every thread rejoins the chart.
 - [The Power Law](/orrery/the-power-law.html) - how a few extreme winners explain venture capital, and what a tail-driven world demands of anyone betting in it.
 - [The School of Life](/orrery/the-school-of-life.html) - the emotional education we never got: on being a bit broken, loving as a skill, and aiming for better, not perfect.
 - [Decision Theory](/orrery/decision-theory.html) - life as repeated choice under uncertainty: expected value humanized, a decision stack, and the models that turn choosing into a way of living.
+- [Decisive](/orrery/decisive.html) - the WRAP process for consequential choices: widen options, reality-test assumptions, attain distance, and prepare to be wrong.
 - [Systems Thinking](/orrery/systems-thinking.html) - why structure beats blame: stocks and flows, feedback loops, the recurring archetypes, and where to actually push on a system.
 - [Building Taste](/orrery/building-taste.html) - taste as trained judgment: why it exists, the loop that builds it, its kinds and limits, and the practice that sharpens it.
 - [Interpersonal & Communication Skills](/orrery/interpersonal-communication.html) - the inner game, the listening half, being understood, and moving people through hard moments.

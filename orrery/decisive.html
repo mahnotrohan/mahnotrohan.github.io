@@ -1,0 +1,1434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+/* Theme is shared with the main site: same origin, same localStorage key. */
+(function(){try{var t=localStorage.getItem('theme');
+if(!t)t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+document.documentElement.setAttribute('data-theme',t);}
+catch(e){document.documentElement.setAttribute('data-theme','light');}})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<title>Decisive - Orrery</title>
+<style>
+:root{
+  /* site parity: --ground/--surface-* mirror the main site's --bg/--bg-2/--chip */
+  --ground:#fbf8f3; --surface-sunk:#f2ede4; --surface-raised:#fdfcf9;
+  --border:#e3dccf; --border-strong:#d2c8b5;
+  --ink:#211f1c; --ink-strong:#14120f; --ink-muted:#5c5751; --ink-faint:#8c867f;
+  --accent:#8f6220; --accent-dim:#c2a47c; --accent-wash:rgba(143,98,32,0.08);
+  --accent-rgb:143,98,32;
+  --font:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --r:4px; --reader-w:min(760px, 58vw); --move-fast:150ms ease;
+  --ink-body:#2b2823; --ink-soft:#332f29;
+  --hdr-fade:linear-gradient(180deg, rgba(251,248,243,.96), rgba(251,248,243,.75), transparent);
+  --vp-bg:radial-gradient(ellipse at 50% 40%, #fdfbf7 0%, #fbf8f3 55%, #f2ede4 100%);
+  --btn-bg:rgba(253,252,249,.92);
+  --line-soft:rgba(33,31,28,0.10); --line-flow:rgba(143,98,32,0.45);
+  --sim-ink:#3a352e; --sim-gray:#8c867f; --sim-faint:#b3ac9f;
+  --sim-amber:#8f6220; --sim-sunk:#f2ede4; --sim-brd:#ddd4c3;
+  --grid-1:rgba(110,95,65,.13); --grid-2:rgba(110,95,65,.07);
+  --shadow:rgba(90,75,50,.16);
+}
+
+/* Night sky, sharing the main site's dark surfaces exactly. */
+html[data-theme="dark"]{
+  --ground:#1a1a1a; --surface-sunk:#232322; --surface-raised:#262523;
+  --border:#2e2e2e; --border-strong:#3e3e3b;
+  --ink:#e8e6e3; --ink-strong:#f5f3f0; --ink-muted:#a5a09a; --ink-faint:#7d7873;
+  --accent:#d9a25e; --accent-dim:#8b6c41; --accent-wash:rgba(217,162,94,0.10);
+  --accent-rgb:217,162,94;
+  --ink-body:#dddad5; --ink-soft:#d3cfc9;
+  --hdr-fade:linear-gradient(180deg, rgba(26,26,26,.96), rgba(26,26,26,.75), transparent);
+  --vp-bg:radial-gradient(ellipse at 50% 40%, #202020 0%, #1a1a1a 55%, #141414 100%);
+  --btn-bg:rgba(38,37,35,.92);
+  --line-soft:rgba(232,230,227,0.10); --line-flow:rgba(217,162,94,0.45);
+  --sim-ink:#e8e6e3; --sim-gray:#9d988f; --sim-faint:#6b6660;
+  --sim-amber:#d9a25e; --sim-sunk:#232322; --sim-brd:#393936;
+  --grid-1:rgba(210,203,190,.09); --grid-2:rgba(210,203,190,.045);
+  --shadow:rgba(0,0,0,.5);
+}
+html{color-scheme:light}
+html[data-theme="dark"]{color-scheme:dark}
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{height:100%; overflow:hidden; background:var(--ground); color:var(--ink);
+  font-family:var(--font); font-size:15.5px; line-height:1.75; overscroll-behavior:none;}
+h1,h2,h3{color:var(--ink-strong); font-weight:600; line-height:1.3;}
+.kicker{font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-muted); font-weight:500;}
+
+/* header - all navigation lives top right */
+#hdr{position:fixed; top:0; left:0; right:0; z-index:40; height:56px;
+  display:flex; align-items:center; gap:1.1rem; padding:0 1.4rem;
+  background:var(--hdr-fade);
+  pointer-events:none; transition:right .3s cubic-bezier(.25,.7,.3,1);}
+body.reader-open #hdr{right:var(--reader-w);}
+#hdr>*{pointer-events:auto;}
+#hdr .t{font-size:15px; font-weight:600; color:var(--ink-strong);}
+#hdr .sub{font-size:11.5px; color:var(--ink-muted);}
+#hdr .spacer{flex:1;}
+#count{font-size:12px; color:var(--ink-faint); white-space:nowrap;}
+.hbtn{background:var(--btn-bg); border:1px solid var(--border-strong); color:var(--ink-muted);
+  font-family:var(--font); font-size:12.5px; padding:6px 13px; border-radius:var(--r); cursor:pointer;
+  transition:all var(--move-fast); white-space:nowrap;}
+.hbtn:hover{color:var(--ink); border-color:var(--ink-muted);}
+.hbtn:disabled{opacity:.35; cursor:default;}
+#navcluster{display:flex; align-items:center; gap:2px; opacity:0; pointer-events:none;
+  transition:opacity .2s ease;}
+#navcluster.on{opacity:1; pointer-events:auto;}
+#navcluster .hbtn{background:none; border:none; font-size:19px; font-weight:300;
+  color:var(--ink-faint); padding:1px 8px; line-height:1.2; border-radius:5px;}
+#navcluster .hbtn:hover{color:var(--ink); background:var(--accent-wash);}
+#navcluster .hbtn:disabled{opacity:.28; background:none;}
+
+/* viewport & sky */
+#vp{position:fixed; inset:0; cursor:grab; touch-action:none;
+  background:var(--vp-bg);}
+#vp.dragging{cursor:grabbing;}
+#vp.dragging, #vp.dragging *{user-select:none;}
+#world{position:absolute; top:0; left:0; width:2750px; height:1750px;
+  transform-origin:0 0; will-change:transform;}
+#world::before{content:''; position:absolute; inset:0; pointer-events:none;
+  background-image:radial-gradient(circle, var(--grid-1) 1.2px, transparent 1.2px),
+                   radial-gradient(circle, var(--grid-2) 1px, transparent 1px);
+  background-size:380px 380px, 150px 150px;
+  background-position:0 0, 70px 100px; opacity:.8;}
+
+/* constellation names */
+.tlab{position:absolute; pointer-events:auto; cursor:pointer; user-select:none; text-align:center;}
+.tlab .big{font-size:40px; font-weight:500; letter-spacing:.5em; line-height:1.3;
+  text-transform:uppercase; white-space:nowrap;}
+.tlab .sum{text-shadow:0 0 5px var(--ground),0 0 5px var(--ground),0 0 3px var(--ground);
+  font-size:19px; color:var(--ink-muted); margin-top:.5em; letter-spacing:.18em; text-transform:uppercase;}
+.tlab:hover .big{filter:brightness(1.35);}
+
+/* stars */
+.mk{position:absolute; cursor:pointer; user-select:none;
+  display:flex; gap:14px; width:330px; align-items:flex-start;}
+.mk .dot{border-radius:50%; flex-shrink:0;
+  transition:transform .2s ease, box-shadow .4s ease, opacity .4s ease, background .4s ease;}
+.mk:hover .dot{transform:scale(1.3);}
+.mk .dtext{min-width:0; padding-top:1px;}
+.mk .lbl{text-shadow:0 0 5px var(--ground),0 0 5px var(--ground),0 0 3px var(--ground),0 0 3px var(--ground);
+  font-size:19px; color:var(--ink); font-weight:500; line-height:1.3;}
+.mk .lbl .seq{font-size:12px; color:var(--ink-faint); font-weight:400; margin-right:.5em;}
+.mk .ess{text-shadow:0 0 5px var(--ground),0 0 5px var(--ground),0 0 3px var(--ground),0 0 3px var(--ground);
+  font-size:14px; color:var(--ink-muted); line-height:1.45; margin-top:4px; max-width:290px;
+  opacity:0; transition:opacity .3s ease;}
+.mk.showess .ess{opacity:1;}
+.mk .sims-badge{font-size:12px; color:var(--accent-dim); margin-top:3px; display:none;}
+.mk.hasim .sims-badge{display:block;}
+.mk.focused .dot{transform:scale(1.35);}
+.mk.focused .lbl{color:var(--ink-strong);}
+.mk.neighbor .lbl{color:var(--ink-strong);}
+.mk.dimmed{opacity:.35;}
+
+/* connection overlay - few, directional, labeled plainly */
+#tsvg, #astsvg, #flowsvg{position:absolute; top:0; left:0; pointer-events:none; overflow:visible;}
+@keyframes dashdrift{to{stroke-dashoffset:-64;}}
+.tline{animation:dashdrift 6s linear infinite;}
+.tlabel{position:absolute; transform:translate(-50%,-50%); background:var(--ground);
+  border:1px solid var(--accent-dim); color:var(--accent); border-radius:12px;
+  font-size:12px; letter-spacing:.06em; padding:2px 11px; white-space:nowrap; cursor:pointer;
+  pointer-events:auto; transition:background var(--move-fast); text-transform:uppercase;}
+.tlabel:hover{background:var(--accent-wash);}
+
+/* ---------- READER ---------- */
+#reader{position:fixed; top:0; right:calc(-1 * var(--reader-w) - 20px); width:var(--reader-w);
+  height:100%; z-index:45; background:var(--surface-raised);
+  border-left:1px solid var(--border); display:flex; flex-direction:column;
+  transition:right .3s cubic-bezier(.25,.7,.3,1);
+  box-shadow:-24px 0 70px var(--shadow);}
+#reader.open{right:0;}
+#reader .top{padding:1.5em 2.2em 1em; border-bottom:1px solid var(--border); position:relative;}
+#reader .rtools{position:absolute; top:13px; right:15px; display:flex; align-items:center; gap:9px;}
+#reader .top .typechip{max-width:calc(100% - 108px);}
+#reader .close{background:none; border:none; padding:0 2px; line-height:1;
+  color:var(--ink-faint); font-size:17px; cursor:pointer;}
+#reader .close:hover{color:var(--ink);}
+#reader h2{font-size:24px; margin:.45em 0 .3em;}
+#reader .terrline{font-size:11.5px; color:var(--ink-faint); margin-top:2px;}
+#rbody{flex:1; overflow-y:auto; padding:1.6em 2.2em 2.5em;}
+#rbody::-webkit-scrollbar{width:6px;}
+#rbody::-webkit-scrollbar-thumb{background:var(--border-strong); border-radius:3px;}
+#rbody>*{max-width:66ch;}
+/* block-level children span the column; the reader width holds the measure */
+#rbody>.ideablock, #rbody>.linkrow{max-width:none;}
+.hook{font-size:18.5px; color:var(--ink-strong); line-height:1.65;
+  padding-left:1em; border-left:2px solid var(--accent-dim); margin-bottom:1.1em;}
+.story{font-size:15.5px; color:var(--ink-body); margin-top:.9em;}
+/* the idea block — the idea / how it works / failure mode / description */
+.ideablock{border:1px solid var(--border); border-radius:10px;
+  background:var(--surface-sunk); overflow:hidden;}
+.ideablock .ib{padding:1.15em 1.35em; border-top:1px solid var(--border);}
+.ideablock .ib:first-child{border-top:none;}
+.ideablock .kicker{display:block; margin-bottom:.45em; color:var(--accent);}
+.ideablock .term{color:var(--ink-strong); font-weight:600; font-size:17px; display:block;}
+.ideablock .def{font-size:14.5px; color:var(--ink-soft); margin-top:.25em;}
+.ideablock .txt{font-size:15px; color:var(--ink-body);}
+.ideablock .hook{margin-bottom:0;}
+.ideablock figure.frame{background:var(--surface-raised);}
+.typechip{display:inline-block; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-muted); border:1px solid var(--border-strong); border-radius:3px; padding:1px 8px;}
+details.fold{margin:1.2em 0 0; border:1px solid var(--border); border-radius:var(--r); background:var(--surface-sunk);}
+details.fold summary{cursor:pointer; padding:.6em 1.05em; color:var(--ink-muted);
+  font-size:13px; list-style:none; user-select:none;}
+details.fold summary::-webkit-details-marker{display:none;}
+details.fold summary::before{content:'+  '; color:var(--accent); font-weight:500;}
+details.fold[open] summary::before{content:'−  ';}
+details.fold summary:hover{color:var(--ink);}
+details.fold .inner{padding:0 1.05em .9em; font-size:14.5px; color:var(--ink-soft);}
+.named{margin-top:1.5em; background:var(--surface-sunk); border:1px solid var(--border);
+  border-radius:8px; padding:1em 1.3em;}
+.named .kicker{display:block; margin-bottom:.35em;}
+.named b{color:var(--ink-strong); font-weight:600; font-size:16px;}
+.named .def{font-size:14.5px; color:var(--ink-soft); margin-top:.2em;}
+.sowhat{margin-top:1.4em; font-size:15px; color:var(--ink-body);}
+.sowhat .kicker{display:block; margin-bottom:.3em;}
+.closure{margin-top:1.5em; border:1px solid var(--accent-dim); border-radius:8px;
+  background:var(--accent-wash); padding:1em 1.3em;}
+.closure .kicker{color:var(--accent); display:block; margin-bottom:.3em;}
+.closure .txt{font-size:14.5px; color:var(--ink-body); line-height:1.65;}
+.linkrow{margin-top:1.6em; border-top:1px solid var(--border); padding-top:1em;
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:.6em 2em;}
+.lgroup .kicker{display:block; margin-bottom:.25em;}
+.lgroup a{display:block; font-size:14px; padding:.2em 0 .45em; color:var(--ink-soft); cursor:pointer; text-decoration:none;}
+.lgroup .kicker .ar{font-size:19px; line-height:1; color:var(--accent); letter-spacing:0;}
+.lgroup a .t{border-bottom:1px dotted transparent; transition:border-color var(--move-fast); color:var(--ink);}
+.lgroup a:hover .t{border-bottom-color:var(--accent);}
+.lgroup a .why{display:block; font-size:12px; color:var(--ink-faint); line-height:1.5;}
+.nextbtn{margin-top:1.8em; width:100%; max-width:66ch; text-align:left;
+  background:var(--surface-sunk); border:1px solid var(--border-strong); border-radius:8px;
+  color:var(--ink); font-family:var(--font); font-size:14.5px; padding:.9em 1.3em; cursor:pointer;
+  transition:all var(--move-fast);}
+.nextbtn:hover{border-color:var(--accent-dim); background:var(--accent-wash);}
+.nextbtn .k{color:var(--ink-faint); font-size:11px; letter-spacing:.12em; text-transform:uppercase;
+  display:block; margin-bottom:.15em;}
+.nextbtn .arr{color:var(--accent); float:right;}
+
+/* sim figure */
+figure.frame{background:var(--surface-sunk); border:1px solid var(--border); border-radius:var(--r);
+  margin:1.3em 0 0; overflow:hidden;}
+figure.frame canvas{width:100%; display:block;}
+figure.frame .controls{display:flex; gap:8px; padding:8px 12px; border-top:1px solid var(--border);
+  align-items:center; flex-wrap:wrap;}
+figure.frame .controls .cl{font-size:11.5px; color:var(--ink-faint);}
+figure.frame figcaption{padding:7px 13px 10px; font-size:12.5px; color:var(--ink-muted); line-height:1.55;}
+.ghost{background:none; border:1px solid var(--border-strong); color:var(--ink-muted);
+  font-family:var(--font); font-size:12px; padding:3px 11px; border-radius:var(--r); cursor:pointer;
+  transition:all var(--move-fast);}
+.ghost:hover{color:var(--ink); border-color:var(--ink-muted);}
+.ghost.active{color:var(--accent); border-color:var(--accent-dim); background:var(--accent-wash);}
+figure.frame input[type=range]{flex:1; min-width:100px; accent-color:var(--accent);}
+
+@media(max-width:760px){ :root{--reader-w:100vw;} }
+
+/* ---- site exits + chart switcher (present on every chart) ---- */
+#hdr .sub a{color:var(--accent);text-decoration:none;border-bottom:1px solid transparent}
+#hdr .sub a:hover{border-bottom-color:var(--accent)}
+#hdr .sub s{text-decoration:none;color:var(--ink-faint);opacity:.75;margin:0 4px}
+#chartSwitch{-webkit-appearance:none;appearance:none;padding-right:26px;max-width:190px;
+  background-image:linear-gradient(45deg,transparent 50%,var(--ink-muted) 50%),
+                   linear-gradient(135deg,var(--ink-muted) 50%,transparent 50%);
+  background-position:calc(100% - 14px) 52%,calc(100% - 9.5px) 52%;
+  background-size:5px 5px,5px 5px;background-repeat:no-repeat}
+#chartSwitch:hover{color:var(--ink-strong);border-color:var(--accent-dim)}
+@media (max-width:700px){#hdr .sub{font-size:10.5px}#chartSwitch{max-width:118px}}
+
+/* ---- reader footer: step nav lives bottom-right, inside the panel ---- */
+#rfoot{display:flex;align-items:center;justify-content:flex-end;gap:.75rem;
+  padding:.5rem 2.2em .6rem;border-top:1px solid var(--border);
+  background:var(--surface-raised);flex:none;border-top-color:transparent}
+#rfoot:has(#navcluster.on){border-top-color:var(--border)}
+#reader #navcluster{background:var(--surface-sunk);border:1px solid var(--border-strong);
+  border-radius:7px;padding:1px 2px}
+/* Forward affordance sits on the right edge, where the thumb already is.
+   Needs #rbody> to beat the (1,0,0) of `#rbody > *`. */
+#rbody>.nextbtn{width:auto;min-width:min(100%,24ch);max-width:min(100%,44ch);
+  margin-left:auto;margin-right:0;display:block}
+@media (max-width:700px){
+  #rfoot{padding:.45rem 1.2em .55rem}
+  #rbody>.nextbtn{max-width:100%}
+}
+
+/* ---- theming: lines, marker, toggle ---- */
+.lnk-base{stroke:var(--line-soft)}
+.lnk-flow{stroke:var(--line-flow)}
+#tsvg marker path{fill:var(--accent)}
+/* band hues are mid-tone and kept in both themes; lift them on dark ground */
+html[data-theme="dark"] #tsvg line,
+html[data-theme="dark"] #astsvg line{stroke-opacity:.55}
+#themeBtn{font-size:14px;line-height:1;padding:5px 11px}
+</style>
+</head>
+<body>
+
+<div id="hdr">
+  <div>
+    <div class="t">Decisive</div>
+    <div class="sub"><a href="/">Rohan's space</a><s>/</s><a href="/orrery">Orrery</a></div>
+  </div>
+  <div class="spacer"></div>
+  <select class="hbtn" id="chartSwitch" aria-label="Jump to another chart"><option value="">Other charts&hellip;</option><option value="/orrery/building-taste.html">Building Taste</option><option value="/orrery/chaos-luck-ergodicity.html">Chaos, Luck &amp; Ergodicity</option><option value="/orrery/decision-theory.html">Decision Theory</option><option value="/orrery/first-principles-thinking.html">First Principles Thinking</option><option value="/orrery/how-to-know-a-person.html">How to Know a Person</option><option value="/orrery/interpersonal-communication.html">Interpersonal &amp; Communication Skills</option><option value="/orrery/never-split-the-difference.html">Never Split the Difference</option><option value="/orrery/nonviolent-communication.html">Nonviolent Communication</option><option value="/orrery/systems-thinking.html">Systems Thinking</option><option value="/orrery/course-of-love.html">The Course of Love</option><option value="/orrery/the-power-law.html">The Power Law</option><option value="/orrery/the-school-of-life.html">The School of Life</option><option value="/orrery/thinking-fast-and-slow.html">Thinking, Fast and Slow</option><option value="/orrery/thinking-in-bets.html">Thinking in Bets</option><option value="/orrery/why-we-sleep.html">Why We Sleep</option></select>
+  <button class="hbtn" id="themeBtn" type="button" title="Light / dark" aria-label="Toggle light or dark">◐</button>
+  <button class="hbtn" id="overviewBtn">Overview&nbsp;·&nbsp;Esc</button>
+</div>
+
+<div id="vp"><div id="world"></div></div>
+
+<div id="reader">
+  <div class="top">
+    <div class="rtools">
+      <div id="navcluster">
+        <button class="hbtn" id="navPrev" title="previous idea">‹</button>
+        <button class="hbtn" id="navNext" title="next idea">›</button>
+      </div>
+      <button class="close" id="rClose" title="close">✕</button>
+    </div>
+    <span class="typechip" id="rChip"></span>
+    <h2 id="rTitle"></h2>
+    <div class="terrline" id="rTerr"></div>
+  </div>
+  <div id="rbody"></div>
+</div>
+
+<script>
+'use strict';
+
+let INKC, GRAY, FAINT, AMBER, SUNK, BRD;
+let RGB_INK, RGB_GRAY, RGB_FAINT, RGB_AMBER;
+/* Canvas takes no var(), so pull the resolved values and refresh on theme flip.
+   Animated sims pick these up on their next frame; static ones are remounted. */
+function syncSimColours(){
+  const cs = getComputedStyle(document.documentElement);
+  const v = n => cs.getPropertyValue(n).trim();
+  const trip = h => { h = h.replace('#','').trim();
+    if (h.length === 3) h = h.split('').map(c=>c+c).join('');
+    return [0,2,4].map(i=>parseInt(h.slice(i,i+2),16)).join(','); };
+  INKC=v('--sim-ink'); GRAY=v('--sim-gray'); FAINT=v('--sim-faint');
+  AMBER=v('--sim-amber'); SUNK=v('--sim-sunk'); BRD=v('--sim-brd');
+  RGB_INK=trip(INKC); RGB_GRAY=trip(GRAY); RGB_FAINT=trip(FAINT); RGB_AMBER=trip(AMBER);
+}
+syncSimColours();
+
+/* ============================================================
+   CONTENT v2 - the reader shows one block per idea, definition-first:
+   the idea (term+def) → how it works (mech) → failure mode (sowhat) →
+   description (hook → story → sim).
+   Connections: ≤4 per idea, as arrows — ← builds on, → leads to, ▶ see it live.
+   ============================================================ */
+const N = {
+
+a1:{type:"axiom", title:"The spotlight", x:1259, y:512,
+  ess:"Your mind lights a small spot and calls it the whole room.",
+  hook:"When was the last time a question left you genuinely stumped, with no opinion at all?",
+  story:"Almost never, and that is the problem. Kahneman: “A remarkable aspect of your mental life is that you are rarely stumped… You like or dislike people long before you know much about them; you trust or distrust strangers without knowing why.” The Heaths turn his image into their central metaphor: “a spotlight only lights a spot. Everything outside it is obscured.”",
+  mech:"Stated as the book’s core difficulty: “What’s in the spotlight will rarely be everything we need to make a good decision, but we won’t always remember to shift the light.” And the arithmetic of it — “What’s in our spotlight = the most accessible information + our interpretation of that information. But that will rarely be all that we need.” Which disposes of the usual advice: “Sometimes we are given the advice to trust our guts when we make important decisions. Unfortunately, our guts are full of questionable advice.”",
+  term:"The spotlight", def:"the narrow beam of accessible information and immediate interpretation that feels like the whole situation.",
+  sowhat:"The failure is rarely bad reasoning about what you can see. It is not noticing what the beam is missing — which by definition does not announce itself.",
+  explain:"why the feeling of having enough information is uninformative about whether you do.",
+  builds:[], leads:[["a2","and why knowing this changes nothing on its own"],["b1-laplace","the first thing it hides"]], live:[]},
+
+a2:{type:"axiom", title:"Awareness doesn’t fix bias", x:1057, y:627,
+  ess:"Knowing you are nearsighted does not help you see.",
+  hook:"You now know about your biases. Why are you not better at deciding?",
+  story:"Because the two are unrelated, which is the load-bearing claim of the whole book: “Why a process? Because understanding our shortcomings is not enough to fix them. Does knowing you’re nearsighted help you see better? Or does knowing that you have a bad temper squelch it? Similarly, it’s hard to correct a bias in our mental processes just by being aware of it.”",
+  mech:"Worth noticing that the Heaths assert this by analogy and cite no study for it — yet everything they prescribe depends on it. If awareness worked, you could be warned about the four villains and sent home. Their alternative is prosthetic rather than corrective: “The grocery list is a correction for the deficiency of forgetfulness. And it’s a much better solution than focusing really hard on not being forgetful.” Hence the honest ceiling — “We can’t deactivate our biases, but these people show us that we can counteract them with the right discipline.”",
+  term:"The awareness gap", def:"the claim that insight into a bias does not reduce it, so the remedy has to be external to your judgement.",
+  sowhat:"Stop trying to be less biased and start building something outside your head — a list, a question, a rule you agreed to earlier. That is the entire move.",
+  explain:"why a checklist beats resolve, even for someone who understands the bias perfectly.",
+  builds:[], leads:[["a3","so what is the process worth?"],["b4-fence","and here is the one this book proposes"]], live:[]},
+
+a3:{type:"axiom", title:"Process beats analysis", x:1462, y:627,
+  ess:"By a factor of six, in the one study they lean on.",
+  hook:"Given a limited budget of effort, would you spend it analysing the options or on how you decide?",
+  story:"On how you decide. In a study of 1,048 business decisions, the researchers found that “process mattered more than analysis — by a factor of six.” The Heaths’ gloss: “Superb analysis is useless unless the decision process gives it a fair hearing.”",
+  mech:"The diagnosis of what goes wrong without one is Olivier Sibony’s: “They have a team arguing only one side of the case… And it falls to the final decision maker to be both the challenger and the ultimate judge.” Note that the factor of six comes from business decisions, and the extension beyond them is an assertion rather than a finding: “A solid process isn’t just good for business; it’s good for our lives.” The default it displaces is thin — “the only decision-making process in wide circulation is the pros-and-cons list” — and, per the Heaths, useless here: it “doesn’t meaningfully counteract any of them.”",
+  term:"Process over analysis", def:"the claim that how a decision is structured matters more to its quality than how well the options are analysed.",
+  sowhat:"If you are about to make something important, the highest-leverage move is not another spreadsheet. It is arranging for someone to argue the other side.",
+  explain:"why the quality of your thinking matters less than the shape of the conversation around it.",
+  builds:[], leads:[["b2-lorenz-attractor","starting with who argues against you"]], live:[]},
+
+a4:{type:"axiom", title:"Intuition is trained, not general", x:1259, y:771,
+  ess:"Trustworthy only where the world repeats and answers back quickly.",
+  hook:"A chess master’s hunch is worth listening to and a hiring manager’s is not — what separates them?",
+  story:"The learning environment, not the person. “Intuition is only accurate in domains where it has been carefully trained. To train intuition requires a predictable environment where you get lots of repetition and quick feedback on your choices.” In an endnote the Heaths record that Kahneman and Klein, who disagreed about most of this, “eventually agreed that intuition was more trustworthy in situations where the learning environment (1) is predictable and (2) provides good feedback.”",
+  mech:"This is the fence around the book’s scope: it is for decisions your gut has never been trained on — hiring, strategy, whether to move city — not for the ones it has. Klein’s own formulation of what to do with a hunch is stricter than the popular version: “You need to take your gut feeling as an important data point, but then you have to consciously and deliberatively evaluate it, to see if it makes sense in this context.” Hiring is the standing example of an untrained domain: interviews “seemed to correlate with nothing other than, well, the ability to interview.”",
+  term:"Trained intuition", def:"a gut feeling earned in a domain that is predictable and gives fast feedback — and worthless outside one.",
+  sowhat:"Before trusting a hunch, ask how many times you have made this exact call and found out whether you were right. If the answer is few, the hunch is a data point rather than an answer.",
+  explain:"how to tell which of your instincts have actually been trained.",
+  builds:[], leads:[["b2-principle","so test instead of predicting"]], live:[]},
+
+"b1-laplace":{type:"phenomenon", title:"Narrow framing", x:404, y:355,
+  ess:"Villain one: seeing a choice in binary terms when it isn’t.",
+  hook:"“Should she fire him or not” — how many options is that, really?",
+  story:"One. “Note that we are counting a ‘whether or not’ decision as one alternative. It’s one alternative that will be either accepted or rejected.” The first villain is “narrow framing, which is the tendency to define our choices too narrowly, to see them in binary terms.”",
+  mech:"The numbers are unkind. Studying teenagers’ decisions, Fischhoff found that statements of resolve and whether-or-not choices “composed about 65% of teenagers’ decisions. In other words, if a teenager is making a ‘decision,’ chances are there’s no real choice being made at all!” — and “organizations are a lot like teenagers.” Paul Nutt’s 168 organisational decisions: “only 29% considered more than one alternative”, and “‘whether or not’ decisions failed 52% of the time over the long term, versus only 32% of the decisions with two or more alternatives.” The good news is that this is the easy villain: “what makes narrow framing remarkable, among the four villains of decision making, is how easy it is to correct. The lightest prick often bursts the bubble.”",
+  term:"Narrow framing", def:"defining a choice too narrowly — most often as whether or not to do one thing, which is a single option wearing a disguise.",
+  sowhat:"Install the alarm the Heaths ask for: “we hope when you see or hear that phrase, a little alarm bell will go off in your head.” Any sentence of the form should-we-X-or-not is a prompt to go looking.",
+  explain:"why most decisions contain fewer real options than they appear to.",
+  builds:[["a1","the beam that never widened"]], leads:[["b1-pendulum","so how many options is enough?"]], live:[]},
+
+"b1-pendulum":{type:"mechanism · simulation", title:"Multitrack", sim:"multitrack", x:884, y:309,
+  ess:"AND, not OR. Two real options beats one, and it beats three fake ones.",
+  hook:"Below: add options one at a time. Where does the gain actually come from?",
+  story:"From the second one. Steve Cole’s rule: “Any time in life you’re tempted to think, ‘Should I do this OR that?’ instead, ask yourself, ‘Is there a way I can do this AND that?’ It’s surprisingly frequent that it’s feasible to do both things.” Of one German firm’s executive board, “when the executive board considered more than one alternative, they made six times as many ‘very good’ decisions” — though the Heaths note this board was “noticeably savvier about escaping narrow framing than the typical firm in Nutt’s study”, and rated its own past decisions.",
+  mech:"Two mechanisms, and the second is the surprising one. Options improve judgement even when discarded — “the simple act of surfacing another option — even if we ultimately decide against it — helps us to make better choices.” And they detach you from your own proposal: “If I have only one design, then my ego is perfectly conflated with my design. But if I have multiple designs, I can separate the two… Multitracking keeps egos in check.” It is also not slower — executives who weigh more options “actually make faster decisions.” The catch is authenticity: “to get the benefits of multitracking, we need to produce options that are meaningfully distinct”, and the test for sham options is disagreement — “poll them for their preferences… An easy consensus may be a red flag.”",
+  term:"Multitracking", def:"considering two or more meaningfully distinct options at once, which improves the decision and detaches you from any one of them.",
+  sowhat:"You do not need many. “You just need one extra choice, or two. Forget 24 different kinds of jam; we’ll happily settle for two or three.” A usable stopping rule: “keep searching for options until you fall in love at least twice.”",
+  explain:"why a second option helps even when you reject it.",
+  builds:[["b1-laplace","the villain it answers"]], leads:[["b1-sensitive","and how to find one when you are stuck"]], live:[]},
+
+"b1-sensitive":{type:"mechanism", title:"The vanishing options test", x:520, y:522,
+  ess:"You may not have any of your current options. Now what?",
+  hook:"What would you do if the choice you are agonising over were simply taken off the table?",
+  story:"That question is the tool. “You cannot choose any of the current options you’re considering. What else could you do?” It works by force: “When people imagine that they cannot have an option, they are forced to move their mental spotlight elsewhere — really move it — often for the first time in a long while.”",
+  mech:"The cheaper version is a reminder about opportunity cost — “what we give up when we make a decision.” In one study, adding a single line to a purchase option — “(B) Not buy this entertaining video. Keep the $14.99 for other purchases.” — moved choices measurably, because “being exposed to even a weak hint of another alternative… is sufficient to improve our purchasing decisions.” So two habits: “What are we giving up by making this choice? What else could we do with the same time and money?” And note why the trap is invisible from inside: “Being stuck in a narrow frame is hard to recognize — but only when you’re the one inside it”, since “focusing is great for analyzing alternatives but terrible for spotting them.”",
+  term:"The vanishing options test", def:"forbidding yourself every option currently on the table, so your attention has to go somewhere new.",
+  sowhat:"Ask it out loud on your next stuck decision, and take the first answer seriously even if it sounds absurd. Ask a colleague too, since they can see your frame and you cannot.",
+  explain:"how to move your own attention when it will not move voluntarily.",
+  builds:[["b1-laplace","the frame it breaks"]], leads:[["b1-lorenz-story","and the two mindsets to run"]], live:[]},
+
+"b1-lorenz-story":{type:"mechanism", title:"Prevention and promotion", x:254, y:656,
+  ess:"One mindset avoids losses, one chases gains. Run both, not your favourite.",
+  hook:"Facing a downturn, do you cut to survive or invest to win?",
+  story:"Both, and the evidence is unkind to picking one. Psychologists have identified “a ‘prevention focus,’ which orients us toward avoiding negative outcomes, and a ‘promotion focus,’ which orients us toward pursuing positive outcomes.” Studying 4,700 public companies across three recessions, Gulati, Nohria and Wohlgezogen found the best performers were the ones that did both — and that 17% of the companies did not survive at all.",
+  mech:"The point is not that one mindset is correct. The firms that came through those recessions best were not the most defensive or the most aggressive but the ones doing both at once — cutting selectively while still investing. Each posture is a spotlight of its own, and most of us have a default, so the instruction is to generate both lists rather than to pick a temperament.",
+  term:"Prevention and promotion focus", def:"the defensive and offensive orientations toward a decision — each generating options the other cannot see.",
+  sowhat:"On your next significant call, write the two lists separately: what would protect us, and what would win. Whichever comes easily is your default, and the other one is the list you would otherwise have skipped.",
+  explain:"why your instinctive posture toward a decision hides half the options.",
+  builds:[["b1-pendulum","multitracking, applied to mindset"]], leads:[["b1-principle","and the fastest source of options"]], live:[]},
+
+"b1-principle":{type:"principle", title:"Find someone who solved it", x:716, y:679,
+  ess:"Someone has already had your problem. Their answer is cheaper than your analysis.",
+  hook:"Why invent an option when the answer is probably sitting in someone else’s experience?",
+  story:"The Heaths’ shortcut is to look outward and inward before thinking harder. Outward to anyone who has faced the same problem — internal or external benchmarking; inward to your own bright spots, the times a version of it already went well for you. When no close analogy exists, you ladder up to a more abstract one.",
+  mech:"It is the most economical of the widening tools because it substitutes retrieval for invention. Note what it shares with multitracking: the value arrives even from an option you reject, because seeing how someone else framed the problem reframes yours. And the Heaths propose an upgrade — a “playlist”, where the advice is written down once so the next person facing it can consult it rather than rediscover it, as Hughes and Johnson did for persuasion.",
+  term:"Bright spots and laddering", def:"finding a prior solution — someone else’s, or your own past success — and climbing to a more abstract analogy when the near one is exhausted.",
+  sowhat:"Before your next hard call, spend fifteen minutes finding one person who has made it. And ask your own history first: when has a version of this gone well, and what was different that time?",
+  explain:"why the fastest new option is usually an old one belonging to someone else.",
+  builds:[["a3","process, not more analysis"],["b1-pendulum","the options it supplies"]], leads:[["b2-logistic","now: the information you gather about them"]], live:[]},
+
+"b2-logistic":{type:"phenomenon", title:"The confirmation bias", x:1837, y:233,
+  ess:"Villain two: gathering evidence, honestly, and cooking the books anyway.",
+  hook:"You spent a week researching. Why is that not reassuring?",
+  story:"Because the research may have been a search for permission. “Our normal habit in life is to develop a quick belief about a situation and then seek out information that bolsters our belief.” Dan Lovallo: “Confirmation bias is probably the single biggest problem in business, because even the most sophisticated people get it wrong. People go out and they’re collecting the data, and they don’t realize they’re cooking the books.”",
+  mech:"The measurement: across “more than 91 studies of over 8,000 participants, the researchers concluded that we are more than twice as likely to favor confirming information than disconfirming information.” What makes it dangerous is that it feels like diligence — “After all, we’re collecting data.” The Heaths’ sharpest line on it: “At work and in life, we often pretend that we want truth when we’re really seeking reassurance.” And unlike narrow framing, they concede this one does not yield: “Even the smartest psychologists, who have studied the bias for years, admit that they can’t shake it. It can’t be wiped out; it can only be reined in.”",
+  term:"The confirmation bias", def:"forming a view quickly and then collecting the evidence that supports it — a bias in gathering, not in weighing.",
+  sowhat:"The tell is emotional, not logical: notice when you are hoping a piece of information turns out a particular way. “Sometimes we think we’re gathering information when we’re actually fishing for support.”",
+  explain:"why doing more research can leave you more confidently wrong.",
+  builds:[["a1","the beam pointed where you want it"]], leads:[["b2-lorenz-attractor","so build in the opposition"]], live:[]},
+
+"b2-lorenz-attractor":{type:"mechanism", title:"Consider the opposite", x:2300, y:282,
+  ess:"Ask what would have to be true — not who is right.",
+  hook:"Two people are arguing about a decision. What question ends the argument without anyone losing?",
+  story:"Roger Martin’s. “Let’s stop arguing about who is right… Instead, let’s take each option, one at a time, and ask ourselves: What would have to be true for this option to be the right answer?” Or in its sharper form, “What would have to be true for this option to be the very best choice?” Its virtue is social: “it allows people to disagree without becoming disagreeable.”",
+  mech:"Formal opposition works only if it is honourable. The devil’s advocate was the church’s promotor fidei — “his role was to build a case against sainthood” — and “an effective promotor fidei is not a token argumentative smarty-pants; it’s someone who deeply respects the Catholic Church.” So “the most important lesson to learn about devil’s advocacy isn’t the need for a formal contrarian position; it’s the need to interpret criticism as a noble function.” Alfred Sloan built delay in for the same reason: “I propose we postpone further discussion of this matter until our next meeting to give ourselves time to develop disagreement.” And the phrasing decides what you learn: in a negotiation over an iPod with a known fault, “What can you tell me about it?” got disclosure from “only 8% of the sellers”; “It doesn’t have any problems, does it?” “boosted the disclosure to 61%”; and the blunt “What problems does it have?” “prompted 89% of the sellers to come clean.”",
+  term:"Considering the opposite", def:"replacing “who is right” with “what would have to be true”, and treating opposition as a role rather than an attack.",
+  sowhat:"Two moves: ask “What would have to be true for this option to be the very best choice?” of the option you like least, and adopt the rule of thumb “what’s the most likely way I could fail to get the right information in this situation?” One caution the Heaths add — probing questions “can backfire in situations with a power dynamic”, where open-ended ones are wiser.",
+  explain:"how to argue about a decision without anyone having to lose.",
+  builds:[["a3","the fair hearing analysis needs"],["b2-logistic","the bias it counteracts"]], leads:[["b2-attractors","and where to get numbers you can trust"]], live:[]},
+
+"b2-attractors":{type:"mechanism · simulation", title:"Zoom out", sim:"baserate", x:2069, y:401,
+  ess:"You are typical. The base rate knows things your confidence does not.",
+  hook:"Below: set your confidence, then meet the base rate. Which one has ever been right?",
+  story:"The base rate. “From the perspective of our brains, we are unique… From the perspective of the universe, though, we are utterly typical.” The distinction the Heaths borrow: “The inside view draws from information that is in our spotlight… The outside view, by contrast, ignores the particulars and instead analyzes the larger class it’s part of.”",
+  mech:"And the outside view wins: it “is more accurate — it’s a summary of real-world experiences, rather than a single person’s impressions — yet we’ll be drawn to the inside view.” So the instruction is to go looking for “some ‘base rates’ on the situation — data showing the record of other people in similar circumstances.” The reframe that makes this bearable: “The advice to trust the numbers isn’t motivated by geekery; it’s motivated by humility”, and the humble question is “What can I reasonably expect to happen if I make this choice?” Use experts, but for the right thing — “Experts are great with base rates and mediocre at predictions”, so “keep them talking about the past and the present, not the future.” The Heaths do add a limit: “The outside view doesn’t require defeatism, but it does require respect for the likely outcomes.”",
+  term:"The outside view", def:"judging your case by the record of the class it belongs to, rather than by its particulars as they appear to you.",
+  sowhat:"Find the base rate before you form the plan, and ask any expert about history rather than the future. “Strange to think that when we make critical decisions, we do less objective research than when we’re picking a sushi joint.”",
+  explain:"why the statistics about people like you beat your read on your own case.",
+  builds:[["a1","the particulars filling the beam"]], leads:[["b2-tension-random","and what the average hides"]], live:[]},
+
+"b2-tension-random":{type:"tension", title:"Zoom in", x:2392, y:470,
+  ess:"Then go and look. The average conceals the thing you needed to feel.",
+  hook:"You have the numbers. What can a single close-up tell you that they cannot?",
+  story:"Texture. “Base rates are good at establishing norms: Here are the outcomes we can expect if we make this decision. Close-ups, though, create intuition, which can be just as important.” Franklin Roosevelt, sending an aide out to look for himself: “Go and see what’s happening. See the end product of what we are doing. Talk to people; get the wind in your nose.”",
+  mech:"The tension with zooming out is real and the Heaths refuse to resolve it in one direction: “When we zoom out, we take the outside view… When we zoom in, we take a close-up of the situation, looking for ‘color’ that could inform our decision… When possible, we should do both.” The reason to bother is that statistics answer a different question than experience does — “It’s one thing to know, in statistical terms, how people feel about an issue. But what’s their temperature?… The numbers can conceal the nuance.” And in design and operations it is treated as a precondition: “how can you improve something you don’t fully understand?”",
+  term:"The close-up", def:"one concrete, first-hand encounter with the reality behind a decision, supplying what an average cannot.",
+  sowhat:"Pair every base rate with one visit, one call, one customer. The point is not to overrule the number — it is to know what the number is made of.",
+  explain:"what a single case gives you that a distribution cannot.",
+  builds:[["b2-attractors","the view it completes"]], leads:[["b2-principle","and how to stop guessing altogether"]], live:[]},
+
+"b2-principle":{type:"principle", title:"Ooch", x:1895, y:598,
+  ess:"Why predict something you can test? Dip a toe before you plunge.",
+  hook:"You are about to bet on a forecast. What small experiment would settle it instead?",
+  story:"“To ooch is to construct small experiments to test one’s hypothesis.” The Heaths’ ambition for it is larger than it sounds: “Whenever possible, we should get out of the business of prediction altogether… Ooching provides an alternative — a way of discovering reality rather than predicting it.” Or, compressed: “Why predict something we can test? Why guess when we can know?”",
+  mech:"The case against forecasting is blunt — Philip Tetlock, surveying the scores from his own study of 284 experts, found that “it is impossible to find any domain in which humans clearly outperformed crude extrapolation algorithms.” Ooching also fixes a political problem. Intuit’s Scott Cook: “When the bosses make the decisions, decisions are made by politics, persuasion, and PowerPoint”, and a small test settles what an argument cannot. But the Heaths give it a hard limit, which is the part usually dropped: “ooching has one big flaw: It’s lousy for situations that require commitment.” It “is not intended to enable emotional tiptoeing, in which we ease timidly into decisions that we know are right but might cause us a little pain.” So: “Ooching, in short, should be used as a way to speed up the collection of trustworthy information, not as a way to slow down a decision that deserves our full commitment.”",
+  term:"Ooching", def:"a small, deliberate experiment run to test a belief instead of forecasting it — and not a way of avoiding a decision already made.",
+  sowhat:"Ask what a two-week version of this would look like. Then ask honestly whether you need information or courage, because ooching only helps with the first.",
+  explain:"when to run a small test, and when a small test is just procrastination.",
+  builds:[["a4","the untrained domains where prediction fails"],["b2-logistic","the bias a test bypasses"]], leads:[["b3-kokura","now: the feelings in the room"]], live:[]},
+
+"b3-kokura":{type:"phenomenon", title:"Short-term emotion", x:271, y:962,
+  ess:"Villain three: nothing on the spreadsheet changed, but your mind keeps changing.",
+  hook:"You have all the information and you are still agonising — what exactly is unresolved?",
+  story:"Not the facts. “If our decision was represented on a spreadsheet, none of the numbers would be changing — there’s no new information being added — but it doesn’t feel that way in our heads.” Of Andy Grove’s years of deliberation over Intel’s memory business: “Grove’s decision wasn’t difficult because he lacked options or information; it was difficult because he felt conflicted.”",
+  mech:"Two forces make the present feel authoritative. Mere exposure — “people develop a preference for things that are more familiar”, to the point that “we like our mirror face better than our real face”, and repeating a statement three times made people rate it as more truthful. And loss aversion — “people act as though losses are from two to four times more painful than gains are pleasurable.” Together: “what you get is a powerful bias for the way things work today”, because “a preference for familiar things is necessarily a preference for the status quo.” Sleeping on it helps and is not enough: “It’s sound advice, and we should take it to heart. For many decisions, though, sleep isn’t enough. We need strategy.”",
+  term:"Short-term emotion", def:"feeling that will fade but is currently loud enough to be mistaken for information.",
+  sowhat:"Test it directly: has anything on the spreadsheet changed since yesterday? If not, what moved was your mood, and you can wait for it or engineer distance from it.",
+  explain:"why a decision can feel different from day to day without any new facts.",
+  builds:[["a1","the present filling the whole beam"]], leads:[["b3-contingency","so change the time horizon"]], live:[]},
+
+"b3-contingency":{type:"mechanism · simulation", title:"10/10/10", sim:"tenten", x:601, y:1008,
+  ess:"Ten minutes, ten months, ten years. The feeling shrinks; the consequence doesn’t.",
+  hook:"Below: run one decision across three horizons. Which of the two bars moves?",
+  story:"“To use 10/10/10, we think about our decisions on three different time frames: How will we feel about it 10 minutes from now? How about 10 months from now? How about 10 years from now?” It works by manufacturing the freshness that only the present usually has: it “forces us to shift our spotlights, asking us to imagine a moment 10 months into the future with the same ‘freshness’ that we feel in the present.”",
+  mech:"The hedge matters and is usually cut: “Conducting a 10/10/10 analysis doesn’t presuppose that the long-term perspective is the right one. It simply ensures that short-term emotion isn’t the only voice at the table.” Sometimes ten minutes wins and that is a legitimate answer. What the procedure removes is the default in which the ten-minute feeling is the only one consulted, because it is the only one that arrives unbidden. This is the same construal-level effect that distance exploits — “with more distance we can see more clearly the most important dimensions of the issue we’re facing.”",
+  term:"10/10/10", def:"evaluating a decision at ten minutes, ten months and ten years, so the loudest horizon is not the only one heard.",
+  sowhat:"Run it out loud on the thing you have been avoiding. If the three answers agree, you are done; if they disagree, you have found the actual decision.",
+  explain:"how to give the future the same vividness the present gets for free.",
+  builds:[["b3-kokura","the emotion it outlasts"]], leads:[["b3-timeline","and a second way to get distance"]], live:[]},
+
+"b3-timeline":{type:"mechanism", title:"What would you tell a friend?", x:312, y:1210,
+  ess:"You give better advice than you take. Use that.",
+  hook:"Why is it so much easier to see what someone else should obviously do?",
+  story:"Because distance clarifies. Offered a choice between two jobs, “when students were asked to choose for themselves, 66% chose Job B. Later, however, when those same students were asked to advise their best friends about which job to take, 83% recommended Job B… Distance yielded clarity.” The Heaths’ image: “When we think of our friends, we see the forest. When we think of ourselves, we get stuck in the trees.”",
+  mech:"Hence their strongest single recommendation: “in helping us to break a decision logjam, the single most effective question may be: What would I tell my best friend to do in this situation?” At work, the same trick wears a different costume — Grove broke a years-long deadlock by asking what a newly hired successor would do: “If we got kicked out and the board brought in a new CEO, what do you think he would do?” The answer was immediate, and the follow-up was the actual decision: “Why shouldn’t you and I walk out the door, come back in, and do it ourselves?”",
+  term:"The advisor’s view", def:"asking what you would recommend to a friend or a successor, which strips out the emotion attached to being the one who has to live with it.",
+  sowhat:"Say the question aloud and answer it in one sentence. If your answer to a friend differs from your own plan, the gap is short-term emotion and nothing else.",
+  explain:"why your advice to others is better than your advice to yourself.",
+  builds:[["b3-kokura","the emotion distance removes"]], leads:[["b3-plan","and what the agonising is really about"]], live:[]},
+
+"b3-plan":{type:"mechanism", title:"Core priorities", x:774, y:1152,
+  ess:"An agonising decision is usually two things you value, fighting.",
+  hook:"Why are the hardest decisions hard, if the facts are already clear?",
+  story:"Because something you care about has to lose. “An agonizing decision like hers is often a sign of a conflict among ‘core priorities.’” And the Heaths are careful that distance is not meant to produce a machine: “the goal of the WRAP process is not to neutralize emotion. Quite the contrary… The buck stops with emotion.”",
+  mech:"So the work is to name the conflict, then rank it in advance rather than in the moment. Interplast resolved years of recurring argument with one sentence: “When there is a conflict, we’ll prioritize the welfare of our patients over our surgeons.” That is the form to aim for — “it’s so important to enshrine core priorities, not just cheerlead for generic values”, because a generic value gives no answer when two of them collide. Done well it buys consistency: “When we identify and enshrine our priorities, our decisions are more consistent and less agonizing.” And the Heaths concede the whole thing is optional: “while priorities are vital for making good decisions, they are also totally voluntary. You will never be required to articulate yours.”",
+  term:"Core priorities", def:"the small number of things that win when they conflict with something else you also want — stated in advance, in ranked order.",
+  sowhat:"When a decision will not resolve, stop weighing options and write down the two priorities in tension. The decision is usually easy once you have decided which one outranks the other.",
+  explain:"why naming what you value settles decisions that analysis cannot.",
+  builds:[["b3-kokura","the conflict beneath the churn"]], leads:[["b3-principle","and how to make it stick"]], live:[]},
+
+"b3-principle":{type:"principle", title:"Defend it on the calendar", x:543, y:1326,
+  ess:"A priority you haven’t protected is a preference. Check the diary.",
+  hook:"If someone read only your calendar, what would they conclude you actually value?",
+  story:"That, rather than your stated values, is the answer. “Our calendars are the ultimate scoreboard for our priorities.” And a priority without a corresponding subtraction is not one. Jim Collins’s prompt, from a thought experiment about two phone calls, is “What would you do differently, and, in particular, what would you stop doing?”",
+  mech:"The mechanism is arithmetic, not virtue: hours are conserved, so a new priority has to displace an old one. Hence the pointed version — “Look back over your schedule for the past week and ask yourself, What, specifically, would I have given up to carve out the extra three or four or five hours that I’ll need?” Captain Abrashoff’s two lists made the subtraction explicit: “List A contained the mission-critical tasks, and List B contained the things that were important but not core… Abrashoff declared war on List B.” And for the drift within a day, a tripwire in miniature: “set a timer that goes off once every hour, and when it beeps, we should ask ourselves, ‘Am I doing what I most need to be doing right now?’”",
+  term:"The stop-doing list", def:"the subtraction that makes a stated priority real, since a new commitment without a dropped one is only an intention.",
+  sowhat:"Name the thing you will stop, this week, to serve the priority you just identified. Then look at next week’s calendar and see whether it agrees with you.",
+  explain:"how to tell a real priority from a stated one.",
+  builds:[["a2","a prosthetic, not resolve"],["b3-plan","the priority it protects"]], leads:[["b4-coinflip","now: the future you cannot see"]], live:[]},
+
+"b4-coinflip":{type:"phenomenon", title:"Overconfidence", x:1583, y:979,
+  ess:"Villain four: you know less about the future than it feels like you do.",
+  hook:"Asked for a range you are 80 percent sure about, how often should the answer fall outside it?",
+  story:"Twenty percent of the time. It was 61. Asked to bracket a film’s box office, “at 80% confidence, the participants should have been surprised only 20% of the time, but it turned out they were overconfident: The actual box-office average fell outside of their ranges 61% of the time.” The fourth villain is “overconfidence. People think they know more than they do about how the future will unfold.”",
+  mech:"Two illustrations the Heaths lean on. Decca turning down the Beatles in 1962: “We don’t like your boys’ sound. Groups are out; four-piece groups with guitars, particularly, are finished.” And the professionals — doctors “completely certain” of a diagnosis were wrong 40% of the time; students who estimated a 1% chance of error were wrong 27% of the time. Its cause is the spotlight again: “We can’t shine a spotlight on areas when we don’t know they exist.” And the tell is that it does not feel like confidence — of Grove’s opponents, “they weren’t hedging their remarks… They knew they were right. They just knew it.”",
+  term:"Overconfidence", def:"having too much faith in what we think we know — for the Heaths, above all in our predictions about how the future will unfold.",
+  sowhat:"Notice that certainty about the future is itself the symptom. “Overconfidence about the future disrupts our decisions. It makes us lackadaisical about preparing for problems… It leaves us unprepared for pleasant surprises.”",
+  explain:"why the feeling of knowing what will happen is uncorrelated with knowing.",
+  builds:[["a1","areas the beam cannot reach"]], leads:[["b4-ergodicity","so stop forecasting a point"]], live:[]},
+
+"b4-ergodicity":{type:"mechanism · simulation", title:"The future is a range", sim:"bookend", x:1901, y:945,
+  ess:"Not a point. Chart both ends, then prepare for the middle.",
+  hook:"Below: a point, then both extremes, then the middle — in which order does an honest range appear?",
+  story:"“Even if we have a pretty good guess about the future, the research on overconfidence suggests that we’ll be wrong more often than we think. The future isn’t a point; it’s a range.” The investor Byron Penstock works this way deliberately — “bookending, which involves estimating two different scenarios: a dire scenario (the lower bookend)… and a rosy scenario (the upper bookend).”",
+  mech:"The measured effect is the useful part. Left alone, “when people did not consider the bookends, they produced ranges that were only 45% as wide as they should have been (when compared to a statistically optimal model). When they were asked to consider the bookends, their guesses improved to 70% of optimal, and when they also added their best guess in the middle… their ranges improved to 96% of the optimal size.” Note that each stage adds an estimate rather than rearranging one: the best guess “tapped a third pool of knowledge” beyond the two extremes. Penstock’s reason for the whole exercise: “my investments can’t hinge on knowing the future. I look for situations where the bookends suggest that I can invest wisely without knowing exactly what the future holds.” And for everyone who is not an investor: “the rest of us aren’t betting on the outcome — we’re living it. So we need to be prepared to deal with any outcome between the two bookends we’ve charted.”",
+  term:"Bookending", def:"estimating the dire and the rosy end of a decision before the likely middle, which widens an honest range from 45 to 96 percent of correct.",
+  sowhat:"For your next forecast, write the disaster and the triumph before you write the expectation. Then plan for anything between them, not for the number in the middle.",
+  explain:"the specific order of estimates that makes a range honest.",
+  builds:[["b4-coinflip","the overconfidence it corrects"]], leads:[["b4-domains","and how to populate the bad end"]], live:[]},
+
+"b4-domains":{type:"mechanism", title:"The premortem", x:2219, y:979,
+  ess:"It failed. Why? A question that finds more than “what could go wrong”.",
+  hook:"Why does imagining a failure that already happened beat imagining one that might?",
+  story:"Because certainty forces detail. Gary Klein’s technique: “A postmortem analysis begins after a death and asks, ‘What caused it?’ A premortem, by contrast, imagines the future ‘death’ of a project and asks, ‘What killed it?’” The prompt: “Okay, it’s 12 months from now, and our project was a total fiasco. It blew up in our faces. Why did it fail?”",
+  mech:"The trick has a name and a finding behind it — Russo and Schoemaker’s: “when people adopt the second style of thinking — using ‘prospective hindsight’ to work backward from a certain future — they are better at generating explanations for why the event might happen.” The reason it works: it “forces us to fill in the blanks between today and a certain future event (as opposed to the slipperier process of speculating about an event that may or may not happen).” The run mechanics matter for group settings: “Everyone on the team takes a few minutes to write down every conceivable reason for the project’s failure. Then the team leader goes around the table, asking each person to share a single reason” — writing first, so the first speaker does not set the frame. Its engineering cousin, the FMEA, asks of each identified failure “How likely is it?” and “How severe would the consequences be?”",
+  term:"The premortem", def:"asserting the failure as already having happened, then asking what killed it — which surfaces more causes than speculation does.",
+  sowhat:"Gather three people, give them five minutes, and assert the failure as done: it is twelve months from now and this was a fiasco. Write before speaking, and collect one reason per person per round.",
+  explain:"why a certain future generates better reasons than a possible one.",
+  builds:[["b4-ergodicity","the lower bookend, populated"]], leads:[["b4-survive","and the end nobody prepares for"]], live:[]},
+
+"b4-survive":{type:"mechanism", title:"The preparade", x:2438, y:1094,
+  ess:"Success will also catch you unprepared. Plan for the parade.",
+  hook:"You planned for this failing. What happens if it works far better than expected?",
+  story:"Mostly, chaos. “We might err by failing to consider the problems we could encounter, and that’s why we need premortems. However, we might also err by failing to prepare for unexpectedly good outcomes.” So the mirror exercise: “A preparade asks us to consider success: Let’s say it’s a year from now and our decision has been a wild success. It’s so great that there’s going to be a parade in our honor. Given that future, how do we ensure that we’re ready for it?”",
+  mech:"It is the same prospective-hindsight machinery pointed the other way, and it catches a different class of problem: capacity, hiring, supply, the thing that breaks when demand triples. Both are limited in the same way, which the Heaths say plainly: “Premortems and preparades are most effective at tackling problems and opportunities that can be reasonably foreseen.” For everything else there is a cruder instrument — “Just assume that you’re being overconfident and give yourself a healthy margin of error.”",
+  term:"The preparade", def:"imagining a wild success a year out and asking what has to be ready for it — the premortem’s mirror image.",
+  sowhat:"Run it in the same meeting as the premortem; it costs five more minutes. The question that pays is which part of your operation breaks first if this works.",
+  explain:"why unexpected success is a risk you can prepare for.",
+  builds:[["b4-ergodicity","the upper bookend, populated"]], leads:[["b4-signal","and the margin for what you cannot foresee"]], live:[]},
+
+"b4-signal":{type:"mechanism", title:"The safety factor", x:1612, y:1181,
+  ess:"Engineers don’t try to stop being overconfident. They multiply.",
+  hook:"How do you protect against a bias you already know you cannot remove?",
+  story:"Correct for it numerically. An engineer’s account: “We engineers know that we’ll be prone to overconfidence, and it’s not possible to render ourselves immune to it, so why not just correct for it?” The multiples are not small — for the space shuttle’s ground equipment the safety factor is four; “for an elevator cable, it’s eleven.”",
+  mech:"This is the axiom about awareness taken to its conclusion: rather than aiming to be less wrong, you build the expected wrongness into the design. It generalises to time and money — a schedule estimate multiplied, a budget with slack — and its virtue is that it needs no insight into the specific failure, only the acknowledgement that failures exist. A related instrument works on people rather than structures: realistic job previews reduce turnover through a “vaccination” effect, “exposing people to a ‘small dose of organizational reality’ before they start work”, and they work even when given after hiring.",
+  term:"The safety factor", def:"deliberately over-provisioning by a known multiple, on the assumption that your estimate is overconfident by an unknown amount.",
+  sowhat:"Pick your multiple before you estimate, not after. And give people the unflattering version of what they are signing up for — it holds better than the flattering one.",
+  explain:"how to design around a bias instead of trying to overcome it.",
+  builds:[["a2","awareness alone doing nothing"],["b4-coinflip","the wrongness it budgets for"]], leads:[["b4-danger","and how you notice in time"]], live:[]},
+
+"b4-danger":{type:"mechanism · simulation", title:"Tripwires", sim:"tripwire", x:1959, y:1152,
+  ess:"Drift never announces itself. A tripwire tells you when to look up.",
+  hook:"Below: the same slow failure, with and without a tripwire. When do you notice?",
+  story:"Too late, without one. “We drift along in life, floating on the wake of past choices, and it’s easy to forget that we have the ability to change direction.” So: “bundle our decisions with ‘tripwires,’ signals that would snap us awake at exactly the right moment, compelling us to reconsider a decision or to make a new one… The goal of a tripwire is to jolt us out of our unconscious routines and make us aware that we have a choice to make.”",
+  mech:"Kodak is the standing example: “The alarm bells, signaling that the film business was in trouble, were omnipresent, yet they were never insistent enough to overcome the seductive voice that kept telling Kodak execs, The film business is still lucrative… Let’s just wait and see what happens.” The fix is mechanical — “Notice how easy it is to turn a hopeful prediction into an early-warning alarm system.” Because “day-to-day change is gradual, even imperceptible, it’s hard to know when to jump. Tripwires tell you when to jump.” Most deadlines are exactly this, invented for the purpose: “the deadlines we encounter in life are simply made up. They are artificially created tripwires to force an action or a decision.” And they need not be numeric — some “are tripped by pattern recognition”, like a hospital card whose most important line was “Call the rapid-response team if you are worried about a patient.”",
+  term:"Tripwire", def:"a pre-set signal — a date, a number, a pattern — that converts a drift into a moment where you notice you have a choice.",
+  sowhat:"Turn your next optimistic prediction into an alarm: name the date or number at which you will reconsider, and tell someone. The value is entirely in setting it before you are invested.",
+  explain:"why gradual failure is invisible without something set in advance.",
+  builds:[["b4-coinflip","the drift overconfidence permits"]], leads:[["b4-process","and the boundary version"],["b4-destination","and why this makes you bolder"]], live:[]},
+
+"b4-process":{type:"mechanism", title:"Partitions", x:1650, y:1330,
+  ess:"Divide the resource. The boundary does the deciding for you.",
+  hook:"Why does the same quantity of biscuits last four times longer when individually wrapped?",
+  story:"Because each wrapper is a decision point. In the study, “the people who got the unwrapped cookies finished them, on average, in 6 days. Meanwhile, those who got the individually wrapped cookies took 24 days!” In the researchers’ terms the wrapper is a “partition”: it “breaks up a resource… by dividing it into discrete portions.”",
+  mech:"A partition is a tripwire made of quantity rather than time, and it addresses a specific failure: “Boundaries are necessary because of people’s tendency to escalate their commitment to their choices.” The mechanism is friction with feeling attached — of a gambler who splits her money across two cards, “if she decides to break into the second card, it will ‘hurt’ a bit, because she’ll know that she’s blowing through her mental budget.” The wince is the point; without it, escalation is continuous and therefore invisible.",
+  term:"Partition", def:"a resource divided into discrete portions so that continuing has to be chosen rather than merely continued.",
+  sowhat:"Split the resource into tranches before you begin, and make crossing one require a sentence out loud. But note where the Heaths fence it: partitioning “is better suited to self-control-type issues, like saving money or resisting cookies” — imposed on colleagues it “could lead to bloodshed.”",
+  explain:"why dividing a resource changes how much of it you spend.",
+  builds:[["b4-danger","a tripwire made of quantity"]], leads:[["b4-fence","and the process all of this belongs to"]], live:[]},
+
+"b4-destination":{type:"tension", title:"Tripwires let you be bolder", x:2330, y:1255,
+  ess:"Not the bicycle helmet of decisions. The harness that lets you climb.",
+  hook:"Does all this contingency planning not just make you timid?",
+  story:"The Heaths argue the reverse, and name the objection first: “All this worrying about traps and contingencies may make tripwires sound overly cautious — the bicycle helmet of decision making. But actually we want to argue the opposite, that tripwires encourage risk taking by letting us carve out a ‘safe space’ for experimentation.”",
+  mech:"The logic is that a bounded downside is what makes a large upside affordable: “tripwires allow us the certainty of committing to a course of action, even a risky one, while minimizing the costs of overconfidence.” Zappos institutionalised it in reverse, paying new hires to leave — “If at any time you feel this is not the right place… say, ‘I want to take the offer.’ And we’ll pay you $1,000 to leave” — which makes staying a decision rather than a default. The same claim closes the book about process generally: “A process can be the equivalent of a mountain climber’s harness and rope, allowing you the freedom to explore without constant worry.”",
+  term:"The safe space", def:"a pre-committed limit that makes a risk affordable, so the effect of planning for failure is more boldness rather than less.",
+  sowhat:"Before the risky thing, name what you will spend and when you will stop. That is what lets you commit properly to the attempt instead of hedging it into uselessness.",
+  explain:"why bounding the downside increases how much risk you can take.",
+  builds:[["b4-danger","the limits that make it safe"]], leads:[["b4-principle","and what the whole process buys"]], live:[]},
+
+"b4-explore":{type:"mechanism", title:"Fair process", x:2470, y:1430,
+  ess:"People accept outcomes they dislike if the process was honest.",
+  hook:"Why do people resist a decision they had no objection to?",
+  story:"Because of how it was reached. “Researchers call this sense of fairness ‘procedural justice’… It’s not just the outcome that matters; it’s the process.” And it pays: bargaining with those affected “always improved the success of the decision”, an improvement Paul Nutt called “dramatic.”",
+  mech:"The Heaths list the elements plainly: “Give people a chance to be heard, to present their case. Listen — really listen — to what people say. Use accurate information to make the decision, and give people a chance to challenge the information if it’s incorrect. Apply principles consistently across situations. Avoid bias and self-interest. Explain why the decision was made and be candid about relevant risks or concerns.” Two practitioner moves make it concrete: Robert Mnookin’s — “I state back the other side’s position better than they could state it. And then they can relax because they feel heard” — and the counter-intuitive one, that “sometimes the best way to defend a decision is to point out its flaws.” The economics are simple: “Bargaining up front, or fighting foot draggers later? Bargaining yields buy-in.”",
+  term:"Procedural justice", def:"the perceived fairness of how a decision was made, which governs acceptance more reliably than the decision itself.",
+  sowhat:"Before announcing, state the strongest version of the objection and say what you did with it. And be candid about the risks — hiding them is what turns a disagreement into resistance.",
+  explain:"why how you decide determines whether the decision survives.",
+  builds:[["a3","the process, seen from outside"]], leads:[["b4-fence","and the checklist it sits in"]], live:[]},
+
+"b4-fence":{type:"mechanism · simulation", title:"WRAP", sim:"wrap", x:2090, y:1430,
+  ess:"Four steps, one per villain. A process that wraps around your usual one.",
+  hook:"Below: four villains, four steps. Which step disarms which?",
+  story:"The mapping is the book. “Note the mnemonic WRAP, which captures the four verbs. We like the notion of a process that ‘wraps’ around your usual way of making decisions.” Widen your options; reality-test your assumptions; attain distance before deciding; prepare to be wrong. Or, at the end: “We can learn to find just one more option. To check our assumptions against reality. To make tough choices based on our core priorities. To prepare humbly for the times when we’ll be wrong.”",
+  mech:"The architecture is a claim in itself — “the nature of each villain suggests a strategy for defeating it” — mapped onto the four stages of any decision: you encounter a choice, you analyse the options, you choose, then you live with it. What the process does is modest and specific: “At its core, the WRAP model urges you to switch from ‘auto spotlight’ to manual spotlight”, and it “reliably focuses our attention on things we otherwise might have missed: options we might have overlooked, information we might have resisted, and preparations we might have neglected.” It also compresses — the Heaths give a version for when you have three quarters of an hour: run the vanishing options test, call someone who has solved it, ask what you would tell your best friend, and gather three colleagues for a premortem.",
+  term:"WRAP", def:"Widen your options, Reality-test your assumptions, Attain distance before deciding, Prepare to be wrong — one step per villain.",
+  sowhat:"You do not need the full version. In forty-five minutes those four moves take one step from each stage, and the Heaths’ claim for it is modest: “you can accomplish a lot.”",
+  explain:"how four steps map onto the four ways decisions go wrong.",
+  builds:[["a2","the prosthetic it provides"],["b4-explore","the fairness it produces"]], leads:[["b4-principle","and what it is finally for"]], live:[]},
+
+"b4-principle":{type:"principle", title:"Decisive is a behaviour", x:1830, y:1560,
+  ess:"Not a trait you have. Something you do, without needing to be certain.",
+  hook:"What does a good process actually give you, if not the right answer?",
+  story:"Confidence of a specific kind. “It would be hard to find a less inspiring word in the English language than ‘process’… What a process provides, though, is more inspiring: confidence. Not cocky overconfidence that comes from collecting biased information and ignoring uncertainties, but the real confidence that comes from knowing you’ve made the best decision that you could.”",
+  mech:"The Heaths are careful not to oversell. Their stated goal is marginal: “We want to make you a bit better at making good decisions, and we want to help you make your good decisions a bit more decisively” — and they concede “you are still going to make a healthy share of bad decisions.” The defence is that a process is reliable where an outcome is not: “Individual decisions will frequently be wrong, but the right process will be an ally in any situation”, and “success emerges from the quality of the decisions we make and the quantity of luck we receive. We can’t control luck. But we can control the way we make choices.” Which is also why outcomes are a bad scoreboard — “a good decision can’t be assessed by the outcome, or else every roulette winner in Vegas would be a decision-making genius.”",
+  term:"Decisiveness", def:"a behaviour of choosing with a good process and appropriate confidence, rather than a trait of being certain.",
+  sowhat:"Judge yourself on how you decided, not on how it turned out. “Being decisive is itself a choice. Decisiveness is a way of behaving, not an inherited trait… not because we know we’ll be right but because it’s better to try and fail than to delay and regret.”",
+  explain:"what to hold yourself to when the outcome was out of your hands.",
+  builds:[["a2","the reason a process was needed"],["b4-fence","the four steps it rests on"]], leads:[["a1","and back to the beam you started with"]], live:[]}
+};
+const TERRITORIES = [
+  {label:"I · Widen Your Options", sum:"against narrow framing", hue:"#4a6684", lx:508, ly:100, rx:184, ry:158, rw:745, rh:590},
+  {label:"II · Reality-Test", sum:"against the confirmation bias", hue:"#4f7050", lx:2114, ly:100, rx:1739, ry:158, rw:745, rh:590},
+  {label:"The Bedrock", sum:"four things the book assumes", hue:"#6f6455", lx:1265, ly:352, rx:964, ry:436, rw:722, rh:439},
+  {label:"III · Attain Distance", sum:"against short-term emotion", hue:"#8a5c5c", lx:520, ly:869, rx:184, ry:846, rw:745, rh:590},
+  {label:"IV · Prepare to Be Wrong", sum:"against overconfidence", hue:"#96702f", lx:2011, ly:820, rx:1479, ry:869, rw:1069, rh:745}
+];
+const ASTERISMS = [
+  ["#4a6684", [["b1-laplace","b1-pendulum"],["b1-laplace","b1-sensitive"],["b1-sensitive","b1-lorenz-story"],["b1-sensitive","b1-principle"]]],
+  ["#4f7050", [["b2-logistic","b2-lorenz-attractor"],["b2-lorenz-attractor","b2-attractors"],["b2-attractors","b2-tension-random"],["b2-attractors","b2-principle"]]],
+  ["#6f6455", [["a1","a2"],["a1","a3"],["a2","a4"],["a3","a4"]]],
+  ["#8a5c5c", [["b3-kokura","b3-contingency"],["b3-contingency","b3-timeline"],["b3-contingency","b3-plan"],["b3-timeline","b3-principle"],["b3-plan","b3-principle"]]],
+  ["#96702f", [["b4-coinflip","b4-ergodicity"],["b4-ergodicity","b4-domains"],["b4-domains","b4-survive"],
+    ["b4-coinflip","b4-signal"],["b4-signal","b4-danger"],["b4-danger","b4-process"],
+    ["b4-danger","b4-destination"],["b4-process","b4-fence"],["b4-destination","b4-explore"],
+    ["b4-explore","b4-fence"],["b4-fence","b4-principle"],["b4-destination","b4-principle"]]]
+];
+const ALL = Object.keys(N);
+const TERRNAME = {b1:"I · Widen Your Options", b2:"II · Reality-Test",
+  b3:"III · Attain Distance", b4:"IV · Prepare to Be Wrong", a:"The Bedrock"};
+const HUES = {b1:"#4a6684", b2:"#4f7050", b3:"#8a5c5c", b4:"#96702f", a:"#6f6455"};
+const hueOf = id => id.startsWith('a') ? HUES.a : HUES[id.slice(0,2)];
+const terrOf = id => id.startsWith('a') ? TERRNAME.a : TERRNAME[id.slice(0,2)];
+
+const TOUR = ["b1-laplace","b1-pendulum","b1-sensitive","b1-lorenz-story","b1-principle",
+  "b2-logistic","b2-lorenz-attractor","b2-attractors","b2-tension-random","b2-principle",
+  "b3-kokura","b3-contingency","b3-timeline","b3-plan","b3-principle",
+  "b4-coinflip","b4-ergodicity","b4-domains","b4-survive","b4-signal","b4-danger",
+  "b4-process","b4-destination","b4-explore","b4-fence","b4-principle"];
+const SEQ = {}; TOUR.forEach((id,i)=>SEQ[id]=i+1);
+
+/* degree from curated links (for star size) */
+const DEG = {};
+ALL.forEach(id=>DEG[id]=0);
+ALL.forEach(id=>{
+  const n = N[id];
+  [...n.builds, ...n.leads, ...n.live].forEach(([t])=>{ DEG[id]++; DEG[t]=(DEG[t]||0)+1; });
+});
+const dotSize = id => 16 + Math.min(DEG[id],8)*2.2;
+const dotCenter = id => ({x:N[id].x+dotSize(id)/2, y:N[id].y+dotSize(id)/2});
+
+/* ============================================================
+   CAMERA
+   ============================================================ */
+const vp = document.getElementById('vp');
+const world = document.getElementById('world');
+const reader = document.getElementById('reader');
+const WW = 2750, WH = 1750;
+let cam = {s:0.12, tx:0, ty:0};
+let anim = null;
+function apply(){
+  world.style.transform = `translate(${cam.tx}px, ${cam.ty}px) scale(${cam.s})`;
+  lod();
+}
+function readerW(){ return reader.classList.contains('open') ? (reader.getBoundingClientRect().width||430) : 0; }
+function visW(){ return innerWidth - readerW(); }
+function centerOn(cx, cy, s){
+  cam.s = s;
+  cam.tx = visW()/2 - cx*s;
+  cam.ty = innerHeight/2 - cy*s;
+  apply();
+}
+function flyTo(cx, cy, s, dur=700){
+  if (anim) cancelAnimationFrame(anim);
+  const s0=cam.s, cx0=(visW()/2-cam.tx)/s0, cy0=(innerHeight/2-cam.ty)/s0;
+  const ls0=Math.log(s0), ls1=Math.log(s);
+  const t0=performance.now();
+  function step(t){
+    let p=Math.min(1,(t-t0)/dur);
+    p = p<.5 ? 4*p*p*p : 1-Math.pow(-2*p+2,3)/2;
+    centerOn(cx0+(cx-cx0)*p, cy0+(cy-cy0)*p, Math.exp(ls0+(ls1-ls0)*p));
+    if (p<1) anim=requestAnimationFrame(step);
+  }
+  anim=requestAnimationFrame(step);
+}
+function overviewCam(fly=true){
+  const s = Math.min(visW()/WW, innerHeight/WH)*0.92;
+  if (fly) flyTo(WW/2, WH/2, s, 800); else centerOn(WW/2, WH/2, s);
+}
+vp.addEventListener('wheel', e=>{
+  e.preventDefault();
+  if (anim) cancelAnimationFrame(anim);
+  const f = Math.exp(-e.deltaY*0.0016);
+  const s2 = Math.min(2.2, Math.max(0.06, cam.s*f));
+  const wx=(e.clientX-cam.tx)/cam.s, wy=(e.clientY-cam.ty)/cam.s;
+  cam.s=s2; cam.tx=e.clientX-wx*s2; cam.ty=e.clientY-wy*s2;
+  apply();
+}, {passive:false});
+const ptrs = new Map();
+let panStart=null, pinchStart=null, moved=0;
+vp.addEventListener('pointerdown', e=>{
+  if (e.target.closest('.tlabel')) return;
+  ptrs.set(e.pointerId, {x:e.clientX, y:e.clientY});
+  if (ptrs.size===1){
+    moved=0;
+    panStart={mx:e.clientX, my:e.clientY, tx:cam.tx, ty:cam.ty};
+    vp.classList.add('dragging');
+  } else if (ptrs.size===2){
+    const [p1,p2]=[...ptrs.values()];
+    pinchStart={d:Math.hypot(p1.x-p2.x,p1.y-p2.y), s:cam.s,
+      wx:((p1.x+p2.x)/2-cam.tx)/cam.s, wy:((p1.y+p2.y)/2-cam.ty)/cam.s};
+    panStart=null;
+  }
+});
+addEventListener('pointermove', e=>{
+  if (!ptrs.has(e.pointerId)) return;
+  ptrs.set(e.pointerId, {x:e.clientX, y:e.clientY});
+  if (ptrs.size===1 && panStart){
+    if (anim) cancelAnimationFrame(anim);
+    moved += Math.abs(e.movementX||0)+Math.abs(e.movementY||0);
+    cam.tx = panStart.tx + (e.clientX-panStart.mx);
+    cam.ty = panStart.ty + (e.clientY-panStart.my);
+    apply();
+  } else if (ptrs.size===2 && pinchStart){
+    if (anim) cancelAnimationFrame(anim);
+    const [p1,p2]=[...ptrs.values()];
+    const d=Math.hypot(p1.x-p2.x,p1.y-p2.y);
+    const s2=Math.min(2.2, Math.max(0.06, pinchStart.s*d/pinchStart.d));
+    const cx=(p1.x+p2.x)/2, cy=(p1.y+p2.y)/2;
+    cam.s=s2; cam.tx=cx-pinchStart.wx*s2; cam.ty=cy-pinchStart.wy*s2;
+    apply();
+  }
+});
+function ptrUp(e){ ptrs.delete(e.pointerId);
+  if (ptrs.size<2) pinchStart=null;
+  if (ptrs.size===0){ panStart=null; vp.classList.remove('dragging'); } }
+addEventListener('pointerup', ptrUp);
+addEventListener('pointercancel', ptrUp);
+vp.addEventListener('dblclick', e=>{
+  if (!e.target.closest('.mk')){ closeReader(); overviewCam(); }
+});
+addEventListener('keydown', e=>{
+  if (e.key==='Escape'){ closeReader(); overviewCam(); }
+  if (e.key==='ArrowRight') navStep(1);
+  if (e.key==='ArrowLeft') navStep(-1);
+});
+document.getElementById('overviewBtn').onclick = ()=>{ closeReader(); overviewCam(); };
+addEventListener('resize', ()=>apply());
+
+/* ============================================================
+   SKY - constellation names, asterisms, ecliptic, stars
+   ============================================================ */
+TERRITORIES.forEach(t=>{
+  const rgb = [parseInt(t.hue.slice(1,3),16), parseInt(t.hue.slice(3,5),16), parseInt(t.hue.slice(5,7),16)].join(',');
+  const l = document.createElement('div');
+  l.className = 'tlab';
+  l.style.cssText = `left:${t.lx}px; top:${t.ly}px; transform:translateX(-50%);`;
+  l.innerHTML = `<div class="big" style="color:rgba(${rgb},0.92)">${t.label}</div>
+    <div class="sum">${t.sum}</div>`;
+  l.addEventListener('click', ()=>{
+    flyTo(t.rx+t.rw/2, t.ry+Math.min(t.rh/2, 1000), Math.min(visW()/(t.rw+300), 0.5));
+  });
+  world.appendChild(l);
+});
+
+
+
+/* minor stars - small nameless flecks inside each figure */
+{
+  const R = mulberry32(11);
+  TERRITORIES.forEach(t=>{
+    for (let i=0;i<16;i++){
+      const d=document.createElement('div');
+      const sz=(2.5+R()*3).toFixed(1);
+      d.style.cssText=`position:absolute; left:${Math.round(t.rx+40+R()*(t.rw-80))}px;`+
+        `top:${Math.round(t.ry+40+R()*(t.rh-80))}px; width:${sz}px; height:${sz}px;`+
+        `border-radius:50%; background:${t.hue}; opacity:${(0.18+R()*0.22).toFixed(2)}; pointer-events:none;`;
+      world.appendChild(d);
+    }
+  });
+}
+
+const flowsvg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+flowsvg.setAttribute('width',WW); flowsvg.setAttribute('height',WH);
+flowsvg.style.cssText='position:absolute;top:0;left:0;pointer-events:none;overflow:visible;';
+world.appendChild(flowsvg);
+
+const astsvg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+astsvg.id='astsvg'; astsvg.setAttribute('width',WW); astsvg.setAttribute('height',WH);
+ASTERISMS.forEach(([hue, pairs])=>{
+  pairs.forEach(([a,b])=>{
+    const pa=dotCenter(a), pb=dotCenter(b);
+    const dx=pb.x-pa.x, dy=pb.y-pa.y, L=Math.hypot(dx,dy)||1;
+    const ux=dx/L, uy=dy/L, off=30;
+    const ln = document.createElementNS('http://www.w3.org/2000/svg','line');
+    ln.setAttribute('x1',pa.x+ux*off); ln.setAttribute('y1',pa.y+uy*off);
+    ln.setAttribute('x2',pb.x-ux*off); ln.setAttribute('y2',pb.y-uy*off);
+    ln.setAttribute('stroke',hue); ln.setAttribute('stroke-opacity','0.38');
+    ln.setAttribute('stroke-width','1.6');
+    astsvg.appendChild(ln);
+  });
+});
+world.appendChild(astsvg);
+
+{
+  const pts = TOUR.map(id=>dotCenter(id));
+  let d = `M ${pts[0].x} ${pts[0].y}`;
+  for (let i=1;i<pts.length;i++){
+    const a=pts[i-1], b=pts[i];
+    const mx=(a.x+b.x)/2, my=(a.y+b.y)/2;
+    d += ` Q ${mx + (b.y-a.y)*0.08} ${my - (b.x-a.x)*0.08} ${b.x} ${b.y}`;
+  }
+  const p = document.createElementNS('http://www.w3.org/2000/svg','path');
+  p.setAttribute('d',d); p.setAttribute('fill','none');
+  p.setAttribute('class','lnk-base'); p.setAttribute('stroke',`rgba(${RGB_INK},0.08)`); p.setAttribute('stroke-width','4');
+  p.setAttribute('stroke-dasharray','2,14');
+  flowsvg.appendChild(p);
+}
+
+const tsvg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+tsvg.id='tsvg'; tsvg.setAttribute('width',WW); tsvg.setAttribute('height',WH);
+const defs = document.createElementNS('http://www.w3.org/2000/svg','defs');
+defs.innerHTML = `<marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="#96702f" opacity="0.8"/></marker>`;
+tsvg.appendChild(defs);
+world.appendChild(tsvg);
+const tlabels = [];
+
+const mkEls = {};
+ALL.forEach(id=>{
+  const n = N[id];
+  const hue = hueOf(id);
+  const size = dotSize(id);
+  const m = document.createElement('div');
+  m.className = 'mk' + (n.sim ? ' hasim' : '');
+  m.style.cssText = `left:${n.x}px; top:${n.y}px;`;
+  m.dataset.id = id;
+  m.innerHTML = `
+    <div class="dot" style="width:${size}px; height:${size}px; background:${hue};"></div>
+    <div class="dtext">
+      <div class="lbl">${SEQ[id]?`<span class="seq">${SEQ[id]}</span>`:''}${n.title}</div>
+      <div class="ess">${n.ess}</div>
+      <div class="sims-badge">▸ live model</div>
+    </div>`;
+  world.appendChild(m);
+  mkEls[id] = m;
+  m.addEventListener('click', e=>{
+    if (moved>6) return;
+    e.stopPropagation();
+    openIdea(id);
+  });
+});
+
+function lod(){
+  const ess = cam.s > 0.55;
+  if (lod._k===ess) return;
+  lod._k = ess;
+  Object.values(mkEls).forEach(m=>m.classList.toggle('showess', ess));
+}
+
+/* ============================================================
+   READER
+   ============================================================ */
+let focusId = null, stopSim = null;
+
+const REL = {builds:{glyph:'\u2190', label:'builds on'},
+             leads: {glyph:'\u2192', label:'leads to'},
+             live:  {glyph:'\u25B6', label:'see it live'}};
+function linkGroup(rel, items){
+  if (!items.length) return '';
+  const r = REL[rel];
+  return `<div class="lgroup"><span class="kicker" title="${r.label}"><span class="ar">${r.glyph}</span></span>
+    ${items.map(([t,why])=>`<a data-t="${t}"><span class="t">${N[t].title}</span>
+      <span class="why">${why}</span></a>`).join('')}
+  </div>`;
+}
+
+function openIdea(id){
+  const n = N[id];
+  if (stopSim){ stopSim(); stopSim=null; }
+  focusId = id;
+  const chip = document.getElementById('rChip');
+  chip.textContent = n.type;
+  chip.style.borderColor = hueOf(id)+'66'; chip.style.color = hueOf(id);
+  document.getElementById('rTitle').textContent = n.title;
+  document.getElementById('rTerr').textContent = terrOf(id) + (SEQ[id]?` · step ${SEQ[id]} of ${TOUR.length}`:'');
+  const nextId = SEQ[id] && SEQ[id] < TOUR.length ? TOUR[SEQ[id]] : null;
+  document.getElementById('rbody').innerHTML = `
+    <div class="ideablock">
+      <section class="ib"><span class="kicker">the idea</span>
+        <b class="term">${n.term}</b><div class="def">${n.def}</div></section>
+      ${n.mech ? `<section class="ib"><span class="kicker">how it works</span>
+        <div class="txt">${n.mech}</div></section>` : ''}
+      <section class="ib"><span class="kicker">failure mode</span>
+        <div class="txt">${n.sowhat}</div></section>
+      <section class="ib"><span class="kicker">description</span>
+        <div class="hook">${n.hook}</div>
+        <div class="story">${n.story}</div>
+        ${n.sim ? simHTML(n.sim) : ''}</section>
+    </div>
+    <div class="linkrow">
+      ${linkGroup('builds', n.builds)}
+      ${linkGroup('leads', n.leads)}
+      ${linkGroup('live', n.live)}
+    </div>
+    ${nextId ? `<button class="nextbtn" data-t="${nextId}"><span class="k">next in the flow · ${SEQ[nextId]} of ${TOUR.length}</span>${N[nextId].title}<span class="arr">→</span></button>`
+             : (SEQ[id]===TOUR.length ? `<button class="nextbtn" id="finishBtn"><span class="k">end of the flow</span>Back to the chart<span class="arr">↑</span></button>` : '')}`;
+  document.querySelectorAll('#rbody [data-t]').forEach(a=>
+    a.addEventListener('click', ()=>openIdea(a.dataset.t)));
+  const fin = document.getElementById('finishBtn');
+  if (fin) fin.onclick = ()=>{ closeReader(); overviewCam(); };
+  const fig = document.querySelector('#rbody figure.frame');
+  if (fig) stopSim = SIMS[fig.dataset.sim](fig);
+  document.getElementById('rbody').scrollTop = 0;
+  reader.classList.add('open');
+  document.body.classList.add('reader-open');
+  highlight(id);
+  syncNav();
+  const rs = Math.min(0.95, Math.max(0.62, cam.s));
+  setTimeout(()=>flyTo(n.x+180, n.y+60, rs), 60);
+}
+function closeReader(){
+  if (stopSim){ stopSim(); stopSim=null; }
+  reader.classList.remove('open');
+  document.body.classList.remove('reader-open');
+  focusId = null;
+  clearHighlight();
+  syncNav();
+}
+document.getElementById('rClose').onclick = closeReader;
+
+/* map highlight: few directional lines with plain labels */
+function highlight(id){
+  clearHighlight();
+  const n = N[id];
+  const nb = new Set([id]);
+  const conns = [
+    ...n.builds.map(([t])=>({t, lab:REL.builds.glyph, title:REL.builds.label, into:true})),
+    ...n.leads.map(([t])=>({t, lab:REL.leads.glyph, title:REL.leads.label, into:false})),
+    ...n.live.map(([t])=>({t, lab:REL.live.glyph, title:REL.live.label, into:false}))
+  ];
+  conns.forEach(c=>nb.add(c.t));
+  ALL.forEach(x=>{
+    mkEls[x].classList.toggle('dimmed', !nb.has(x));
+    mkEls[x].classList.toggle('neighbor', nb.has(x) && x!==id);
+    mkEls[x].classList.toggle('focused', x===id);
+  });
+  const here = dotCenter(id);
+  conns.forEach(c=>{
+    const there = dotCenter(c.t);
+    let from = c.into ? {...there} : {...here};
+    let to   = c.into ? {...here} : {...there};
+    {
+      const ddx=to.x-from.x, ddy=to.y-from.y, LL=Math.hypot(ddx,ddy)||1;
+      const ux=ddx/LL, uy=ddy/LL, off=30;
+      from = {x:from.x+ux*off, y:from.y+uy*off};
+      to   = {x:to.x-ux*off,   y:to.y-uy*off};
+    }
+    const dx=to.x-from.x, dy=to.y-from.y, dist=Math.hypot(dx,dy)||1;
+    const cx=(from.x+to.x)/2 - dy/dist*dist*0.12, cy=(from.y+to.y)/2 + dx/dist*dist*0.12;
+    const p = document.createElementNS('http://www.w3.org/2000/svg','path');
+    p.setAttribute('d',`M ${from.x} ${from.y} Q ${cx} ${cy} ${to.x} ${to.y}`);
+    p.setAttribute('fill','none');
+    p.setAttribute('class','lnk-flow'); p.setAttribute('stroke',`rgba(${RGB_AMBER},0.45)`);
+    p.setAttribute('stroke-width','2.5');
+    p.setAttribute('stroke-dasharray','9,8');
+    p.setAttribute('class','tline');
+    p.setAttribute('marker-end','url(#arr)');
+    tsvg.appendChild(p);
+    const lbl = document.createElement('div');
+    lbl.className='tlabel';
+    lbl.style.left = (.25*from.x+.5*cx+.25*to.x)+'px';
+    lbl.style.top = (.25*from.y+.5*cy+.25*to.y)+'px';
+    lbl.textContent = c.lab;
+    lbl.title = c.title;
+    lbl.addEventListener('click', e=>{ e.stopPropagation(); openIdea(c.t); });
+    world.appendChild(lbl);
+    tlabels.push(lbl);
+  });
+}
+function clearHighlight(){
+  ALL.forEach(x=>mkEls[x].classList.remove('dimmed','neighbor','focused'));
+  [...tsvg.querySelectorAll('path')].forEach(p=>p.remove());
+  tlabels.forEach(l=>l.remove()); tlabels.length=0;
+}
+
+/* ============================================================
+   NAV - top-right cluster drives the default flow
+   ============================================================ */
+function syncNav(){
+  const i = focusId ? TOUR.indexOf(focusId) : -1;
+  document.getElementById('navcluster').classList.toggle('on', !!focusId);
+  document.getElementById('navPrev').disabled = i===0;
+  document.getElementById('navNext').disabled = i===TOUR.length-1;
+}
+function navStep(dir){
+  const i = focusId ? TOUR.indexOf(focusId) : -1;
+  if (i<0){ openIdea(TOUR[0]); return; }
+  const j = i+dir;
+  if (j>=0 && j<TOUR.length) openIdea(TOUR[j]);
+}
+document.getElementById('navPrev').onclick = ()=>navStep(-1);
+document.getElementById('navNext').onclick = ()=>navStep(1);
+
+/* ============================================================
+   SIMULATIONS
+   ============================================================ */
+
+function mulberry32(a){ return function(){ a|=0; a=a+0x6D2B79F5|0;
+  let t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t;
+  return ((t^t>>>14)>>>0)/4294967296; }; }
+function setActive(fig, btn){
+  fig.querySelectorAll('.ghost').forEach(b=>{ if(b.dataset.d!==undefined||b.dataset.m!==undefined) b.classList.remove('active');});
+  if (btn) btn.classList.add('active');
+}
+function simHTML(kind){
+  const caps = {
+    multitrack:"Add options one at a time, and toggle whether they are genuinely distinct. The gain arrives with the second real option — and never arrives at all for sham ones.",
+    baserate:"Set how confident you feel, then meet the record of everyone who has been here before. The two numbers are not related.",
+    tenten:"One decision, three horizons, with illustrative bars — the book gives no numbers here. The felt intensity collapses; the consequence does not. Sometimes ten minutes still wins, which is a legitimate answer.",
+    bookend:"Estimate a point, then the two extremes, then the middle as well. The percentages are the measured width of people’s ranges against a statistically optimal model.",
+    tripwire:"The same slow failure, four ways — the decline itself is drawn illustratively. What differs is only when you look up, and nothing makes you look up unless it was set in advance.",
+    wrap:"Four villains, four steps. Click either side to see the pairing, or step through the process in order."
+  };
+  const ctl = {
+    multitrack:`<span class="cl">options</span><input type="range" min="1" max="3" step="1" value="1">
+      <button class="ghost active" data-m="real">meaningfully distinct</button>
+      <button class="ghost" data-m="sham">sham options</button>`,
+    baserate:`<span class="cl">your confidence</span><input type="range" min="5" max="95" step="5" value="70">
+      <button class="ghost active" data-m="hire">a great hire</button>
+      <button class="ghost" data-m="whether">a “whether or not” call</button>
+      <button class="ghost" data-m="forecast">your own forecast</button>`,
+    tenten:`<button class="ghost active" data-m="0">10 minutes</button>
+      <button class="ghost" data-m="1">10 months</button>
+      <button class="ghost" data-m="2">10 years</button>`,
+    bookend:`<button class="ghost" data-a="next">add the next estimate</button>
+      <button class="ghost" data-a="reset">reset ↻</button>`,
+    tripwire:`<button class="ghost active" data-m="none">no tripwire</button>
+      <button class="ghost" data-m="date">a date</button>
+      <button class="ghost" data-m="budget">a partition</button>
+      <button class="ghost" data-m="pattern">a pattern</button>`,
+    wrap:`<button class="ghost" data-a="next">step through</button>
+      <button class="ghost" data-a="reset">reset ↻</button>`
+  };
+  return `<figure class="frame" data-sim="${kind}">
+    <canvas></canvas>
+    <div class="controls">${ctl[kind]}</div>
+    <figcaption>${caps[kind]}</figcaption>
+  </figure>`;
+}
+/* Canvas backing store follows the device pixel ratio, so canvas text stays
+   crisp in the ~570px reader column. Sims still draw in logical 700-wide units. */
+const _DPR = Math.max(1, Math.min(2, (typeof devicePixelRatio === 'number' ? devicePixelRatio : 1) || 1));
+function fitCanvas(cv, w, h){
+  cv.width = Math.round(w*_DPR); cv.height = Math.round(h*_DPR);
+  const ctx = cv.getContext('2d');
+  if (ctx.setTransform) ctx.setTransform(_DPR,0,0,_DPR,0,0);
+  return ctx;
+}
+const SIMS = {};
+
+/* word-wrap helper */
+function wrapTxt(ctx, s, maxw){
+  const words = s.split(' '); const out = []; let line = '';
+  for (const w of words){
+    const t = line ? line+' '+w : w;
+    if (ctx.measureText(t).width > maxw && line){ out.push(line); line = w; } else line = t;
+  }
+  if (line) out.push(line);
+  return out;
+}
+
+/* ---------- I · multitracking ----------------------------------------- */
+SIMS.multitrack = fig=>{
+  const cv=fig.querySelector('canvas');
+  const W=700,H=410, ctx=fitCanvas(cv,W,H);
+  let n=1, real=true;
+  /* A supports exactly one contrast: one alternative vs more than one (6x).
+     Never invent intermediate multipliers. */
+  const sixfold = () => real && n>1;
+  function draw(){
+    ctx.fillStyle=SUNK; ctx.fillRect(0,0,W,H); ctx.textAlign='left';
+    ctx.fillStyle=GRAY; ctx.font='11.5px Inter, sans-serif';
+    ctx.fillText('OPTIONS ON THE TABLE',30,26);
+    /* the options */
+    for(let i=0;i<3;i++){
+      const x=30+i*218, live=i<n;
+      ctx.strokeStyle=live?AMBER:BRD; ctx.lineWidth=1.4;
+      ctx.strokeRect(x,40,204,52);
+      if(live){ ctx.fillStyle=`rgba(${RGB_AMBER},0.16)`; ctx.fillRect(x,40,204,52); }
+      ctx.fillStyle=live?INKC:FAINT; ctx.font='13.5px Inter, sans-serif';
+      ctx.fillText(live?(real?`option ${i+1}`:`option ${i+1} (sham)`):'—',x+12,62);
+      if(live){ ctx.fillStyle=GRAY; ctx.font='11.5px Inter, sans-serif';
+        ctx.fillText(real?'genuinely different':'a variation',x+12,80); }
+    }
+    /* the one contrast the book supports */
+    const BY=126;
+    ctx.fillStyle=GRAY; ctx.font='11.5px Inter, sans-serif';
+    ctx.fillText('“very good” decisions, as rated by that board',30,BY-8);
+    ctx.fillStyle=INKC; ctx.font='15px Inter, sans-serif';
+    ctx.fillText(sixfold() ? 'more than one alternative:  40% rated very good'
+                           : 'one alternative only:  6% rated very good', 30, BY+14);
+    ctx.fillStyle=sixfold()?AMBER:FAINT; ctx.font='13.5px Inter, sans-serif';
+    ctx.fillText(sixfold() ? 'six times as many' : '—', 30, BY+36);
+    /* ego indicator */
+    const EY=186;
+    ctx.fillStyle=GRAY; ctx.font='11.5px Inter, sans-serif';
+    ctx.fillText('your ego',30,EY);
+    ctx.fillStyle=(n===1)?INKC:GRAY; ctx.font='13.5px Inter, sans-serif';
+    ctx.fillText(n===1 ? 'conflated with the single design'
+                       : 'separable from any one design', 96, EY);
+    /* verdict */
+    let msg, sub;
+    if(!real){ msg='Sham options do not count.';
+      sub='Poll for preferences: an easy consensus is a red flag. Kissinger’s parody of a sham choice was nuclear war, present policy, or surrender.'; }
+    else if(n===1){ msg='One option is a “whether or not” decision in disguise.';
+      sub='In Nutt’s 168 decisions those failed 52% of the time over the long term, against 32% for decisions with two or more alternatives.'; }
+    else if(n===2){ msg='The jump happens here, at the second real option.';
+      sub='And you do not need more: forget 24 kinds of jam — two or three will do. Keep looking until you fall in love twice.'; }
+    else { msg='Three is as far as the evidence goes.';
+      sub='That board’s decisions “never involved more than three alternatives”, so nothing here speaks to a fourth. Weighing more options is not slower either — those executives decided faster.'; }
+    ctx.fillStyle=INKC; ctx.font='15px Inter, sans-serif'; ctx.fillText(msg,30,244);
+    ctx.fillStyle=GRAY; ctx.font='13px Inter, sans-serif';
+    wrapTxt(ctx,sub,W-60).forEach((l,i)=>ctx.fillText(l,30,268+i*20));
+    ctx.fillStyle=FAINT; ctx.font='12px Inter, sans-serif';
+    ctx.fillText('Every figure shown is the Heaths’ own; no value here is interpolated.',30,H-16);
+  }
+  draw();
+  const sl=fig.querySelector('input');
+  sl.oninput=()=>{n=parseInt(sl.value,10);draw();};
+  fig.querySelectorAll('.ghost').forEach(b=>b.onclick=()=>{
+    setActive(fig,b); real = b.dataset.m==='real'; draw();});
+  return ()=>{};
+};
+
+/* ---------- II · base rates ------------------------------------------- */
+SIMS.baserate = fig=>{
+  const cv=fig.querySelector('canvas');
+  const W=700,H=400, ctx=fitCanvas(cv,W,H);
+  const D = {
+    hire:{label:'this candidate will be a great hire', rate:null,
+      stat:'No trustworthy base rate exists — which is itself the finding.',
+      note:'Interviews “seemed to correlate with nothing other than, well, the ability to interview”, and research finds them “less predictive of job performance than work samples, job-knowledge tests, and peer ratings of past job performance.”',
+      alt:'ask for a work sample'},
+    whether:{label:'this “whether or not” decision will work out', rate:null,
+      stat:'They failed 52% of the time — against 32% with two or more alternatives.',
+      note:'Nutt’s 168 organisational decisions. The book reports the failure rate, so that is what is shown here rather than a success rate inferred from it.',
+      alt:'find a second, meaningfully distinct option'},
+    forecast:{label:'my 80%-confident range will contain the answer', rate:null,
+      stat:'The true answer fell outside people’s 80% ranges 61% of the time.',
+      note:'It should have been 20%. Asked to bracket a film’s box office, forecasters were surprised three times more often than they had allowed for.',
+      alt:'bookend it before guessing the middle'}
+  };
+  let conf=70, key='hire';
+  function draw(){
+    ctx.fillStyle=SUNK; ctx.fillRect(0,0,W,H); ctx.textAlign='left';
+    const d=D[key];
+    ctx.fillStyle=GRAY; ctx.font='11.5px Inter, sans-serif';
+    ctx.fillText('THE CLAIM',30,26);
+    ctx.fillStyle=INKC; ctx.font='15px Inter, sans-serif'; ctx.fillText(d.label,30,48);
+    const bar=(y,lab,pct,col,dash)=>{
+      const BW=W-60;
+      ctx.fillStyle=GRAY; ctx.font='11.5px Inter, sans-serif'; ctx.fillText(lab,30,y-8);
+      ctx.strokeStyle=BRD; ctx.lineWidth=1;
+      if(dash){ ctx.setLineDash([4,4]); } ctx.strokeRect(30,y,BW,18); ctx.setLineDash([]);
+      if(pct!==null){
+        ctx.fillStyle=col; ctx.fillRect(30,y,BW*pct/100,18);
+        ctx.fillStyle=INKC; ctx.font='13.5px Inter, sans-serif';
+        ctx.textAlign='right'; ctx.fillText(pct+'%',W-34,y+14); ctx.textAlign='left';
+      } else {
+        ctx.fillStyle=INKC; ctx.font='12.5px Inter, sans-serif';
+        wrapTxt(ctx,d.stat,BW-16).forEach((l,k)=>ctx.fillText(l,38,y+13+k*15));
+      }
+    };
+    bar(88,'the inside view — how confident you feel',conf,`rgba(${RGB_AMBER},0.42)`,false);
+    bar(150,'the outside view — the record of the class',d.rate,`rgba(${RGB_GRAY},0.46)`,d.rate===null);
+    ctx.fillStyle=INKC; ctx.font='14px Inter, sans-serif';
+    ctx.fillText(conf>=60 ? `You feel ${conf}% sure. The record is on the line above.`
+                          : `You feel ${conf}% sure — already unusual. Check that too.`,30,212);
+    ctx.fillStyle=GRAY; ctx.font='13px Inter, sans-serif';
+    wrapTxt(ctx,d.note,W-60).forEach((l,i)=>ctx.fillText(l,30,240+i*20));
+    ctx.fillStyle=AMBER; ctx.font='13.5px Inter, sans-serif';
+    ctx.fillText('→ '+d.alt,30,332);
+    ctx.fillStyle=FAINT; ctx.font='12px Inter, sans-serif';
+    ctx.fillText('“The advice to trust the numbers isn’t motivated by geekery; it’s motivated by humility.”',30,H-16);
+  }
+  draw();
+  const sl=fig.querySelector('input');
+  sl.oninput=()=>{conf=parseInt(sl.value,10);draw();};
+  fig.querySelectorAll('.ghost').forEach(b=>b.onclick=()=>{
+    setActive(fig,b); key=b.dataset.m; draw();});
+  return ()=>{};
+};
+
+/* ---------- III · 10/10/10 -------------------------------------------- */
+SIMS.tenten = fig=>{
+  const cv=fig.querySelector('canvas');
+  const W=700,H=400, ctx=fitCanvas(cv,W,H);
+  const DEC = 'You have been offered the job. It pays less, and you would have to move.';
+  const H3=[
+    {t:'10 minutes from now', feel:96, matter:20,
+     f:'Terrifying. You would have to tell them, and tell your parents, and admit you are doing it.',
+     m:'Almost nothing has actually happened yet.'},
+    {t:'10 months from now', feel:44, matter:66,
+     f:'The dread is gone either way. What is left is whether the work is any good.',
+     m:'You are living in the consequence daily — the commute, the money, the colleagues.'},
+    {t:'10 years from now', feel:9, matter:92,
+     f:'You will barely remember the fear. Nobody will ask how nervous you were.',
+     m:'This is the fork the rest of the decade came off.'}
+  ];
+  let i=0;
+  function draw(){
+    ctx.fillStyle=SUNK; ctx.fillRect(0,0,W,H); ctx.textAlign='left';
+    ctx.fillStyle=GRAY; ctx.font='11.5px Inter, sans-serif'; ctx.fillText('THE DECISION',30,26);
+    ctx.fillStyle=INKC; ctx.font='15px Inter, sans-serif';
+    wrapTxt(ctx,DEC,W-60).forEach((l,k)=>ctx.fillText(l,30,48+k*21));
+    const h=H3[i];
+    ctx.fillStyle=AMBER; ctx.font='15px Inter, sans-serif'; ctx.fillText(h.t,30,106);
+    const bar=(y,lab,pct,col,txt)=>{
+      const BW=W-60;
+      ctx.fillStyle=GRAY; ctx.font='11.5px Inter, sans-serif'; ctx.fillText(lab,30,y-8);
+      ctx.strokeStyle=BRD; ctx.lineWidth=1; ctx.strokeRect(30,y,BW,16);
+      ctx.fillStyle=col; ctx.fillRect(30,y,BW*pct/100,16);
+      ctx.fillStyle=INKC; ctx.font='12.5px Inter, sans-serif';
+      wrapTxt(ctx,txt,BW).forEach((l,k)=>ctx.fillText(l,30,y+34+k*18));
+    };
+    bar(138,'how intensely it feels',h.feel,`rgba(${RGB_AMBER},0.42)`,h.f);
+    bar(232,'how much it actually matters',h.matter,`rgba(${RGB_GRAY},0.46)`,h.m);
+    ctx.fillStyle=i===2?INKC:GRAY; ctx.font='13px Inter, sans-serif';
+    ctx.fillText(i===2 ? 'The bars have swapped places. Nothing about the facts changed.'
+                       : 'Move forward and watch which bar moves.',30,344);
+    ctx.fillStyle=FAINT; ctx.font='12px Inter, sans-serif';
+    wrapTxt(ctx,'10/10/10 “doesn’t presuppose that the long-term perspective is the right one. It simply ensures that short-term emotion isn’t the only voice at the table.”',W-60)
+      .forEach((l,k)=>ctx.fillText(l,30,368+k*16));
+  }
+  draw();
+  fig.querySelectorAll('.ghost').forEach(b=>b.onclick=()=>{
+    setActive(fig,b); i=parseInt(b.dataset.m,10); draw();});
+  return ()=>{};
+};
+
+/* ---------- IV · bookending ------------------------------------------- */
+SIMS.bookend = fig=>{
+  const cv=fig.querySelector('canvas');
+  const W=700,H=400, ctx=fitCanvas(cv,W,H);
+  const STEPS=[
+    {n:'nothing yet', w:0,  lab:'Estimate the future as a single number.', pct:null},
+    {n:'a point estimate', w:0.06, lab:'A point. Confidently wrong at a rate you cannot see.', pct:45},
+    {n:'both bookends', w:0.70, lab:'Now the dire end and the rosy end, before anything else.', pct:70},
+    {n:'and the middle', w:0.96, lab:'Then add the likely case as well — a third estimate, not a reshuffle of the first two.', pct:96}
+  ];
+  let i=0;
+  function draw(){
+    ctx.fillStyle=SUNK; ctx.fillRect(0,0,W,H); ctx.textAlign='left';
+    const X0=40,X1=W-40,LY=140;
+    ctx.fillStyle=GRAY; ctx.font='11.5px Inter, sans-serif';
+    ctx.fillText('THE RANGE OF FUTURES THAT COULD ACTUALLY HAPPEN',30,26);
+    /* the honest range */
+    ctx.strokeStyle=BRD; ctx.lineWidth=1; ctx.setLineDash([4,4]);
+    ctx.strokeRect(X0,LY-26,X1-X0,52); ctx.setLineDash([]);
+    ctx.fillStyle=FAINT; ctx.font='11.5px Inter, sans-serif';
+    ctx.fillText('an honest range',X0+6,LY-34);
+    const s=STEPS[i];
+    if(i>0){
+      const w=(X1-X0)*s.w, cx=(X0+X1)/2;
+      ctx.fillStyle=`rgba(${RGB_AMBER},0.30)`;
+      ctx.fillRect(cx-w/2,LY-20,Math.max(w,3),40);
+      ctx.strokeStyle=AMBER; ctx.lineWidth=2;
+      ctx.strokeRect(cx-w/2,LY-20,Math.max(w,3),40);
+      if(i>=2){
+        ctx.fillStyle=AMBER; ctx.font='11.5px Inter, sans-serif';
+        ctx.fillText('dire',cx-w/2,LY+36); ctx.textAlign='right';
+        ctx.fillText('rosy',cx+w/2,LY+36); ctx.textAlign='left';
+      }
+      if(i>=3){ ctx.strokeStyle=INKC; ctx.lineWidth=2;
+        ctx.beginPath(); ctx.moveTo(cx,LY-20); ctx.lineTo(cx,LY+20); ctx.stroke();
+        ctx.fillStyle=INKC; ctx.font='11.5px Inter, sans-serif'; ctx.fillText('likely',cx+6,LY-26); }
+    }
+    ctx.fillStyle=INKC; ctx.font='15px Inter, sans-serif';
+    ctx.fillText(s.pct===null?'Press “add the next estimate”.':`${s.pct}% of an honest range`,30,224);
+    ctx.fillStyle=GRAY; ctx.font='13.5px Inter, sans-serif';
+    wrapTxt(ctx,s.lab,W-60).forEach((l,k)=>ctx.fillText(l,30,252+k*20));
+    if(i>=3){
+      ctx.fillStyle=INKC; ctx.font='13px Inter, sans-serif';
+      wrapTxt(ctx,'Four percent from perfect. Each stage added an estimate rather than rearranging one — the best guess “tapped a third pool of knowledge.”',W-60)
+        .forEach((l,k)=>ctx.fillText(l,30,300+k*19));
+    }
+    ctx.fillStyle=FAINT; ctx.font='12px Inter, sans-serif';
+    ctx.fillText('45 / 70 / 96 percent are the measured figures. “The future isn’t a point; it’s a range.”',30,H-16);
+  }
+  draw();
+  fig.querySelectorAll('.ghost').forEach(b=>b.onclick=()=>{
+    i = b.dataset.a==='next' ? Math.min(3,i+1) : 0; draw();});
+  return ()=>{};
+};
+
+/* ---------- IV · tripwires -------------------------------------------- */
+SIMS.tripwire = fig=>{
+  const cv=fig.querySelector('canvas');
+  const W=700,H=410, ctx=fitCanvas(cv,W,H);
+  const MODES={
+    none:{fire:null, lab:'Nothing is set. You notice at month 22, when it is undeniable.',
+      note:'“The alarm bells… were never insistent enough to overcome the seductive voice that kept telling Kodak execs, The film business is still lucrative.”', notice:22},
+    date:{fire:9, lab:'A date: “we review this in month 9, whatever it looks like.”',
+      note:'“Notice how easy it is to turn a hopeful prediction into an early-warning alarm system.”', notice:9},
+    budget:{fire:12, lab:'A partition: the money is in two envelopes, not one.',
+      note:'Crossing into the second envelope “will hurt a bit, because she’ll know that she’s blowing through her mental budget.”', notice:12},
+    pattern:{fire:6, lab:'A pattern: “call the team if you are worried”, no number required.',
+      note:'Some tripwires “aren’t tripped by clear-cut measures like budgets or dates or partitions; they’re tripped by pattern recognition.”', notice:6}
+  };
+  let key='none';
+  function draw(){
+    ctx.fillStyle=SUNK; ctx.fillRect(0,0,W,H); ctx.textAlign='left';
+    const X0=44,X1=W-40,YB=190,YT=54,M=24;
+    const px=m=>X0+(m/M)*(X1-X0);
+    const val=m=>1-Math.pow(m/M,1.6)*0.92;      /* slow, smooth decline */
+    const py=v=>YB-v*(YB-YT);
+    ctx.fillStyle=GRAY; ctx.font='11.5px Inter, sans-serif';
+    ctx.fillText('A PROJECT QUIETLY GOING WRONG, MONTH BY MONTH',30,26);
+    ctx.strokeStyle=BRD; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(X0,YB); ctx.lineTo(X1,YB); ctx.stroke();
+    ctx.fillStyle=FAINT; ctx.font='11px Inter, sans-serif';
+    for(let m=0;m<=M;m+=6){ ctx.fillText('m'+m, px(m)-8, YB+18); }
+    /* the decline */
+    ctx.strokeStyle=GRAY; ctx.lineWidth=2.4; ctx.beginPath();
+    for(let m=0;m<=M;m++){ const x=px(m),y=py(val(m)); m?ctx.lineTo(x,y):ctx.moveTo(x,y); }
+    ctx.stroke();
+    const md=MODES[key], nm=md.notice;
+    /* salvaged vs lost */
+    ctx.fillStyle=`rgba(${RGB_AMBER},0.16)`;
+    ctx.fillRect(X0,YT,px(nm)-X0,YB-YT);
+    ctx.strokeStyle=AMBER; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(px(nm),YT-8); ctx.lineTo(px(nm),YB+6); ctx.stroke();
+    ctx.fillStyle=AMBER; ctx.font='12.5px Inter, sans-serif';
+    const nearEnd = px(nm) > W-190;
+    ctx.textAlign = nearEnd?'right':'left';
+    ctx.fillText('you notice here', px(nm)+(nearEnd?-6:6), YT-14);
+    ctx.textAlign='left';
+    ctx.fillStyle=INKC; ctx.font='15px Inter, sans-serif';
+    ctx.fillText(`You reconsider at month ${nm} of 24.`,30,242);
+    ctx.fillStyle=GRAY; ctx.font='13.5px Inter, sans-serif';
+    wrapTxt(ctx,md.lab,W-60).forEach((l,k)=>ctx.fillText(l,30,270+k*20));
+    ctx.fillStyle=FAINT; ctx.font='12.5px Inter, sans-serif';
+    wrapTxt(ctx,md.note,W-60).forEach((l,k)=>ctx.fillText(l,30,314+k*18));
+    ctx.fillStyle=key==='none'?INKC:GRAY; ctx.font='13px Inter, sans-serif';
+    ctx.fillText(key==='none' ? '“Tripwires tell you when to jump.”'
+                              : 'Set before you were invested — which is the only time you could have.',30,H-30);
+    ctx.fillStyle=FAINT; ctx.font='12px Inter, sans-serif';
+    ctx.fillText('The curve is illustrative. The book quantifies no rate of decline.',30,H-12);
+  }
+  draw();
+  fig.querySelectorAll('.ghost').forEach(b=>b.onclick=()=>{
+    setActive(fig,b); key=b.dataset.m; draw();});
+  return ()=>{};
+};
+
+/* ---------- IV · WRAP ------------------------------------------------- */
+SIMS.wrap = fig=>{
+  const cv=fig.querySelector('canvas');
+  const W=700,H=430, ctx=fitCanvas(cv,W,H);
+  const ROWS=[
+    ['You encounter a choice','Narrow framing','Widen Your Options','How can you expand your set of choices?'],
+    ['You analyse your options','The confirmation bias','Reality-Test Your Assumptions','How can you get outside your head and collect information you can trust?'],
+    ['You make a choice','Short-term emotion','Attain Distance Before Deciding','How can you overcome the emotion that will fade?'],
+    ['Then you live with it','Overconfidence','Prepare to Be Wrong','How can you plan for an uncertain future?']
+  ];
+  let n=0;
+  function draw(){
+    ctx.fillStyle=SUNK; ctx.fillRect(0,0,W,H); ctx.textAlign='left';
+    ctx.fillStyle=GRAY; ctx.font='11.5px Inter, sans-serif';
+    ctx.fillText('THE STAGE',30,26); ctx.fillText('THE VILLAIN',214,26); ctx.fillText('THE STEP',420,26);
+    ROWS.forEach((r,i)=>{
+      const y=44+i*74, live=i<n;
+      ctx.strokeStyle=live?AMBER:BRD; ctx.lineWidth=1;
+      ctx.strokeRect(30,y,W-60,56);
+      if(live){ ctx.fillStyle=`rgba(${RGB_AMBER},0.13)`; ctx.fillRect(30,y,W-60,56); }
+      ctx.font='13px Inter, sans-serif'; ctx.fillStyle=live?INKC:FAINT;
+      wrapTxt(ctx,r[0],168).forEach((l,k)=>ctx.fillText(l,40,y+20+k*17));
+      ctx.fillStyle=live?GRAY:FAINT;
+      wrapTxt(ctx,r[1],186).forEach((l,k)=>ctx.fillText(l,214,y+20+k*17));
+      ctx.fillStyle=live?AMBER:FAINT; ctx.font='13.5px Inter, sans-serif';
+      wrapTxt(ctx,r[2],250).forEach((l,k)=>ctx.fillText(l,420,y+20+k*17));
+      if(live){ ctx.fillStyle=GRAY; ctx.font='11.5px Inter, sans-serif';
+        wrapTxt(ctx,r[3],250).forEach((l,k)=>ctx.fillText(l,420,y+38+k*14)); }
+    });
+    ctx.fillStyle=n>=4?INKC:GRAY; ctx.font='13.5px Inter, sans-serif';
+    ctx.fillText(n>=4 ? 'W · R · A · P — “a process that wraps around your usual way of making decisions.”'
+                      : 'Press “step through”.',30,H-18);
+  }
+  draw();
+  fig.querySelectorAll('.ghost').forEach(b=>b.onclick=()=>{
+    n = b.dataset.a==='next' ? Math.min(4,n+1) : 0; draw();});
+  return ()=>{};
+};
+
+/* ============================================================
+   BOOT
+   ============================================================ */
+syncNav();
+overviewCam(false);
+
+
+/* ---- light / dark, shared with the main site ---- */
+document.getElementById('themeBtn').addEventListener('click', function(){
+  const r = document.documentElement;
+  const next = r.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  r.setAttribute('data-theme', next);
+  try { localStorage.setItem('theme', next); } catch(e) {}
+  syncSimColours();
+  if (focusId) openIdea(focusId);   // repaint the open simulation
+});
+</script>
+
+<script>
+/* Chart switcher: jump straight to another constellation. */
+(function(){var s=document.getElementById('chartSwitch');
+if(s)s.addEventListener('change',function(){if(s.value)window.location.href=s.value;});})();
+</script>
+</body>
+</html>
