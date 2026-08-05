@@ -73,7 +73,7 @@ This website is my digital garden.
 
 <h2 class="secth" id="around-here">Around here</h2>
 
-<div class="blurbs">
+<div class="blurbs about-blurbs">
   <div>
     <h3><a href="{{ site.baseurl }}/blog">Writing</a></h3>
     <p>Essays and notes on attention, people, work, and making sense of things.</p>
