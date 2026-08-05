@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+/* Theme is shared with the main site: same origin, same localStorage key. */
+(function(){try{var t=localStorage.getItem('theme');
+if(!t)t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+document.documentElement.setAttribute('data-theme',t);}
+catch(e){document.documentElement.setAttribute('data-theme','light');}})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<title>Attachment: Bonds, Clinging & the Grip - Orrery</title>
+<style>
+:root{
+  /* site parity: --ground/--surface-* mirror the main site's --bg/--bg-2/--chip */
+  --ground:#fbf8f3; --surface-sunk:#f2ede4; --surface-raised:#fdfcf9;
+  --border:#e3dccf; --border-strong:#d2c8b5;
+  --ink:#211f1c; --ink-strong:#14120f; --ink-muted:#5c5751; --ink-faint:#8c867f;
+  --accent:#8f6220; --accent-dim:#c2a47c; --accent-wash:rgba(143,98,32,0.08);
+  --accent-rgb:143,98,32;
+  --font:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --r:4px; --reader-w:min(760px, 58vw); --move-fast:150ms ease;
+  --ink-body:#2b2823; --ink-soft:#332f29;
+  --hdr-fade:linear-gradient(180deg, rgba(251,248,243,.96), rgba(251,248,243,.75), transparent);
+  --vp-bg:radial-gradient(ellipse at 50% 40%, #fdfbf7 0%, #fbf8f3 55%, #f2ede4 100%);
+  --btn-bg:rgba(253,252,249,.92);
+  --line-soft:rgba(33,31,28,0.10); --line-flow:rgba(143,98,32,0.45);
+  --sim-ink:#3a352e; --sim-gray:#8c867f; --sim-faint:#b3ac9f;
+  --sim-amber:#8f6220; --sim-sunk:#f2ede4; --sim-brd:#ddd4c3;
+  --grid-1:rgba(110,95,65,.13); --grid-2:rgba(110,95,65,.07);
+  --shadow:rgba(90,75,50,.16);
+}
+
+/* Night sky, sharing the main site's dark surfaces exactly. */
+html[data-theme="dark"]{
+  --ground:#1a1a1a; --surface-sunk:#232322; --surface-raised:#262523;
+  --border:#2e2e2e; --border-strong:#3e3e3b;
+  --ink:#e8e6e3; --ink-strong:#f5f3f0; --ink-muted:#a5a09a; --ink-faint:#7d7873;
+  --accent:#d9a25e; --accent-dim:#8b6c41; --accent-wash:rgba(217,162,94,0.10);
+  --accent-rgb:217,162,94;
+  --ink-body:#dddad5; --ink-soft:#d3cfc9;
+  --hdr-fade:linear-gradient(180deg, rgba(26,26,26,.96), rgba(26,26,26,.75), transparent);
+  --vp-bg:radial-gradient(ellipse at 50% 40%, #202020 0%, #1a1a1a 55%, #141414 100%);
+  --btn-bg:rgba(38,37,35,.92);
+  --line-soft:rgba(232,230,227,0.10); --line-flow:rgba(217,162,94,0.45);
+  --sim-ink:#e8e6e3; --sim-gray:#9d988f; --sim-faint:#6b6660;
+  --sim-amber:#d9a25e; --sim-sunk:#232322; --sim-brd:#393936;
+  --grid-1:rgba(210,203,190,.09); --grid-2:rgba(210,203,190,.045);
+  --shadow:rgba(0,0,0,.5);
+}
+html{color-scheme:light}
+html[data-theme="dark"]{color-scheme:dark}
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{height:100%; overflow:hidden; background:var(--ground); color:var(--ink);
+  font-family:var(--font); font-size:15.5px; line-height:1.75; overscroll-behavior:none;}
+h1,h2,h3{color:var(--ink-strong); font-weight:600; line-height:1.3;}
+.kicker{font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-muted); font-weight:500;}
+
+/* header - all navigation lives top right */
+#hdr{position:fixed; top:0; left:0; right:0; z-index:40; height:56px;
+  display:flex; align-items:center; gap:1.1rem; padding:0 1.4rem;
+  background:var(--hdr-fade);
+  pointer-events:none; transition:right .3s cubic-bezier(.25,.7,.3,1);}
+body.reader-open #hdr{right:var(--reader-w);}
+#hdr>*{pointer-events:auto;}
+#hdr .t{font-size:15px; font-weight:600; color:var(--ink-strong);}
+#hdr .sub{font-size:11.5px; color:var(--ink-muted);}
+#hdr .spacer{flex:1;}
+#count{font-size:12px; color:var(--ink-faint); white-space:nowrap;}
+.hbtn{background:var(--btn-bg); border:1px solid var(--border-strong); color:var(--ink-muted);
+  font-family:var(--font); font-size:12.5px; padding:6px 13px; border-radius:var(--r); cursor:pointer;
+  transition:all var(--move-fast); white-space:nowrap;}
+.hbtn:hover{color:var(--ink); border-color:var(--ink-muted);}
+.hbtn:disabled{opacity:.35; cursor:default;}
+#navcluster{display:flex; align-items:center; gap:2px; opacity:0; pointer-events:none;
+  transition:opacity .2s ease;}
+#navcluster.on{opacity:1; pointer-events:auto;}
+#navcluster .hbtn{background:none; border:none; font-size:19px; font-weight:300;
+  color:var(--ink-faint); padding:1px 8px; line-height:1.2; border-radius:5px;}
+#navcluster .hbtn:hover{color:var(--ink); background:var(--accent-wash);}
+#navcluster .hbtn:disabled{opacity:.28; background:none;}
+
+/* viewport & sky */
+#vp{position:fixed; inset:0; cursor:grab; touch-action:none;
+  background:var(--vp-bg);}
+#vp.dragging{cursor:grabbing;}
+#vp.dragging, #vp.dragging *{user-select:none;}
+#world{position:absolute; top:0; left:0; width:2750px; height:1750px;
+  transform-origin:0 0; will-change:transform;}
+#world::before{content:''; position:absolute; inset:0; pointer-events:none;
+  background-image:radial-gradient(circle, var(--grid-1) 1.2px, transparent 1.2px),
+                   radial-gradient(circle, var(--grid-2) 1px, transparent 1px);
+  background-size:380px 380px, 150px 150px;
+  background-position:0 0, 70px 100px; opacity:.8;}
+
+/* constellation names */
+.tlab{position:absolute; pointer-events:auto; cursor:pointer; user-select:none; text-align:center;}
+.tlab .big{font-size:40px; font-weight:500; letter-spacing:.5em; line-height:1.3;
+  text-transform:uppercase; white-space:nowrap;}
+.tlab .sum{text-shadow:0 0 5px var(--ground),0 0 5px var(--ground),0 0 3px var(--ground);
+  font-size:19px; color:var(--ink-muted); margin-top:.5em; letter-spacing:.18em; text-transform:uppercase;}
+.tlab:hover .big{filter:brightness(1.35);}
+
+/* stars */
+.mk{position:absolute; cursor:pointer; user-select:none;
+  display:flex; gap:14px; width:330px; align-items:flex-start;}
+.mk .dot{border-radius:50%; flex-shrink:0;
+  transition:transform .2s ease, box-shadow .4s ease, opacity .4s ease, background .4s ease;}
+.mk:hover .dot{transform:scale(1.3);}
+.mk .dtext{min-width:0; padding-top:1px;}
+.mk .lbl{text-shadow:0 0 5px var(--ground),0 0 5px var(--ground),0 0 3px var(--ground),0 0 3px var(--ground);
+  font-size:19px; color:var(--ink); font-weight:500; line-height:1.3;}
+.mk .lbl .seq{font-size:12px; color:var(--ink-faint); font-weight:400; margin-right:.5em;}
+.mk .ess{text-shadow:0 0 5px var(--ground),0 0 5px var(--ground),0 0 3px var(--ground),0 0 3px var(--ground);
+  font-size:14px; color:var(--ink-muted); line-height:1.45; margin-top:4px; max-width:290px;
+  opacity:0; transition:opacity .3s ease;}
+.mk.showess .ess{opacity:1;}
+.mk .sims-badge{font-size:12px; color:var(--accent-dim); margin-top:3px; display:none;}
+.mk.hasim .sims-badge{display:block;}
+.mk.focused .dot{transform:scale(1.35);}
+.mk.focused .lbl{color:var(--ink-strong);}
+.mk.neighbor .lbl{color:var(--ink-strong);}
+.mk.dimmed{opacity:.35;}
+
+/* connection overlay - few, directional, labeled plainly */
+#tsvg, #astsvg, #flowsvg{position:absolute; top:0; left:0; pointer-events:none; overflow:visible;}
+@keyframes dashdrift{to{stroke-dashoffset:-64;}}
+.tline{animation:dashdrift 6s linear infinite;}
+.tlabel{position:absolute; transform:translate(-50%,-50%); background:var(--ground);
+  border:1px solid var(--accent-dim); color:var(--accent); border-radius:12px;
+  font-size:12px; letter-spacing:.06em; padding:2px 11px; white-space:nowrap; cursor:pointer;
+  pointer-events:auto; transition:background var(--move-fast); text-transform:uppercase;}
+.tlabel:hover{background:var(--accent-wash);}
+
+/* ---------- READER ---------- */
+#reader{position:fixed; top:0; right:calc(-1 * var(--reader-w) - 20px); width:var(--reader-w);
+  height:100%; z-index:45; background:var(--surface-raised);
+  border-left:1px solid var(--border); display:flex; flex-direction:column;
+  transition:right .3s cubic-bezier(.25,.7,.3,1);
+  box-shadow:-24px 0 70px var(--shadow);}
+#reader.open{right:0;}
+#reader .top{padding:1.5em 2.2em 1em; border-bottom:1px solid var(--border); position:relative;}
+#reader .rtools{position:absolute; top:13px; right:15px; display:flex; align-items:center; gap:9px;}
+#reader .top .typechip{max-width:calc(100% - 108px);}
+#reader .close{background:none; border:none; padding:0 2px; line-height:1;
+  color:var(--ink-faint); font-size:17px; cursor:pointer;}
+#reader .close:hover{color:var(--ink);}
+#reader h2{font-size:24px; margin:.45em 0 .3em;}
+#reader .terrline{font-size:11.5px; color:var(--ink-faint); margin-top:2px;}
+#rbody{flex:1; overflow-y:auto; padding:1.6em 2.2em 2.5em;}
+#rbody::-webkit-scrollbar{width:6px;}
+#rbody::-webkit-scrollbar-thumb{background:var(--border-strong); border-radius:3px;}
+#rbody>*{max-width:66ch;}
+/* block-level children span the column; the reader width holds the measure */
+#rbody>.ideablock, #rbody>.linkrow{max-width:none;}
+.hook{font-size:18.5px; color:var(--ink-strong); line-height:1.65;
+  padding-left:1em; border-left:2px solid var(--accent-dim); margin-bottom:1.1em;}
+.story{font-size:15.5px; color:var(--ink-body); margin-top:.9em;}
+/* the idea block — the idea / how it works / failure mode / description */
+.ideablock{border:1px solid var(--border); border-radius:10px;
+  background:var(--surface-sunk); overflow:hidden;}
+.ideablock .ib{padding:1.15em 1.35em; border-top:1px solid var(--border);}
+.ideablock .ib:first-child{border-top:none;}
+.ideablock .kicker{display:block; margin-bottom:.45em; color:var(--accent);}
+.ideablock .term{color:var(--ink-strong); font-weight:600; font-size:17px; display:block;}
+.ideablock .def{font-size:14.5px; color:var(--ink-soft); margin-top:.25em;}
+.ideablock .txt{font-size:15px; color:var(--ink-body);}
+.ideablock .hook{margin-bottom:0;}
+.ideablock figure.frame{background:var(--surface-raised);}
+.typechip{display:inline-block; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-muted); border:1px solid var(--border-strong); border-radius:3px; padding:1px 8px;}
+details.fold{margin:1.2em 0 0; border:1px solid var(--border); border-radius:var(--r); background:var(--surface-sunk);}
+details.fold summary{cursor:pointer; padding:.6em 1.05em; color:var(--ink-muted);
+  font-size:13px; list-style:none; user-select:none;}
+details.fold summary::-webkit-details-marker{display:none;}
+details.fold summary::before{content:'+  '; color:var(--accent); font-weight:500;}
+details.fold[open] summary::before{content:'−  ';}
+details.fold summary:hover{color:var(--ink);}
+details.fold .inner{padding:0 1.05em .9em; font-size:14.5px; color:var(--ink-soft);}
+.named{margin-top:1.5em; background:var(--surface-sunk); border:1px solid var(--border);
+  border-radius:8px; padding:1em 1.3em;}
+.named .kicker{display:block; margin-bottom:.35em;}
+.named b{color:var(--ink-strong); font-weight:600; font-size:16px;}
+.named .def{font-size:14.5px; color:var(--ink-soft); margin-top:.2em;}
+.sowhat{margin-top:1.4em; font-size:15px; color:var(--ink-body);}
+.sowhat .kicker{display:block; margin-bottom:.3em;}
+.closure{margin-top:1.5em; border:1px solid var(--accent-dim); border-radius:8px;
+  background:var(--accent-wash); padding:1em 1.3em;}
+.closure .kicker{color:var(--accent); display:block; margin-bottom:.3em;}
+.closure .txt{font-size:14.5px; color:var(--ink-body); line-height:1.65;}
+.linkrow{margin-top:1.6em; border-top:1px solid var(--border); padding-top:1em;
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:.6em 2em;}
+.lgroup .kicker{display:block; margin-bottom:.25em;}
+.lgroup a{display:block; font-size:14px; padding:.2em 0 .45em; color:var(--ink-soft); cursor:pointer; text-decoration:none;}
+.lgroup .kicker .ar{font-size:19px; line-height:1; color:var(--accent); letter-spacing:0;}
+.lgroup a .t{border-bottom:1px dotted transparent; transition:border-color var(--move-fast); color:var(--ink);}
+.lgroup a:hover .t{border-bottom-color:var(--accent);}
+.lgroup a .why{display:block; font-size:12px; color:var(--ink-faint); line-height:1.5;}
+.nextbtn{margin-top:1.8em; width:100%; max-width:66ch; text-align:left;
+  background:var(--surface-sunk); border:1px solid var(--border-strong); border-radius:8px;
+  color:var(--ink); font-family:var(--font); font-size:14.5px; padding:.9em 1.3em; cursor:pointer;
+  transition:all var(--move-fast);}
+.nextbtn:hover{border-color:var(--accent-dim); background:var(--accent-wash);}
+.nextbtn .k{color:var(--ink-faint); font-size:11px; letter-spacing:.12em; text-transform:uppercase;
+  display:block; margin-bottom:.15em;}
+.nextbtn .arr{color:var(--accent); float:right;}
+
+/* sim figure */
+figure.frame{background:var(--surface-sunk); border:1px solid var(--border); border-radius:var(--r);
+  margin:1.3em 0 0; overflow:hidden;}
+figure.frame canvas{width:100%; display:block;}
+figure.frame .controls{display:flex; gap:8px; padding:8px 12px; border-top:1px solid var(--border);
+  align-items:center; flex-wrap:wrap;}
+figure.frame .controls .cl{font-size:11.5px; color:var(--ink-faint);}
+figure.frame figcaption{padding:7px 13px 10px; font-size:12.5px; color:var(--ink-muted); line-height:1.55;}
+.ghost{background:none; border:1px solid var(--border-strong); color:var(--ink-muted);
+  font-family:var(--font); font-size:12px; padding:3px 11px; border-radius:var(--r); cursor:pointer;
+  transition:all var(--move-fast);}
+.ghost:hover{color:var(--ink); border-color:var(--ink-muted);}
+.ghost.active{color:var(--accent); border-color:var(--accent-dim); background:var(--accent-wash);}
+figure.frame input[type=range]{flex:1; min-width:100px; accent-color:var(--accent);}
+
+@media(max-width:760px){ :root{--reader-w:100vw;} }
+
+/* ---- site exits + chart switcher (present on every chart) ---- */
+#hdr .sub a{color:var(--accent);text-decoration:none;border-bottom:1px solid transparent}
+#hdr .sub a:hover{border-bottom-color:var(--accent)}
+#hdr .sub s{text-decoration:none;color:var(--ink-faint);opacity:.75;margin:0 4px}
+#chartSwitch{-webkit-appearance:none;appearance:none;padding-right:26px;max-width:190px;
+  background-image:linear-gradient(45deg,transparent 50%,var(--ink-muted) 50%),
+                   linear-gradient(135deg,var(--ink-muted) 50%,transparent 50%);
+  background-position:calc(100% - 14px) 52%,calc(100% - 9.5px) 52%;
+  background-size:5px 5px,5px 5px;background-repeat:no-repeat}
+#chartSwitch:hover{color:var(--ink-strong);border-color:var(--accent-dim)}
+@media (max-width:700px){#hdr .sub{font-size:10.5px}#chartSwitch{max-width:118px}}
+
+/* ---- reader footer: step nav lives bottom-right, inside the panel ---- */
+#rfoot{display:flex;align-items:center;justify-content:flex-end;gap:.75rem;
+  padding:.5rem 2.2em .6rem;border-top:1px solid var(--border);
+  background:var(--surface-raised);flex:none;border-top-color:transparent}
+#rfoot:has(#navcluster.on){border-top-color:var(--border)}
+#reader #navcluster{background:var(--surface-sunk);border:1px solid var(--border-strong);
+  border-radius:7px;padding:1px 2px}
+/* Forward affordance sits on the right edge, where the thumb already is.
+   Needs #rbody> to beat the (1,0,0) of `#rbody > *`. */
+#rbody>.nextbtn{width:auto;min-width:min(100%,24ch);max-width:min(100%,44ch);
+  margin-left:auto;margin-right:0;display:block}
+@media (max-width:700px){
+  #rfoot{padding:.45rem 1.2em .55rem}
+  #rbody>.nextbtn{max-width:100%}
+}
+
+/* ---- theming: lines, marker, toggle ---- */
+.lnk-base{stroke:var(--line-soft)}
+.lnk-flow{stroke:var(--line-flow)}
+#tsvg marker path{fill:var(--accent)}
+/* band hues are mid-tone and kept in both themes; lift them on dark ground */
+html[data-theme="dark"] #tsvg line,
+html[data-theme="dark"] #astsvg line{stroke-opacity:.55}
+#themeBtn{font-size:14px;line-height:1;padding:5px 11px}
+</style>
+</head>
+<body>
+
+<div id="hdr">
+  <div>
+    <div class="t">Attachment</div>
+    <div class="sub"><a href="/">Rohan's space</a><s>/</s><a href="/orrery">Orrery</a></div>
+  </div>
+  <div class="spacer"></div>
+  <select class="hbtn" id="chartSwitch" aria-label="Jump to another chart"><option value="">Other charts&hellip;</option><option value="/orrery/building-taste.html">Building Taste</option><option value="/orrery/chaos-luck-ergodicity.html">Chaos, Luck &amp; Ergodicity</option><option value="/orrery/decision-theory.html">Decision Theory</option><option value="/orrery/decisive.html">Decisive</option><option value="/orrery/desire.html">Desire, from first principles</option><option value="/orrery/first-principles-thinking.html">First Principles Thinking</option><option value="/orrery/how-to-know-a-person.html">How to Know a Person</option><option value="/orrery/interpersonal-communication.html">Interpersonal &amp; Communication Skills</option><option value="/orrery/never-split-the-difference.html">Never Split the Difference</option><option value="/orrery/nonviolent-communication.html">Nonviolent Communication</option><option value="/orrery/systems-thinking.html">Systems Thinking</option><option value="/orrery/course-of-love.html">The Course of Love</option><option value="/orrery/the-power-law.html">The Power Law</option><option value="/orrery/the-school-of-life.html">The School of Life</option><option value="/orrery/thinking-fast-and-slow.html">Thinking, Fast and Slow</option><option value="/orrery/thinking-in-bets.html">Thinking in Bets</option><option value="/orrery/why-we-sleep.html">Why We Sleep</option></select>
+  <button class="hbtn" id="themeBtn" type="button" title="Light / dark" aria-label="Toggle light or dark">◐</button>
+  <button class="hbtn" id="overviewBtn">Overview&nbsp;·&nbsp;Esc</button>
+</div>
+
+<div id="vp"><div id="world"></div></div>
+
+<div id="reader">
+  <div class="top">
+    <div class="rtools">
+      <div id="navcluster">
+        <button class="hbtn" id="navPrev" title="previous idea">‹</button>
+        <button class="hbtn" id="navNext" title="next idea">›</button>
+      </div>
+      <button class="close" id="rClose" title="close">✕</button>
+    </div>
+    <span class="typechip" id="rChip"></span>
+    <h2 id="rTitle"></h2>
+    <div class="terrline" id="rTerr"></div>
+  </div>
+  <div id="rbody"></div>
+</div>
+
+<script>
+'use strict';
+
+let INKC, GRAY, FAINT, AMBER, SUNK, BRD;
+let RGB_INK, RGB_GRAY, RGB_FAINT, RGB_AMBER;
+/* Canvas takes no var(), so pull the resolved values and refresh on theme flip.
+   Animated sims pick these up on their next frame; static ones are remounted. */
+function syncSimColours(){
+  const cs = getComputedStyle(document.documentElement);
+  const v = n => cs.getPropertyValue(n).trim();
+  const trip = h => { h = h.replace('#','').trim();
+    if (h.length === 3) h = h.split('').map(c=>c+c).join('');
+    return [0,2,4].map(i=>parseInt(h.slice(i,i+2),16)).join(','); };
+  INKC=v('--sim-ink'); GRAY=v('--sim-gray'); FAINT=v('--sim-faint');
+  AMBER=v('--sim-amber'); SUNK=v('--sim-sunk'); BRD=v('--sim-brd');
+  RGB_INK=trip(INKC); RGB_GRAY=trip(GRAY); RGB_FAINT=trip(FAINT); RGB_AMBER=trip(AMBER);
+}
+syncSimColours();
+
+/* ============================================================
+   CONTENT v2 - the reader shows one block per idea, definition-first:
+   the idea (term+def) → how it works (mech) → failure mode (sowhat) →
+   description (hook → story → sim).
+   Connections: ≤4 per idea, as arrows — ← builds on, → leads to, ▶ see it live.
+   ============================================================ */
+const N = {
+
+a1:{type:"axiom", title:"A body must be budgeted", x:1259, y:512,
+  ess:"Your first job was never thinking. It was keeping a body solvent.",
+  hook:"Before you had a single thought about anyone, your brain had one job — what was it?",
+  story:"Keeping a body alive: glucose, temperature, oxygen, water, all inside narrow survivable ranges. It cannot do this by reacting, because reacting is too late — resting muscle takes about 1.2 litres of oxygenated blood a minute while peak effort needs about 22, nearly twenty times more, which cardiac output alone cannot supply. So the brain forecasts demand and borrows in advance, taking blood from the gut and the kidney before it is needed.",
+  mech:"Sterling calls this allostasis — stability through change, with setpoints that move — as against homeostasis correcting error against fixed ones. The consequence is that regulation is a budget-allocation problem, not an error-correction problem, and a budgeting brain has no notion of simply returning to baseline: it must forecast, prioritise and borrow. What you feel as mood is largely the readout of that ledger. Barrett describes affect — valence, arousal, effort — as a barometer of the brain's beliefs about the energetic state of the body.",
+  term:"Allostasis", def:"predictive regulation of the body's budget, with setpoints that move to meet forecast demand.",
+  sowhat:"Almost everything written about attachment starts at feelings. Start there and the rest of this is unintelligible, because feelings are the dashboard and not the engine.",
+  builds:[], leads:[["a2","and an infant cannot do this alone"]], live:[["b1-lorenz-story","what borrowing actually buys"]]},
+
+a2:{type:"axiom", title:"The infant has no hands", x:1057, y:627,
+  ess:"A newborn can feel a deficit and do almost nothing about it.",
+  hook:"A hungry infant cries and kicks, and neither act produces food — so why would evolution build that?",
+  story:"Because the cry is not an attempt at food. It is an attempt at a person. Fotopoulou and Tsakiris put it precisely: predictive regulation has two arms, updating your model and acting on the world, and the infant has almost no motor arm for its own interior — it can suck a thumb, and that is close to the whole repertoire.",
+  mech:"So for anything involving intake, temperature or arousal, the action arm of the infant's regulation is another person's body — which is why they conclude that the origins of interoceptive inference are always, by necessity, social, and that hunger, satiation, pain and relief therefore have social origins. Atzil and Barrett add a constraint: physical care alone is not enough, the external regulator has to be a predicting agent, which is why postpartum depression disrupts development even where physical care continues. Note what this is not. It is not the claim that babies like company; it is the claim that the loop does not close inside the child.",
+  term:"Borrowed regulation", def:"an organism whose regulatory loop is completed by another organism's actions.",
+  sowhat:"This is why needing people is not a character weakness to be trained out. For a human infant it is an anatomical fact, and the adult version inherits the architecture.",
+  builds:[["a1","the budget that has to be solved"]], leads:[["a3","how a person becomes valuable"]], live:[]},
+
+a3:{type:"axiom", title:"Value is learned, not given", x:1462, y:627,
+  ess:"Anything that reliably predicts relief becomes worth wanting.",
+  hook:"Does a baby love its mother because of a bond instinct, or for a much more ordinary reason?",
+  story:"Atzil and colleagues argue the evidence does not necessarily support a dedicated affiliation instinct. A caregiver's regulation is rewarding; the caregiver's face, voice and smell reliably precede it; so the infant learns that these cues predict allostatic relief, by exactly the rule that makes any cue valuable. Social animals, on their definition, are simply those who cannot survive alone and rely on group members to regulate their ongoing physiology.",
+  mech:"This is deflationary in a useful way. A person is not a special class of goal with its own drive — a person is a cue that predicts budget relief. The whole unification later in this chart runs through that sentence, because it means the machinery valuing a partner and the machinery valuing a drug are not analogous but the same computation over different cue classes. It also explains an odd coincidence: the addiction literature and the attachment literature independently reached for the same word, allostasis, without noticing each other.",
+  term:"Allostatic cue", def:"something whose presence predicts that your regulatory budget is about to be helped.",
+  sowhat:"If people are cues, then whatever you learned about which cues pay off is a forecast rather than a fact about you. Forecasts can be wrong, and they can be stale.",
+  builds:[["a2","the regulator you learn to predict"]], leads:[], live:[["b4-domains","the same rule, applied to a drug"]]},
+
+a4:{type:"axiom", title:"Nothing holds still", x:1259, y:771,
+  ess:"Every arrangement you rely on is already coming apart.",
+  hook:"Can you name one thing in your life whose current arrangement is guaranteed to persist?",
+  story:"There isn't one, and this is the least controversial claim here — the Pali canon calls it anicca, and physics has no quarrel with it. What is less obvious is that the same instability lives inside the machinery that evaluates. A prediction-error learner rescales its own gain to whatever it has been getting, so no attained state stays satisfying, however good it was.",
+  mech:"Two independent facts are stacked here. First, conditioned things arise, alter and pass, so the objects of any hold are in motion. Second, the valuation system codes normalised prediction error rather than state — Tobler and colleagues showed dopamine responses rescale to the range of predicted rewards, so a tenfold difference in absolute size can produce near-identical signals. So even a world that did hold still would stop registering; impermanence is not only out there, it is also the sampling rule.",
+  term:"Anicca", def:"impermanence — every conditioned thing arises, changes and passes, with nothing exempt.",
+  sowhat:"Any strategy whose success requires a specific arrangement to persist has its failure built into its success condition, rather than bolted on afterwards.",
+  builds:[], leads:[["b3-principle","what follows for how you hold things"]], live:[["b3-timeline","watch satisfaction expire on schedule"]]},
+
+"b1-laplace":{type:"story · phenomenon", title:"Cupboard love, and the deeper heresy", x:404, y:355,
+  ess:"Bowlby's famous break was with feeding. His real one was with hydraulics.",
+  hook:"Given a wire mother that feeds it and a cloth mother that doesn't, why does an infant monkey spend its day on the cloth one?",
+  story:"Harlow's rhesus infants clung to the unfeeding cloth surrogate and fled to it when frightened, which is the clean disconfirmation of the reigning view — that love of mother is a learned by-product of oral gratification, cupboard love. Bowlby had already concluded from clinical work that actual family experience, not fantasy, was doing the causal work, a position that cost him standing in the British Psychoanalytic Society. But the deeper break was quieter.",
+  mech:"Freud's model was hydraulic: pressure accumulates and discharges. Bowlby replaced it wholesale with control systems, citing Miller, Galanter and Pribram on plan hierarchies and Craik on internal models — Volume I of Attachment and Loss contains sections titled Some principles of control systems, and Chapter 13 is A Control Systems Approach to Attachment Behaviour. He argued that a machine incorporating feedback can be truly goal-directed, which licensed purposive language in biology as good science rather than teleology. What Harlow does not license is that contact comfort suffices — and the wire-versus-cloth contrast is a stacked dichotomy that probably inflates the apparent weight of touch — the surrogate-reared animals remained socially abnormal, and later total-isolation studies produced permanent social incapacity in some animals.",
+  term:"Behavioural system", def:"inherited machinery that works to keep some state within range, adjusting continuously against feedback.",
+  sowhat:"Popular attachment writing kept the feeding story and dropped the cybernetics. That is why it reads as a theory of wounds rather than a theory of control loops.",
+  builds:[["a2","the regulator the system reaches for"]], leads:[["b1-pendulum","so what state does it keep in range?"]], live:[["b1-pendulum","the loop, running"]]},
+
+"b1-pendulum":{type:"simulation", title:"The leash is a learned number", sim:"leash", x:884, y:309,
+  ess:"How far a child will wander is a computed quantity, not a personality.",
+  hook:"Two toddlers in one room, one exploring the far corner and one gripping a knee — what actually differs?",
+  story:"Not curiosity. Ainsworth's term is the secure base: the caregiver as the platform you explore from, which she kept distinct from the safe haven, the destination you retreat to. Cittern and Edalat make the platform quantitative — in their model the safe range is inversely proportional to the caregiver's estimated latency, so the leash length is a learned parameter.",
+  mech:"Here the set-goal is a radius that shrinks as expected availability falls or as threat rises, and the attachment system activates as a smooth function of how far past that radius the child has drifted. Exploration and proximity-seeking are reciprocal, so the equilibrium orbit sits just outside the radius, and the child who will not explore is not incurious — the leash got short. Sroufe and Waters made an amendment Bowlby did not: the set-goal is not physical proximity but felt security, an appraisal. This is also what the Strange Situation actually scores — not how much the infant cried, but whether it can use the caregiver at reunion to get back inside range.",
+  term:"Set-goal", def:"the state a control system works to maintain — here, felt security held within a tolerable range.",
+  sowhat:"Judging anyone's attachment by how independent they look reads the output and misses the parameter. Switch contact to aversive in the panel and watch someone pinned to the far wall with exploration still at zero.",
+  builds:[["b1-laplace","the control loop this draws"]], leads:[["b1-sensitive","and what is being regulated?"]], live:[]},
+
+"b1-sensitive":{type:"mechanism", title:"The bond is a bundle", x:520, y:522,
+  ess:"Separation doesn't break one thing. It unplugs several, each with its own cable.",
+  hook:"If the mother-infant bond were one thing, what should happen when you take the mother away?",
+  story:"One deficit. What Hofer found in rat pups was a set of them, dissociating cleanly — maternal tactile stimulation regulates growth hormone, the rhythm of milk delivery regulates sleep-wake states, and separated functions are restored by different specific inputs rather than by the mother as such. His methodological move was to stop studying maternal behaviour globally and start mapping subcomponents onto the homeostasis of particular systems.",
+  mech:"The logic settles the matter independently of the numbers. If the bond were sentiment with physiological side-effects, removing it would produce one syndrome; producing a bundle of separable deficits means the bond is the bundle of regulatory couplings, and the sentiment is the readout. Friston and Frith give the formal version — two coupled agents running the same generative model settle onto a shared attractor, so separation is not losing a comfort but losing half of a synchronised system. One caution on sourcing: the widely quoted percentages from Hofer's separation experiments are hard to verify secondhand, so treat the dissociation logic as the claim and the specific figures as needing the 1994 monograph.",
+  term:"Hidden regulators", def:"the specific caregiver inputs that hold specific physiological systems in range, invisibly.",
+  sowhat:"It explains why grief is somatic — sleep, appetite, temperature, immune function — rather than merely sad. Several cables were carrying live current.",
+  builds:[["a2","the loop that runs through another body"]], leads:[["b1-lorenz-story","so what does the coupling cost?"]], live:[]},
+
+"b1-lorenz-story":{type:"story · tension", title:"A real win, and a real debt", x:254, y:656,
+  ess:"Depending on someone is a thermodynamic bargain with a price tag.",
+  hook:"Is leaning on people a weakness the strong grow out of, or a discount a brain would be foolish to refuse?",
+  story:"Coan's Social Baseline Theory argues the latter: the brain treats relationships as bioenergetic resources, distributing risk — vigilance falls as group size rises — and sharing load, gated by familiarity and trust. His striking inversion is that the brain looks more at rest when social resources are visibly available, so isolation is the experimental treatment, the condition that adds perceived work. In one small study, holding a spouse's hand under threat of shock attenuated activation across threat-related regions, with a stranger's hand producing a strict subset of the effect.",
+  mech:"Take the discount and you acquire the dependency: if a trusted partner halves your share of a task, losing the partner is not a return to baseline but a deficit of that same size arriving all at once. Sbarra and Hazan name the whole arc — coregulation, dysregulation, re-regulation — and note the middle term ranges from diffuse arousal and disorganisation to a full-blown and highly organised stress response, rather than mere sadness. Be careful with the flagship experiments here: the hand-holding study is sixteen women with two of its three moderation results at p = .07 and .08, and the related finding that hills look steeper alone sits in a literature that has replicated badly. The theoretical claim is well supported; these particular numbers are a suggestive pilot.",
+  term:"Load sharing", def:"outsourcing part of the metabolic cost of vigilance and effort to a trusted other.",
+  sowhat:"This reframes the whole topic. The exposure inside a bond is not a mistake to be corrected but the price of an efficiency worth buying — so the question is never whether to depend, but on what, how tightly, and with what fallback.",
+  builds:[["a1","the budget the sharing helps solve"]], leads:[["b1-principle","so what is a working bond for?"]], live:[]},
+
+"b1-principle":{type:"principle", title:"Security retires the need for security", x:716, y:679,
+  ess:"A working bond doesn't satisfy the need for safety. It retires it.",
+  hook:"If security were the goal of the attachment system, what would a secure person spend the day doing?",
+  story:"Chasing it — and secure people conspicuously do not. Mikulincer and Shaver's answer is that repeated confirmation that proximity-seeking works frees capacity for the other behavioural systems: exploration, affiliation, caregiving, sex. Security is not the destination; it is what makes the destination stop being security.",
+  mech:"The mechanism they propose is internalisation. A reliable external regulator installs a procedural secure-base script — acknowledge distress, seek closeness, then engage the problem — plus self-caregiving representations derived from identification with the traits of a caring, supportive figure, so that under threat a secure person mobilises caring qualities modelled on someone else's. Read structurally, the developmental function of a dependable other is to build a regulator that no longer requires that other to be present. Hold onto this: it is the cleanest route by which the two traditions here converge — though only partly, and the priming evidence for portable security sits under the general replication cloud.",
+  term:"Broaden-and-build cycle", def:"security frees the resources that were being spent on getting secure.",
+  sowhat:"It inverts the usual advice. Working on your attachment is not mainly working on attachment; it is noticing what you would be doing with the attention if it were not on watch.",
+  builds:[["b1-lorenz-story","the borrowed regulation, internalised"]], leads:[["b2-attractors","and when the loop does not close?"]], live:[]},
+
+"b2-attractors":{type:"mechanism", title:"The three-gate switch", x:2069, y:401,
+  ess:"Threat, then availability, then one question that decides everything.",
+  hook:"Why do two people, both insecure, answer the same silence by texting six times and by going cold?",
+  story:"Mikulincer and Shaver route both through the same three gates. Is there a sign of threat — if yes, seek proximity, which in adults is often the activation of a mental representation rather than literal approach; is the attachment figure available — if yes, felt security, and the broaden-and-build cycle runs. If not, one more question: is proximity-seeking still a viable option?",
+  mech:"That third gate is where the two pictures separate, and the branch runs opposite to what people assume — judged viable, the system hyperactivates, escalating and insisting and monitoring; judged not viable, it deactivates, suppressing the need and going compulsively self-reliant. So anxious escalation is the strategy of someone whose history says persistence sometimes works, and avoidance the strategy of someone whose history says it never does. The model does not rank these on one severity axis. And the loops run backwards: excitatory and inhibitory pathways from the secondary strategies feed into the earlier gates, so each strategy biases the very threat-detection and availability-appraisal that trigger it — deactivation in particular prevents updating of working models even when environments do become supportive, because the system stops sampling the evidence that would revise it.",
+  term:"Secondary strategies", def:"hyperactivation and deactivation — what the attachment system does once the primary strategy fails.",
+  sowhat:"Mikulincer and Shaver call these the best a person can do under dreadful circumstances, which is the right frame. The cost is that both are self-confirming, so neither collects the evidence that would end it.",
+  builds:[["b1-principle","the loop that closed, here failing to"]], leads:[["b2-logistic","the same switch, as two dials"]], live:[["b2-logistic","set the gain and watch the loop ring"]]},
+
+"b2-logistic":{type:"simulation", title:"One loop, two knobs", sim:"loop", x:1837, y:233,
+  ess:"Anxious and avoidant are one controller at different gain and threshold.",
+  hook:"Which costs more — a loop that rings and overshoots, or one so quiet it never calls for help?",
+  story:"Both, in different currencies, and here you can watch the exchange rate. There is one distress signal, one bid for care, and one caregiver who responds with some probability after some delay. The only knobs are gain, how hard distress converts into a bid, and threshold, how much distress it takes before you bid at all.",
+  mech:"High gain with delay is a textbook unstable control loop: with a one-step lag the loop starts ringing once effective gain passes a quarter of the persistence term squared and diverges past one, which on the trace looks like escalating spikes and, in a life, like protest. A high threshold produces the opposite signature — an almost flat trace sitting at an elevated plateau, because with no bidding the distress settles at the stressor mean divided by one minus persistence, here about 1.2, an order of magnitude above the secure steady state. That is the single most useful thing in this chart: avoidance does not reduce distress, it reduces the signal of distress, which is exactly why avoidant people report feeling fine and show elevated physiological arousal. And notice what cures the ringing — dragging the caregiver's latency down, without touching the gain at all.",
+  term:"Gain and threshold", def:"how strongly a controller reacts, and how much error it tolerates before reacting.",
+  sowhat:"Told to calm down, an anxiously activated person is being asked to lower gain — but the instability came from gain times delay. The other half of the parameter was never theirs.",
+  builds:[["b2-attractors","the switch this makes playable"]], leads:[["b2-lorenz-attractor","the same failure, one level down"]], live:[]},
+
+"b2-lorenz-attractor":{type:"simulation", title:"Precision on the wrong channel", sim:"channels", x:2300, y:282,
+  ess:"Watching harder for an unreliable signal makes you know less.",
+  hook:"You are reading someone's mood from ambiguous cues — does paying closer attention improve your estimate?",
+  story:"Only if the cues are reliable. Any estimate combining two noisy channels should weight each by its actual reliability, and the algebra is unforgiving: get the weights wrong and error rises whichever way you err. Here the two channels are your own interior, and the other person's signals.",
+  mech:"Lin's account — a reframing rather than a formal model — has the two insecure patterns making opposite errors on different channels: Type A, the avoidant pattern, habituates to unmet needs until interoceptive prediction errors lose precision, reclassifying the error as irreducible noise rather than something learnable, an allostatic bankruptcy that is numb but not actually inaccurate about the world. Type C, the anxious pattern, does the reverse — boosting interoceptive precision while suppressing exteroceptive availability cues, then compensating by effortfully over-sampling them. One flag before leaning on any of it: the direction of precision abnormality is genuinely contested across computational psychiatry, so over-precision is not a settled diagnosis. What is not contested is the algebra, and the counterintuitive result falls straight out of it — when the other channel's reliability is low, raising your weight on it degrades the estimate, so anxious monitoring is not trying harder but injecting noise.",
+  term:"Precision", def:"how much confidence a system assigns a signal — the weight that signal gets in the estimate.",
+  sowhat:"Only the ratio of the two weights matters, not their size, so caring more cannot fix a miscalibration. Two people can be equally wrong about the same room, one by feeling too little and one by watching too hard.",
+  builds:[["b2-logistic","the same controller, at the level of signals"]], leads:[["b2-tension-random","and both errors were once correct"]], live:[]},
+
+"b2-tension-random":{type:"tension", title:"Insecurity is correct inference", x:2392, y:470,
+  ess:"Avoidance isn't a broken controller. It's a good one, in a bad world.",
+  hook:"If avoidance costs so much, why would any mind adopt it?",
+  story:"Because it is optimal. Cittern, Edalat, Ghaznavi and Friston built the model formally — an infant inferring under active inference, with a single environmental parameter: the probability that the caregiver actually regulates your stress when you seek proximity. At about 0.9, consistent seeking emerges; at 0.3 to 0.4, guarded seeking; at 0.1, avoidance.",
+  mech:"Nothing in the controller is broken at 0.1 — avoidance minimises expected free energy there. It is the right answer to the world the child was given, which is why Main's conditional strategies, Belsky's evolutionary reading and Del Giudice's Adaptive Calibration Model all treat insecurity as calibration rather than damage. Their model earns its keep by predicting something classical theory does not: an infant learning from scratch under an unresponsive caregiver passes through a transient guarded-seeking phase on the way to avoidance. Disorganisation comes from a different mechanism entirely — a caregiver who reliably increases stress on approach while emitting ambiguous cues, where the ambiguity carries enough epistemic value that approach stays attractive even as it is punished, so no coherent policy converges.",
+  term:"Conditional strategy", def:"a policy that is locally optimal given the environment it was calibrated in.",
+  sowhat:"But adaptive does not mean costless, and the counter-case is precise: these are local optima that become global traps — Miller, Kiverstein and Rietveld call them bad bootstraps, policies with excellent local slopes and failing global ones. They are failures relative to a longer horizon, to an environment whose parameter has since changed, and to the standing cost of running the strategy at all.",
+  builds:[["b2-lorenz-attractor","the precision settings this explains"]], leads:[["b2-principle","so how tightly should you hold the theory?"]], live:[]},
+
+"b2-principle":{type:"principle", title:"Hold the theory as it asks to be held", x:1895, y:598,
+  ess:"The findings that replicated are the modest ones. Believe them modestly.",
+  hook:"Your attachment style came from your childhood — how strong is the evidence for that sentence?",
+  story:"Weaker than the sentence sounds, because it splices two literatures. Everything about infancy, caregiving and transmission comes from the Strange Situation and the Adult Attachment Interview; everything labelled attachment style online descends from self-report questionnaires. Roisman and colleagues meta-analysed the convergence across ten studies at r = .09, in their own words trivial to small.",
+  mech:"Four more corrections, all from the field's own meta-analyses, starting with this — attachment is dimensional rather than typological, with two dimensions, anxiety and avoidance, with the four styles as quadrants and no cut-point anywhere in the data, so dichotomising discards about 36% of true-score variance, and this holds for infants as well as adults. Stability decays with interval: r = .39 overall across 21,072 attachments, but .45 under six months, .20 at five to fifteen years, and .14 and non-significant beyond fifteen on the few long intervals available — so the infant-to-adult link, on which the whole popular edifice rests, is the one interval indistinguishable from zero, and downstream effects are modest too, with security predicting peer competence at d = 0.39 and externalising at d = 0.31. The flagship mechanism is real but small: caregiver sensitivity predicts security at r = .25 across 174 studies and 22,914 children, remarkably similar to the 1997 estimate across 27 years, about 6% of variance — and the transmission it was invented to explain turns out only about a quarter mediated by it. Two cautions on top: sensitivity as operationalised is culturally specific, privileging face-to-face contingent response over the body contact and co-sleeping normative across much of the world, and in the field's own published exchange a defender of universality concedes that whether sensitive responsiveness is good parenting cross-culturally is an empirical question rarely addressed in research; and the literature shows a decline effect, transmission running at r = .38 in published studies against .25 in unpublished ones, attributed partly to the winner's curse.",
+  term:"The transmission gap", def:"the three-quarters of parent-to-child attachment similarity that observed sensitivity does not explain.",
+  sowhat:"As Groh and colleagues put it, any simplistic notion that security determines peer interactions in childhood and aggressive behaviour is likely incorrect — and notice this chart has just applied its own thesis to itself, holding a model at the confidence it actually earns. Any quiz returning one of four labels has imposed a threshold the data do not contain.",
+  builds:[["b2-tension-random","the calibration story, now calibrated"]], leads:[["b3-kokura","the other tradition that uses the word"]], live:[]},
+
+"b3-kokura":{type:"story", title:"Five words, one translation", x:271, y:962,
+  ess:"The Buddha did not say attachment causes suffering. He said thirst.",
+  hook:"If the Second Noble Truth names the cause of suffering, which word does it actually use?",
+  story:"Tanha — literally thirst. The English word attachment is doing the work of at least five distinct Pali terms: tanha (craving), upadana (clinging, and also fuel, what sustains a fire), raga (passion, which is where the English gloss mostly arrives from via Tibetan), lobha (greed) and abhijjha (covetousness). Careful translators almost never render tanha as attachment.",
+  mech:"The distinctions carry weight. Tanha is a motivational deficit state; upadana is a relational stance — the thirst, then what you do with the object once thirst has selected it — and dependent origination makes them sequential rather than synonymous. Crucially, not all desire is the target: Payutto distinguishes tanha from chanda, which is not a defilement at all but the first of the four bases of success, and the canon states that all things are rooted in desire. When Unnabha objected that using desire to end desire is an endless path, Ananda's answer was that you desired to walk to the park, and on arriving the desire was allayed.",
+  term:"Tanha", def:"thirst — craving as a deficit state, in three modes: for sense pleasure, for becoming, for non-becoming.",
+  sowhat:"Almost every sentence beginning the Buddha said attachment is translating a word that does not mean bonds. The bond and the thirst are different variables, and conflating them is why the two traditions look like rivals.",
+  builds:[["b2-principle","the same discipline, applied to a second tradition"]], leads:[["b3-contingency","the mode of craving nobody quotes"]], live:[]},
+
+"b3-contingency":{type:"tension", title:"Craving away is still craving", x:601, y:1008,
+  ess:"The urge for an experience to stop is the third kind of thirst.",
+  hook:"Popular accounts list craving for pleasure and craving for existence — what became of the third one?",
+  story:"It got dropped, and it is the one that makes the analysis symmetric. The canonical formula names kama-tanha, bhava-tanha and vibhava-tanha: craving for sensual pleasure, for becoming, and for non-becoming. Aversion is not the opposite of craving; it is a mode of it.",
+  mech:"Restore that term and the framework stops being permission to withdraw. The urge to not-have an inner experience is itself the thing diagnosed — which lines up exactly with two other traditions, since experiential avoidance is ACT's central pathology and deactivating strategies are avoidance's signature in attachment theory. Welwood, who knew both literatures, arrived at the same point independently and stated it best: avoidance of attachment is still a form of clinging, clinging to the denial of your human attachment needs. One honest caveat — reading the second and third cravings as live psychological states is the modern reading, and the Theravada commentaries take them as view-flavoured cravings about post-mortem fate.",
+  term:"Vibhava-tanha", def:"craving for non-becoming — the thirst for an experience, or a self, to not be.",
+  sowhat:"This is the sentence that stops non-attachment being a respectable name for numbing. If wanting-it-gone is also wanting, going cold is not the exit.",
+  builds:[["b3-kokura","the three modes of thirst"]], leads:[["b3-timeline","and why the first mode never gets satisfied"]], live:[["b2-logistic","the same avoidance, as a threshold"]]},
+
+"b3-timeline":{type:"simulation", title:"Why chasing never lands", sim:"chase", x:312, y:1210,
+  ess:"The machinery that makes you want is not the machinery that makes you glad.",
+  hook:"You finally got the thing — why is the glow gone within a week, and reliably so?",
+  story:"Because satisfaction is transient by construction, not by bad luck. Berridge and Robinson's dissociation is the hard part: deplete nearly all brain dopamine and rats' liking reactions to sugar stay completely normal while the lesions apparently abolish all motivation, and stimulating mesolimbic circuits can quadruple wanting to eat without raising pleasure at all. Wanting runs on large, robust, plastic systems and liking on smaller fragile ones — and only wanting sensitises with repetition.",
+  mech:"Stack that with how the valuation reports. Rutledge and colleagues fitted momentary happiness as a leaky sum of recent prediction errors, with a forgetting factor of 0.61 give or take 0.30, an uncertainty half the size of the estimate and no term at all for how much you have — so a constant reward yields a decaying signal, and holding felt happiness at a target requires permanent escalation. Tobler's adaptive coding closes the trap, since gain rescales to the range you have been getting, which makes the required escalation geometric rather than linear. Koob and Le Moal add the darkest layer: with repeated large rewards an opponent process grows and the hedonic baseline itself shifts down, so back to normal becomes unreachable — and note the symmetry the panel exposes, that raising the learning rate shortens satisfaction and shortens grief, because adaptation is one mechanism rather than a bug bolted onto pleasure.",
+  term:"Incentive sensitisation", def:"repetition amplifies wanting while leaving liking flat, or falling.",
+  sowhat:"So I will be fine once I have it is not a mistaken forecast but a structurally impossible one. It is also why the same person can be certain they want something and, on getting it, find no pleasure to report.",
+  builds:[["a4","normalised valuation, and impermanence"]], leads:[["b3-principle","so where is the fault, exactly?"]], live:[]},
+
+"b3-principle":{type:"principle", title:"Dukkha is a fit problem", x:774, y:1152,
+  ess:"The mismatch isn't in the world or the feeling. It's in the mode of holding.",
+  hook:"If impermanence alone entails nothing about satisfaction, what actually produces the friction?",
+  story:"The way the thing is held. The canonical chain runs what is impermanent is unsatisfactory, what is unsatisfactory is not-self — but as stated the first step is a non-sequitur. Reconstructed, it works: clinging is a stance whose success condition is that its object persist as held, all conditioned things fail to persist, and a stance whose success condition cannot in principle be met is necessarily frustrated.",
+  mech:"So dukkha is a fit problem rather than a content problem, which is why suffering is a poor translation and unsatisfactoriness, or Thanissaro's stress, are better. (The evocative image is a badly fitted axle-hole making for a bumpy ride — keep it as an image, since the philologically stronger derivation is standing badly.) Since impermanence is not negotiable, exactly one variable in that argument is adjustable: the mode of holding. And dependent origination locates the intervention precisely — contact gives rise to feeling-tone, feeling-tone to craving, craving to clinging — so the leverage sits after feeling and before craving, which means neither your feelings nor the world is the target.",
+  term:"Dukkha", def:"unsatisfactoriness — the friction of holding an impermanent thing as though it were not.",
+  sowhat:"This is the load-bearing sentence of the whole chart: the strength of a bond and the graspingness of a hold are different variables. Which is exactly why a bond can be strong and the holding not grasping.",
+  builds:[["a4","the impermanence the argument needs"]], leads:[["b3-plan","the objection this glides over"]], live:[["b3-timeline","the same conclusion, from the neuroscience"]]},
+
+"b3-plan":{type:"tension", title:"The concession", x:543, y:1326,
+  ess:"One sutta says the people you love are where the grief comes from.",
+  hook:"A father is haunting a cemetery crying for his dead only child — what does the Buddha tell him?",
+  story:"That sorrow, lamentation, pain, distress and despair are born from one who is dear. The householder rejects the teaching and sides instead with some nearby gamblers who say loved ones bring happiness. Queen Mallika then walks King Pasenadi through it person by person — his daughter, his queen, his son, herself — until he concedes the point.",
+  mech:"Any account claiming Buddhism has no quarrel with attachment bonds has to answer this text, and most popular treatments do not know it exists. Three things make the honest reply: it is descriptive rather than prescriptive, and what is diagnosed is the man's incapacitation rather than his love; the same canon sets a mother's devotion to her only child as the benchmark for cultivated love and rates admirable friendship as the whole of the holy life; so the claim is that bonds are costly, not that they are bad. But here is the concession that separates this from self-help — early Buddhism is a renunciate soteriology, and for the monastic goal of ending rebirth, bonds are obstacles, full stop. Modern secular non-attachment keeps the technique and quietly drops the goal that justified it, which is a legitimate move but a revision, and one that ought to be declared rather than hidden.",
+  term:"Piyajatika", def:"born from the dear — the teaching that grief is generated by precisely what you love.",
+  sowhat:"Anyone selling you non-attachment as costless has either not read this or is not telling you. The trade is real; what follows is an argument about how to make it well, not a promise that it is free.",
+  builds:[["b3-principle","the fit problem, meeting its hardest case"]], leads:[["b4-ergodicity","so what exactly is the variable?"]], live:[]},
+
+"b4-ergodicity":{type:"mechanism", title:"The invariant", x:1901, y:945,
+  ess:"Not external. A variable whose value you do not determine.",
+  hook:"What do a partner's mood, your own hunger, and your reputation have in common?",
+  story:"You do not set any of them. The tempting formulation — that clinging means binding your regulation to something external — collapses the moment self-image counts, and the fourth kind of clinging, attavadupadana, targets exactly that region — though note it names clinging to the doctrine of self, an operation performed on experience, rather than the mere possession of a self-concept. So drop external.",
+  mech:"The invariant is a variable whose value you do not determine, which correctly includes your own body, your own mood, and other people's opinions of you. What is left is a quantity: harm scales roughly as precision times lack of control, or pi times one minus c, where pi is how tightly you hold a target state and c is how much your actions actually move it. That collapses four situations into one frame and, importantly, gives it two failure modes rather than one, because you can also hold a target too loosely where action would in fact work. Note this is a reformulation rather than a published law — it assembles the controllability literature, the precision-weighting literature and the attachment models into a single quantity that would need testing.",
+  term:"Precision times uncontrollability", def:"the mismatch between how tightly a target is held and how much you can actually move it.",
+  sowhat:"The pathology is never that you depended on something. It is the gap between the grip and the leverage — and the diagnosis you need is which of the two is wrong.",
+  builds:[["b3-plan","the trade this quantifies"]], leads:[["b4-coinflip","the quantity, made playable"]], live:[["b4-coinflip","find the best grip for a given world"]]},
+
+"b4-coinflip":{type:"simulation", title:"Finding the right grip", sim:"pic", x:1583, y:979,
+  ess:"For every degree of control there is a best amount of confidence.",
+  hook:"You cannot change the outcome much — is it rational to care less about it?",
+  story:"Yes, and less has a number. Here a target state is driven partly by your action and partly by forces you do not touch, and you choose how much precision to place on hitting it. Drag control down, then look at accumulated surprise across every possible grip: the minimum moves.",
+  mech:"Higher precision does buy more effort, but leverage scales with controllability, so as control falls the achievable improvement shrinks while the felt cost of the same world keeps rising with your grip. Scan precision at fixed control and the surprise curve has an interior minimum that falls as control falls — meaning that loosening your hold on an unattainable target is Bayes-optimal, not resignation. Overlay the opposite miscalibration and the two-by-two appears: high grip on low control is clinging, low grip on high control is premature giving-up, matched is effective, and low grip on low control is equanimity. Ligneul and colleagues supply the estimation layer, since a real agent does not know its control but infers it by comparing an actor model against a spectator model — and after uncontrollable stress the evidence threshold for inferring control measurably rises, so an agent that has control can fail to find it.",
+  term:"Precision matching", def:"setting confidence in a target to the amount of influence you actually have over it.",
+  sowhat:"It gives let it go a criterion instead of a mood, and it says when not to. The same maths that licenses loosening also condemns loosening where your actions would have worked.",
+  builds:[["b4-ergodicity","the quantity this draws"]], leads:[["b4-domains","the same maths, over a different object"]], live:[]},
+
+"b4-domains":{type:"mechanism", title:"Same computation, different cue", x:2219, y:979,
+  ess:"A person and a drug are not analogous. They are one learning rule.",
+  hook:"Why did two unconnected fields — addiction and attachment — reach for the same word without noticing?",
+  story:"Because they were describing the same machinery. Koob and Le Moal built addiction on allostasis, defining an allostatic state as chronic deviation of the regulatory systems with a new setpoint established. Atzil and Barrett built infant attachment on allostasis, with a caregiver as a cue that predicts regulation, learned by the ordinary reward rule.",
+  mech:"If a person acquires value by predicting budget relief, and a substance acquires value by predicting budget relief, then the two valuations are not similar — they are the same computation over different cue classes. That is the strongest form of the unification available here, and it is mechanistic rather than a resemblance. It also predicts a bridge the data weakly support: insecure attachment to emotion dysregulation to addictive behaviour, reported across substances, gambling, gaming and internet use, though those primary papers were paywalled, so treat the mediation as a lead. Brewer's candidate common substrate is worth flagging as a lead too — posterior cingulate activity appears to track getting caught up in rather than any particular object, activating for craving, mind-wandering and self-evaluation alike and deactivating in meditation.",
+  term:"Cue class", def:"the category of thing a learned prediction attaches to — a person, a substance, a self-image.",
+  sowhat:"It explains why the vocabularies transfer so easily: withdrawal, tolerance, relapse, chasing. And it warns you off the obvious inference, that a bond is therefore an addiction, which the controllability term specifically denies.",
+  builds:[["a3","the learning rule that makes cues valuable"]], leads:[["b4-signal","what has to be intact for any of this to work"]], live:[["b3-timeline","the sensitisation, running"]]},
+
+"b4-signal":{type:"mechanism", title:"You learn control, not helplessness", x:1612, y:1181,
+  ess:"Passivity is the default. What gets learned is that you can act.",
+  hook:"After fifty years, what did the founders of learned helplessness decide they had got backwards?",
+  story:"The direction. Maier and Seligman's reversal is blunt: passivity in response to shock is not learned, it is the default, unlearned response to prolonged aversive events. What animals learn is that they can control aversive events — and detecting control is what suppresses the default collapse.",
+  mech:"Mechanistically, aversive stimulation activates serotonergic neurons in the dorsal raphe, producing default passivity; when control is detected, prelimbic ventromedial prefrontal cortex inhibits that circuit, and the experience of control produces lasting plasticity there, an immunisation. The consequence for this chart is large. Equanimity is not the same operation as never having learned control: it requires an intact control-detection system that has correctly concluded that here, control is near zero. Which is why depressive resignation and equanimity can look identical from outside and be opposites inside.",
+  term:"Control detection", def:"the machinery that infers whether your actions move the world, releasing you from default passivity when they do.",
+  sowhat:"It gives you the test that separates letting go from giving up, and it is not how calm you look — it is whether the detector is still running. Someone who has stopped checking is not equanimous.",
+  builds:[["b4-coinflip","the controllability this has to estimate"]], leads:[["b4-danger","and the error in the other direction"]], live:[]},
+
+"b4-danger":{type:"mechanism", title:"The other error", x:1959, y:1152,
+  ess:"Loosening your grip where action would work is also a failure.",
+  hook:"Every version of this teaching warns about holding too tight — what warns you about holding too loose?",
+  story:"Almost nothing in the popular literature, which is a serious asymmetry. The frame has four cells, and low precision on high control is a real pathology: never acting where acting would have worked, dressed up as acceptance. Ligneul's finding makes it worse than a one-off mistake — it is a bias with a history.",
+  mech:"After uncontrollable stress, the threshold of causal evidence required before inferring control rises measurably, so someone with a history of powerlessness now demands more proof of influence than the world tends to supply, and will systematically under-act in situations they could in fact move. That is the mechanism by which a stale calibration becomes a self-sealing life, and it is the mirror image of the anxious case. Wrosch's work on goal disengagement adds the boundary condition: disengagement helps well-being, but chiefly when paired with reengagement onto an available alternative, and as a function of how much time is left. In adolescents at risk, difficulty disengaging predicted rising inflammatory markers — an illustrative calibration from ninety participants rather than a prediction, but it puts a physiological cost on persisting past the boundary.",
+  term:"Goal disengagement", def:"releasing an unattainable goal — adaptive mainly when there is somewhere else to put the effort.",
+  sowhat:"So letting go is not universally good; it is good relative to an available alternative and the time remaining. A teaching that only warns against gripping will produce the opposite casualty and not notice.",
+  builds:[["b4-signal","the detector this mis-sets"]], leads:[["b4-survive","so what is equanimity, precisely?"]], live:[["b4-coinflip","the cell nobody warns you about"]]},
+
+"b4-survive":{type:"principle", title:"Equanimity is not low precision", x:2438, y:1094,
+  ess:"It's a loose grip plus a confident belief that losing grip is survivable.",
+  hook:"If letting go were simply turning confidence down, what would a fully let-go mind do?",
+  story:"Nothing. Uniform precision reduction predicts catatonia, and active inference's own answer to that objection is that epistemic value — the drive to reduce uncertainty — is what keeps an agent exploring rather than sitting in a dark room. So letting go has to be selective, or the model predicts a corpse.",
+  mech:"Laukkonen and Slagter describe the selectivity, in a reframing rather than a formal model: practice reduces the temporal depth of processing, dampening deep, self-referential, counterfactual priors while stubborn homeostatic ones resist. Deane, Miller and Wilkinson then supply the sharpest distinction available anywhere here — depersonalisation is an inferred loss of allostatic control, and meditative selflessness is structurally the same loosening, differing in whether that loss is inferred as threatening. So equanimity is not low precision. It is low precision plus a high-confidence prior that losing control is survivable, which is plausibly what a history of reliable regulation installs — that bridge is my inference, not theirs — and exactly what the commentaries mean when they say the near enemy of equanimity is the equanimity of unknowing — diagnosed by failure of discernment rather than by absence of feeling.",
+  term:"Upekkha", def:"equanimity — non-reactivity with discernment intact, as against the calm of not seeing.",
+  sowhat:"It gives you the discriminating question, and it is not how calm am I. It is am I still seeing clearly, and do I believe I would survive this going badly.",
+  builds:[["b4-danger","the two-sided error this resolves"]], leads:[["b4-process","and does the evidence show it?"]], live:[]},
+
+"b4-process":{type:"mechanism", title:"Measurably not avoidance", x:1650, y:1330,
+  ess:"If letting go were avoidance in robes, one correlation would be positive.",
+  hook:"Non-attachment and avoidant detachment can look identical from outside — is there a number that separates them?",
+  story:"There is. Sahdra, Shaver and Brown built a nonattachment scale explicitly as a Buddhist complement to Western attachment research, then correlated it against the two attachment dimensions. Nonattachment runs strongly against attachment anxiety, around minus .55, and — the decisive result — mildly against avoidance, around minus .22 to minus .26.",
+  mech:"The sign is what matters. If non-attachment were a rebranding of avoidant detachment, that second correlation would be positive; it is negative, so more non-attached people are less avoidant, not more. The surrounding pattern says the same thing — generosity .44, self-compassion .50 to .59, perspective-taking .38, agreeableness .48, and personal distress at minus .42 to minus .47 — and one scale item operationalises the distinction outright: I can enjoy my family and friends without feeling I need to hang on to them. As the authors put it, rather than being aloof or unengaged, the non-attached person genuinely cares about, is engaged in and responsive to the present situation; Shaver's one-line version is that what Buddhism calls clinging and grasping is characteristic of anxious attachment, not of secure attachment.",
+  term:"Nonattachment", def:"a flexible, balanced way of relating to experience without either clinging to it or suppressing it.",
+  sowhat:"Honest limitation: at minus .22 the scale does not strongly discriminate against avoidant self-presentation, so a well-defended person could score moderately high. The construct separates warmth from grasping; the instrument does so only weakly.",
+  builds:[["b4-survive","the distinction this tests"]], leads:[["b4-destination","and where the accounts still disagree"]], live:[]},
+
+"b4-destination":{type:"tension", title:"Not the same thing twice", x:2330, y:1255,
+  ess:"Ten percent shared variance is related, not identical.",
+  hook:"If security and non-attachment converge, why do they only correlate at about minus .3?",
+  story:"Because there is a real disagreement underneath, and it is worth stating rather than smoothing. Attachment theory says security is a stable, reliable, internalised representation of an available other. Buddhist psychology says any stable representation held as a source of security is itself the mechanism of dukkha.",
+  mech:"Sahdra and Shaver, the authors most sympathetic to the comparison, make the refusal explicit: it is theoretically impossible to find lasting security in mental representations, and here Buddhist psychology differs from attachment theory. They treat security and non-attachment as two independent, possibly synergistic routes to lower defensiveness rather than one thing seen twice, and their own sample is small — non-attachment correlating minus .32 with anxiety and a non-significant .15 with avoidance. Trait mindfulness shows the same modest pattern against both dimensions across a large meta-analysis, all of it cross-sectional, which its authors note does not allow inferences about causality. Anyone telling you secure attachment and non-attachment are the same thing is punning on an English word.",
+  term:"Partial convergence", def:"two constructs that point the same direction and share roughly a tenth of their variance.",
+  sowhat:"Worse for the tidy version, part of any convergence is definitional — define security as regulation robust to any particular external state and you have defined it into non-attachment, and the nonattachment scale was explicitly designed to align with security. Keep the disagreement instead: the secure-base script is object-specific, approach a significant other, and reifying exactly such representations is what the second tradition targets.",
+  builds:[["b4-process","the correlations that also limit the claim"]], leads:[["b4-explore","so which one comes first?"]], live:[]},
+
+"b4-explore":{type:"tension", title:"Somebody before nobody", x:2470, y:1430,
+  ess:"You have to be somebody before you can be nobody.",
+  hook:"Can you hold a self lightly before you have finished building one?",
+  story:"Engler's line — you have to be somebody before you can be nobody — is the developmental hinge, and it is the claim the empirical papers pointedly do not make. A stable integrated self must exist before it can be seen through, so advanced practice without sufficient ego capacity is counterproductive. Welwood's version is two required tracks: growing up and waking up.",
+  mech:"Welwood also names the predicted failure mode precisely, and he is the one who knew both literatures: many Western practitioners are avoidant attachment types in the first place, recognise something familiar in non-attachment teachings, and so a valid dharma teaching becomes used to support our defenses — spiritual bypassing, or premature transcendence. Note that this framework predicts the confusion rather than merely deploring it, because if non-attachment and deactivation both present as reduced weight on the interoceptive channel then they will be behaviourally confusable, and only the controllability and discernment layers tell them apart. Two honesty notes, though: Engler softened the strict ordering later, allowing that psychological and spiritual development interweave, and the empirical status of spiritual bypassing is thin, its own main measurement paper conceding that no psychometrically sound measures exist. Treat the ordering as a defensible argument and the bypassing as a clinical hypothesis, not as findings.",
+  term:"Spiritual bypassing", def:"using spiritual ideas to sidestep unresolved emotional and developmental work.",
+  sowhat:"It also disposes of earned security as usually told: people classified that way retrospectively turn out not to have been insecure as infants, and to have had among the most supportive care in their sample — the label largely tracks negative recall in currently distressed people. Attachment can change; that particular evidence for it does not hold.",
+  builds:[["b4-destination","the two routes, now ordered"]], leads:[["b4-fence","so what is actually adjustable?"]], live:[]},
+
+"b4-fence":{type:"mechanism", title:"What is actually adjustable", x:2090, y:1430,
+  ess:"Not the world, not the feeling. The step between feeling and craving.",
+  hook:"Of everything in this causal chain, which link can you actually reach?",
+  story:"One. Contact produces feeling-tone, feeling-tone produces craving, craving produces clinging — so the object sits two steps upstream and out of reach, while the feeling is upstream of the target too. On the Burmese vipassana lineage's reading of it, the innovation was not abstaining from sense objects, which contemporaries already advocated, but changing the response at that one joint — a framing to attribute to that lineage rather than to the canon.",
+  mech:"Three unrelated traditions converge on this architecture with unusual exactness: permit the first movement, intercept the endorsement, keep the action. Buddhist practice works at the feeling-to-craving joint; the Stoics distinguished propatheiai, first movements experienced without assent, from the assent that constitutes a passion, so the feeling is not suppressed and the endorsement is; ACT calls the same operation defusion and subordinates it explicitly to values-based committed action, since acceptance and defusion are not ends in themselves. That last clause also answers the nihilism objection, which assumes motivation must be deficit-driven — every one of these systems supplies a non-deficit engine: chanda and the brahmaviharas, oikeiosis and the preferred indifferents, values. Concede that the Stoic version runs closest to the suppression line — Nussbaum's standing objection is that eliminating attachment to externals costs too much, and Epictetus really does say to remember your child is mortal as you kiss them — while noting the Gita pre-empts the opposite misreading inside the very verse usually quoted for it: act without attachment to the fruit, and let there not be attachment to inaction.",
+  term:"The vedana joint", def:"the gap between having a feeling and being recruited by it — the one reachable link in the chain.",
+  sowhat:"The best evidence for this joint is oddly shaped: Brewer's smoking trials confirmed the decoupling of craving from action while a later app trial found no abstinence difference at all — mechanism supported, outcome not, which is exactly what severing craving-to-policy predicts and a caution against overselling the effect sizes. It relocates the project: you are not trying to feel less or to arrange the world better, which is why both stop caring and get everything under control are off-target.",
+  builds:[["b3-principle","the fit problem, now with an address"]], leads:[["b4-principle","and what actually moves?"]], live:[]},
+
+"b4-principle":{type:"principle", title:"What actually moves", x:1830, y:1560,
+  ess:"The leverage is in the present relationship, and it is nearer than promised.",
+  hook:"If you wanted to change how you attach, where does the evidence say to push?",
+  story:"Not where the popular story points. Across seventy traced studies, interventions moved caregiver sensitivity at d = 0.33 and infant security at d = 0.20 — and the pattern was less is more: a clear behavioural focus beat insight-oriented work, video feedback outperformed, non-professionals outperformed professionals, and briefer courses did at least as well as long ones, though the authors' own summary says a moderate number of sessions rather than the fewest. Short, concrete, behavioural, and seeing yourself on tape — with one limit worth stating precisely: on disorganised attachment the overall intervention effect was d = 0.05 and non-significant, and while the sensitivity-focused subset did reach d = 0.26, that rests on five studies.",
+  mech:"The second pointer is where your working model actually lives. Relationship-specific attachment tracks the global model at about .75 for a current partner against .42 for a mother, and current peer relationships dominate the global model more than parental ones do, so the leverage is the relationship you are in rather than the one you came from. Two constraints to carry out with you: hold all of this at the precision it has earned, because the honest claims here are modest, mechanistically grounded and mostly about calibration. And if you take one operational sentence, take this — the question is never whether to depend, but on what, how tightly, and whether you would survive it going badly.",
+  term:"Calibration, not detachment", def:"matching how tightly you hold each thing to how much you can move it, and to what you would do if it went.",
+  sowhat:"The two errors are symmetrical and both are common: gripping what you cannot move, and releasing what you could. Almost everything written on this subject warns about only one of them.",
+  builds:[["b4-fence","the adjustable step"]], leads:[], live:[["b4-coinflip","the calibration, one last time"]]}
+
+};
+const TERRITORIES = [
+  {label:"I · The Borrowed Regulator", sum:"a bond is plumbing, not sentiment", hue:"#4a6684", lx:508, ly:100, rx:184, ry:158, rw:745, rh:590},
+  {label:"II · Two Ways to Miss", sum:"one loop, two knobs, three pictures", hue:"#4f7050", lx:2114, ly:100, rx:1739, ry:158, rw:745, rh:590},
+  {label:"The Bedrock", sum:"four facts about being a body", hue:"#6f6455", lx:1265, ly:352, rx:964, ry:436, rw:722, rh:439},
+  {label:"III · The Other Attachment", sum:"what the second tradition actually said", hue:"#8a5c5c", lx:520, ly:869, rx:184, ry:846, rw:745, rh:590},
+  {label:"IV · One Mechanism, Two Names", sum:"where the accounts meet, and where they don't", hue:"#96702f", lx:2011, ly:820, rx:1479, ry:869, rw:1069, rh:745}
+];
+const ASTERISMS = [
+  ["#4a6684", [["b1-laplace","b1-pendulum"],["b1-pendulum","b1-sensitive"],["b1-sensitive","b1-lorenz-story"],["b1-lorenz-story","b1-principle"]]],
+  ["#4f7050", [["b2-attractors","b2-logistic"],["b2-attractors","b2-lorenz-attractor"],["b2-lorenz-attractor","b2-tension-random"],["b2-attractors","b2-principle"]]],
+  ["#6f6455", [["a1","a2"],["a2","a3"],["a1","a4"],["a3","a4"]]],
+  ["#8a5c5c", [["b3-kokura","b3-contingency"],["b3-contingency","b3-timeline"],["b3-timeline","b3-principle"],["b3-principle","b3-plan"]]],
+  ["#96702f", [["b4-ergodicity","b4-coinflip"],["b4-coinflip","b4-domains"],["b4-coinflip","b4-signal"],
+    ["b4-signal","b4-danger"],["b4-danger","b4-survive"],["b4-survive","b4-process"],
+    ["b4-process","b4-destination"],["b4-destination","b4-explore"],["b4-explore","b4-fence"],
+    ["b4-fence","b4-principle"],["b4-domains","b4-destination"],["b4-danger","b4-principle"]]]
+];
+const ALL = Object.keys(N);
+const TERRNAME = {b1:"I · The Borrowed Regulator", b2:"II · Two Ways to Miss",
+  b3:"III · The Other Attachment", b4:"IV · One Mechanism, Two Names", a:"The Bedrock"};
+const HUES = {b1:"#4a6684", b2:"#4f7050", b3:"#8a5c5c", b4:"#96702f", a:"#6f6455"};
+const hueOf = id => id.startsWith('a') ? HUES.a : HUES[id.slice(0,2)];
+const terrOf = id => id.startsWith('a') ? TERRNAME.a : TERRNAME[id.slice(0,2)];
+
+const TOUR = ["b1-laplace","b1-pendulum","b1-sensitive","b1-lorenz-story","b1-principle",
+  "b2-attractors","b2-logistic","b2-lorenz-attractor","b2-tension-random","b2-principle",
+  "b3-kokura","b3-contingency","b3-timeline","b3-principle","b3-plan",
+  "b4-ergodicity","b4-coinflip","b4-domains","b4-signal","b4-danger","b4-survive",
+  "b4-process","b4-destination","b4-explore","b4-fence","b4-principle"];
+const SEQ = {}; TOUR.forEach((id,i)=>SEQ[id]=i+1);
+
+/* degree from curated links (for star size) */
+const DEG = {};
+ALL.forEach(id=>DEG[id]=0);
+ALL.forEach(id=>{
+  const n = N[id];
+  [...n.builds, ...n.leads, ...n.live].forEach(([t])=>{ DEG[id]++; DEG[t]=(DEG[t]||0)+1; });
+});
+const dotSize = id => 16 + Math.min(DEG[id],8)*2.2;
+const dotCenter = id => ({x:N[id].x+dotSize(id)/2, y:N[id].y+dotSize(id)/2});
+
+/* ============================================================
+   CAMERA
+   ============================================================ */
+const vp = document.getElementById('vp');
+const world = document.getElementById('world');
+const reader = document.getElementById('reader');
+const WW = 2750, WH = 1750;
+let cam = {s:0.12, tx:0, ty:0};
+let anim = null;
+function apply(){
+  world.style.transform = `translate(${cam.tx}px, ${cam.ty}px) scale(${cam.s})`;
+  lod();
+}
+function readerW(){ return reader.classList.contains('open') ? (reader.getBoundingClientRect().width||430) : 0; }
+function visW(){ return innerWidth - readerW(); }
+function centerOn(cx, cy, s){
+  cam.s = s;
+  cam.tx = visW()/2 - cx*s;
+  cam.ty = innerHeight/2 - cy*s;
+  apply();
+}
+function flyTo(cx, cy, s, dur=700){
+  if (anim) cancelAnimationFrame(anim);
+  const s0=cam.s, cx0=(visW()/2-cam.tx)/s0, cy0=(innerHeight/2-cam.ty)/s0;
+  const ls0=Math.log(s0), ls1=Math.log(s);
+  const t0=performance.now();
+  function step(t){
+    let p=Math.min(1,(t-t0)/dur);
+    p = p<.5 ? 4*p*p*p : 1-Math.pow(-2*p+2,3)/2;
+    centerOn(cx0+(cx-cx0)*p, cy0+(cy-cy0)*p, Math.exp(ls0+(ls1-ls0)*p));
+    if (p<1) anim=requestAnimationFrame(step);
+  }
+  anim=requestAnimationFrame(step);
+}
+function overviewCam(fly=true){
+  const s = Math.min(visW()/WW, innerHeight/WH)*0.92;
+  if (fly) flyTo(WW/2, WH/2, s, 800); else centerOn(WW/2, WH/2, s);
+}
+vp.addEventListener('wheel', e=>{
+  e.preventDefault();
+  if (anim) cancelAnimationFrame(anim);
+  const f = Math.exp(-e.deltaY*0.0016);
+  const s2 = Math.min(2.2, Math.max(0.06, cam.s*f));
+  const wx=(e.clientX-cam.tx)/cam.s, wy=(e.clientY-cam.ty)/cam.s;
+  cam.s=s2; cam.tx=e.clientX-wx*s2; cam.ty=e.clientY-wy*s2;
+  apply();
+}, {passive:false});
+const ptrs = new Map();
+let panStart=null, pinchStart=null, moved=0;
+vp.addEventListener('pointerdown', e=>{
+  if (e.target.closest('.tlabel')) return;
+  ptrs.set(e.pointerId, {x:e.clientX, y:e.clientY});
+  if (ptrs.size===1){
+    moved=0;
+    panStart={mx:e.clientX, my:e.clientY, tx:cam.tx, ty:cam.ty};
+    vp.classList.add('dragging');
+  } else if (ptrs.size===2){
+    const [p1,p2]=[...ptrs.values()];
+    pinchStart={d:Math.hypot(p1.x-p2.x,p1.y-p2.y), s:cam.s,
+      wx:((p1.x+p2.x)/2-cam.tx)/cam.s, wy:((p1.y+p2.y)/2-cam.ty)/cam.s};
+    panStart=null;
+  }
+});
+addEventListener('pointermove', e=>{
+  if (!ptrs.has(e.pointerId)) return;
+  ptrs.set(e.pointerId, {x:e.clientX, y:e.clientY});
+  if (ptrs.size===1 && panStart){
+    if (anim) cancelAnimationFrame(anim);
+    moved += Math.abs(e.movementX||0)+Math.abs(e.movementY||0);
+    cam.tx = panStart.tx + (e.clientX-panStart.mx);
+    cam.ty = panStart.ty + (e.clientY-panStart.my);
+    apply();
+  } else if (ptrs.size===2 && pinchStart){
+    if (anim) cancelAnimationFrame(anim);
+    const [p1,p2]=[...ptrs.values()];
+    const d=Math.hypot(p1.x-p2.x,p1.y-p2.y);
+    const s2=Math.min(2.2, Math.max(0.06, pinchStart.s*d/pinchStart.d));
+    const cx=(p1.x+p2.x)/2, cy=(p1.y+p2.y)/2;
+    cam.s=s2; cam.tx=cx-pinchStart.wx*s2; cam.ty=cy-pinchStart.wy*s2;
+    apply();
+  }
+});
+function ptrUp(e){ ptrs.delete(e.pointerId);
+  if (ptrs.size<2) pinchStart=null;
+  if (ptrs.size===0){ panStart=null; vp.classList.remove('dragging'); } }
+addEventListener('pointerup', ptrUp);
+addEventListener('pointercancel', ptrUp);
+vp.addEventListener('dblclick', e=>{
+  if (!e.target.closest('.mk')){ closeReader(); overviewCam(); }
+});
+addEventListener('keydown', e=>{
+  if (e.key==='Escape'){ closeReader(); overviewCam(); }
+  if (e.key==='ArrowRight') navStep(1);
+  if (e.key==='ArrowLeft') navStep(-1);
+});
+document.getElementById('overviewBtn').onclick = ()=>{ closeReader(); overviewCam(); };
+addEventListener('resize', ()=>apply());
+
+/* ============================================================
+   SKY - constellation names, asterisms, ecliptic, stars
+   ============================================================ */
+TERRITORIES.forEach(t=>{
+  const rgb = [parseInt(t.hue.slice(1,3),16), parseInt(t.hue.slice(3,5),16), parseInt(t.hue.slice(5,7),16)].join(',');
+  const l = document.createElement('div');
+  l.className = 'tlab';
+  l.style.cssText = `left:${t.lx}px; top:${t.ly}px; transform:translateX(-50%);`;
+  l.innerHTML = `<div class="big" style="color:rgba(${rgb},0.92)">${t.label}</div>
+    <div class="sum">${t.sum}</div>`;
+  l.addEventListener('click', ()=>{
+    flyTo(t.rx+t.rw/2, t.ry+Math.min(t.rh/2, 1000), Math.min(visW()/(t.rw+300), 0.5));
+  });
+  world.appendChild(l);
+});
+
+
+
+/* minor stars - small nameless flecks inside each figure */
+{
+  const R = mulberry32(11);
+  TERRITORIES.forEach(t=>{
+    for (let i=0;i<16;i++){
+      const d=document.createElement('div');
+      const sz=(2.5+R()*3).toFixed(1);
+      d.style.cssText=`position:absolute; left:${Math.round(t.rx+40+R()*(t.rw-80))}px;`+
+        `top:${Math.round(t.ry+40+R()*(t.rh-80))}px; width:${sz}px; height:${sz}px;`+
+        `border-radius:50%; background:${t.hue}; opacity:${(0.18+R()*0.22).toFixed(2)}; pointer-events:none;`;
+      world.appendChild(d);
+    }
+  });
+}
+
+const flowsvg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+flowsvg.setAttribute('width',WW); flowsvg.setAttribute('height',WH);
+flowsvg.style.cssText='position:absolute;top:0;left:0;pointer-events:none;overflow:visible;';
+world.appendChild(flowsvg);
+
+const astsvg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+astsvg.id='astsvg'; astsvg.setAttribute('width',WW); astsvg.setAttribute('height',WH);
+ASTERISMS.forEach(([hue, pairs])=>{
+  pairs.forEach(([a,b])=>{
+    const pa=dotCenter(a), pb=dotCenter(b);
+    const dx=pb.x-pa.x, dy=pb.y-pa.y, L=Math.hypot(dx,dy)||1;
+    const ux=dx/L, uy=dy/L, off=30;
+    const ln = document.createElementNS('http://www.w3.org/2000/svg','line');
+    ln.setAttribute('x1',pa.x+ux*off); ln.setAttribute('y1',pa.y+uy*off);
+    ln.setAttribute('x2',pb.x-ux*off); ln.setAttribute('y2',pb.y-uy*off);
+    ln.setAttribute('stroke',hue); ln.setAttribute('stroke-opacity','0.38');
+    ln.setAttribute('stroke-width','1.6');
+    astsvg.appendChild(ln);
+  });
+});
+world.appendChild(astsvg);
+
+{
+  const pts = TOUR.map(id=>dotCenter(id));
+  let d = `M ${pts[0].x} ${pts[0].y}`;
+  for (let i=1;i<pts.length;i++){
+    const a=pts[i-1], b=pts[i];
+    const mx=(a.x+b.x)/2, my=(a.y+b.y)/2;
+    d += ` Q ${mx + (b.y-a.y)*0.08} ${my - (b.x-a.x)*0.08} ${b.x} ${b.y}`;
+  }
+  const p = document.createElementNS('http://www.w3.org/2000/svg','path');
+  p.setAttribute('d',d); p.setAttribute('fill','none');
+  p.setAttribute('class','lnk-base'); p.setAttribute('stroke',`rgba(${RGB_INK},0.08)`); p.setAttribute('stroke-width','4');
+  p.setAttribute('stroke-dasharray','2,14');
+  flowsvg.appendChild(p);
+}
+
+const tsvg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+tsvg.id='tsvg'; tsvg.setAttribute('width',WW); tsvg.setAttribute('height',WH);
+const defs = document.createElementNS('http://www.w3.org/2000/svg','defs');
+defs.innerHTML = `<marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="#96702f" opacity="0.8"/></marker>`;
+tsvg.appendChild(defs);
+world.appendChild(tsvg);
+const tlabels = [];
+
+const mkEls = {};
+ALL.forEach(id=>{
+  const n = N[id];
+  const hue = hueOf(id);
+  const size = dotSize(id);
+  const m = document.createElement('div');
+  m.className = 'mk' + (n.sim ? ' hasim' : '');
+  m.style.cssText = `left:${n.x}px; top:${n.y}px;`;
+  m.dataset.id = id;
+  m.innerHTML = `
+    <div class="dot" style="width:${size}px; height:${size}px; background:${hue};"></div>
+    <div class="dtext">
+      <div class="lbl">${SEQ[id]?`<span class="seq">${SEQ[id]}</span>`:''}${n.title}</div>
+      <div class="ess">${n.ess}</div>
+      <div class="sims-badge">▸ live model</div>
+    </div>`;
+  world.appendChild(m);
+  mkEls[id] = m;
+  m.addEventListener('click', e=>{
+    if (moved>6) return;
+    e.stopPropagation();
+    openIdea(id);
+  });
+});
+
+function lod(){
+  const ess = cam.s > 0.55;
+  if (lod._k===ess) return;
+  lod._k = ess;
+  Object.values(mkEls).forEach(m=>m.classList.toggle('showess', ess));
+}
+
+/* ============================================================
+   READER
+   ============================================================ */
+let focusId = null, stopSim = null;
+
+const REL = {builds:{glyph:'\u2190', label:'builds on'},
+             leads: {glyph:'\u2192', label:'leads to'},
+             live:  {glyph:'\u25B6', label:'see it live'}};
+function linkGroup(rel, items){
+  if (!items.length) return '';
+  const r = REL[rel];
+  return `<div class="lgroup"><span class="kicker" title="${r.label}"><span class="ar">${r.glyph}</span></span>
+    ${items.map(([t,why])=>`<a data-t="${t}"><span class="t">${N[t].title}</span>
+      <span class="why">${why}</span></a>`).join('')}
+  </div>`;
+}
+
+function openIdea(id){
+  const n = N[id];
+  if (stopSim){ stopSim(); stopSim=null; }
+  focusId = id;
+  const chip = document.getElementById('rChip');
+  chip.textContent = n.type;
+  chip.style.borderColor = hueOf(id)+'66'; chip.style.color = hueOf(id);
+  document.getElementById('rTitle').textContent = n.title;
+  document.getElementById('rTerr').textContent = terrOf(id) + (SEQ[id]?` · step ${SEQ[id]} of ${TOUR.length}`:'');
+  const nextId = SEQ[id] && SEQ[id] < TOUR.length ? TOUR[SEQ[id]] : null;
+  document.getElementById('rbody').innerHTML = `
+    <div class="ideablock">
+      <section class="ib"><span class="kicker">the idea</span>
+        <b class="term">${n.term}</b><div class="def">${n.def}</div></section>
+      ${n.mech ? `<section class="ib"><span class="kicker">how it works</span>
+        <div class="txt">${n.mech}</div></section>` : ''}
+      <section class="ib"><span class="kicker">failure mode</span>
+        <div class="txt">${n.sowhat}</div></section>
+      <section class="ib"><span class="kicker">description</span>
+        <div class="hook">${n.hook}</div>
+        <div class="story">${n.story}</div>
+        ${n.sim ? simHTML(n.sim) : ''}</section>
+    </div>
+    <div class="linkrow">
+      ${linkGroup('builds', n.builds)}
+      ${linkGroup('leads', n.leads)}
+      ${linkGroup('live', n.live)}
+    </div>
+    ${nextId ? `<button class="nextbtn" data-t="${nextId}"><span class="k">next in the flow · ${SEQ[nextId]} of ${TOUR.length}</span>${N[nextId].title}<span class="arr">→</span></button>`
+             : (SEQ[id]===TOUR.length ? `<button class="nextbtn" id="finishBtn"><span class="k">end of the flow</span>Back to the chart<span class="arr">↑</span></button>` : '')}`;
+  document.querySelectorAll('#rbody [data-t]').forEach(a=>
+    a.addEventListener('click', ()=>openIdea(a.dataset.t)));
+  const fin = document.getElementById('finishBtn');
+  if (fin) fin.onclick = ()=>{ closeReader(); overviewCam(); };
+  const fig = document.querySelector('#rbody figure.frame');
+  if (fig) stopSim = SIMS[fig.dataset.sim](fig);
+  document.getElementById('rbody').scrollTop = 0;
+  reader.classList.add('open');
+  document.body.classList.add('reader-open');
+  highlight(id);
+  syncNav();
+  const rs = Math.min(0.95, Math.max(0.62, cam.s));
+  setTimeout(()=>flyTo(n.x+180, n.y+60, rs), 60);
+}
+function closeReader(){
+  if (stopSim){ stopSim(); stopSim=null; }
+  reader.classList.remove('open');
+  document.body.classList.remove('reader-open');
+  focusId = null;
+  clearHighlight();
+  syncNav();
+}
+document.getElementById('rClose').onclick = closeReader;
+
+/* map highlight: few directional lines with plain labels */
+function highlight(id){
+  clearHighlight();
+  const n = N[id];
+  const nb = new Set([id]);
+  const conns = [
+    ...n.builds.map(([t])=>({t, lab:REL.builds.glyph, title:REL.builds.label, into:true})),
+    ...n.leads.map(([t])=>({t, lab:REL.leads.glyph, title:REL.leads.label, into:false})),
+    ...n.live.map(([t])=>({t, lab:REL.live.glyph, title:REL.live.label, into:false}))
+  ];
+  conns.forEach(c=>nb.add(c.t));
+  ALL.forEach(x=>{
+    mkEls[x].classList.toggle('dimmed', !nb.has(x));
+    mkEls[x].classList.toggle('neighbor', nb.has(x) && x!==id);
+    mkEls[x].classList.toggle('focused', x===id);
+  });
+  const here = dotCenter(id);
+  conns.forEach(c=>{
+    const there = dotCenter(c.t);
+    let from = c.into ? {...there} : {...here};
+    let to   = c.into ? {...here} : {...there};
+    {
+      const ddx=to.x-from.x, ddy=to.y-from.y, LL=Math.hypot(ddx,ddy)||1;
+      const ux=ddx/LL, uy=ddy/LL, off=30;
+      from = {x:from.x+ux*off, y:from.y+uy*off};
+      to   = {x:to.x-ux*off,   y:to.y-uy*off};
+    }
+    const dx=to.x-from.x, dy=to.y-from.y, dist=Math.hypot(dx,dy)||1;
+    const cx=(from.x+to.x)/2 - dy/dist*dist*0.12, cy=(from.y+to.y)/2 + dx/dist*dist*0.12;
+    const p = document.createElementNS('http://www.w3.org/2000/svg','path');
+    p.setAttribute('d',`M ${from.x} ${from.y} Q ${cx} ${cy} ${to.x} ${to.y}`);
+    p.setAttribute('fill','none');
+    p.setAttribute('class','lnk-flow'); p.setAttribute('stroke',`rgba(${RGB_AMBER},0.45)`);
+    p.setAttribute('stroke-width','2.5');
+    p.setAttribute('stroke-dasharray','9,8');
+    p.setAttribute('class','tline');
+    p.setAttribute('marker-end','url(#arr)');
+    tsvg.appendChild(p);
+    const lbl = document.createElement('div');
+    lbl.className='tlabel';
+    lbl.style.left = (.25*from.x+.5*cx+.25*to.x)+'px';
+    lbl.style.top = (.25*from.y+.5*cy+.25*to.y)+'px';
+    lbl.textContent = c.lab;
+    lbl.title = c.title;
+    lbl.addEventListener('click', e=>{ e.stopPropagation(); openIdea(c.t); });
+    world.appendChild(lbl);
+    tlabels.push(lbl);
+  });
+}
+function clearHighlight(){
+  ALL.forEach(x=>mkEls[x].classList.remove('dimmed','neighbor','focused'));
+  [...tsvg.querySelectorAll('path')].forEach(p=>p.remove());
+  tlabels.forEach(l=>l.remove()); tlabels.length=0;
+}
+
+/* ============================================================
+   NAV - top-right cluster drives the default flow
+   ============================================================ */
+function syncNav(){
+  const i = focusId ? TOUR.indexOf(focusId) : -1;
+  document.getElementById('navcluster').classList.toggle('on', !!focusId);
+  document.getElementById('navPrev').disabled = i===0;
+  document.getElementById('navNext').disabled = i===TOUR.length-1;
+}
+function navStep(dir){
+  const i = focusId ? TOUR.indexOf(focusId) : -1;
+  if (i<0){ openIdea(TOUR[0]); return; }
+  const j = i+dir;
+  if (j>=0 && j<TOUR.length) openIdea(TOUR[j]);
+}
+document.getElementById('navPrev').onclick = ()=>navStep(-1);
+document.getElementById('navNext').onclick = ()=>navStep(1);
+
+/* ============================================================
+   SIMULATIONS
+   ============================================================ */
+
+function mulberry32(a){ return function(){ a|=0; a=a+0x6D2B79F5|0;
+  let t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t;
+  return ((t^t>>>14)>>>0)/4294967296; }; }
+function setActive(fig, btn){
+  fig.querySelectorAll('.ghost').forEach(b=>{ if(b.dataset.d!==undefined||b.dataset.m!==undefined) b.classList.remove('active');});
+  if (btn) btn.classList.add('active');
+}
+function simHTML(kind){
+  const caps = {
+    leash:"The dashed circle is the set-goal: how far the child will go. It is computed from availability and threat — not from character.",
+    loop:"One distress signal, one bid for care, one caregiver. Amber is felt distress; gray is how loudly it is being signalled.",
+    chase:"Gray is what you get, faint is what you now expect, amber is what you feel. Watch which one flatlines.",
+    pic:"Left: hitting a target you only partly control. Right: accumulated surprise for every possible grip, with the best one marked.",
+    channels:"Error in reading a situation from two noisy channels. Only the ratio of the two weights matters — the valley is a ray, not a point."
+  };
+  const ctl = {
+    leash:`<span class="cl">availability</span><input type="range" data-p="q" min="0.05" max="1" step="0.01" value="0.85">
+      <span class="cl">threat</span><input type="range" data-p="T" min="0" max="1" step="0.01" value="0.12">
+      <button class="ghost active" data-m="0">contact soothes</button>
+      <button class="ghost" data-m="0.72">contact aversive</button>`,
+    loop:`<button class="ghost active" data-m="secure">secure</button>
+      <button class="ghost" data-m="anx">hyperactivating</button>
+      <button class="ghost" data-m="avo">deactivating</button>
+      <span class="cl">gain</span><input type="range" data-p="K" min="0.05" max="3.5" step="0.05" value="0.7">
+      <span class="cl">threshold</span><input type="range" data-p="th" min="0" max="1" step="0.01" value="0.3">
+      <span class="cl">caregiver delay</span><input type="range" data-p="tau" min="0" max="3" step="1" value="1">`,
+    chase:`<span class="cl">learning rate</span><input type="range" data-p="al" min="0.02" max="0.6" step="0.01" value="0.18">
+      <span class="cl">escalation</span><input type="range" data-p="g" min="0" max="0.06" step="0.002" value="0">
+      <button class="ghost active" data-k="adapt">adaptive gain</button>
+      <button class="ghost" data-k="opp">opponent process</button>`,
+    pic:`<span class="cl">your control</span><input type="range" data-p="c" min="0.05" max="0.88" step="0.01" value="0.62">
+      <span class="cl">your grip</span><input type="range" data-p="pi" min="0.2" max="30" step="0.1" value="3">
+      <button class="ghost" data-a="best">snap to the best grip</button>`,
+    channels:`<span class="cl">weight on your interior</span><input type="range" data-p="pi" min="0.05" max="3" step="0.01" value="1">
+      <span class="cl">weight on their cues</span><input type="range" data-p="pe" min="0.05" max="3" step="0.01" value="1">
+      <span class="cl">how readable they are</span><input type="range" data-p="re" min="0.05" max="2" step="0.01" value="1">
+      <button class="ghost" data-a="A">type A</button><button class="ghost" data-a="C">type C</button>
+      <button class="ghost" data-a="S">matched</button>`
+  };
+  return `<figure class="frame" data-sim="${kind}">
+    <canvas></canvas>
+    <div class="controls">${ctl[kind]}</div>
+    <figcaption>${caps[kind]}</figcaption>
+  </figure>`;
+}
+/* Canvas backing store follows the device pixel ratio, so canvas text stays
+   crisp in the ~570px reader column. Sims still draw in logical 700-wide units. */
+const _DPR = Math.max(1, Math.min(2, (typeof devicePixelRatio === 'number' ? devicePixelRatio : 1) || 1));
+function fitCanvas(cv, w, h){
+  cv.width = Math.round(w*_DPR); cv.height = Math.round(h*_DPR);
+  const ctx = cv.getContext('2d');
+  if (ctx.setTransform) ctx.setTransform(_DPR,0,0,_DPR,0,0);
+  return ctx;
+}
+const SIMS = {};
+
+SIMS.leash = fig=>{
+  const cv=fig.querySelector('canvas');
+    const ctx=fitCanvas(cv,700,360);
+  const W=700,H=360,cx=250,cy=178,Dmax=205,Rmax=0.8*Dmax,sq=0.60;
+  const rnd=mulberry32(11);
+  let q=0.85,T=0.12,av=0,d=30,th=0.4,trail=[],raf,steps=0,far=0;
+  const Rof=()=>Math.max(3, Rmax*q/(1+3*T));
+  function frame(){
+    const R=Rof(), beta=8/Rmax;
+    const A=1/(1+Math.exp(-beta*(d-R)));
+    d=Math.max(0,Math.min(Dmax, d + 0.05*Dmax*(1-A)*rnd() - 0.08*Dmax*A*(1-2*av)));
+    th += 0.008 + 0.020*(1-A);
+    const x=cx+d*Math.cos(th), y=cy+d*Math.sin(th)*sq;
+    trail.push([x,y]); if(trail.length>300) trail.shift();
+    steps++; if(d>0.5*Rmax) far++;
+    ctx.fillStyle=SUNK; ctx.fillRect(0,0,W,H);
+    ctx.strokeStyle=BRD; ctx.lineWidth=1; ctx.beginPath();
+    ctx.ellipse(cx,cy,Dmax,Dmax*sq,0,0,7); ctx.stroke();
+    ctx.fillStyle=AMBER; ctx.globalAlpha=.06; ctx.beginPath();
+    ctx.ellipse(cx,cy,R,R*sq,0,0,7); ctx.fill(); ctx.globalAlpha=1;
+    ctx.strokeStyle=FAINT; ctx.setLineDash([4,5]); ctx.lineWidth=1.3; ctx.beginPath();
+    ctx.ellipse(cx,cy,R,R*sq,0,0,7); ctx.stroke(); ctx.setLineDash([]);
+    ctx.strokeStyle=GRAY; ctx.globalAlpha=.30; ctx.lineWidth=1.2; ctx.beginPath();
+    trail.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));
+    ctx.stroke(); ctx.globalAlpha=1;
+    ctx.fillStyle=INKC; ctx.beginPath(); ctx.arc(cx,cy,8,0,7); ctx.fill();
+    ctx.fillStyle=GRAY; ctx.font='13px Inter, sans-serif';
+    ctx.fillText('caregiver',cx-27,cy+24);
+    ctx.fillStyle=AMBER; ctx.beginPath(); ctx.arc(x,y,6.5,0,7); ctx.fill();
+    const pct=steps?Math.round(100*far/steps):0;
+    ctx.fillStyle=GRAY; ctx.font='15px Inter, sans-serif';
+    ctx.fillText('set-goal radius '+Math.round(R)+' of '+Math.round(Rmax)+'  ·  system activation '+A.toFixed(2),480,28);
+    ctx.fillText('time spent out in the world: '+pct+'%',480,52);
+    ctx.fillStyle=INKC;
+    ctx.fillText(av>0.5?'contact aversive — displaced, not freed':'contact soothes',480,H-22);
+    raf=requestAnimationFrame(frame);
+  }
+  raf=requestAnimationFrame(frame);
+  const reset=()=>{trail=[];steps=0;far=0;};
+  fig.querySelectorAll('input').forEach(s=>s.oninput=()=>{
+    const p=s.dataset.p, v=parseFloat(s.value);
+    if(p==='q')q=v; else T=v; reset();});
+  fig.querySelectorAll('.ghost').forEach(b=>b.onclick=()=>{
+    setActive(fig,b); av=parseFloat(b.dataset.m); d=30; reset();});
+  return ()=>cancelAnimationFrame(raf);
+};
+
+SIMS.loop = fig=>{
+  const cv=fig.querySelector('canvas');
+    const ctx=fitCanvas(cv,700,420);
+  const W=700,H=420,PH=250,a=0.9,q=0.82,gEff=1.0,SW=0.15,xmax=2.2;
+  const rnd=mulberry32(29);
+  const gauss=()=>{let u=0,v=0;while(u===0)u=rnd();while(v===0)v=rnd();
+    return Math.sqrt(-2*Math.log(u))*Math.cos(6.283185*v);};
+  let K=0.7,th=0.30,tau=1;
+  let x=0.5,ubuf=[0,0,0,0],hx=[],hu=[],n=0,sx=0,sx2=0,su=0,raf;
+  const plateau=(SW*0.7979)/(1-a);
+  function step(){
+    const u=K*Math.max(0,x-th);
+    ubuf.push(u); const del=ubuf.shift();
+    const r=(rnd()<q? gEff*ubuf[Math.max(0,ubuf.length-1-tau)] : 0);
+    const w=Math.abs(gauss())*SW;
+    x=Math.max(0,Math.min(xmax, a*x + w - r));
+    hx.push(x); hu.push(u); if(hx.length>330){hx.shift();hu.shift();}
+    n++; sx+=x; sx2+=x*x; su+=u;
+    void del;
+  }
+  function draw(){
+    for(let i=0;i<2;i++) step();
+    ctx.fillStyle=SUNK; ctx.fillRect(0,0,W,H);
+    const y=v=>PH-4-(v/xmax)*(PH-30);
+    ctx.strokeStyle=BRD; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(0,PH); ctx.lineTo(W,PH); ctx.stroke();
+    ctx.strokeStyle=FAINT; ctx.setLineDash([3,4]);
+    ctx.beginPath(); ctx.moveTo(0,y(plateau)); ctx.lineTo(W,y(plateau)); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle=FAINT; ctx.font='12px Inter, sans-serif';
+    ctx.fillText('unbuffered plateau '+plateau.toFixed(2),8,y(plateau)-6);
+    const line=(arr,col,al)=>{ctx.strokeStyle=col;ctx.globalAlpha=al;ctx.lineWidth=1.6;
+      ctx.beginPath(); arr.forEach((v,i)=>{const X=i/330*W,Y=y(v);i?ctx.lineTo(X,Y):ctx.moveTo(X,Y);});
+      ctx.stroke();ctx.globalAlpha=1;};
+    line(hu,GRAY,.55); line(hx,AMBER,1);
+    const mean=n?sx/n:0, sd=n?Math.sqrt(Math.max(0,sx2/n-mean*mean)):0, eff=n?su/n:0;
+    const L=K*gEff*q;
+    const divg = tau===0 ? 1+a : 1, ring = tau===0 ? a : 0.75;
+    let verdict='damped — settles back quickly';
+    if(L>=divg) verdict='diverging — escalating protest';
+    else if(L>ring) verdict='ringing — overshoots before it settles';
+    if(K<0.35||th>0.7) verdict='quiet — but parked high';
+    ctx.fillStyle=INKC; ctx.font='15px Inter, sans-serif';
+    ctx.fillText('mean distress '+mean.toFixed(2)+'      volatility '+sd.toFixed(2)+'      signalling effort '+eff.toFixed(2),14,PH+34);
+    ctx.fillStyle=AMBER;
+    ctx.fillText('loop gain '+L.toFixed(2)+' with delay '+tau+'  ·  '+verdict,14,PH+62);
+    ctx.fillStyle=GRAY; ctx.font='13.5px Inter, sans-serif';
+    ctx.fillText('amber = distress actually carried    gray = distress actually signalled',14,PH+92);
+    ctx.fillText('anxious pays in volatility and effort. avoidant pays in a quiet, permanently elevated baseline.',14,PH+116);
+    ctx.fillText('drag caregiver delay to zero without touching gain — the ringing stops.',14,PH+140);
+    raf=requestAnimationFrame(draw);
+  }
+  raf=requestAnimationFrame(draw);
+  const reset=()=>{hx=[];hu=[];n=0;sx=0;sx2=0;su=0;x=0.5;ubuf=[0,0,0,0];};
+  const setS=(k,v)=>{const s=fig.querySelector('input[data-p="'+k+'"]'); if(s)s.value=v;};
+  fig.querySelectorAll('input').forEach(s=>s.oninput=()=>{
+    const p=s.dataset.p, v=parseFloat(s.value);
+    if(p==='K')K=v; else if(p==='th')th=v; else tau=Math.round(v);
+    reset();});
+  fig.querySelectorAll('.ghost').forEach(b=>b.onclick=()=>{
+    setActive(fig,b);
+    const m=b.dataset.m;
+    if(m==='secure'){K=0.7;th=0.30;tau=1;}
+    if(m==='anx'){K=3.1;th=0.04;tau=2;}
+    if(m==='avo'){K=0.18;th=0.82;tau=1;}
+    setS('K',K); setS('th',th); setS('tau',tau); reset();});
+  return ()=>cancelAnimationFrame(raf);
+};
+
+SIMS.chase = fig=>{
+  const cv=fig.querySelector('canvas');
+    const ctx=fitCanvas(cv,700,430);
+  const W=700,H=430,PH=280,GAM=0.61,w3=1.0,K=10;
+  let al=0.18,g=0,adapt=true,opp=false;
+  function run(){
+    let V=0,b=0,R=1,hist=[],recent=[],Rs=[],Vs=[],Hs=[],hsum=0;
+    for(let t=0;t<220;t++){
+      R=Math.pow(1+g,t);
+      const dl=R-V; V=V+al*dl;
+      recent.push(R); if(recent.length>K) recent.shift();
+      const mu=recent.reduce((s,v)=>s+v,0)/recent.length;
+      const sd=Math.sqrt(recent.reduce((s,v)=>s+(v-mu)*(v-mu),0)/recent.length);
+      const dt=adapt? dl/(sd+0.35) : dl;
+      hsum=GAM*hsum+dt;
+      if(opp){ b=b+0.055*Math.max(0,dt)-0.030*b; }
+      Rs.push(R); Vs.push(V); Hs.push(w3*hsum-(opp?b:0));
+      hist.push(dt);
+    }
+    return {Rs,Vs,Hs};
+  }
+  function draw(){
+    const {Rs,Vs,Hs}=run();
+    ctx.fillStyle=SUNK; ctx.fillRect(0,0,W,H);
+    const rmax=Math.max(1.2,Rs[Rs.length-1]);
+    const yR=v=>PH*0.52-4-(v/rmax)*(PH*0.52-26);
+    const hlo=Math.min(-0.6,...Hs), hhi=Math.max(1.2,...Hs);
+    const yH=v=>PH-8-((v-hlo)/(hhi-hlo))*(PH*0.42);
+    ctx.strokeStyle=BRD; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(0,PH*0.54); ctx.lineTo(W,PH*0.54); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0,yH(0)); ctx.lineTo(W,yH(0)); ctx.stroke();
+    const line=(arr,f,col,al2,dash)=>{ctx.strokeStyle=col;ctx.globalAlpha=al2;ctx.lineWidth=1.8;
+      if(dash)ctx.setLineDash([3,4]);
+      ctx.beginPath(); arr.forEach((v,i)=>{const X=i/219*W,Y=f(v);i?ctx.lineTo(X,Y):ctx.moveTo(X,Y);});
+      ctx.stroke(); ctx.setLineDash([]); ctx.globalAlpha=1;};
+    line(Rs,yR,GRAY,.85); line(Vs,yR,FAINT,.95,true); line(Hs,yH,AMBER,1);
+    ctx.font='13px Inter, sans-serif';
+    ctx.fillStyle=GRAY; ctx.fillText('what you get',10,16);
+    ctx.fillStyle=FAINT; ctx.fillText('what you expect',108,16);
+    ctx.fillStyle=AMBER; ctx.fillText('what you feel',10,yH(0)+18);
+    const grew=Rs[Rs.length-1]/Rs[0];
+    const hEnd=Hs[Hs.length-1], hPk=Math.max(...Hs);
+    ctx.fillStyle=INKC; ctx.font='15px Inter, sans-serif';
+    ctx.fillText('reward grew x'+grew.toFixed(1)+'   ·   feeling peaked at '+hPk.toFixed(2)+' and now reads '+hEnd.toFixed(2),14,PH+30);
+    const need=(al*1.0/w3);
+    ctx.fillStyle=AMBER;
+    ctx.fillText('to hold the feeling steady, reward must keep rising by '+need.toFixed(3)+' per step — forever',14,PH+58);
+    ctx.fillStyle=GRAY; ctx.font='13.5px Inter, sans-serif';
+    ctx.fillText(adapt?'adaptive gain ON — gain rescales to the range you have been getting, so escalation must go geometric':'adaptive gain off — the trap is milder than reality',14,PH+88);
+    ctx.fillText(opp?'opponent process ON — the baseline itself is sinking; back to normal is now below zero':'opponent process off — no baseline shift',14,PH+112);
+    ctx.fillStyle=INKC;
+    ctx.fillText('raise the learning rate: satisfaction gets shorter — and so would grief. Same machinery.',14,PH+140);
+  }
+  draw();
+  fig.querySelectorAll('input').forEach(s=>s.oninput=()=>{
+    const p=s.dataset.p, v=parseFloat(s.value);
+    if(p==='al')al=v; else g=v; draw();});
+  fig.querySelectorAll('.ghost').forEach(b=>b.onclick=()=>{
+    const k=b.dataset.k;
+    if(k==='adapt'){adapt=!adapt; b.classList.toggle('active',adapt);}
+    else {opp=!opp; b.classList.toggle('active',opp);}
+    draw();});
+  return ()=>{};
+};
+
+SIMS.pic = fig=>{
+  const cv=fig.querySelector('canvas');
+    const ctx=fitCanvas(cv,700,420);
+  const W=700,H=420,LW=372,KAP=1.0,SIG=1.6,PLO=0.2,PHI=30;
+  const rnd=mulberry32(53);
+  const gauss=()=>{let u=0,v=0;while(u===0)u=rnd();while(v===0)v=rnd();
+    return Math.sqrt(-2*Math.log(u))*Math.cos(6.283185*v);};
+  let c=0.7,pi=3,tr=[],raf;
+  const clp=v=>Math.max(PLO,Math.min(PHI,(Number.isFinite(v)?v:PLO)));
+  const clc=v=>Math.max(0.05,Math.min(0.88,(Number.isFinite(v)?v:0.05)));
+  const ES=(p,cc)=>{const e=KAP/(p*cc*cc+KAP);
+    return 0.5*p*(e*e+(1-cc)*(1-cc)*SIG*SIG)-0.5*Math.log(p);};
+  const best=cc=>{let bp=PLO,bv=1e9;
+    for(let i=0;i<=260;i++){const p=PLO*Math.pow(PHI/PLO,i/260),v=ES(p,cc);
+      if(v<bv){bv=v;bp=p;}} return bp;};
+  function frame(){
+    pi=clp(pi); c=clc(c);
+    const u=pi*c*1/(pi*c*c+KAP);
+    const y=c*u+(1-c)*gauss()*SIG;
+    tr.push(y); if(tr.length>150) tr.shift();
+    ctx.fillStyle=SUNK; ctx.fillRect(0,0,W,H);
+    const yy=v=>150-v*44;
+    ctx.strokeStyle=AMBER; ctx.globalAlpha=.5; ctx.setLineDash([4,4]); ctx.lineWidth=1.3;
+    ctx.beginPath(); ctx.moveTo(0,yy(1)); ctx.lineTo(LW,yy(1)); ctx.stroke();
+    ctx.setLineDash([]); ctx.globalAlpha=1;
+    ctx.fillStyle=AMBER; ctx.font='12px Inter, sans-serif'; ctx.fillText('the target',6,yy(1)-7);
+    ctx.strokeStyle=INKC; ctx.globalAlpha=.8; ctx.lineWidth=1.5; ctx.beginPath();
+    tr.forEach((v,i)=>{const X=i/149*LW,Y=Math.max(6,Math.min(258,yy(v)));i?ctx.lineTo(X,Y):ctx.moveTo(X,Y);});
+    ctx.stroke(); ctx.globalAlpha=1;
+    const pb=best(c), ratio=pi/pb;
+    let badge, note;
+    if(ratio>2.2){ badge = c<0.4? 'over-gripped · clinging' : 'over-gripped';
+      note='you are holding it far tighter than you can move it'; }
+    else if(ratio<0.45){ badge='under-gripped · premature giving-up';
+      note='you could move this and are not trying'; }
+    else { badge = c<0.35? 'matched · equanimity' : 'matched · effective';
+      note='grip and leverage agree'; }
+    ctx.fillStyle=GRAY; ctx.font='14px Inter, sans-serif';
+    ctx.fillText('control '+c.toFixed(2)+'   grip '+pi.toFixed(1)+'   best grip here '+pb.toFixed(1),8,196);
+    ctx.fillStyle=AMBER; ctx.font='16px Inter, sans-serif'; ctx.fillText(badge,8,222);
+    ctx.fillStyle=INKC; ctx.font='13.5px Inter, sans-serif'; ctx.fillText(note,8,244);
+    const X0=414,X1=688,Y0=26,Y1=250;
+    let lo=1e9,hi=-1e9,pts=[];
+    for(let i=0;i<=140;i++){const p=PLO*Math.pow(PHI/PLO,i/140),v=ES(p,c);
+      pts.push([p,v]); if(v<lo)lo=v; if(v>hi)hi=v;}
+    const px=p=>X0+(Math.log(p/PLO)/Math.log(PHI/PLO))*(X1-X0);
+    const py=v=>Y1-((v-lo)/(hi-lo+1e-9))*(Y1-Y0);
+    ctx.strokeStyle=BRD; ctx.lineWidth=1; ctx.beginPath();
+    ctx.moveTo(X0,Y1); ctx.lineTo(X1,Y1); ctx.stroke();
+    ctx.strokeStyle=GRAY; ctx.lineWidth=1.8; ctx.beginPath();
+    pts.forEach((p,i)=>{const X=px(p[0]),Y=py(p[1]);i?ctx.lineTo(X,Y):ctx.moveTo(X,Y);});
+    ctx.stroke();
+    ctx.strokeStyle=FAINT; ctx.setLineDash([3,4]); ctx.beginPath();
+    ctx.moveTo(px(pb),Y0); ctx.lineTo(px(pb),Y1); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle=AMBER; ctx.beginPath(); ctx.arc(px(pi),py(ES(pi,c)),5,0,7); ctx.fill();
+    ctx.fillStyle=GRAY; ctx.font='12.5px Inter, sans-serif';
+    ctx.fillText('accumulated surprise vs grip',X0,18);
+    ctx.fillText('loose',X0,Y1+18); ctx.fillText('tight',X1-28,Y1+18);
+    ctx.fillStyle=FAINT; ctx.fillText('best',px(pb)-12,Y0+12);
+    ctx.fillStyle=INKC; ctx.font='13.5px Inter, sans-serif';
+    ctx.fillText('Drag control toward zero and watch the best grip slide left. Loosening is the optimum, not a concession —',14,H-44);
+    ctx.fillText('and the curve rises on BOTH sides, which is the failure mode nobody warns you about.',14,H-22);
+    raf=requestAnimationFrame(frame);
+  }
+  raf=requestAnimationFrame(frame);
+  fig.querySelectorAll('input').forEach(s=>s.oninput=()=>{
+    const p=s.dataset.p, v=parseFloat(s.value);
+    if(p==='c')c=v; else pi=v; tr=[];});
+  fig.querySelectorAll('.ghost').forEach(b=>b.onclick=()=>{
+    pi=best(c); const s=fig.querySelector('input[data-p="pi"]'); if(s)s.value=pi; tr=[];});
+  return ()=>cancelAnimationFrame(raf);
+};
+
+SIMS.channels = fig=>{
+  const cv=fig.querySelector('canvas');
+    const ctx=fitCanvas(cv,700,400);
+  const W=700,H=400,X0=14,Y0=18,S=250,ri=1.0,LO=0.05,HI=3;
+  let pi=1,pe=1,re=1;
+  const cl=v=>Math.max(LO,Math.min(HI,(Number.isFinite(v)?v:LO)));
+  const err=(a0,b0,r0)=>{const a=cl(a0),b=cl(b0),rr=Math.max(0.02,r0||0.02);
+    return Math.sqrt((a*a/ri+b*b/rr))/(a+b);};
+  const gx=v=>X0+((v-LO)/(HI-LO))*S, gy=v=>Y0+S-((v-LO)/(HI-LO))*S;
+  function draw(){
+    ctx.fillStyle=SUNK; ctx.fillRect(0,0,W,H);
+    const step=5;
+    let lo=1e9,hi=-1e9;
+    for(let a=LO;a<=HI;a+=(HI-LO)/50) for(let b=LO;b<=HI;b+=(HI-LO)/50){
+      const e=err(a,b,re); if(e<lo)lo=e; if(e>hi)hi=e;}
+    for(let sx=0;sx<S;sx+=step) for(let sy=0;sy<S;sy+=step){
+      const a=LO+(sx/S)*(HI-LO), b=LO+((S-sy)/S)*(HI-LO);
+      const t=(err(a,b,re)-lo)/(hi-lo+1e-9);
+      ctx.fillStyle=INKC; ctx.globalAlpha=0.05+0.62*t;
+      ctx.fillRect(X0+sx,Y0+sy,step,step);
+    }
+    ctx.globalAlpha=1;
+    ctx.strokeStyle=AMBER; ctx.lineWidth=2; ctx.globalAlpha=.85;
+    ctx.beginPath();
+    const slope=ri/Math.max(0.02,re||0.02);
+    if(slope>=1){ ctx.moveTo(gx(LO),gy(LO)); ctx.lineTo(gx(Math.min(HI,HI/slope)),gy(Math.min(HI,HI/slope)*slope)); }
+    else { ctx.moveTo(gx(LO),gy(LO)); ctx.lineTo(gx(HI),gy(HI*slope)); }
+    ctx.stroke(); ctx.globalAlpha=1;
+    ctx.strokeStyle=BRD; ctx.lineWidth=1; ctx.strokeRect(X0,Y0,S,S);
+    ctx.fillStyle=AMBER; ctx.beginPath(); ctx.arc(gx(cl(pi)),gy(cl(pe)),6,0,7); ctx.fill();
+    ctx.fillStyle=GRAY; ctx.font='12.5px Inter, sans-serif';
+    ctx.fillText('weight on your interior',X0+56,Y0+S+18);
+    ctx.save(); ctx.translate(X0-2,Y0+S-56); ctx.rotate(-1.5708);
+    ctx.fillText('weight on their cues',0,0); ctx.restore();
+    ctx.fillStyle=AMBER; ctx.font='12.5px Inter, sans-serif';
+    ctx.fillText('the correctly-weighted ray',X0+8,Y0+14);
+    const X2=306,S2=250;
+    let plo=1e9,phi=-1e9,pts=[];
+    for(let i=0;i<=140;i++){const b=LO+(i/140)*(HI-LO), e=err(pi,b,re);
+      pts.push([b,e]); if(e<plo)plo=e; if(e>phi)phi=e;}
+    const qx=b=>X2+((b-LO)/(HI-LO))*(W-X2-20), qy=e=>Y0+S2-((e-plo)/(phi-plo+1e-9))*(S2-20);
+    ctx.strokeStyle=BRD; ctx.lineWidth=1; ctx.beginPath();
+    ctx.moveTo(X2,Y0+S2); ctx.lineTo(W-20,Y0+S2); ctx.stroke();
+    ctx.strokeStyle=GRAY; ctx.lineWidth=1.8; ctx.beginPath();
+    pts.forEach((p,i)=>{const X=qx(p[0]),Y=qy(p[1]);i?ctx.lineTo(X,Y):ctx.moveTo(X,Y);});
+    ctx.stroke();
+    let bb=LO,bv=1e9; pts.forEach(p=>{if(p[1]<bv){bv=p[1];bb=p[0];}});
+    ctx.strokeStyle=FAINT; ctx.setLineDash([3,4]); ctx.beginPath();
+    ctx.moveTo(qx(bb),Y0); ctx.lineTo(qx(bb),Y0+S2); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle=AMBER; ctx.beginPath(); ctx.arc(qx(cl(pe)),qy(err(pi,cl(pe),re)),5,0,7); ctx.fill();
+    ctx.fillStyle=GRAY; ctx.font='12.5px Inter, sans-serif';
+    ctx.fillText('error as you watch them harder',X2,Y0+10);
+    ctx.fillText('best weight '+bb.toFixed(2),qx(bb)+6,Y0+26);
+    ctx.fillStyle=INKC; ctx.font='14px Inter, sans-serif';
+    ctx.fillText('error now '+err(pi,pe,re).toFixed(3)+'   ·   best achievable '+bv.toFixed(3),X2,Y0+S2+26);
+    ctx.fillStyle=GRAY; ctx.font='13.5px Inter, sans-serif';
+    ctx.fillText(re<0.5?'they are hard to read — watching harder now makes your estimate WORSE'
+      :'they are readable — extra attention pays here',X2,Y0+S2+50);
+    ctx.fillStyle=INKC; ctx.font='13.5px Inter, sans-serif';
+    ctx.fillText('Only the ratio matters, so the valley is a ray: caring more overall cannot fix a miscalibration.',14,H-16);
+  }
+  draw();
+  const setS=(k,v)=>{const s=fig.querySelector('input[data-p="'+k+'"]'); if(s)s.value=v;};
+  fig.querySelectorAll('input').forEach(s=>s.oninput=()=>{
+    const p=s.dataset.p, v=parseFloat(s.value);
+    if(p==='pi')pi=v; else if(p==='pe')pe=v; else re=v; draw();});
+  fig.querySelectorAll('.ghost').forEach(b=>b.onclick=()=>{
+    const a=b.dataset.a;
+    if(a==='A'){pi=0.22;pe=0.9;re=0.9;}
+    if(a==='C'){pi=2.4;pe=2.7;re=0.22;}
+    if(a==='S'){re=0.9;pi=1.0;pe=0.9;}
+    setS('pi',pi); setS('pe',pe); setS('re',re); draw();});
+  return ()=>{};
+};
+
+/* ============================================================
+   BOOT
+   ============================================================ */
+syncNav();
+overviewCam(false);
+
+
+/* ---- light / dark, shared with the main site ---- */
+document.getElementById('themeBtn').addEventListener('click', function(){
+  const r = document.documentElement;
+  const next = r.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  r.setAttribute('data-theme', next);
+  try { localStorage.setItem('theme', next); } catch(e) {}
+  syncSimColours();
+  if (focusId) openIdea(focusId);   // repaint the open simulation
+});
+</script>
+
+<script>
+/* Chart switcher: jump straight to another constellation. */
+(function(){var s=document.getElementById('chartSwitch');
+if(s)s.addEventListener('change',function(){if(s.value)window.location.href=s.value;});})();
+</script>
+</body>
+</html>

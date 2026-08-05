@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+/* Theme is shared with the main site: same origin, same localStorage key. */
+(function(){try{var t=localStorage.getItem('theme');
+if(!t)t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+document.documentElement.setAttribute('data-theme',t);}
+catch(e){document.documentElement.setAttribute('data-theme','light');}})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<title>Desire, from first principles - Orrery</title>
+<style>
+:root{
+  /* site parity: --ground/--surface-* mirror the main site's --bg/--bg-2/--chip */
+  --ground:#fbf8f3; --surface-sunk:#f2ede4; --surface-raised:#fdfcf9;
+  --border:#e3dccf; --border-strong:#d2c8b5;
+  --ink:#211f1c; --ink-strong:#14120f; --ink-muted:#5c5751; --ink-faint:#8c867f;
+  --accent:#8f6220; --accent-dim:#c2a47c; --accent-wash:rgba(143,98,32,0.08);
+  --accent-rgb:143,98,32;
+  --font:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --r:4px; --reader-w:min(760px, 58vw); --move-fast:150ms ease;
+  --ink-body:#2b2823; --ink-soft:#332f29;
+  --hdr-fade:linear-gradient(180deg, rgba(251,248,243,.96), rgba(251,248,243,.75), transparent);
+  --vp-bg:radial-gradient(ellipse at 50% 40%, #fdfbf7 0%, #fbf8f3 55%, #f2ede4 100%);
+  --btn-bg:rgba(253,252,249,.92);
+  --line-soft:rgba(33,31,28,0.10); --line-flow:rgba(143,98,32,0.45);
+  --sim-ink:#3a352e; --sim-gray:#8c867f; --sim-faint:#b3ac9f;
+  --sim-amber:#8f6220; --sim-sunk:#f2ede4; --sim-brd:#ddd4c3;
+  --grid-1:rgba(110,95,65,.13); --grid-2:rgba(110,95,65,.07);
+  --shadow:rgba(90,75,50,.16);
+}
+
+/* Night sky, sharing the main site's dark surfaces exactly. */
+html[data-theme="dark"]{
+  --ground:#1a1a1a; --surface-sunk:#232322; --surface-raised:#262523;
+  --border:#2e2e2e; --border-strong:#3e3e3b;
+  --ink:#e8e6e3; --ink-strong:#f5f3f0; --ink-muted:#a5a09a; --ink-faint:#7d7873;
+  --accent:#d9a25e; --accent-dim:#8b6c41; --accent-wash:rgba(217,162,94,0.10);
+  --accent-rgb:217,162,94;
+  --ink-body:#dddad5; --ink-soft:#d3cfc9;
+  --hdr-fade:linear-gradient(180deg, rgba(26,26,26,.96), rgba(26,26,26,.75), transparent);
+  --vp-bg:radial-gradient(ellipse at 50% 40%, #202020 0%, #1a1a1a 55%, #141414 100%);
+  --btn-bg:rgba(38,37,35,.92);
+  --line-soft:rgba(232,230,227,0.10); --line-flow:rgba(217,162,94,0.45);
+  --sim-ink:#e8e6e3; --sim-gray:#9d988f; --sim-faint:#6b6660;
+  --sim-amber:#d9a25e; --sim-sunk:#232322; --sim-brd:#393936;
+  --grid-1:rgba(210,203,190,.09); --grid-2:rgba(210,203,190,.045);
+  --shadow:rgba(0,0,0,.5);
+}
+html{color-scheme:light}
+html[data-theme="dark"]{color-scheme:dark}
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{height:100%; overflow:hidden; background:var(--ground); color:var(--ink);
+  font-family:var(--font); font-size:15.5px; line-height:1.75; overscroll-behavior:none;}
+h1,h2,h3{color:var(--ink-strong); font-weight:600; line-height:1.3;}
+.kicker{font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-muted); font-weight:500;}
+
+/* header - all navigation lives top right */
+#hdr{position:fixed; top:0; left:0; right:0; z-index:40; height:56px;
+  display:flex; align-items:center; gap:1.1rem; padding:0 1.4rem;
+  background:var(--hdr-fade);
+  pointer-events:none; transition:right .3s cubic-bezier(.25,.7,.3,1);}
+body.reader-open #hdr{right:var(--reader-w);}
+#hdr>*{pointer-events:auto;}
+#hdr .t{font-size:15px; font-weight:600; color:var(--ink-strong);}
+#hdr .sub{font-size:11.5px; color:var(--ink-muted);}
+#hdr .spacer{flex:1;}
+#count{font-size:12px; color:var(--ink-faint); white-space:nowrap;}
+.hbtn{background:var(--btn-bg); border:1px solid var(--border-strong); color:var(--ink-muted);
+  font-family:var(--font); font-size:12.5px; padding:6px 13px; border-radius:var(--r); cursor:pointer;
+  transition:all var(--move-fast); white-space:nowrap;}
+.hbtn:hover{color:var(--ink); border-color:var(--ink-muted);}
+.hbtn:disabled{opacity:.35; cursor:default;}
+#navcluster{display:flex; align-items:center; gap:2px; opacity:0; pointer-events:none;
+  transition:opacity .2s ease;}
+#navcluster.on{opacity:1; pointer-events:auto;}
+#navcluster .hbtn{background:none; border:none; font-size:19px; font-weight:300;
+  color:var(--ink-faint); padding:1px 8px; line-height:1.2; border-radius:5px;}
+#navcluster .hbtn:hover{color:var(--ink); background:var(--accent-wash);}
+#navcluster .hbtn:disabled{opacity:.28; background:none;}
+
+/* viewport & sky */
+#vp{position:fixed; inset:0; cursor:grab; touch-action:none;
+  background:var(--vp-bg);}
+#vp.dragging{cursor:grabbing;}
+#vp.dragging, #vp.dragging *{user-select:none;}
+#world{position:absolute; top:0; left:0; width:2750px; height:1750px;
+  transform-origin:0 0; will-change:transform;}
+#world::before{content:''; position:absolute; inset:0; pointer-events:none;
+  background-image:radial-gradient(circle, var(--grid-1) 1.2px, transparent 1.2px),
+                   radial-gradient(circle, var(--grid-2) 1px, transparent 1px);
+  background-size:380px 380px, 150px 150px;
+  background-position:0 0, 70px 100px; opacity:.8;}
+
+/* constellation names */
+.tlab{position:absolute; pointer-events:auto; cursor:pointer; user-select:none; text-align:center;}
+.tlab .big{font-size:40px; font-weight:500; letter-spacing:.5em; line-height:1.3;
+  text-transform:uppercase; white-space:nowrap;}
+.tlab .sum{text-shadow:0 0 5px var(--ground),0 0 5px var(--ground),0 0 3px var(--ground);
+  font-size:19px; color:var(--ink-muted); margin-top:.5em; letter-spacing:.18em; text-transform:uppercase;}
+.tlab:hover .big{filter:brightness(1.35);}
+
+/* stars */
+.mk{position:absolute; cursor:pointer; user-select:none;
+  display:flex; gap:14px; width:330px; align-items:flex-start;}
+.mk .dot{border-radius:50%; flex-shrink:0;
+  transition:transform .2s ease, box-shadow .4s ease, opacity .4s ease, background .4s ease;}
+.mk:hover .dot{transform:scale(1.3);}
+.mk .dtext{min-width:0; padding-top:1px;}
+.mk .lbl{text-shadow:0 0 5px var(--ground),0 0 5px var(--ground),0 0 3px var(--ground),0 0 3px var(--ground);
+  font-size:19px; color:var(--ink); font-weight:500; line-height:1.3;}
+.mk .lbl .seq{font-size:12px; color:var(--ink-faint); font-weight:400; margin-right:.5em;}
+.mk .ess{text-shadow:0 0 5px var(--ground),0 0 5px var(--ground),0 0 3px var(--ground),0 0 3px var(--ground);
+  font-size:14px; color:var(--ink-muted); line-height:1.45; margin-top:4px; max-width:290px;
+  opacity:0; transition:opacity .3s ease;}
+.mk.showess .ess{opacity:1;}
+.mk .sims-badge{font-size:12px; color:var(--accent-dim); margin-top:3px; display:none;}
+.mk.hasim .sims-badge{display:block;}
+.mk.focused .dot{transform:scale(1.35);}
+.mk.focused .lbl{color:var(--ink-strong);}
+.mk.neighbor .lbl{color:var(--ink-strong);}
+.mk.dimmed{opacity:.35;}
+
+/* connection overlay - few, directional, labeled plainly */
+#tsvg, #astsvg, #flowsvg{position:absolute; top:0; left:0; pointer-events:none; overflow:visible;}
+@keyframes dashdrift{to{stroke-dashoffset:-64;}}
+.tline{animation:dashdrift 6s linear infinite;}
+.tlabel{position:absolute; transform:translate(-50%,-50%); background:var(--ground);
+  border:1px solid var(--accent-dim); color:var(--accent); border-radius:12px;
+  font-size:12px; letter-spacing:.06em; padding:2px 11px; white-space:nowrap; cursor:pointer;
+  pointer-events:auto; transition:background var(--move-fast); text-transform:uppercase;}
+.tlabel:hover{background:var(--accent-wash);}
+
+/* ---------- READER ---------- */
+#reader{position:fixed; top:0; right:calc(-1 * var(--reader-w) - 20px); width:var(--reader-w);
+  height:100%; z-index:45; background:var(--surface-raised);
+  border-left:1px solid var(--border); display:flex; flex-direction:column;
+  transition:right .3s cubic-bezier(.25,.7,.3,1);
+  box-shadow:-24px 0 70px var(--shadow);}
+#reader.open{right:0;}
+#reader .top{padding:1.5em 2.2em 1em; border-bottom:1px solid var(--border); position:relative;}
+#reader .rtools{position:absolute; top:13px; right:15px; display:flex; align-items:center; gap:9px;}
+#reader .top .typechip{max-width:calc(100% - 108px);}
+#reader .close{background:none; border:none; padding:0 2px; line-height:1;
+  color:var(--ink-faint); font-size:17px; cursor:pointer;}
+#reader .close:hover{color:var(--ink);}
+#reader h2{font-size:24px; margin:.45em 0 .3em;}
+#reader .terrline{font-size:11.5px; color:var(--ink-faint); margin-top:2px;}
+#rbody{flex:1; overflow-y:auto; padding:1.6em 2.2em 2.5em;}
+#rbody::-webkit-scrollbar{width:6px;}
+#rbody::-webkit-scrollbar-thumb{background:var(--border-strong); border-radius:3px;}
+#rbody>*{max-width:66ch;}
+/* block-level children span the column; the reader width holds the measure */
+#rbody>.ideablock, #rbody>.linkrow{max-width:none;}
+.hook{font-size:18.5px; color:var(--ink-strong); line-height:1.65;
+  padding-left:1em; border-left:2px solid var(--accent-dim); margin-bottom:1.1em;}
+.story{font-size:15.5px; color:var(--ink-body); margin-top:.9em;}
+/* the idea block — the idea / how it works / failure mode / description */
+.ideablock{border:1px solid var(--border); border-radius:10px;
+  background:var(--surface-sunk); overflow:hidden;}
+.ideablock .ib{padding:1.15em 1.35em; border-top:1px solid var(--border);}
+.ideablock .ib:first-child{border-top:none;}
+.ideablock .kicker{display:block; margin-bottom:.45em; color:var(--accent);}
+.ideablock .term{color:var(--ink-strong); font-weight:600; font-size:17px; display:block;}
+.ideablock .def{font-size:14.5px; color:var(--ink-soft); margin-top:.25em;}
+.ideablock .txt{font-size:15px; color:var(--ink-body);}
+.ideablock .hook{margin-bottom:0;}
+.ideablock figure.frame{background:var(--surface-raised);}
+.typechip{display:inline-block; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-muted); border:1px solid var(--border-strong); border-radius:3px; padding:1px 8px;}
+details.fold{margin:1.2em 0 0; border:1px solid var(--border); border-radius:var(--r); background:var(--surface-sunk);}
+details.fold summary{cursor:pointer; padding:.6em 1.05em; color:var(--ink-muted);
+  font-size:13px; list-style:none; user-select:none;}
+details.fold summary::-webkit-details-marker{display:none;}
+details.fold summary::before{content:'+  '; color:var(--accent); font-weight:500;}
+details.fold[open] summary::before{content:'−  ';}
+details.fold summary:hover{color:var(--ink);}
+details.fold .inner{padding:0 1.05em .9em; font-size:14.5px; color:var(--ink-soft);}
+.named{margin-top:1.5em; background:var(--surface-sunk); border:1px solid var(--border);
+  border-radius:8px; padding:1em 1.3em;}
+.named .kicker{display:block; margin-bottom:.35em;}
+.named b{color:var(--ink-strong); font-weight:600; font-size:16px;}
+.named .def{font-size:14.5px; color:var(--ink-soft); margin-top:.2em;}
+.sowhat{margin-top:1.4em; font-size:15px; color:var(--ink-body);}
+.sowhat .kicker{display:block; margin-bottom:.3em;}
+.closure{margin-top:1.5em; border:1px solid var(--accent-dim); border-radius:8px;
+  background:var(--accent-wash); padding:1em 1.3em;}
+.closure .kicker{color:var(--accent); display:block; margin-bottom:.3em;}
+.closure .txt{font-size:14.5px; color:var(--ink-body); line-height:1.65;}
+.linkrow{margin-top:1.6em; border-top:1px solid var(--border); padding-top:1em;
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:.6em 2em;}
+.lgroup .kicker{display:block; margin-bottom:.25em;}
+.lgroup a{display:block; font-size:14px; padding:.2em 0 .45em; color:var(--ink-soft); cursor:pointer; text-decoration:none;}
+.lgroup .kicker .ar{font-size:19px; line-height:1; color:var(--accent); letter-spacing:0;}
+.lgroup a .t{border-bottom:1px dotted transparent; transition:border-color var(--move-fast); color:var(--ink);}
+.lgroup a:hover .t{border-bottom-color:var(--accent);}
+.lgroup a .why{display:block; font-size:12px; color:var(--ink-faint); line-height:1.5;}
+.nextbtn{margin-top:1.8em; width:100%; max-width:66ch; text-align:left;
+  background:var(--surface-sunk); border:1px solid var(--border-strong); border-radius:8px;
+  color:var(--ink); font-family:var(--font); font-size:14.5px; padding:.9em 1.3em; cursor:pointer;
+  transition:all var(--move-fast);}
+.nextbtn:hover{border-color:var(--accent-dim); background:var(--accent-wash);}
+.nextbtn .k{color:var(--ink-faint); font-size:11px; letter-spacing:.12em; text-transform:uppercase;
+  display:block; margin-bottom:.15em;}
+.nextbtn .arr{color:var(--accent); float:right;}
+
+/* sim figure */
+figure.frame{background:var(--surface-sunk); border:1px solid var(--border); border-radius:var(--r);
+  margin:1.3em 0 0; overflow:hidden;}
+figure.frame canvas{width:100%; display:block;}
+figure.frame .controls{display:flex; gap:8px; padding:8px 12px; border-top:1px solid var(--border);
+  align-items:center; flex-wrap:wrap;}
+figure.frame .controls .cl{font-size:11.5px; color:var(--ink-faint);}
+figure.frame figcaption{padding:7px 13px 10px; font-size:12.5px; color:var(--ink-muted); line-height:1.55;}
+.ghost{background:none; border:1px solid var(--border-strong); color:var(--ink-muted);
+  font-family:var(--font); font-size:12px; padding:3px 11px; border-radius:var(--r); cursor:pointer;
+  transition:all var(--move-fast);}
+.ghost:hover{color:var(--ink); border-color:var(--ink-muted);}
+.ghost.active{color:var(--accent); border-color:var(--accent-dim); background:var(--accent-wash);}
+figure.frame input[type=range]{flex:1; min-width:100px; accent-color:var(--accent);}
+
+@media(max-width:760px){ :root{--reader-w:100vw;} }
+
+/* ---- site exits + chart switcher (present on every chart) ---- */
+#hdr .sub a{color:var(--accent);text-decoration:none;border-bottom:1px solid transparent}
+#hdr .sub a:hover{border-bottom-color:var(--accent)}
+#hdr .sub s{text-decoration:none;color:var(--ink-faint);opacity:.75;margin:0 4px}
+#chartSwitch{-webkit-appearance:none;appearance:none;padding-right:26px;max-width:190px;
+  background-image:linear-gradient(45deg,transparent 50%,var(--ink-muted) 50%),
+                   linear-gradient(135deg,var(--ink-muted) 50%,transparent 50%);
+  background-position:calc(100% - 14px) 52%,calc(100% - 9.5px) 52%;
+  background-size:5px 5px,5px 5px;background-repeat:no-repeat}
+#chartSwitch:hover{color:var(--ink-strong);border-color:var(--accent-dim)}
+@media (max-width:700px){#hdr .sub{font-size:10.5px}#chartSwitch{max-width:118px}}
+
+/* ---- reader footer: step nav lives bottom-right, inside the panel ---- */
+#rfoot{display:flex;align-items:center;justify-content:flex-end;gap:.75rem;
+  padding:.5rem 2.2em .6rem;border-top:1px solid var(--border);
+  background:var(--surface-raised);flex:none;border-top-color:transparent}
+#rfoot:has(#navcluster.on){border-top-color:var(--border)}
+#reader #navcluster{background:var(--surface-sunk);border:1px solid var(--border-strong);
+  border-radius:7px;padding:1px 2px}
+/* Forward affordance sits on the right edge, where the thumb already is.
+   Needs #rbody> to beat the (1,0,0) of `#rbody > *`. */
+#rbody>.nextbtn{width:auto;min-width:min(100%,24ch);max-width:min(100%,44ch);
+  margin-left:auto;margin-right:0;display:block}
+@media (max-width:700px){
+  #rfoot{padding:.45rem 1.2em .55rem}
+  #rbody>.nextbtn{max-width:100%}
+}
+
+/* ---- theming: lines, marker, toggle ---- */
+.lnk-base{stroke:var(--line-soft)}
+.lnk-flow{stroke:var(--line-flow)}
+#tsvg marker path{fill:var(--accent)}
+/* band hues are mid-tone and kept in both themes; lift them on dark ground */
+html[data-theme="dark"] #tsvg line,
+html[data-theme="dark"] #astsvg line{stroke-opacity:.55}
+#themeBtn{font-size:14px;line-height:1;padding:5px 11px}
+</style>
+</head>
+<body>
+
+<div id="hdr">
+  <div>
+    <div class="t">Desire</div>
+    <div class="sub"><a href="/">Rohan's space</a><s>/</s><a href="/orrery">Orrery</a></div>
+  </div>
+  <div class="spacer"></div>
+  <select class="hbtn" id="chartSwitch" aria-label="Jump to another chart"><option value="">Other charts&hellip;</option><option value="/orrery/attachment.html">Attachment: Bonds, Clinging &amp; the Grip</option><option value="/orrery/building-taste.html">Building Taste</option><option value="/orrery/chaos-luck-ergodicity.html">Chaos, Luck &amp; Ergodicity</option><option value="/orrery/decision-theory.html">Decision Theory</option><option value="/orrery/decisive.html">Decisive</option><option value="/orrery/first-principles-thinking.html">First Principles Thinking</option><option value="/orrery/how-to-know-a-person.html">How to Know a Person</option><option value="/orrery/interpersonal-communication.html">Interpersonal &amp; Communication Skills</option><option value="/orrery/never-split-the-difference.html">Never Split the Difference</option><option value="/orrery/nonviolent-communication.html">Nonviolent Communication</option><option value="/orrery/systems-thinking.html">Systems Thinking</option><option value="/orrery/course-of-love.html">The Course of Love</option><option value="/orrery/the-power-law.html">The Power Law</option><option value="/orrery/the-school-of-life.html">The School of Life</option><option value="/orrery/thinking-fast-and-slow.html">Thinking, Fast and Slow</option><option value="/orrery/thinking-in-bets.html">Thinking in Bets</option><option value="/orrery/why-we-sleep.html">Why We Sleep</option></select>
+  <button class="hbtn" id="themeBtn" type="button" title="Light / dark" aria-label="Toggle light or dark">◐</button>
+  <button class="hbtn" id="overviewBtn">Overview&nbsp;·&nbsp;Esc</button>
+</div>
+
+<div id="vp"><div id="world"></div></div>
+
+<div id="reader">
+  <div class="top">
+    <div class="rtools">
+      <div id="navcluster">
+        <button class="hbtn" id="navPrev" title="previous idea">‹</button>
+        <button class="hbtn" id="navNext" title="next idea">›</button>
+      </div>
+      <button class="close" id="rClose" title="close">✕</button>
+    </div>
+    <span class="typechip" id="rChip"></span>
+    <h2 id="rTitle"></h2>
+    <div class="terrline" id="rTerr"></div>
+  </div>
+  <div id="rbody"></div>
+</div>
+
+<script>
+'use strict';
+
+let INKC, GRAY, FAINT, AMBER, SUNK, BRD;
+let RGB_INK, RGB_GRAY, RGB_FAINT, RGB_AMBER;
+/* Canvas takes no var(), so pull the resolved values and refresh on theme flip.
+   Animated sims pick these up on their next frame; static ones are remounted. */
+function syncSimColours(){
+  const cs = getComputedStyle(document.documentElement);
+  const v = n => cs.getPropertyValue(n).trim();
+  const trip = h => { h = h.replace('#','').trim();
+    if (h.length === 3) h = h.split('').map(c=>c+c).join('');
+    return [0,2,4].map(i=>parseInt(h.slice(i,i+2),16)).join(','); };
+  INKC=v('--sim-ink'); GRAY=v('--sim-gray'); FAINT=v('--sim-faint');
+  AMBER=v('--sim-amber'); SUNK=v('--sim-sunk'); BRD=v('--sim-brd');
+  RGB_INK=trip(INKC); RGB_GRAY=trip(GRAY); RGB_FAINT=trip(FAINT); RGB_AMBER=trip(AMBER);
+}
+syncSimColours();
+
+/* ============================================================
+   CONTENT v2 - the reader shows one block per idea, definition-first:
+   the idea (term+def) → how it works (mech) → failure mode (sowhat) →
+   description (hook → story → sim).
+   Connections: ≤4 per idea, as arrows — ← builds on, → leads to, ▶ see it live.
+   ============================================================ */
+const N = {
+
+a1:{type:"axiom", title:"You predict, you do not perceive", x:1259, y:512,
+  ess:"Your brain models the world and corrects. Wanting is one of those predictions.",
+  hook:"You reach for a cup without looking — what told your hand where it would be?",
+  story:"Your model did, built from every cup you have ever lifted and running slightly ahead of your senses. The brain does not receive the world and then react; it guesses continuously and spends its effort on the corrections. Wanting is one of those guesses, not an exception to them.",
+  mech:"Perception, emotion and motivation run on one architecture: a prediction, an outcome, and the error between them. The body is regulated the same way, mobilising before a deficit arrives rather than only reacting once it has. Barrett and Simmons (2015) give the interoceptive version; Keramati and Gutkin (2014) give a formal one in which reward simply is predicted reduction of deviation from a setpoint. Treat the mechanism as established and the fashionable label for it, allostasis, as contested — Ramsay and Woods (2014) call the term diffuse and ambiguously used, and at least three non-equivalent theories travel under it.",
+  term:"Predictive regulation", def:"the brain runs a model of body and world, acts to fulfil its predictions, and learns from the error.",
+  sowhat:"Every feeling you treat as a readout of reality is a readout of your model of reality. That gap is where this entire subject lives.",
+  builds:[], leads:[["b1-sensitive","what the brain is actually broadcasting"]], live:[["b1-pendulum","the prediction and the pleasure, pulled apart"]]},
+
+a2:{type:"axiom", title:"You are finite and open", x:1057, y:627,
+  ess:"You must take in from outside to keep existing. A closed system would want nothing.",
+  hook:"What would a being that needed nothing at all want?",
+  story:"Nothing, and that is a definition rather than a riddle. Wanting is what an open system does: something that must draw matter, warmth, information and company across its own boundary simply to remain a thing. Remove the gap between you and what you need and you have not perfected the system, you have closed it.",
+  mech:"Spinoza's conatus: each thing, as far as it lies in itself, strives to persevere in its being, and that striving is the thing's actual essence rather than a feature added on top. On this reading desire is not something you have; it is the form your continuing-to-exist takes once you are a system that models the future. So the supply of wants is not a personal failing awaiting correction. It regenerates because you do.",
+  term:"Conatus", def:"the striving to persevere in being — for a finite open system, not an appetite but its essence.",
+  sowhat:"Any promise to end wanting is either promising something else under that name, or promising your dissolution. Judge such promises accordingly.",
+  builds:[], leads:[["b2-attractors","the idea, named and pushed"]], live:[["b2-logistic","watch the gap refill"]]},
+
+a3:{type:"axiom", title:"Most value cannot be tasted", x:1462, y:627,
+  ess:"Your body scores food and warmth directly. It cannot score a job title.",
+  hook:"How did you learn that one neighbourhood is better than another?",
+  story:"Not from your body, which has no receptor for postcodes. For the small set of things biology scores directly, wanting points itself; for everything else you learned what was worth wanting by watching what other people treated as worth wanting. That second set is almost the whole of your adult life.",
+  mech:"Evidence for the weak version is solid and independent of any grand theory. Lebreton and colleagues (2012) found objects were rated more desirable once perceived as another agent's goal, with mirror-system to valuation-system connectivity predicting who was most susceptible. Salganik, Dodds and Watts (2006) ran forty-eight unknown songs through eight parallel worlds of 14,341 people: making others' choices visible raised both the inequality and the unpredictability of what succeeded. Quality still mattered — the best songs rarely did badly and the worst rarely did well — but everything between those extremes was up for grabs.",
+  term:"Inherited valuation", def:"where you cannot assess worth directly, you acquire it by observing what others treat as worth wanting.",
+  sowhat:"This is the scope condition for the whole social layer. It applies exactly where your body has no vote, which is most of what you are currently working towards.",
+  builds:[], leads:[["b3-kokura","where this bites, and where it does not"]], live:[]},
+
+a4:{type:"axiom", title:"You live forward and score backward", x:1259, y:771,
+  ess:"The self that pursues and the self that judges are not the same self.",
+  hook:"Was last year good — and which of you is answering, the one who lived it or the one now summarising it?",
+  story:"They are different informants. One had the live signal and no idea what was coming; the other has the whole arc, a heavily edited copy of it, and a standing interest in the story making sense. They routinely disagree, and there is no neutral third party to settle it.",
+  mech:"This is what makes 'did I actually want that' a hard question rather than a trivial one. The pursuing self forecasts badly in specific, measurable ways. The reviewing self keeps a distorted record: endings weighted heavily, duration barely counted, preferences partly reconstructed at the moment of asking. Neither is the authority, which is why what follows is a set of questions rather than a rule.",
+  term:"The two selves", def:"the self that pursues and the self that later evaluates have different information and systematically disagree.",
+  sowhat:"You cannot audit a desire by asking either self alone. Both testimonies are interested.",
+  builds:[], leads:[["b4-explore","the tension in full"]], live:[["b4-coinflip","take a desire apart"]]},
+
+"b1-laplace":{type:"phenomenon", title:"The folk model of wanting", x:404, y:355,
+  ess:"I want it because it will feel good, in proportion, and then I will stop.",
+  hook:"You wanted it, you got it, and the wanting stopped before the enjoying started — which part of the story explains that?",
+  story:"The folk theory has three joints: I want it because it will feel good; how much I want it tracks how good it will be; and getting it ends the wanting. Each is a separate empirical claim, and each of the three layers ahead breaks a different one. The theory is not slightly wrong — it is wrong at all three joints, in three different ways.",
+  mech:"Keep the joints separate, because the failures are separate. Joint one fails because pursuit and pleasure run on different machinery. Joint two fails twice over — intensity tracks predicted change rather than value, and the object's charge was borrowed from someone else to begin with. Joint three fails because the gap generating the wanting is structural and refills.",
+  term:"The folk model", def:"desire as a proportional forecast of pleasure that terminates on delivery.",
+  sowhat:"Almost every plan you have made about your own future satisfaction assumes all three joints hold. They are why your best-laid pursuits keep landing oddly.",
+  builds:[["a1","wanting as a prediction, not a reading"]], leads:[["b1-pendulum","joint one, broken"]], live:[]},
+
+"b1-pendulum":{type:"simulation", title:"Wanting is not liking", sim:"wanting", x:884, y:309,
+  ess:"Pursuit and pleasure run on separate systems and can move in opposite directions.",
+  hook:"Can you want something more and more while enjoying it exactly the same, or less?",
+  story:"Yes, and the machinery is separable. Rats with 98 to 99 per cent of accumbens dopamine removed still show the full facial signature of liking sugar, and stop going to get it. Over ten years, people who went on to develop alcohol use disorder showed rising wanting while their liking stayed high and stable (King and colleagues, 2021).",
+  mech:"Robinson and Berridge's incentive-sensitization theory (1993; definitive statement in Annual Review of Psychology, 2025) separates wanting — incentive salience, the motivational magnetism a cue acquires — from liking, the hedonic impact, which runs on tiny opioid and endocannabinoid hotspots of roughly a cubic millimetre in accumbens shell and ventral pallidum. Amphetamine microinjection amplifies pursuit without amplifying liking; in people, Parkinson's patients on dopamine agonists develop compulsive gambling, shopping and hypersexuality, and O'Sullivan and colleagues (2011) found L-Dopa-evoked dopamine release tracked compulsive wanting but not liking. Two cautions travel with this: wanting here is not a feeling you can introspect but a sub-personal process, and the theory never claimed addicts stop liking the thing — wanting grows disproportionately whether liking falls or stays flat. And the human evidence is far weaker than the rodent evidence: Pool and colleagues (2016) document serious measurement problems, and Soutschek and colleagues (2021, N=116, double-blind) found the opioid blocker naltrexone cut wanting (d=0.47) and left liking untouched, the opposite of the tidy two-chemical story.",
+  term:"Incentive salience", def:"the motivational pull a cue acquires, generated separately from the pleasure the thing delivers.",
+  sowhat:"'I do not even like this as much as I used to' is not a figure of speech or a weakness of will. Nor does the split require it — wanting grows disproportionately whether liking falls or holds perfectly steady.",
+  builds:[["b1-laplace","the joint this breaks"]], leads:[["b1-sensitive","so what is the pull actually made of"]], live:[]},
+
+"b1-sensitive":{type:"mechanism", title:"The signal is an error term", x:520, y:522,
+  ess:"The pull tracks better-than-expected, not good. Surprise, not worth.",
+  hook:"Your pay rises, the thrill lasts a month, and the money is all still there — so what exactly ran out?",
+  story:"The gap did. The pull is keyed to the difference between what you predicted and what arrived, not to how good the thing is, and phasic dopamine in the pathway from midbrain to accumbens carries something close to that error term (Schultz, Dayan and Montague, 1997). Not this is good, but this is better than I had it modelled.",
+  mech:"This is where a careful reader gets caught in 2026: dopamine equals pleasure died in the 1990s, but dopamine equals reward prediction error, full stop, is now the sophisticated-sounding overstatement, and the field's own reviews reject it — Gershman and colleagues (2024, Nature Neuroscience) write that the original interpretation is probably too simple and fails to explain all the properties of phasic dopamine observed. The complications are real: ramping during approach, pre-movement vigor signals, errors in predicted reward identity at matched value, novelty responses with no reward history, release travelling as spatiotemporal waves rather than one scalar broadcast, and Greenstreet and colleagues (2025) finding tail-of-striatum dopamine reinforcing action repetition independently of outcome value. Namboodiri's group argues for replacement rather than repair, their ANCCR model having the brain reason backwards from a meaningful event to its causes instead of propagating value forwards (Jeong and colleagues, 2022, Science), and Costa and Dudhabhate (2026) put the field's position plainly: we are likely in the transition period to a new paradigm. What survives is enough for everything downstream here — the core mesolimbic error signal is robust, and felt intensity tracks predicted improvement rather than predicted state.",
+  term:"Prediction error", def:"the difference between what your model expected and what arrived — which is what the pull is scaled to.",
+  sowhat:"The things you want most are disproportionately the things you understand least, because unfamiliarity is prediction error. Novelty feels like value and is not.",
+  builds:[["a1","the model doing the predicting"],["b1-pendulum","the system that carries the signal"]], leads:[["b1-lorenz-story","and what happens once the prediction catches up"]], live:[]},
+
+"b1-lorenz-story":{type:"story", title:"The most misreported study in psychology", x:254, y:656,
+  ess:"Lottery winners, accident victims, and what the paper actually found.",
+  hook:"You have heard that lottery winners end up no happier and paraplegics no less happy — what if the study says otherwise?",
+  story:"It does. Brickman, Coates and Janoff-Bulman (1978), on a six-point scale: winners 4.00 against controls 3.82, a non-significant difference with twenty-two people per group, which is a null at negligible power rather than evidence of no effect. Accident victims scored 2.96 against 3.82 — significantly lower, p below .01, roughly eight-tenths of a standard deviation.",
+  mech:"The one significant winner effect was a contrast effect: winners took less pleasure in mundane events, 3.33 against 3.82, p below .011 — which is the mechanism rather than the moral. The modern picture (Diener, Lucas and Scollon 2006) is that set points sit above neutral, differ between people, are multiple — positive affect, negative affect and life satisfaction move independently — and can move: in seventeen years of German panel data 24 per cent of people shifted significantly and 9 per cent by about two standard deviations. Adaptation is incomplete for unemployment, which did not recover even after re-employment, and for long-term disability. And done properly, lotteries do move the needle: Lindqvist, Ostling and Cesarini (2020), 3,362 winners, pre-registered, five to twenty-two years out, found life satisfaction up 0.037 SD per hundred thousand dollars with no decay over time, though happiness and mental-health effects were not significant.",
+  term:"The treadmill, corrected", def:"the pull reliably decays to zero; the benefit often does not — these are different quantities.",
+  sowhat:"Both the fatalism (nothing will make you happier) and the overcorrection (adaptation is a myth) are wrong, and each licenses a different bad decision. What decays is the wanting, not necessarily the good.",
+  builds:[["b1-sensitive","why the signal has to fade"]], leads:[["b1-principle","what to conclude from it"]], live:[["b2-logistic","the two quantities, side by side"]]},
+
+"b1-principle":{type:"principle", title:"Intensity is about your model", x:716, y:679,
+  ess:"How badly you want it measures your forecast, not the thing.",
+  hook:"If two desires burn equally hot, does that tell you the two objects are worth the same?",
+  story:"No, and not even approximately. Intensity is generated by predicted improvement, so it scales with how surprising the thing is to you right now, which is a fact about your model's current state. The object's actual worth is a separate question, and the wanting will not answer it for you.",
+  mech:"Two desires of identical intensity can carry completely different expected value. Two objects of identical value can produce wildly different pull depending only on how well you already understand them. So the correct inference from 'I want this enormously' is 'my model predicts a large change here' — genuinely informative, just not about the thing.",
+  term:"Intensity is not evidence", def:"the strength of a desire is data about the predictor, not about the predicted.",
+  sowhat:"The move that follows is small and hard: stop using wanting as a tiebreaker. It is the least reliable input you have for exactly the decisions where it feels most authoritative.",
+  builds:[["b1-sensitive","the error term that sets the scale"],["b1-lorenz-story","the decay that proves it"]], leads:[["b4-fence","question two of the filter"]], live:[]},
+
+"b2-logistic":{type:"simulation", title:"The pull and the level", sim:"treadmill", x:1837, y:233,
+  ess:"One quantity always returns to zero. The other sometimes does not.",
+  hook:"When people say you will get used to it, which of the two things you care about are they talking about?",
+  story:"There are two curves here and they are routinely confused. The charge — the wanting, the anticipation — reliably decays towards zero after any event you can predict. The level, meaning how your life actually goes, may return to baseline, may partly return, or may not return at all.",
+  mech:"Unemployment is the clearest non-adaptation case: Lucas and colleagues (2004) found people did not return to baseline even after re-employment, and long-term disability shows lasting decrements across two nationally representative panels (Lucas 2007). In the lottery evidence, money shows a persistent effect on evaluative wellbeing and essentially none on affective wellbeing, which is why does-money-buy-happiness has two correct and opposite answers depending on which you measure. One genuine dispute rather than papering over it: Clark, Diener, Georgellis and Lucas (2008), across 130,000-plus person-years, found complete adaptation to divorce and widowhood, sitting awkwardly against Lucas's own earlier finding of incomplete adaptation — note he co-authored both, so this is one researcher's methods disagreeing rather than two camps, and it turns on model specification.",
+  term:"Two quantities", def:"the charge reliably returns to zero; the level returns fully, partly, or not at all depending on the event.",
+  sowhat:"Deciding by the pull means deciding by the one curve you can count on flattening. It is the only part of the picture with a known expiry date.",
+  builds:[["a2","the gap that keeps refilling"],["b1-lorenz-story","the evidence, corrected"]], leads:[["b2-attractors","why the gap refills at all"]], live:[]},
+
+"b2-attractors":{type:"mechanism", title:"Striving is what a persisting thing is", x:2069, y:401,
+  ess:"Desire is not something you have. It is the shape of continuing to exist.",
+  hook:"Is the endless supply of new wants a flaw in you, or a description of what you are?",
+  story:"A description. A finite, open system is defined by needing what it does not contain, so removing the gap does not perfect the system — it closes it, which for a living thing means ending it. The wants regenerate because you do.",
+  mech:"Spinoza's formulation is the sharp one: each thing, as far as it lies in itself, strives to persevere in its being, and this striving is the thing's actual essence rather than a property added to it. On that reading desire is not a possession but the form your persistence takes once you are a system that models the future. The practical consequence is unforgiving: you cannot want nothing and remain a self.",
+  term:"Conatus, pushed", def:"striving is not a thing selves do; it is what being a self consists in for a finite open system.",
+  sowhat:"This is what makes 'stop wanting things' bad advice rather than hard advice. It is not a discipline you are failing; it is a target that does not exist.",
+  builds:[["a2","finite and open"]], leads:[["b2-lorenz-attractor","two traditions that agree on the diagnosis"]], live:[["b2-logistic","the gap refilling, watched"]]},
+
+"b2-lorenz-attractor":{type:"tension", title:"Two readings of the lack", x:2300, y:282,
+  ess:"Schopenhauer and the Buddha agree on the diagnosis and split on the exit.",
+  hook:"If wanting is suffering, is the cure to want less, or to hold wanting differently?",
+  story:"Schopenhauer says less: willing is lack, lack is suffering, and satisfaction is only the brief absence of one want before boredom or the next arrives — the exit is denial of the will. The Buddhist reading of tanha says otherwise: it is the craving, not the object, that binds, and the path explicitly includes right intention and right effort, which are themselves wants. One prescribes subtraction; the other prescribes non-identification.",
+  mech:"The distinction is not academic, because only one of the two survives the previous idea. If striving is what a persisting thing is, then a programme of subtracting desire is a programme of subtracting the person. Non-identification asks something different and possible: keep the striving, stop treating each particular craving as an instruction you are obliged to obey. Note that the popular Western gloss of Buddhism as want nothing is closer to Schopenhauer than to the texts.",
+  term:"Subtraction versus non-identification", def:"two exits from one diagnosis — remove the wanting, or change your relationship to it.",
+  sowhat:"A great deal of self-improvement advice about desire is smuggled Schopenhauer wearing Buddhist vocabulary. It fails predictably, because it aims at a target that cannot exist.",
+  builds:[["b2-attractors","the constraint both must satisfy"]], leads:[["b2-tension-random","and the objection to both"]], live:[]},
+
+"b2-tension-random":{type:"tension", title:"Desirelessness is a disease first", x:2392, y:470,
+  ess:"The absence of wanting has a clinical name, and it is not serenity.",
+  hook:"What does it actually look like from the inside when wanting goes away?",
+  story:"Depression, in a specific and well-documented form. In major depression the enjoying is often intact while the going-and-getting is not: Sherdell, Waugh and Gotlib (2012) found anticipatory rather than consummatory pleasure predicted motivation for reward, and Treadway and colleagues (2012) documented the effort-based decision deficit. People who have lost wanting can still like things and cannot make themselves go and get them.",
+  mech:"This is arguably the cleanest clinical evidence for the wanting-liking split, and it points the opposite way from the ascetic reading. Nietzsche's and Spinoza's objection is the same one from the other side: the striving is the life, so killing desire does not free the person, it removes them. Hold both halves at once. Craving-as-identity is a real trap and the traditions are right about it; wanting as such is not the trap, and treating it as one has a cost that shows up in clinics.",
+  term:"Anhedonia, split", def:"the loss of wanting with liking preserved — the empirical form of desirelessness, and a disorder rather than an attainment.",
+  sowhat:"If a practice is reducing your capacity to want rather than your captivity to particular wants, it is going the wrong way. That is a distinguishable difference and worth checking.",
+  builds:[["b1-pendulum","the same split, seen in the clinic"],["b2-lorenz-attractor","the prescription this tests"]], leads:[["b2-principle","what is left to aim at"]], live:[]},
+
+"b2-principle":{type:"principle", title:"Aim at the striving, not its end", x:1895, y:598,
+  ess:"Arrival is not available as a target. The quality of the pursuit is.",
+  hook:"If the gap is constitutive, what is actually left to optimise?",
+  story:"The character of the pursuit. Whether it is yours, whether it compounds into something, whether you would endorse being the sort of person who wants this — these are answerable, and they survive the arrival that a finish line does not.",
+  mech:"A finish line is real and does arrive. What follows it is not peace but the machinery producing the next one, which you will then read as evidence you picked the wrong finish line, so you will pick another and get the same result. Retargeting is not consolation for failing to arrive; it is the only target that does not dissolve on contact. Note this does not say goals are useless — it says goals are instruments, and the striving is what they are instruments for.",
+  term:"Retargeting", def:"shifting the object of optimisation from the endpoint of a pursuit to the character of the pursuing.",
+  sowhat:"Organising a life around a finish line reliably produces one specific disappointment: arriving, and finding the wanting already relocated. That disappointment is not a sign you chose wrong.",
+  builds:[["a2","why arrival cannot be the target"],["b2-tension-random","and why zero is not one either"]], leads:[["b4-principle","the compression this feeds"]], live:[]},
+
+"b3-kokura":{type:"mechanism", title:"Value you cannot taste", x:271, y:962,
+  ess:"Hunger names its own object. A promotion does not.",
+  hook:"Which of the things you are currently working towards could your body evaluate on its own?",
+  story:"Very few. Direction has two sources — bodily need, which is narrow, non-negotiable and self-pointing, and social learning, which is broad, negotiable, and points wherever you learned to look. Food, warmth and pain belong to the first; careers, titles, taste and nearly all consumption belong to the second.",
+  mech:"This is the scope condition for everything in this section, and it is the part usually missing. The social layer applies precisely where your body has no vote: where you cannot score the object directly and therefore must acquire its value by observation. Stated this way, mimetic theory stops being an unfalsifiable universal claim and becomes a tool with a domain. Hunger points itself; whether to want the promotion does not.",
+  term:"The scope rule", def:"borrowed valuation operates wherever the object's worth is not directly assessable by your body — which is most of adult life.",
+  sowhat:"Applied everywhere, this layer explains nothing. Applied where it belongs, it explains why your ambitions have a suspicious family resemblance to those of the people nearest you.",
+  builds:[["a3","value that has to be inherited"]], leads:[["b3-contingency","the structure it takes"]], live:[]},
+
+"b3-contingency":{type:"mechanism", title:"The triangle", x:601, y:1008,
+  ess:"Not you and the object. You, the object, and whoever showed you it mattered.",
+  hook:"Did you find the thing and then notice others wanted it, or is the order the other way round?",
+  story:"Girard's claim is that desire is never a two-term relation between subject and object but a three-term one: subject, model, object. You observe someone wanting, and the object acquires its charge from that observation. His own compression: a vain man will desire any object so long as he is convinced it is already desired by someone he admires.",
+  mech:"The source is Mensonge romantique et verite romanesque (1961), and one caveat must travel with the claim: it is a literary-critical thesis, not an empirical one. Its evidence is a reading of Cervantes, Stendhal, Flaubert, Proust and Dostoevsky, and the whole later anthropology — mimetic rivalry escalating into a crisis that gets resolved by scapegoating one arbitrary victim — is extrapolated from that reading. What gives it independent standing is the psychology arriving separately at the weak version — that observing another's valuation raises your own. Take the triangle as a well-motivated structural hypothesis rather than a demonstrated law.",
+  term:"Triangular desire", def:"desire runs subject to model to object; the object's charge is acquired from the model, not found in the object.",
+  sowhat:"The model is usually invisible to the person doing the desiring, which is exactly what makes the structure worth looking for. You will not find it by introspecting on the object.",
+  builds:[["b3-kokura","where the structure applies"],["a3","the inheritance it formalises"]], leads:[["b3-timeline","the distinction that does the work"]], live:[]},
+
+"b3-timeline":{type:"simulation", title:"External and internal mediation", sim:"mediation", x:312, y:1210,
+  ess:"Rivalry comes from overlapping possibility, not from scarce supply.",
+  hook:"Why can you admire a distant hero's taste happily, and resent a colleague's identical taste?",
+  story:"Because the distance that matters is neither physical nor fame — it is whether the two of you inhabit the same field of contestable possibilities. Girard: “it is not physical space that measures the gap… the distance between mediator and subject is primarily spiritual.” A founder you follow online can be informationally nearer than your neighbour and still be external; the colleague one desk away is internal.",
+  mech:"When the spheres do not intersect you can copy the model's desire without competing for anything, and the relation is discipleship. When they do intersect, copying the desire automatically places you on the model's object, which converts model into rival, and the imitation then runs both ways. The inversion is the whole point: you do not both happen to want it and therefore compete — you want it because they want it, and competition follows. Which is why abundant supply does not defuse it, and why Burgis's popular Celebristan-versus-Freshmanistan gloss — a serviceable heuristic that nonetheless substitutes social proximity for Girard's sphere-overlap criterion — gets cases wrong.",
+  term:"External and internal mediation", def:"external — spheres of possibility do not touch, so imitation is discipleship; internal — they overlap, so imitation manufactures rivalry.",
+  sowhat:"Trying to fix an internally mediated desire by getting more of the object fails, because supply was never the binding constraint. Distance was.",
+  builds:[["b3-contingency","the triangle this refines"]], leads:[["b3-principle","the test it hands you"]], live:[]},
+
+"b3-principle":{type:"principle", title:"The concealment test", x:774, y:1152,
+  ess:"Openly copied is safe. The desire you insist is wholly yours is the suspect one.",
+  hook:"When did you last feel a need to establish that you wanted something before anyone else did?",
+  story:"Girard's behavioural signature runs opposite in the two cases. External mediation is proclaimed: Don Quixote announces Amadis of Gaul as his model, loudly and proudly. Internal mediation is concealed, and the chronology gets reversed — the subject insists he wanted it first and that any resemblance is coincidence.",
+  mech:"That gives a diagnostic no other framework here supplies, and it runs counter to intuition in the useful direction. The urge to establish priority is not evidence of originality; it is the marker of a model standing close enough to contest. So the desires you are least likely to audit, the ones that feel most native, are precisely the ones most likely to have been acquired from someone nearby. Note the test detects internal mediation, not badness — a borrowed desire can be an excellent desire, and knowing it is borrowed is what lets you judge it on its merits.",
+  term:"The concealment test", def:"urgency about having wanted it first is the signature of internal mediation, not of authorship.",
+  sowhat:"The feeling of originality is inversely related to the reliability of your read on where a desire came from. Treat conviction here as a prompt to check, not as the result of checking.",
+  builds:[["b3-timeline","the two regimes this distinguishes"]], leads:[["b3-plan","how far to trust all this"],["b4-fence","question one of the filter"]], live:[]},
+
+"b3-plan":{type:"tension", title:"How much is actually mimetic?", x:543, y:1326,
+  ess:"The weak claim is well supported. The strong claim is untestable.",
+  hook:"If every desire is copied from someone else's desire, where did the first one come from?",
+  story:"That is Pommier's objection, and the theory has no answer to it. The weak claim — that preferences are substantially socially acquired, that observing another's valuation raises your own, and that people under-report this — is well supported and independently established. The strong claims — that all desire is mimetic, that the object is always epiphenomenal, and that scapegoating originates culture — are untestable as stated and not accepted outside the Girardian school.",
+  mech:"The standing objections: Traube calls it a one-size-fits-all approach that loses the ability to tell us anything about cultural products themselves; both violence and its absence get read as confirmation, and Girard's own defence in 1992 was that the theory is a working hypothesis that increasingly works, which is fecundity rather than falsification; and Oughourlian, his own collaborator, objected that imitation can be “totally peaceful and beneficial”. A useful check from the adjacent literature: Papakonstantinou and colleagues (2025), 89 studies and 85,759 people, found social-norms messaging effects of d=0.14 collapsing to d=0.01 after robust Bayesian publication-bias correction — a different claim, but a caution about how easily deliberate mimetic engineering is assumed to work. And the Thiel reading (Zero to One, 2014, and the Competition Is for Losers lecture), which is how most people meet the idea, converts a description into an arbitrage — be non-mimetic and win — which presupposes exactly the autonomous self Girard denies; the practical residue in tech circles then drops the external-internal distinction carrying all the analytic content. Verdict: a lens with a high hit rate on one phenomenon, envy under conditions of similarity, and not a theory of desire.",
+  term:"Scope, not universality", def:"mimetic theory earns its keep as a domain-limited diagnostic, not as a general account of where wants come from.",
+  sowhat:"Over-applied it becomes unfalsifiable and you stop learning from it. Under-applied you keep mistaking a borrowed vector for a personal conviction.",
+  builds:[["b3-contingency","the claim being bounded"],["b3-kokura","the domain it is bounded to"]], leads:[["b4-coinflip","one layer of three"]], live:[]},
+
+"b4-coinflip":{type:"simulation", title:"Take a desire apart", sim:"mix", x:1583, y:979,
+  ess:"Same felt intensity, three different mixes, three different working levers.",
+  hook:"Two people want the same thing equally badly — should they do the same thing about it?",
+  story:"Almost certainly not. The three layers contribute independently: a forecast supplies the force, a structural gap supplies the persistence, and a model supplies the direction. Two desires can register identically on the intensity meter and decompose completely differently, and that is what decides whether willpower, environment, or retargeting is the move.",
+  mech:"Move the sliders and watch the verdict change while the needle barely does. That is the whole diagnostic in one picture: the felt quantity underdetermines the correct response, so intensity alone cannot tell you what to do. The presets are three common shapes — the promotion you cannot stop thinking about, the feed, and the restlessness that survives every arrival.",
+  term:"The mix", def:"any desire is a weighted combination of forecast, gap and model, and the weights rather than the intensity select the intervention.",
+  sowhat:"Applying the wrong lever is the standard failure, and it feels like insufficient discipline. It is usually a misread of which layer is generating the pull.",
+  builds:[["b1-principle","the force"],["b2-principle","the persistence"],["b3-plan","the vector"]], leads:[["b4-ergodicity","the same thing, named"]], live:[]},
+
+"b4-ergodicity":{type:"mechanism", title:"Three questions, not three theories", x:1901, y:945,
+  ess:"They never contradicted each other. They were answering different questions.",
+  hook:"Neuroscience, Spinoza and Girard say different things about desire — which one is right?",
+  story:"The question is malformed, because they are not competing. Mechanism answers what generates the pull, namely a prediction of improvement; structure answers why there is always another, namely that the gap is constitutive; direction answers why this object, namely that value you cannot assess directly is read off other people. Force, persistence, vector.",
+  mech:"Put together: a desire is a forecast, about a gap, pointed at an object by a model. Each layer is load-bearing and none is redundant, which is why dropping one produces a characteristic error — drop mechanism and you treat intensity as worth, drop structure and you expect arrival to end it, drop direction and you mistake inherited ambition for conviction. The reconciliation is not a compromise between three theories. It is the observation that they were never answering the same question.",
+  term:"Force, persistence, vector", def:"the three independent contributions to any desire — magnitude from prediction, continuation from finitude, direction from models.",
+  sowhat:"Most arguments about desire are people defending different layers at each other. Knowing which layer a claim belongs to settles more of them than any new evidence would.",
+  builds:[["b4-coinflip","the decomposition, shown"]], leads:[["b4-domains","what your forecast gets wrong"]], live:[]},
+
+"b4-domains":{type:"mechanism", title:"What you actually get wrong", x:2219, y:979,
+  ess:"Not the intensity. The frequency, and how much it colours ordinary days.",
+  hook:"You have been told you overestimate how good it will feel — but is that even the error you make?",
+  story:"Apparently not. Lench and colleagues (2019), across an exam study of 643 people, an election study of 706 and three lab studies, split the impact bias into three components and found the intensity of the emotion about the event is essentially accurate: the election-study bias was M=0.04, t(705)=0.59, p=.55. What is overestimated is how often you will feel it, and how much it will colour your overall mood.",
+  mech:"The frequency error is robust, at d of .30 and .64 across studies, and the mood-effect error grows with time rather than shrinking — M=0.84 at one week, M=1.76 at three. So the usable prediction is sharper than the folk version: it will feel about as good as you expect, you will simply think about it far less often than you imagine and it will colour your life far less than you imagine. One honesty note: this area is a live methodological dispute, Levine and colleagues (2012) against Wilson and Gilbert (2013) against Levine again (2013), with no large registered multi-lab replication, so treat it as contested and decomposed rather than settled.",
+  term:"The decomposed forecast error", def:"intensity forecasts are near-accurate; frequency and overall-mood-effect forecasts are systematically inflated.",
+  sowhat:"Write the forecast down in the corrected form and it becomes falsifiable against your own diary within a month. The folk version, that it will matter less than you think, is not checkable and so never corrects you.",
+  builds:[["a4","the self doing the forecasting"],["b4-ergodicity","the layer this belongs to"]], leads:[["b4-destination","and the self doing the scoring"]], live:[]},
+
+"b4-destination":{type:"mechanism", title:"Endings write the record", x:2330, y:1255,
+  ess:"Retrospect weights endings heavily and duration barely at all.",
+  hook:"Would you accept a longer unpleasant procedure if it ended more gently?",
+  story:"They do, in a randomised trial. Redelmeier, Katz and Kahneman (2003, n=682) gave colonoscopy patients extra minutes of milder discomfort at the end; those patients remembered the whole thing as less unpleasant and were likelier to return, despite strictly more total pain. The record is not a sum.",
+  mech:"Peak-end weighting is robust: Alaybek and colleagues (2022), across 174 effect sizes, found the peak-end composite correlates r=.581 with retrospective evaluation, and duration effects are essentially null. But the strong version does not survive that same meta-analysis — a simple average of all episodes predicted retrospective evaluations just as well as the peak-end score alone. So the defensible claims are that endings are weighted heavily and duration is discounted; only-the-peak-and-the-end-matter is not established, and the consultant version built on it is overreach.",
+  term:"Peak-end and duration neglect", def:"retrospective evaluation over-weights the ending and barely counts how long it lasted.",
+  sowhat:"Your reviewing self is not lying to you, but it keeps a compressed and end-weighted record. Every audit of 'did I want that' runs on exactly that record.",
+  builds:[["a4","the self that scores"]], leads:[["b4-survive","so what does behaviour prove"]], live:[]},
+
+"b4-survive":{type:"principle", title:"Your behaviour is not your values", x:2438, y:1094,
+  ess:"What you chose tells you what won, not what you endorse.",
+  hook:"If you audited your values from your calendar and your bank statement, what would you conclude?",
+  story:"Something, but not the thing you want to know. Samuelson's revealed preference (1938) has two separable uses and only one is safe: as a consistency check, asking whether choice data is rationalisable by some utility function, it is fine and standard. As a welfare claim, that what you chose is what makes you better off, it is a leap — consistency is compatible with any content at all, including self-destruction.",
+  mech:"Sen's Rational Fools (1977) supplies the sharpest wedge: commitment, meaning choosing an option that yields you “a lower level of personal welfare… than an alternative that is also available”, separates choice from welfare and breaks the model outright. Elster's Sour Grapes (1983) supplies the other: adaptive preferences shrink to fit what is available, so satisfaction under deprivation is not evidence of wellbeing. And Infante, Lecouteux and Sugden (2016) show the behavioural-welfare rescue smuggles in an inner rational agent whose latent coherent preferences there is no evidence for — if preferences are constructed at the moment of asking, there is nothing underneath to purify.",
+  term:"Revealed preference is not revealed endorsement", def:"choice data licenses consistency claims, not welfare or values claims.",
+  sowhat:"The gap between what you did and what you endorse is not hypocrisy to be embarrassed about. It is the subject matter, and looking away from it removes the only thing worth measuring.",
+  builds:[["b4-destination","the distorted record it would run on"],["a4","two selves, two interested testimonies"]], leads:[["b4-signal","so what would endorsement mean"]], live:[]},
+
+"b4-signal":{type:"mechanism", title:"Wanting to want", x:1612, y:1181,
+  ess:"First order: I want this. Second order: I want to be moved by this.",
+  hook:"Is there a desire currently moving you that you would rather not be moved by?",
+  story:"Frankfurt (1971) called the answer to that a second-order volition — a desire about which desires get to move you. Someone with first-order desires and no second-order volitions he called a wanton: not unfree exactly, just absent from the question. Endorsement means the desire that actually moves you is one you identify with.",
+  mech:"Two known holes. The regress, since nothing secures endorsement of the endorsement; and the manipulation problem, since an implanted second-order desire that coheres with the first-order one satisfies Frankfurt's condition perfectly — which is why historical conditions get added (Dworkin 1988, Christman 1991, Mele): not do you endorse it now, but did it arise through a process that undermines autonomy, a move the Stanford Encyclopedia notes is hard to make without appealing to the very thing you are trying to explain. Watson (1975) grounds out instead in evaluative judgement: does this follow from your view of what you have reason to do, or is it bare pull? Self-Determination Theory supplies the measurable version in introjected regulation — guilt, contingent self-worth, ego-involvement — though its base is strong without being neutral: the 2023 meta-review of sixty meta-analyses is by the theory's founders and unregistered, and Van den Broeck and colleagues (2016) found the three needs explained only 1 per cent of variance in external and introjected motivation, which they say could be read as disqualifying them as basic needs on SDT's own criteria.",
+  term:"Second-order volition", def:"a desire about which of your desires you want to be the one that moves you.",
+  sowhat:"James Williams tiers the damage — Spotlight, disrupting what you do; Starlight, disrupting who you are; Daylight, the deepest, eroding the capacity to define what you want to want. What is scarce is not time but the reflective capacity that endorsement requires.",
+  builds:[["b4-survive","why behaviour cannot settle it"]], leads:[["b4-danger","and what is attacking it"]], live:[]},
+
+"b4-danger":{type:"mechanism", title:"Manufactured wanting", x:1959, y:1152,
+  ess:"If wanting can be sensitised apart from liking, it can be built for you.",
+  hook:"What would it take to make someone want something they neither enjoy nor endorse?",
+  story:"Less than you would hope, and the recipe is documented. Intermittent variable reward, removal of stopping cues, and stored investment — streaks, followers, history — that makes leaving costly. The rigorous source is not tech commentary but Natasha Dow Schull's Addiction by Design (2012), an ethnography of machine gambling.",
+  mech:"Bhargava and Velasquez (2021) name what separates a feed from a cigarette: the user is being used against oneself, because the system consumes your own engagement data to become progressively more compelling to you specifically — cigarettes are static, feeds are not, which is also what defuses the you-chose-it objection. Be careful in three named places. The dopamine-hit framing is mechanistically wrong as usually deployed and dopamine detox has no scientific basis; population-harm effect sizes are small and contested, with Orben and Przybylski (2019) finding by specification-curve analysis across 355,358 people that technology use explains at most 0.4 per cent of variance in adolescent wellbeing, while the Haidt-Odgers dispute stays live and unresolved in both directions; and social media addiction is not a recognised clinical diagnosis. The good news is that the argument does not need the harm claim — the defensible statement is architectural, that environments can reliably manufacture wanting decoupled from liking and from endorsement, and it holds however the epidemiology resolves.",
+  term:"Manufactured wanting", def:"engineered environments that sensitise pursuit independently of enjoyment or endorsement.",
+  sowhat:"The question to ask of any environment you spend hours inside is not whether it harms you. It is whether the wanting it produces is one you would have chosen to have.",
+  builds:[["b1-pendulum","the split that makes it possible"],["b4-signal","the capacity it erodes"]], leads:[["b4-process","how to tell which is happening"]], live:[]},
+
+"b4-process":{type:"mechanism", title:"The lens: three signatures", x:1650, y:1330,
+  ess:"Read which layer is generating the pull, because each needs a different lever.",
+  hook:"You have a desire you distrust — which of the three is producing it?",
+  story:"There are three signatures and they are distinguishable. Mimetic: it escalates with a rival's attention, the model is concealed, the chronology gets back-dated, and the charge fades when the other person stops wanting it. Sensitised: it survives repeated non-enjoyment, fires on cues, and shows wanting rising while liking stays flat or falls; structural: the restlessness survives every attainment and the object keeps changing.",
+  mech:"The point of naming them is that each has a different lever and the wrong one reliably fails. Mimetic desire needs a change of models or more mediation distance, because willpower cannot out-discipline a borrowed vector; sensitised wanting needs a change of cue environment, because resolve fails against a signal generated upstream of the decision; structural restlessness needs retargeting from arrival to the striving, because a better object will not help, which is the entire finding. One caveat on the middle row: incentive-sensitization is not the only account of compulsive pursuit, since opponent-process and habit-transfer models explain much of the same behaviour, so read it as the best-supported reading rather than the only one.",
+  term:"The three signatures", def:"mimetic, sensitised and structural pulls look alike from the inside and respond to completely different interventions.",
+  sowhat:"Most real desires are mixtures, so the useful output is a proportion rather than a label. What it buys you is knowing which lever is not a waste of effort.",
+  builds:[["b4-ergodicity","the three layers being read"],["b4-danger","the sensitised case"],["b3-principle","the mimetic case"]], leads:[["b4-explore","and who gets to decide"]], live:[["b4-coinflip","dial the mix yourself"]]},
+
+"b4-explore":{type:"tension", title:"Which self do you trust?", x:2470, y:1430,
+  ess:"The wanting self forecasts badly. The reviewing self keeps a distorted record.",
+  hook:"When the two of you disagree about whether something was worth it, who wins?",
+  story:"Neither, cleanly. The wanting self holds the live signal and is a poor forecaster, and its pull is partly manufactured and partly borrowed. The reviewing self has integration and hindsight, plus an end-weighted record, preferences reconstructed at the moment of asking, and a standing incentive to make the story cohere.",
+  mech:"There is no neutral arbiter, and constructing one is not on offer — every candidate turns out to be one of the two selves in a better suit. This is why the system that follows is a set of questions rather than a rule that outputs an answer: the questions are designed to expose which testimony is compromised in this particular case, not to crown a permanent winner. Where the two agree, act. Where they disagree, the disagreement is itself the information.",
+  term:"The unresolved arbiter", def:"no self is authoritative about your desires; each is compromised in a known and different way.",
+  sowhat:"Anyone selling you trust-your-gut or trust-your-reflection is selling one compromised witness as an oracle. The honest version is slower and hands you a process instead.",
+  builds:[["a4","the two selves"],["b4-domains","how the forecaster fails"],["b4-destination","how the scorer fails"]], leads:[["b4-fence","the process that follows"]], live:[]},
+
+"b4-fence":{type:"mechanism", title:"The filter: four questions, in order", x:2090, y:1430,
+  ess:"Whose is this · what am I predicting · then what · do I want to want it.",
+  hook:"Before committing to a pursuit, what is the shortest set of questions that would actually change your mind?",
+  story:"Four, and the order carries as much weight as the content. One, whose is this: can I name the model, am I concealing one, does the intensity track a particular person's attention, do I feel urgency about having wanted it first? Two, what exactly am I predicting: not that I will be happier, but how often will I think about this, and how much will it colour ordinary days?",
+  mech:"Three, then what: after I get it, does the wanting close or relocate, and would I still take this if it arrived with no anticipation at all? Four, do I want to want this: the second-order check, plus the historical one — did this desire arise through a process I would endorse, or through an environment built to produce it? Source goes first, because if the desire is borrowed then questions two through four are being answered about someone else's want. Question two is the one to write down, because in the corrected form it is falsifiable within a month.",
+  term:"The four-question filter", def:"source, forecast, gap, endorsement — run in that order before committing to a pursuit.",
+  sowhat:"Run out of order, the filter produces confident answers to the wrong question. Run in order, it fails fast on exactly the pursuits that would have cost you the most.",
+  builds:[["b3-principle","question one"],["b1-principle","question two"],["b2-principle","question three"],["b4-signal","question four"]], leads:[["b4-principle","what it all compresses to"]], live:[["b4-coinflip","weigh the three before you answer"]]},
+
+"b4-principle":{type:"principle", title:"Desire is data about your model", x:1830, y:1560,
+  ess:"Rich information about the predictor. Almost none about the predicted.",
+  hook:"If wanting does not measure worth, what is it good for?",
+  story:"It is the best available readout of your own model of the world: what it expects, which gap it is tracking, whose valuations it has absorbed. That is genuinely valuable and worth attending to closely. It is simply not a measurement of the thing you want.",
+  mech:"Each layer says this from a different side. Intensity is generated by a prediction, so it measures expected change rather than worth. It persists because you are finite and open, so its continuation is not a verdict on any particular choice. And it points where it points because value you cannot assess directly is read off other people, so its direction is inherited unless checked — none of which is a reason to distrust desire, only a reason to read it.",
+  term:"Desire as instrument reading", def:"wanting is high-quality data about your model and near-zero data about the world.",
+  sowhat:"The object's value is a separate question needing separate evidence. The wanting will not do that work for you, and its confidence will keep suggesting otherwise.",
+  builds:[["b4-fence","the process that operationalises it"],["b2-principle","the structural half"],["b1-principle","the mechanistic half"]], leads:[], live:[]}
+};
+const TERRITORIES = [
+  {label:"I · The Mechanism", sum:"where the pull is generated", hue:"#4a6684", lx:508, ly:100, rx:184, ry:158, rw:745, rh:590},
+  {label:"II · The Structure", sum:"why it never runs out", hue:"#4f7050", lx:2114, ly:100, rx:1739, ry:158, rw:745, rh:590},
+  {label:"The Bedrock", sum:"four assumptions beneath everything", hue:"#6f6455", lx:1265, ly:352, rx:964, ry:436, rw:722, rh:439},
+  {label:"III · The Direction", sum:"why this and not that", hue:"#8a5c5c", lx:520, ly:869, rx:184, ry:846, rw:745, rh:590},
+  {label:"IV · The System", sum:"reading a desire before you obey it", hue:"#96702f", lx:2011, ly:820, rx:1479, ry:869, rw:1069, rh:745}
+];
+const ASTERISMS = [
+  ["#4a6684", [["b1-laplace","b1-pendulum"],["b1-pendulum","b1-sensitive"],["b1-sensitive","b1-lorenz-story"],["b1-sensitive","b1-principle"]]],
+  ["#4f7050", [["b2-logistic","b2-attractors"],["b2-lorenz-attractor","b2-attractors"],["b2-attractors","b2-tension-random"],["b2-attractors","b2-principle"]]],
+  ["#6f6455", [["a1","a2"],["a1","a3"],["a2","a4"],["a3","a4"]]],
+  ["#8a5c5c", [["b3-kokura","b3-contingency"],["b3-contingency","b3-timeline"],["b3-contingency","b3-principle"],["b3-principle","b3-plan"]]],
+  ["#96702f", [["b4-coinflip","b4-ergodicity"],["b4-ergodicity","b4-domains"],["b4-domains","b4-survive"],
+    ["b4-signal","b4-danger"],["b4-domains","b4-danger"],["b4-danger","b4-process"],
+    ["b4-survive","b4-explore"],["b4-destination","b4-explore"],["b4-explore","b4-fence"],
+    ["b4-process","b4-principle"],["b4-fence","b4-principle"],["b4-destination","b4-principle"]]]
+];
+const ALL = Object.keys(N);
+const TERRNAME = {b1:"I · The Mechanism", b2:"II · The Structure",
+  b3:"III · The Direction", b4:"IV · The System", a:"The Bedrock"};
+const HUES = {b1:"#4a6684", b2:"#4f7050", b3:"#8a5c5c", b4:"#96702f", a:"#6f6455"};
+const hueOf = id => id.startsWith('a') ? HUES.a : HUES[id.slice(0,2)];
+const terrOf = id => id.startsWith('a') ? TERRNAME.a : TERRNAME[id.slice(0,2)];
+
+const TOUR = ["b1-laplace","b1-pendulum","b1-sensitive","b1-lorenz-story","b1-principle",
+  "b2-logistic","b2-attractors","b2-lorenz-attractor","b2-tension-random","b2-principle",
+  "b3-kokura","b3-contingency","b3-timeline","b3-principle","b3-plan",
+  "b4-coinflip","b4-ergodicity","b4-domains","b4-destination","b4-survive","b4-signal",
+  "b4-danger","b4-process","b4-explore","b4-fence","b4-principle"];
+const SEQ = {}; TOUR.forEach((id,i)=>SEQ[id]=i+1);
+
+/* degree from curated links (for star size) */
+const DEG = {};
+ALL.forEach(id=>DEG[id]=0);
+ALL.forEach(id=>{
+  const n = N[id];
+  [...n.builds, ...n.leads, ...n.live].forEach(([t])=>{ DEG[id]++; DEG[t]=(DEG[t]||0)+1; });
+});
+const dotSize = id => 16 + Math.min(DEG[id],8)*2.2;
+const dotCenter = id => ({x:N[id].x+dotSize(id)/2, y:N[id].y+dotSize(id)/2});
+
+/* ============================================================
+   CAMERA
+   ============================================================ */
+const vp = document.getElementById('vp');
+const world = document.getElementById('world');
+const reader = document.getElementById('reader');
+const WW = 2750, WH = 1750;
+let cam = {s:0.12, tx:0, ty:0};
+let anim = null;
+function apply(){
+  world.style.transform = `translate(${cam.tx}px, ${cam.ty}px) scale(${cam.s})`;
+  lod();
+}
+function readerW(){ return reader.classList.contains('open') ? (reader.getBoundingClientRect().width||430) : 0; }
+function visW(){ return innerWidth - readerW(); }
+function centerOn(cx, cy, s){
+  cam.s = s;
+  cam.tx = visW()/2 - cx*s;
+  cam.ty = innerHeight/2 - cy*s;
+  apply();
+}
+function flyTo(cx, cy, s, dur=700){
+  if (anim) cancelAnimationFrame(anim);
+  const s0=cam.s, cx0=(visW()/2-cam.tx)/s0, cy0=(innerHeight/2-cam.ty)/s0;
+  const ls0=Math.log(s0), ls1=Math.log(s);
+  const t0=performance.now();
+  function step(t){
+    let p=Math.min(1,(t-t0)/dur);
+    p = p<.5 ? 4*p*p*p : 1-Math.pow(-2*p+2,3)/2;
+    centerOn(cx0+(cx-cx0)*p, cy0+(cy-cy0)*p, Math.exp(ls0+(ls1-ls0)*p));
+    if (p<1) anim=requestAnimationFrame(step);
+  }
+  anim=requestAnimationFrame(step);
+}
+function overviewCam(fly=true){
+  const s = Math.min(visW()/WW, innerHeight/WH)*0.92;
+  if (fly) flyTo(WW/2, WH/2, s, 800); else centerOn(WW/2, WH/2, s);
+}
+vp.addEventListener('wheel', e=>{
+  e.preventDefault();
+  if (anim) cancelAnimationFrame(anim);
+  const f = Math.exp(-e.deltaY*0.0016);
+  const s2 = Math.min(2.2, Math.max(0.06, cam.s*f));
+  const wx=(e.clientX-cam.tx)/cam.s, wy=(e.clientY-cam.ty)/cam.s;
+  cam.s=s2; cam.tx=e.clientX-wx*s2; cam.ty=e.clientY-wy*s2;
+  apply();
+}, {passive:false});
+const ptrs = new Map();
+let panStart=null, pinchStart=null, moved=0;
+vp.addEventListener('pointerdown', e=>{
+  if (e.target.closest('.tlabel')) return;
+  ptrs.set(e.pointerId, {x:e.clientX, y:e.clientY});
+  if (ptrs.size===1){
+    moved=0;
+    panStart={mx:e.clientX, my:e.clientY, tx:cam.tx, ty:cam.ty};
+    vp.classList.add('dragging');
+  } else if (ptrs.size===2){
+    const [p1,p2]=[...ptrs.values()];
+    pinchStart={d:Math.hypot(p1.x-p2.x,p1.y-p2.y), s:cam.s,
+      wx:((p1.x+p2.x)/2-cam.tx)/cam.s, wy:((p1.y+p2.y)/2-cam.ty)/cam.s};
+    panStart=null;
+  }
+});
+addEventListener('pointermove', e=>{
+  if (!ptrs.has(e.pointerId)) return;
+  ptrs.set(e.pointerId, {x:e.clientX, y:e.clientY});
+  if (ptrs.size===1 && panStart){
+    if (anim) cancelAnimationFrame(anim);
+    moved += Math.abs(e.movementX||0)+Math.abs(e.movementY||0);
+    cam.tx = panStart.tx + (e.clientX-panStart.mx);
+    cam.ty = panStart.ty + (e.clientY-panStart.my);
+    apply();
+  } else if (ptrs.size===2 && pinchStart){
+    if (anim) cancelAnimationFrame(anim);
+    const [p1,p2]=[...ptrs.values()];
+    const d=Math.hypot(p1.x-p2.x,p1.y-p2.y);
+    const s2=Math.min(2.2, Math.max(0.06, pinchStart.s*d/pinchStart.d));
+    const cx=(p1.x+p2.x)/2, cy=(p1.y+p2.y)/2;
+    cam.s=s2; cam.tx=cx-pinchStart.wx*s2; cam.ty=cy-pinchStart.wy*s2;
+    apply();
+  }
+});
+function ptrUp(e){ ptrs.delete(e.pointerId);
+  if (ptrs.size<2) pinchStart=null;
+  if (ptrs.size===0){ panStart=null; vp.classList.remove('dragging'); } }
+addEventListener('pointerup', ptrUp);
+addEventListener('pointercancel', ptrUp);
+vp.addEventListener('dblclick', e=>{
+  if (!e.target.closest('.mk')){ closeReader(); overviewCam(); }
+});
+addEventListener('keydown', e=>{
+  if (e.key==='Escape'){ closeReader(); overviewCam(); }
+  if (e.key==='ArrowRight') navStep(1);
+  if (e.key==='ArrowLeft') navStep(-1);
+});
+document.getElementById('overviewBtn').onclick = ()=>{ closeReader(); overviewCam(); };
+addEventListener('resize', ()=>apply());
+
+/* ============================================================
+   SKY - constellation names, asterisms, ecliptic, stars
+   ============================================================ */
+TERRITORIES.forEach(t=>{
+  const rgb = [parseInt(t.hue.slice(1,3),16), parseInt(t.hue.slice(3,5),16), parseInt(t.hue.slice(5,7),16)].join(',');
+  const l = document.createElement('div');
+  l.className = 'tlab';
+  l.style.cssText = `left:${t.lx}px; top:${t.ly}px; transform:translateX(-50%);`;
+  l.innerHTML = `<div class="big" style="color:rgba(${rgb},0.92)">${t.label}</div>
+    <div class="sum">${t.sum}</div>`;
+  l.addEventListener('click', ()=>{
+    flyTo(t.rx+t.rw/2, t.ry+Math.min(t.rh/2, 1000), Math.min(visW()/(t.rw+300), 0.5));
+  });
+  world.appendChild(l);
+});
+
+
+
+/* minor stars - small nameless flecks inside each figure */
+{
+  const R = mulberry32(11);
+  TERRITORIES.forEach(t=>{
+    for (let i=0;i<16;i++){
+      const d=document.createElement('div');
+      const sz=(2.5+R()*3).toFixed(1);
+      d.style.cssText=`position:absolute; left:${Math.round(t.rx+40+R()*(t.rw-80))}px;`+
+        `top:${Math.round(t.ry+40+R()*(t.rh-80))}px; width:${sz}px; height:${sz}px;`+
+        `border-radius:50%; background:${t.hue}; opacity:${(0.18+R()*0.22).toFixed(2)}; pointer-events:none;`;
+      world.appendChild(d);
+    }
+  });
+}
+
+const flowsvg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+flowsvg.setAttribute('width',WW); flowsvg.setAttribute('height',WH);
+flowsvg.style.cssText='position:absolute;top:0;left:0;pointer-events:none;overflow:visible;';
+world.appendChild(flowsvg);
+
+const astsvg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+astsvg.id='astsvg'; astsvg.setAttribute('width',WW); astsvg.setAttribute('height',WH);
+ASTERISMS.forEach(([hue, pairs])=>{
+  pairs.forEach(([a,b])=>{
+    const pa=dotCenter(a), pb=dotCenter(b);
+    const dx=pb.x-pa.x, dy=pb.y-pa.y, L=Math.hypot(dx,dy)||1;
+    const ux=dx/L, uy=dy/L, off=30;
+    const ln = document.createElementNS('http://www.w3.org/2000/svg','line');
+    ln.setAttribute('x1',pa.x+ux*off); ln.setAttribute('y1',pa.y+uy*off);
+    ln.setAttribute('x2',pb.x-ux*off); ln.setAttribute('y2',pb.y-uy*off);
+    ln.setAttribute('stroke',hue); ln.setAttribute('stroke-opacity','0.38');
+    ln.setAttribute('stroke-width','1.6');
+    astsvg.appendChild(ln);
+  });
+});
+world.appendChild(astsvg);
+
+{
+  const pts = TOUR.map(id=>dotCenter(id));
+  let d = `M ${pts[0].x} ${pts[0].y}`;
+  for (let i=1;i<pts.length;i++){
+    const a=pts[i-1], b=pts[i];
+    const mx=(a.x+b.x)/2, my=(a.y+b.y)/2;
+    d += ` Q ${mx + (b.y-a.y)*0.08} ${my - (b.x-a.x)*0.08} ${b.x} ${b.y}`;
+  }
+  const p = document.createElementNS('http://www.w3.org/2000/svg','path');
+  p.setAttribute('d',d); p.setAttribute('fill','none');
+  p.setAttribute('class','lnk-base'); p.setAttribute('stroke',`rgba(${RGB_INK},0.08)`); p.setAttribute('stroke-width','4');
+  p.setAttribute('stroke-dasharray','2,14');
+  flowsvg.appendChild(p);
+}
+
+const tsvg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+tsvg.id='tsvg'; tsvg.setAttribute('width',WW); tsvg.setAttribute('height',WH);
+const defs = document.createElementNS('http://www.w3.org/2000/svg','defs');
+defs.innerHTML = `<marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="#96702f" opacity="0.8"/></marker>`;
+tsvg.appendChild(defs);
+world.appendChild(tsvg);
+const tlabels = [];
+
+const mkEls = {};
+ALL.forEach(id=>{
+  const n = N[id];
+  const hue = hueOf(id);
+  const size = dotSize(id);
+  const m = document.createElement('div');
+  m.className = 'mk' + (n.sim ? ' hasim' : '');
+  m.style.cssText = `left:${n.x}px; top:${n.y}px;`;
+  m.dataset.id = id;
+  m.innerHTML = `
+    <div class="dot" style="width:${size}px; height:${size}px; background:${hue};"></div>
+    <div class="dtext">
+      <div class="lbl">${SEQ[id]?`<span class="seq">${SEQ[id]}</span>`:''}${n.title}</div>
+      <div class="ess">${n.ess}</div>
+      <div class="sims-badge">▸ live model</div>
+    </div>`;
+  world.appendChild(m);
+  mkEls[id] = m;
+  m.addEventListener('click', e=>{
+    if (moved>6) return;
+    e.stopPropagation();
+    openIdea(id);
+  });
+});
+
+function lod(){
+  const ess = cam.s > 0.55;
+  if (lod._k===ess) return;
+  lod._k = ess;
+  Object.values(mkEls).forEach(m=>m.classList.toggle('showess', ess));
+}
+
+/* ============================================================
+   READER
+   ============================================================ */
+let focusId = null, stopSim = null;
+
+const REL = {builds:{glyph:'\u2190', label:'builds on'},
+             leads: {glyph:'\u2192', label:'leads to'},
+             live:  {glyph:'\u25B6', label:'see it live'}};
+function linkGroup(rel, items){
+  if (!items.length) return '';
+  const r = REL[rel];
+  return `<div class="lgroup"><span class="kicker" title="${r.label}"><span class="ar">${r.glyph}</span></span>
+    ${items.map(([t,why])=>`<a data-t="${t}"><span class="t">${N[t].title}</span>
+      <span class="why">${why}</span></a>`).join('')}
+  </div>`;
+}
+
+function openIdea(id){
+  const n = N[id];
+  if (stopSim){ stopSim(); stopSim=null; }
+  focusId = id;
+  const chip = document.getElementById('rChip');
+  chip.textContent = n.type;
+  chip.style.borderColor = hueOf(id)+'66'; chip.style.color = hueOf(id);
+  document.getElementById('rTitle').textContent = n.title;
+  document.getElementById('rTerr').textContent = terrOf(id) + (SEQ[id]?` · step ${SEQ[id]} of ${TOUR.length}`:'');
+  const nextId = SEQ[id] && SEQ[id] < TOUR.length ? TOUR[SEQ[id]] : null;
+  document.getElementById('rbody').innerHTML = `
+    <div class="ideablock">
+      <section class="ib"><span class="kicker">the idea</span>
+        <b class="term">${n.term}</b><div class="def">${n.def}</div></section>
+      ${n.mech ? `<section class="ib"><span class="kicker">how it works</span>
+        <div class="txt">${n.mech}</div></section>` : ''}
+      <section class="ib"><span class="kicker">failure mode</span>
+        <div class="txt">${n.sowhat}</div></section>
+      <section class="ib"><span class="kicker">description</span>
+        <div class="hook">${n.hook}</div>
+        <div class="story">${n.story}</div>
+        ${n.sim ? simHTML(n.sim) : ''}</section>
+    </div>
+    <div class="linkrow">
+      ${linkGroup('builds', n.builds)}
+      ${linkGroup('leads', n.leads)}
+      ${linkGroup('live', n.live)}
+    </div>
+    ${nextId ? `<button class="nextbtn" data-t="${nextId}"><span class="k">next in the flow · ${SEQ[nextId]} of ${TOUR.length}</span>${N[nextId].title}<span class="arr">→</span></button>`
+             : (SEQ[id]===TOUR.length ? `<button class="nextbtn" id="finishBtn"><span class="k">end of the flow</span>Back to the chart<span class="arr">↑</span></button>` : '')}`;
+  document.querySelectorAll('#rbody [data-t]').forEach(a=>
+    a.addEventListener('click', ()=>openIdea(a.dataset.t)));
+  const fin = document.getElementById('finishBtn');
+  if (fin) fin.onclick = ()=>{ closeReader(); overviewCam(); };
+  const fig = document.querySelector('#rbody figure.frame');
+  if (fig) stopSim = SIMS[fig.dataset.sim](fig);
+  document.getElementById('rbody').scrollTop = 0;
+  reader.classList.add('open');
+  document.body.classList.add('reader-open');
+  highlight(id);
+  syncNav();
+  const rs = Math.min(0.95, Math.max(0.62, cam.s));
+  setTimeout(()=>flyTo(n.x+180, n.y+60, rs), 60);
+}
+function closeReader(){
+  if (stopSim){ stopSim(); stopSim=null; }
+  reader.classList.remove('open');
+  document.body.classList.remove('reader-open');
+  focusId = null;
+  clearHighlight();
+  syncNav();
+}
+document.getElementById('rClose').onclick = closeReader;
+
+/* map highlight: few directional lines with plain labels */
+function highlight(id){
+  clearHighlight();
+  const n = N[id];
+  const nb = new Set([id]);
+  const conns = [
+    ...n.builds.map(([t])=>({t, lab:REL.builds.glyph, title:REL.builds.label, into:true})),
+    ...n.leads.map(([t])=>({t, lab:REL.leads.glyph, title:REL.leads.label, into:false})),
+    ...n.live.map(([t])=>({t, lab:REL.live.glyph, title:REL.live.label, into:false}))
+  ];
+  conns.forEach(c=>nb.add(c.t));
+  ALL.forEach(x=>{
+    mkEls[x].classList.toggle('dimmed', !nb.has(x));
+    mkEls[x].classList.toggle('neighbor', nb.has(x) && x!==id);
+    mkEls[x].classList.toggle('focused', x===id);
+  });
+  const here = dotCenter(id);
+  conns.forEach(c=>{
+    const there = dotCenter(c.t);
+    let from = c.into ? {...there} : {...here};
+    let to   = c.into ? {...here} : {...there};
+    {
+      const ddx=to.x-from.x, ddy=to.y-from.y, LL=Math.hypot(ddx,ddy)||1;
+      const ux=ddx/LL, uy=ddy/LL, off=30;
+      from = {x:from.x+ux*off, y:from.y+uy*off};
+      to   = {x:to.x-ux*off,   y:to.y-uy*off};
+    }
+    const dx=to.x-from.x, dy=to.y-from.y, dist=Math.hypot(dx,dy)||1;
+    const cx=(from.x+to.x)/2 - dy/dist*dist*0.12, cy=(from.y+to.y)/2 + dx/dist*dist*0.12;
+    const p = document.createElementNS('http://www.w3.org/2000/svg','path');
+    p.setAttribute('d',`M ${from.x} ${from.y} Q ${cx} ${cy} ${to.x} ${to.y}`);
+    p.setAttribute('fill','none');
+    p.setAttribute('class','lnk-flow'); p.setAttribute('stroke',`rgba(${RGB_AMBER},0.45)`);
+    p.setAttribute('stroke-width','2.5');
+    p.setAttribute('stroke-dasharray','9,8');
+    p.setAttribute('class','tline');
+    p.setAttribute('marker-end','url(#arr)');
+    tsvg.appendChild(p);
+    const lbl = document.createElement('div');
+    lbl.className='tlabel';
+    lbl.style.left = (.25*from.x+.5*cx+.25*to.x)+'px';
+    lbl.style.top = (.25*from.y+.5*cy+.25*to.y)+'px';
+    lbl.textContent = c.lab;
+    lbl.title = c.title;
+    lbl.addEventListener('click', e=>{ e.stopPropagation(); openIdea(c.t); });
+    world.appendChild(lbl);
+    tlabels.push(lbl);
+  });
+}
+function clearHighlight(){
+  ALL.forEach(x=>mkEls[x].classList.remove('dimmed','neighbor','focused'));
+  [...tsvg.querySelectorAll('path')].forEach(p=>p.remove());
+  tlabels.forEach(l=>l.remove()); tlabels.length=0;
+}
+
+/* ============================================================
+   NAV - top-right cluster drives the default flow
+   ============================================================ */
+function syncNav(){
+  const i = focusId ? TOUR.indexOf(focusId) : -1;
+  document.getElementById('navcluster').classList.toggle('on', !!focusId);
+  document.getElementById('navPrev').disabled = i===0;
+  document.getElementById('navNext').disabled = i===TOUR.length-1;
+}
+function navStep(dir){
+  const i = focusId ? TOUR.indexOf(focusId) : -1;
+  if (i<0){ openIdea(TOUR[0]); return; }
+  const j = i+dir;
+  if (j>=0 && j<TOUR.length) openIdea(TOUR[j]);
+}
+document.getElementById('navPrev').onclick = ()=>navStep(-1);
+document.getElementById('navNext').onclick = ()=>navStep(1);
+
+/* ============================================================
+   SIMULATIONS
+   ============================================================ */
+
+function mulberry32(a){ return function(){ a|=0; a=a+0x6D2B79F5|0;
+  let t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t;
+  return ((t^t>>>14)>>>0)/4294967296; }; }
+function setActive(fig, btn){
+  fig.querySelectorAll('.ghost').forEach(b=>{ if(b.dataset.d!==undefined||b.dataset.m!==undefined) b.classList.remove('active');});
+  if (btn) btn.classList.add('active');
+}
+function simHTML(kind){
+  const caps = {
+    wanting:"Two systems over repeated exposure. Gray is liking, amber is wanting. Pick a regime and watch whether they travel together.",
+    treadmill:"An event at the marker. Amber is the charge, gray is the level. The charge always returns to zero; the level is up to you.",
+    mediation:"Two spheres of possibility. Slide them apart and the same imitation becomes discipleship instead of rivalry. Supply is a red herring.",
+    mix:"One desire, three contributions. Move the sliders so the needle stays put and the verdict changes — that is the whole diagnostic."
+  };
+  const ctl = {
+    wanting:`<span class="cl">regime</span>
+      <button class="ghost" data-m="A">ordinary pleasure</button>
+      <button class="ghost active" data-m="B">sensitising cue</button>
+      <button class="ghost" data-m="C">anhedonia</button>`,
+    treadmill:`<span class="cl">adapts</span><input type="range" min="0" max="1" step="0.01" value="0.34">
+      <button class="ghost" data-m="buy">new purchase</button>
+      <button class="ghost active" data-m="lotto">lottery win</button>
+      <button class="ghost" data-m="job">job loss</button>`,
+    mediation:`<span class="cl">internal</span><input type="range" min="0" max="1" step="0.01" value="0.15"><span class="cl">external</span>
+      <button class="ghost active" data-m="scarce">one of them</button>
+      <button class="ghost" data-m="plenty">plenty to go round</button>`,
+    mix:`<span class="cl">forecast</span><input type="range" min="0" max="100" step="1" value="55">
+      <span class="cl">gap</span><input type="range" min="0" max="100" step="1" value="45">
+      <span class="cl">model</span><input type="range" min="0" max="100" step="1" value="90">
+      <button class="ghost" data-m="promo">promotion</button>
+      <button class="ghost" data-m="feed">the feed</button>
+      <button class="ghost" data-m="rest">restlessness</button>`
+  };
+  return `<figure class="frame" data-sim="${kind}">
+    <canvas></canvas>
+    <div class="controls">${ctl[kind]}</div>
+    <figcaption>${caps[kind]}</figcaption>
+  </figure>`;
+}
+/* Canvas backing store follows the device pixel ratio, so canvas text stays
+   crisp in the ~570px reader column. Sims still draw in logical 700-wide units. */
+const _DPR = Math.max(1, Math.min(2, (typeof devicePixelRatio === 'number' ? devicePixelRatio : 1) || 1));
+function fitCanvas(cv, w, h){
+  cv.width = Math.round(w*_DPR); cv.height = Math.round(h*_DPR);
+  const ctx = cv.getContext('2d');
+  if (ctx.setTransform) ctx.setTransform(_DPR,0,0,_DPR,0,0);
+  return ctx;
+}
+const SIMS = {};
+
+SIMS.wanting = fig=>{
+  const cv=fig.querySelector('canvas');
+    const ctx=fitCanvas(cv,700,390);
+  const W=700,H=390,L=68,R=W-96,T=34,B=H-62;
+  const C={
+    A:{lk:x=>0.86*Math.exp(-1.9*x)+0.08, wt:x=>0.90*Math.exp(-2.1*x)+0.06,
+       note:'ordinary pleasure — the two fade together, and nothing comes apart'},
+    B:{lk:x=>0.62-0.10*x, wt:x=>0.22+0.72*(1-Math.exp(-3.2*x)),
+       note:'sensitisation — wanting climbs straight past liking'},
+    C:{lk:x=>0.70+0.02*Math.sin(6*x), wt:x=>0.74*Math.exp(-3.4*x)+0.04,
+       note:'anhedonia — liking intact, wanting collapses'}
+  };
+  let mode='B', t=0, raf;
+  const px=u=>L+u*(R-L), py=v=>B-Math.max(0,Math.min(1,v))*(B-T);
+  function draw(){
+    t=Math.min(1,t+0.006);
+    ctx.fillStyle=SUNK; ctx.fillRect(0,0,W,H);
+    ctx.strokeStyle=BRD; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(L,T); ctx.lineTo(L,B); ctx.lineTo(R,B); ctx.stroke();
+    ctx.fillStyle=FAINT; ctx.font='12px Inter, sans-serif';
+    ctx.fillText('repeated exposure to the cue', L+4, B+34);
+    ctx.save(); ctx.translate(20,(T+B)/2); ctx.rotate(-Math.PI/2);
+    ctx.textAlign='center'; ctx.fillText('strength',0,0); ctx.restore();
+    const c=C[mode];
+    const line=(f,col,w)=>{ ctx.beginPath();
+      for(let i=0;i<=240;i++){ const u=i/240*t; const X=px(u), Y=py(f(u));
+        i?ctx.lineTo(X,Y):ctx.moveTo(X,Y); }
+      ctx.strokeStyle=col; ctx.lineWidth=w; ctx.stroke(); };
+    line(c.lk,GRAY,2.2); line(c.wt,AMBER,2.9);
+    const lk=Math.max(0,Math.min(1,c.lk(t))), wt=Math.max(0,Math.min(1,c.wt(t)));
+    ctx.font='12.5px Inter, sans-serif';
+    ctx.fillStyle=GRAY; ctx.beginPath(); ctx.arc(px(t),py(lk),4.5,0,7); ctx.fill();
+    ctx.fillText('liking', px(t)+9, py(lk)+4);
+    ctx.fillStyle=AMBER; ctx.beginPath(); ctx.arc(px(t),py(wt),4.5,0,7); ctx.fill();
+    ctx.fillText('wanting', px(t)+9, py(wt)+4);
+    ctx.fillStyle=INKC; ctx.font='13px Inter, sans-serif';
+    ctx.fillText(c.note, L+4, T-12);
+    ctx.fillStyle=GRAY; ctx.font='12.5px Inter, sans-serif';
+    ctx.fillText('wanting '+wt.toFixed(2)+'   ·   liking '+lk.toFixed(2)+'   ·   gap '+(wt-lk).toFixed(2), L+4, B+52);
+    raf=requestAnimationFrame(draw);
+  }
+  raf=requestAnimationFrame(draw);
+  fig.querySelectorAll('.ghost').forEach(b=>b.onclick=()=>{
+    setActive(fig,b); mode=b.dataset.m; t=0; });
+  return ()=>cancelAnimationFrame(raf);
+};
+
+SIMS.treadmill = fig=>{
+  const cv=fig.querySelector('canvas');
+    const ctx=fitCanvas(cv,700,400);
+  const W=700,H=400,L=62,R=W-116,T=36,B=H-64,EV=0.18;
+  const sl=fig.querySelector('input[type=range]');
+  const P={ buy:{a:1.00,g:0.85,l:'a new thing you bought — the level comes all the way back'},
+            lotto:{a:0.34,g:0.52,l:'lottery, done properly — a small gain that does not decay (Lindqvist 2020)'},
+            job:{a:0.14,g:-0.86,l:'job loss — little recovery, even after re-employment (Lucas 2004)'} };
+  let adapt=0.34, gain=0.52, lab=P.lotto.l, t=0, raf;
+  const px=u=>L+u*(R-L);
+  const mid=(T+B)/2, amp=(B-T)/2*0.82;
+  const py=v=>mid-Math.max(-1.15,Math.min(1.15,v))*amp;
+  const level=u=>{ if(u<EV) return 0; const d=(u-EV)/(1-EV);
+    return gain*(1-adapt*(1-Math.exp(-4.2*d))); };
+  const charge=u=>{ if(u<EV) return 0; const d=(u-EV)/(1-EV);
+    return gain*1.12*Math.exp(-7.0*d); };
+  function draw(){
+    t=Math.min(1,t+0.005);
+    ctx.fillStyle=SUNK; ctx.fillRect(0,0,W,H);
+    ctx.strokeStyle=BRD; ctx.lineWidth=1; ctx.setLineDash([5,5]);
+    ctx.beginPath(); ctx.moveTo(L,py(0)); ctx.lineTo(R,py(0)); ctx.stroke(); ctx.setLineDash([]);
+    ctx.beginPath(); ctx.moveTo(L,T); ctx.lineTo(L,B); ctx.stroke();
+    ctx.strokeStyle=FAINT; ctx.setLineDash([3,4]);
+    ctx.beginPath(); ctx.moveTo(px(EV),T); ctx.lineTo(px(EV),B); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle=FAINT; ctx.font='12px Inter, sans-serif';
+    ctx.fillText('the event', px(EV)+6, T+12);
+    ctx.fillText('baseline', L+4, py(0)-7);
+    ctx.fillText('time', R-30, B+34);
+    const line=(f,col,w)=>{ ctx.beginPath();
+      for(let i=0;i<=260;i++){ const u=i/260*t; const X=px(u), Y=py(f(u));
+        i?ctx.lineTo(X,Y):ctx.moveTo(X,Y); }
+      ctx.strokeStyle=col; ctx.lineWidth=w; ctx.stroke(); };
+    line(charge,AMBER,2.6); line(level,GRAY,2.6);
+    const lv=level(t), ch=charge(t);
+    ctx.font='12.5px Inter, sans-serif';
+    const sep=Math.abs(py(ch)-py(lv))<15?9:0;
+    ctx.fillStyle=AMBER; ctx.beginPath(); ctx.arc(px(t),py(ch),4.5,0,7); ctx.fill();
+    ctx.fillText('the charge', px(t)+9, py(ch)+4-sep);
+    ctx.fillStyle=GRAY; ctx.beginPath(); ctx.arc(px(t),py(lv),4.5,0,7); ctx.fill();
+    ctx.fillText('the level', px(t)+9, py(lv)+4+sep);
+    ctx.fillStyle=INKC; ctx.font='13px Inter, sans-serif';
+    ctx.fillText(lab, L+4, T-14);
+    ctx.fillStyle=GRAY; ctx.font='12.5px Inter, sans-serif';
+    ctx.fillText('charge '+ch.toFixed(2)+'   ·   level '+lv.toFixed(2)+'   ·   adapts '+Math.round(adapt*100)+'%', L+4, B+52);
+    raf=requestAnimationFrame(draw);
+  }
+  raf=requestAnimationFrame(draw);
+  if(sl) sl.oninput=()=>{ adapt=parseFloat(sl.value); lab='your own setting'; t=0; };
+  fig.querySelectorAll('.ghost').forEach(b=>b.onclick=()=>{
+    setActive(fig,b); const p=P[b.dataset.m];
+    adapt=p.a; gain=p.g; lab=p.l; if(sl) sl.value=p.a; t=0; });
+  return ()=>cancelAnimationFrame(raf);
+};
+
+SIMS.mediation = fig=>{
+  const cv=fig.querySelector('canvas');
+    const ctx=fitCanvas(cv,700,400);
+  const W=700,H=400,L=42,R=W-42;
+  const sl=fig.querySelector('input[type=range]');
+  const BT=118, BB=250, OY=184;          // band top / bottom, object axis
+  let dist=0.15, supply='scarce', ph=0, raf;
+  function draw(){
+    ph+=0.05;
+    ctx.fillStyle=SUNK; ctx.fillRect(0,0,W,H);
+    const span=R-L, rad=span*0.215;
+    const myC=L+span*0.29, moC=myC+0.42*rad+2.35*rad*dist;
+    const overlap=Math.max(0,Math.min(1,1-(moC-myC)/(2*rad)));
+    const rel=-0.45;                      // where the object sits inside a sphere
+    const moP=moC+rel*rad;                // the model's object
+    const inMine=(moP-myC)<=rad;          // can you contest it at all?
+    const myP=inMine?moP:myC+rel*rad;     // else you copy the form onto your own
+    // spheres
+    const band=(cx,col,al)=>{
+      ctx.globalAlpha=al; ctx.fillStyle=col; ctx.fillRect(cx-rad,BT,rad*2,BB-BT);
+      ctx.globalAlpha=0.5; ctx.strokeStyle=col; ctx.lineWidth=1.2;
+      ctx.strokeRect(cx-rad,BT,rad*2,BB-BT); ctx.globalAlpha=1; };
+    band(myC,AMBER,0.13); band(moC,GRAY,0.13);
+    // the intersection
+    const ia=Math.max(myC-rad,moC-rad), ib=Math.min(myC+rad,moC+rad);
+    if(ib>ia){
+      ctx.globalAlpha=0.14; ctx.fillStyle=INKC; ctx.fillRect(ia,BT,ib-ia,BB-BT); ctx.globalAlpha=1;
+      ctx.strokeStyle=INKC; ctx.globalAlpha=0.35; ctx.setLineDash([4,4]);
+      ctx.strokeRect(ia,BT,ib-ia,BB-BT); ctx.setLineDash([]); ctx.globalAlpha=1;
+      if(ib-ia>110){ ctx.fillStyle=INKC; ctx.font='12px Inter, sans-serif'; ctx.textAlign='center';
+        ctx.fillText('contestable by both',(ia+ib)/2,BB-12); ctx.textAlign='left'; }
+    }
+    ctx.font='12.5px Inter, sans-serif'; ctx.textAlign='center';
+    ctx.fillStyle=GRAY;  ctx.fillText('the model — their sphere of possibility',moC,BT-46);
+    ctx.fillStyle=AMBER; ctx.fillText('you — your sphere of possibility',myC,BB+40);
+    ctx.textAlign='left';
+    // agents reaching for objects
+    ctx.strokeStyle=GRAY; ctx.lineWidth=1.8;
+    ctx.beginPath(); ctx.moveTo(moC,BT-30); ctx.lineTo(moP,OY-13); ctx.stroke();
+    ctx.fillStyle=GRAY; ctx.beginPath(); ctx.arc(moC,BT-34,6,0,7); ctx.fill();
+    ctx.strokeStyle=AMBER; ctx.lineWidth=2.2;
+    ctx.beginPath(); ctx.moveTo(myC,BB+24); ctx.lineTo(myP,OY+13); ctx.stroke();
+    ctx.fillStyle=AMBER; ctx.beginPath(); ctx.arc(myC,BB+28,6,0,7); ctx.fill();
+    // spare supply
+    if(supply==='plenty'){
+      ctx.fillStyle=FAINT;
+      for(let i=0;i<8;i++){ const x=L+span*(0.05+i*0.129);
+        if(Math.abs(x-moP)<14||Math.abs(x-myP)<14) continue;
+        ctx.beginPath(); ctx.arc(x,OY,5,0,7); ctx.fill(); }
+    }
+    // objects
+    ctx.fillStyle=INKC; ctx.beginPath(); ctx.arc(moP,OY,8,0,7); ctx.fill();
+    if(!inMine){ ctx.strokeStyle=AMBER; ctx.lineWidth=2.4;
+      ctx.beginPath(); ctx.arc(myP,OY,8,0,7); ctx.stroke(); }
+    let verdict,rival;
+    if(inMine){ rival=overlap;
+      ctx.strokeStyle=AMBER; ctx.globalAlpha=0.8; ctx.lineWidth=2;
+      ctx.beginPath(); ctx.arc(moP,OY,15+4*Math.sin(ph),0,7); ctx.stroke(); ctx.globalAlpha=1;
+      verdict='internal mediation — you landed on their object; the model is now an obstacle';
+    } else { rival=0;
+      verdict='external mediation — you copied the desire onto your own object; discipleship, no rivalry'; }
+    ctx.fillStyle=INKC; ctx.font='600 13.5px Inter, sans-serif';
+    ctx.fillText(verdict,L,34);
+    // rivalry meter
+    const bx=L,by=316,bw=span*0.44,bh=10;
+    ctx.globalAlpha=0.3; ctx.fillStyle=FAINT; ctx.fillRect(bx,by,bw,bh); ctx.globalAlpha=1;
+    ctx.fillStyle=AMBER; ctx.fillRect(bx,by,bw*rival,bh);
+    ctx.fillStyle=GRAY; ctx.font='12.5px Inter, sans-serif';
+    ctx.fillText('rivalry',bx,by-7);
+    ctx.fillText('overlap '+Math.round(overlap*100)+'%   ·   supply '+(supply==='plenty'?'plentiful':'a single one')+
+      '   ·   rivalry '+Math.round(rival*100)+'%',bx,by+30);
+    ctx.fillStyle=FAINT; ctx.font='12px Inter, sans-serif';
+    ctx.fillText('add supply: nothing moves.',bx+bw+22,by+2);
+    ctx.fillText('move the spheres: everything moves.',bx+bw+22,by+18);
+    raf=requestAnimationFrame(draw);
+  }
+  raf=requestAnimationFrame(draw);
+  if(sl) sl.oninput=()=>{ dist=parseFloat(sl.value); };
+  fig.querySelectorAll('.ghost').forEach(b=>b.onclick=()=>{
+    setActive(fig,b); supply=b.dataset.m; });
+  return ()=>cancelAnimationFrame(raf);
+};
+
+SIMS.mix = fig=>{
+  const cv=fig.querySelector('canvas');
+    const ctx=fitCanvas(cv,700,400);
+  const W=700,H=400,L=54,R=W-54;
+  const rs=[].slice.call(fig.querySelectorAll('input[type=range]'));
+  const P={ promo:[52,44,92], feed:[88,26,30], rest:[30,92,38] };
+  let raf;
+  function draw(){
+    const v=rs.map(r=>parseFloat(r.value));
+    const f=v[0]||0, g=v[1]||0, m=v[2]||0, tot=Math.max(1,f+g+m);
+    const felt=Math.round(Math.min(100,(f+g+m)/2.35+0.0009*f*m));
+    ctx.fillStyle=SUNK; ctx.fillRect(0,0,W,H);
+    ctx.fillStyle=FAINT; ctx.font='12.5px Inter, sans-serif';
+    ctx.fillText('felt intensity', L, 40);
+    const bw=R-L;
+    ctx.globalAlpha=0.30; ctx.fillStyle=FAINT; ctx.fillRect(L,52,bw,26); ctx.globalAlpha=1;
+    ctx.fillStyle=AMBER; ctx.fillRect(L,52,bw*felt/100,26);
+    ctx.font='600 20px Inter, sans-serif';
+    if(felt>84){ ctx.fillStyle=SUNK; ctx.fillText(String(felt), L+bw*felt/100-40, 73); }
+    else { ctx.fillStyle=INKC; ctx.fillText(String(felt), L+bw*felt/100+12, 73); }
+    ctx.fillStyle=FAINT; ctx.font='12.5px Inter, sans-serif';
+    ctx.fillText('what it is made of', L, 126);
+    const parts=[['forecast',f,GRAY],['gap',g,FAINT],['model',m,AMBER]];
+    let x=L;
+    parts.forEach(p=>{ const w=bw*p[1]/tot, pale=p[2]===FAINT;
+      ctx.fillStyle=p[2]; ctx.globalAlpha=pale?0.55:1; ctx.fillRect(x,138,Math.max(0,w-2),30);
+      ctx.globalAlpha=1;
+      if(w>62){ ctx.fillStyle=pale?INKC:SUNK; ctx.font='12.5px Inter, sans-serif';
+        ctx.fillText(p[0]+' '+Math.round(p[1]/tot*100)+'%', x+8, 158); }
+      x+=w; });
+    const rank=parts.slice().sort((a,b)=>b[1]-a[1]);
+    const lead=rank[0], second=rank[1];
+    const mixed=(lead[1]-second[1])/tot<0.10;
+    const V={ forecast:['sensitised forecast','change the cue environment — remove the trigger, not the temptation','resolve. the signal is generated upstream of any decision you make'],
+              gap:['structural gap','retarget from arrival to the quality of the striving','a better object. there is not one, and that is the finding'],
+              model:['borrowed vector','change your models, or increase mediation distance','willpower. you cannot out-discipline a desire that is not yours'] };
+    const a=V[lead[0]];
+    ctx.fillStyle=FAINT; ctx.font='12.5px Inter, sans-serif';
+    ctx.fillText('the read', L, 214);
+    ctx.fillStyle=INKC; ctx.font='600 16px Inter, sans-serif';
+    ctx.fillText(mixed?(a[0]+', shading into '+V[second[0]][0]):a[0], L, 240);
+    ctx.font='13.5px Inter, sans-serif'; ctx.fillStyle=INKC;
+    ctx.fillText('what works:  '+a[1], L, 274);
+    ctx.fillStyle=GRAY;
+    ctx.fillText('what fails:  '+a[2], L, 300);
+    if(mixed){ ctx.fillStyle=FAINT; ctx.font='12.5px Inter, sans-serif';
+      ctx.fillText('two layers within ten points — treat it as a mixture and pull both levers.', L, 328); }
+    ctx.fillStyle=FAINT; ctx.font='12px Inter, sans-serif';
+    ctx.fillText('hold the needle steady and change the composition: the verdict moves, the feeling does not.', L, 366);
+    raf=requestAnimationFrame(draw);
+  }
+  raf=requestAnimationFrame(draw);
+  fig.querySelectorAll('.ghost').forEach(b=>b.onclick=()=>{
+    setActive(fig,b); const p=P[b.dataset.m];
+    rs.forEach((r,i)=>{ r.value=p[i]; }); });
+  return ()=>cancelAnimationFrame(raf);
+};
+
+/* ============================================================
+   BOOT
+   ============================================================ */
+syncNav();
+overviewCam(false);
+
+
+/* ---- light / dark, shared with the main site ---- */
+document.getElementById('themeBtn').addEventListener('click', function(){
+  const r = document.documentElement;
+  const next = r.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  r.setAttribute('data-theme', next);
+  try { localStorage.setItem('theme', next); } catch(e) {}
+  syncSimColours();
+  if (focusId) openIdea(focusId);   // repaint the open simulation
+});
+</script>
+
+<script>
+/* Chart switcher: jump straight to another constellation. */
+(function(){var s=document.getElementById('chartSwitch');
+if(s)s.addEventListener('change',function(){if(s.value)window.location.href=s.value;});})();
+</script>
+</body>
+</html>
