@@ -6,7 +6,7 @@ permalink: /
 ---
 
 {%- assign recent = site.notes | sort: "date" | reverse -%}
-{%- assign starts = "repairs,on-attention-2,ride-hailing" | split: "," -%}
+{%- assign starts = "the-ledger,seize-the-day,thoughts-on-forever" | split: "," -%}
 
 # Rohan's space
 
@@ -14,7 +14,7 @@ permalink: /
 
 <p class="lede">This is my digital garden: a place where I write about the things I notice, the questions I sit with, and the slow process of making sense of things as they take shape. <a href="{{ site.baseurl }}/about">More about me →</a></p>
 
-<h2 class="secth" id="start-here">Start here</h2>
+<h2 class="secth" id="start-here">Three essays to begin with</h2>
 
 <div class="picks">
 {%- for slug in starts -%}
