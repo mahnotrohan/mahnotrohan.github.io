@@ -4,6 +4,8 @@ sitemap: false
 ---
 {%- comment -%}
   Search index, built at compile time and fetched once by the search overlay.
+  Constellation titles are included from _data/orrery.yml so the charts are
+  discoverable from the same search as Writing and the regular pages.
   Anything with `noindex: true` is excluded, so Notes In Transit and the
   letters behind it never appear in results.
 {%- endcomment -%}
@@ -25,5 +27,17 @@ sitemap: false
 "body": {{ it.content | strip_html | normalize_whitespace | truncate: 1800 | jsonify }}
 }
 {%- endunless -%}
+{%- endfor -%}
+{%- for it in site.data.orrery -%}
+{%- if first == false %},{% endif -%}{%- assign first = false -%}
+{
+"title": {{ it.title | jsonify }},
+"url": {{ it.url | relative_url | jsonify }},
+"date": "",
+"kind": "constellation",
+"tags": ["orrery"],
+"desc": {{ it.description | jsonify }},
+"body": {{ it.description | jsonify }}
+}
 {%- endfor -%}
 ]

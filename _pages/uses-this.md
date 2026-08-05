@@ -1,10 +1,10 @@
 ---
 layout: page
-title: Uses This
+title: Uses this
 permalink: /uses-this
 ---
 
-# Uses This    
+# Uses this
 
 
 ## Hardware

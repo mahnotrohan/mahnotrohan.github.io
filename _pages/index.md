@@ -14,7 +14,7 @@ permalink: /
 
 <p class="lede">This is my digital garden: a place where I write about the things I notice, the questions I sit with, and the slow process of making sense of things as they take shape. <a href="{{ site.baseurl }}/about">More about me →</a></p>
 
-<div class="secth">Start here</div>
+<h2 class="secth" id="start-here">Start here</h2>
 
 <div class="picks">
 {%- for slug in starts -%}
@@ -25,7 +25,7 @@ permalink: /
 
 <p class="p-all"><a href="{{ site.baseurl }}/blog">Read more →</a></p>
 
-<div class="secth">Workshop</div>
+<h2 class="secth" id="workshop">Workshop</h2>
 
 <div class="cards">
   <a class="card" href="{{ site.baseurl }}/orrery">
@@ -45,7 +45,7 @@ permalink: /
   </a>
 </div>
 
-<div class="secth">Off the clock</div>
+<h2 class="secth" id="off-the-clock">Off the clock</h2>
 
 <div class="blurbs">
   <div>
@@ -58,7 +58,7 @@ permalink: /
   </div>
   <div>
     <h3><a href="{{ site.baseurl }}/bookshelf">Shelf</a></h3>
-    <p>What I've been reading, with notes on what stayed with me.</p>
+    <p>Books I've been reading recently, plus a few ideas I've followed into Orrery.</p>
   </div>
   <div>
     <h3><a href="{{ site.baseurl }}/uses-this">Uses this</a></h3>
@@ -66,7 +66,7 @@ permalink: /
   </div>
 </div>
 
-<div class="secth">Say hello</div>
+<h2 class="secth" id="say-hello">Say hello</h2>
 
 <p>I'd love to hear from you - about something I wrote, a book you think I'd enjoy, or just to say hi.</p>
 
