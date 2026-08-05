@@ -227,17 +227,10 @@ figure.frame input[type=range]{flex:1; min-width:100px; accent-color:var(--accen
 
 @media(max-width:760px){ :root{--reader-w:100vw;} }
 
-/* ---- site exits + chart switcher (present on every chart) ---- */
+/* ---- site exits (present on every chart) ---- */
 #hdr .sub a{color:var(--accent);text-decoration:none;border-bottom:1px solid transparent}
 #hdr .sub a:hover{border-bottom-color:var(--accent)}
 #hdr .sub s{text-decoration:none;color:var(--ink-faint);opacity:.75;margin:0 4px}
-#chartSwitch{-webkit-appearance:none;appearance:none;padding-right:26px;max-width:190px;
-  background-image:linear-gradient(45deg,transparent 50%,var(--ink-muted) 50%),
-                   linear-gradient(135deg,var(--ink-muted) 50%,transparent 50%);
-  background-position:calc(100% - 14px) 52%,calc(100% - 9.5px) 52%;
-  background-size:5px 5px,5px 5px;background-repeat:no-repeat}
-#chartSwitch:hover{color:var(--ink-strong);border-color:var(--accent-dim)}
-@media (max-width:700px){#hdr .sub{font-size:10.5px}#chartSwitch{max-width:118px}}
 
 /* ---- reader footer: step nav lives bottom-right, inside the panel ---- */
 #rfoot{display:flex;align-items:center;justify-content:flex-end;gap:.75rem;
@@ -274,7 +267,6 @@ html[data-theme="dark"] #astsvg line{stroke-opacity:.55}
     <div class="sub"><a href="/">Rohan's space</a><s>/</s><a href="/orrery">Orrery</a></div>
   </div>
   <div class="spacer"></div>
-  <select class="hbtn" id="chartSwitch" aria-label="Jump to another chart"><option value="">Other charts&hellip;</option><option value="/orrery/attachment.html">Attachment: Bonds, Clinging &amp; the Grip</option><option value="/orrery/building-taste.html">Building Taste</option><option value="/orrery/chaos-luck-ergodicity.html">Chaos, Luck &amp; Ergodicity</option><option value="/orrery/decision-theory.html">Decision Theory</option><option value="/orrery/decisive.html">Decisive</option><option value="/orrery/desire.html">Desire, from first principles</option><option value="/orrery/first-principles-thinking.html">First Principles Thinking</option><option value="/orrery/how-to-know-a-person.html">How to Know a Person</option><option value="/orrery/interpersonal-communication.html">Interpersonal &amp; Communication Skills</option><option value="/orrery/never-split-the-difference.html">Never Split the Difference</option><option value="/orrery/nonviolent-communication.html">Nonviolent Communication</option><option value="/orrery/systems-thinking.html">Systems Thinking</option><option value="/orrery/capability-stack.html">The Capability Stack</option><option value="/orrery/course-of-love.html">The Course of Love</option><option value="/orrery/the-power-law.html">The Power Law</option><option value="/orrery/the-school-of-life.html">The School of Life</option><option value="/orrery/thinking-fast-and-slow.html">Thinking, Fast and Slow</option><option value="/orrery/why-we-sleep.html">Why We Sleep</option></select>
   <button class="hbtn" id="themeBtn" type="button" title="Light / dark" aria-label="Toggle light or dark">◐</button>
   <button class="hbtn" id="overviewBtn">Overview&nbsp;·&nbsp;Esc</button>
 </div>
@@ -1209,10 +1201,5 @@ document.getElementById('themeBtn').addEventListener('click', function(){
 });
 </script>
 
-<script>
-/* Chart switcher: jump straight to another constellation. */
-(function(){var s=document.getElementById('chartSwitch');
-if(s)s.addEventListener('change',function(){if(s.value)window.location.href=s.value;});})();
-</script>
 </body>
 </html>
