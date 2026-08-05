@@ -8,7 +8,7 @@ permalink: /
 {%- assign recent = site.notes | sort: "date" | reverse -%}
 {%- assign starts = "the-ledger,seize-the-day,thoughts-on-forever" | split: "," -%}
 
-# Rohan's space
+# Rohan's digital garden
 
 <p class="lede">Hi I'm Rohan! This website is my place to think, somewhere between a journal and a conversation, where ideas don't have to be finished to be worth writing down.</p>
 
@@ -60,15 +60,11 @@ permalink: /
     <h3><a href="{{ site.baseurl }}/bookshelf">Shelf</a></h3>
     <p>Books I've been reading recently, plus a few ideas I've followed into Orrery.</p>
   </div>
-  <div>
-    <h3><a href="{{ site.baseurl }}/uses-this">Uses this</a></h3>
-    <p>The hardware, software and brewing gear I actually use.</p>
-  </div>
 </div>
 
 <h2 class="secth" id="say-hello">Say hello</h2>
 
-<p>I'd love to hear from you - about something I wrote, a book you think I'd enjoy, or just to say hi.</p>
+<p class="hello-copy">I'd love to hear from you - about something I wrote, a book you think I'd enjoy, or just to say hi.</p>
 
 <p class="hello">
   <a href="mailto:mahnot.who@gmail.com">Email</a> |

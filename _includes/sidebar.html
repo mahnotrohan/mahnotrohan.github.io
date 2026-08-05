@@ -26,7 +26,11 @@
     <div class="sb-subs">
       <a href="{{ site.baseurl }}/bookshelf"{% if page.url == "/bookshelf" %} class="cur"{% endif %}>Shelf</a><s>&middot;</s>
       <a href="{{ site.baseurl }}/thoughts/on-coffee"{% if page.url contains "on-coffee" %} class="cur"{% endif %}>Coffee</a><s>&middot;</s>
-      <a href="{{ site.baseurl }}/thoughts/on-food"{% if page.url contains "on-food" %} class="cur"{% endif %}>Food</a><s>&middot;</s>
+      <a href="{{ site.baseurl }}/thoughts/on-food"{% if page.url contains "on-food" %} class="cur"{% endif %}>Food</a>
+    </div>
+
+    <div class="sb-grp">Tools</div>
+    <div class="sb-subs">
       <a href="{{ site.baseurl }}/uses-this"{% if page.url == "/uses-this" %} class="cur"{% endif %}>Uses this</a>
     </div>
   </nav>

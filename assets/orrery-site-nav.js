@@ -31,6 +31,7 @@
         '<a href="/bookshelf">Shelf</a>' +
         '<a href="/thoughts/on-coffee">Coffee</a>' +
         '<a href="/thoughts/on-food">Food</a>' +
+        '<div class="drawer-label">Tools</div>' +
         '<a href="/uses-this">Uses this</a>' +
       '</div>' +
       '<dialog id="orrery-search" aria-label="Search the site">' +

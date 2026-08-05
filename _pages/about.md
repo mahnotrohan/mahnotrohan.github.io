@@ -15,6 +15,35 @@ Outside of work, I cook a lot, brew coffee, read memoirs, and run. I've been run
 
 This website is my digital garden.
 
+<h2 class="secth" id="around-here">Around here</h2>
+
+<div class="blurbs about-blurbs">
+  <div>
+    <h3><a href="{{ site.baseurl }}/blog">Writing</a></h3>
+    <p>Essays and notes on attention, people, work, and making sense of things.</p>
+  </div>
+  <div>
+    <h3><a href="{{ site.baseurl }}/orrery">Orrery</a></h3>
+    <p>Constellations of connected ideas, with a guided route through each one.</p>
+  </div>
+  <div>
+    <h3><a href="{{ site.baseurl }}/uses-this">Uses this</a></h3>
+    <p>The tools, objects, and brewing equipment that earn a place in daily use.</p>
+  </div>
+  <div>
+    <h3><a href="{{ site.baseurl }}/bookshelf">Shelf</a></h3>
+    <p>Books I've been reading, and the ones that became ideas worth following.</p>
+  </div>
+  <div>
+    <h3><a href="{{ site.baseurl }}/thoughts/on-coffee">Coffee</a></h3>
+    <p>Brewing, beans, and the small details that make a cup work.</p>
+  </div>
+  <div>
+    <h3><a href="{{ site.baseurl }}/thoughts/on-food">Food</a></h3>
+    <p>Meals, tastes, and strong opinions about what belongs on a plate.</p>
+  </div>
+</div>
+
 <h2 class="secth" id="right-now">Right now</h2>
 
 <p class="p-meta"><span>Updated {{ page.updated | date: "%d %b %Y" }}</span></p>
@@ -68,35 +97,6 @@ This website is my digital garden.
   <div class="now-item">
     <p class="q">What makes a form factor click?</p>
     <p>I pay attention to how everyday objects are shaped - watches, rings, backpacks, bottles. Not in a design-nerd way; more why this thing feels good to use and that one doesn't.</p>
-  </div>
-</div>
-
-<h2 class="secth" id="around-here">Around here</h2>
-
-<div class="blurbs about-blurbs">
-  <div>
-    <h3><a href="{{ site.baseurl }}/blog">Writing</a></h3>
-    <p>Essays and notes on attention, people, work, and making sense of things.</p>
-  </div>
-  <div>
-    <h3><a href="{{ site.baseurl }}/orrery">Orrery</a></h3>
-    <p>Constellations of connected ideas, with a guided route through each one.</p>
-  </div>
-  <div>
-    <h3><a href="{{ site.baseurl }}/uses-this">Uses this</a></h3>
-    <p>The tools, objects, and brewing equipment that earn a place in daily use.</p>
-  </div>
-  <div>
-    <h3><a href="{{ site.baseurl }}/bookshelf">Shelf</a></h3>
-    <p>Books I've been reading, and the ones that became ideas worth following.</p>
-  </div>
-  <div>
-    <h3><a href="{{ site.baseurl }}/thoughts/on-coffee">Coffee</a></h3>
-    <p>Brewing, beans, and the small details that make a cup work.</p>
-  </div>
-  <div>
-    <h3><a href="{{ site.baseurl }}/thoughts/on-food">Food</a></h3>
-    <p>Meals, tastes, and strong opinions about what belongs on a plate.</p>
   </div>
 </div>
 
