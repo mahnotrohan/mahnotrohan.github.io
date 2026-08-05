@@ -15,14 +15,6 @@ Outside of work, I cook a lot, brew coffee, read memoirs, and run. I've been run
 
 This website is my digital garden.
 
-<nav class="about-map" aria-label="On this page">
-  <span>On this page</span>
-  <a href="#right-now">Right now</a>
-  <a href="#threads">Threads I keep pulling on</a>
-  <a href="#around-here">Around here</a>
-  <a href="#say-hello">Say hello</a>
-</nav>
-
 <h2 class="secth" id="right-now">Right now</h2>
 
 <p class="p-meta"><span>Updated {{ page.updated | date: "%d %b %Y" }}</span></p>
