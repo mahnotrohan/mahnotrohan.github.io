@@ -1256,6 +1256,7 @@ SIMS.bids = fig=>{
    ============================================================ */
 syncNav();
 overviewCam(false);
+if (window.location.hash === '#start') setTimeout(()=>openIdea(TOUR[0]), 0);
 
 
 /* ---- light / dark, shared with the main site ---- */
