@@ -102,7 +102,7 @@ This website is my digital garden.
 
 <h2 class="secth" id="say-hello">Say hello</h2>
 
-<p>I'd love to hear from you. About something I wrote, a suggestion you enjoyed, or just to say hi.</p>
+<p class="hello-copy">I'd love to hear from you. About something I wrote, a suggestion you enjoyed, or just to say hi.</p>
 
 <p class="hello">
   <a href="mailto:mahnot.who@gmail.com">Email</a> |

@@ -508,7 +508,12 @@ h2.secth { font-size: 0.62rem; line-height: 1.4; }
   a:hover strong { color: var(--accent); }
 }
 
+.hello-copy { max-width: none; color: var(--fg); white-space: nowrap; }
 .hello { font-size: 0.95rem; }
+
+@media (max-width: 900px) {
+  .hello-copy { white-space: normal; }
+}
 
 // External links in prose use the same outward-link cue as the sidebar.
 content a[href^="http"]:not(.card)::after {
