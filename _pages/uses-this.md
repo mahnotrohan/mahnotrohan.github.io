@@ -9,28 +9,24 @@ permalink: /uses-this
 
 ## Hardware
 
-*   MacBook Pro
-*   iPhone 15
-*   Airpods 4
-*   Garmin Forerunner 55
-*   StuffCool Power Bank
+*   iPad 11 + Apple Pencil
+*   Clip-on Microphone
     
 ## Software
     
-*   Sublime
-*   Bitwarden
-*   Retro - Photo Journalling
-*   Nike Run Club
+*   Todoist
+*   Notion
+*   FluidVoice
+*   Claude + Codex
     
-## Coffee 
+## Brewing equipment
+
 ### Grinders
     
 *   Timemore Chestnut C2 Hand Grinder
     
-### Brewing Equipment
+### Brewers
     
-*   Mokapot
-*   Phin Filter
-*   French Press
-*   Aeropress Go
-*   Hario V60
+*   Origami Dripper
+*   Cafec Deep27
+*   Picopresso
