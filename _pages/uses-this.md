@@ -34,15 +34,13 @@ permalink: /uses-this
     
 *   Timemore Chestnut C2 Hand Grinder
     
-### Brewing Equipment
+### Brewers
     
 *   Mokapot
 *   Phin Filter
 *   French Press
 *   Aeropress Go
 *   Hario V60
-
-### Brewers
 
 *   Origami Dripper
 *   Cafec Deep27
