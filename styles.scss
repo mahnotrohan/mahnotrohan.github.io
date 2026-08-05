@@ -11,27 +11,38 @@
   list-style: none;
   padding: 0;
   display: grid;
-  gap: .75rem;
+  counter-reset: orrery;
+  border-top: 1px solid var(--rule);
 
   li {
-    border: 1px solid var(--rule);
-    border-radius: 6px;
-    padding: 1.1rem 1.2rem;
-    background: var(--bg-2);
+    counter-increment: orrery;
+    display: grid;
+    grid-template-columns: 2.5rem minmax(0, 1fr);
+    align-items: center;
+    padding: 1.1rem 0;
+    border-bottom: 1px solid var(--rule);
+
+    &::before {
+      content: counter(orrery, decimal-leading-zero);
+      color: var(--fg-faint);
+      font-size: .78rem;
+      font-variant-numeric: tabular-nums;
+    }
   }
 }
 
-.orrery-entry { display: flex; justify-content: space-between; gap: 1.5rem; align-items: center; }
+.orrery-entry { display: flex; justify-content: space-between; gap: 1.5rem; align-items: center; min-width: 0; }
 .orrery-copy { min-width: 0; }
-.orrery-title { display: block; font-weight: 500; line-height: 1.35; }
-.orrery-actions { display: flex; flex: 0 0 auto; gap: .8rem; padding-top: .12rem; }
-.orrery-actions a { color: var(--fg-dim); font-size: .78rem; white-space: nowrap; text-decoration: none; border: 1px solid var(--rule); border-radius: 4px; padding: .42rem .7rem; }
-.orrery-actions a:first-child { color: var(--bg); background: var(--accent); border-color: var(--accent); font-weight: 500; }
+.orrery-title { display: block; font-size: 1.2rem; font-weight: 500; line-height: 1.35; }
+.orrery-actions { display: flex; flex: 0 0 auto; gap: 1.35rem; padding-top: .12rem; }
+.orrery-actions a { color: var(--fg-dim); font-size: .78rem; white-space: nowrap; text-decoration: none; }
+.orrery-actions a:first-child { color: var(--accent); font-weight: 500; }
 .orrery-actions a:hover { color: var(--fg); }
-.orrery-actions a:first-child:hover { color: var(--bg); filter: brightness(1.08); }
+.orrery-actions a:first-child:hover { color: var(--accent); text-decoration: underline; text-underline-offset: 4px; }
+.orrery-note { color: var(--fg-faint); font-size: .75rem; margin-top: 1rem; }
 
 @media (max-width: 700px) {
+  .orrery-list li { grid-template-columns: 1.8rem minmax(0, 1fr); }
   .orrery-entry { display: block; }
-  .orrery-actions { gap: .6rem; margin-top: .8rem; flex-wrap: wrap; }
-  .orrery-actions a { font-size: .8rem; }
+  .orrery-actions { gap: 1rem; margin-top: .7rem; flex-wrap: wrap; }
 }
