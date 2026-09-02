@@ -10,10 +10,10 @@ permalink: /blog
 # Writing
 
 <div class="filters" id="filters">
-  <button class="on" data-f="all" type="button">all {{ notes | size }}</button>
+  <button class="on" data-f="all" type="button" aria-pressed="true">all {{ notes | size }}</button>
   {%- for t in allTags -%}
   {%- assign tagged = site.notes | where_exp: "x", "x.tags contains t" -%}
-  <button data-f="{{ t }}" type="button">{{ t }} <span class="n">{{ tagged | size }}</span></button>
+  <button data-f="{{ t }}" type="button" aria-pressed="false">{{ t }} <span class="n">{{ tagged | size }}</span></button>
   {%- endfor -%}
 </div>
 
