@@ -28,4 +28,4 @@ My go-to is a cortado made with a SIF or an Aeropress. For pourovers, V60 and De
 - **Best cortado** - Shades of Coffee, HSR.
 - **Best pourover** - Baan 125, Phuket.
 
-[← Back to Off the clock](/#off-the-clock)
+[Back to Off the clock](/#off-the-clock)

@@ -40,4 +40,4 @@ Brewing coffee · Woody perfume fragrances · Chinese food · Sushi · Animated 
 - **Gingerbread**
 - **Irish coffee**
 
-[← Back to Off the clock](/#off-the-clock)
+[Back to Off the clock](/#off-the-clock)

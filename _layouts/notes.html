@@ -38,7 +38,7 @@ layout: default
     {%- assign short = p.title | split: " (" | first -%}
     {%- if p.url == page.url -%}<span class="here">{{ short }}</span>
     {%- else -%}<a href="{{ p.url }}">{{ short }}</a>{%- endif -%}
-    {%- unless forloop.last %}<s>&rarr;</s>{% endunless -%}
+    {%- unless forloop.last %}<s>&middot;</s>{% endunless -%}
     {%- endfor -%}
   </div>
   {%- endif -%}
@@ -72,7 +72,7 @@ layout: default
         {%- assign shown = shown | plus: 1 -%}
         {%- endif -%}
         {%- endfor -%}
-        <a class="p-rel-all" href="{{ site.baseurl }}/blog#{{ t }}">All {{ t }} &rarr;</a>
+        <a class="p-rel-all" href="{{ site.baseurl }}/blog#{{ t }}">All {{ t }}</a>
       </div>
       {%- endfor -%}
     </div>
@@ -82,17 +82,17 @@ layout: default
       {%- if idx > 0 -%}
       {%- assign previdx = idx | minus: 1 -%}
       {%- assign prev = ordered[previdx] -%}
-      <a class="p-prev" href="{{ prev.url }}"><span class="k">&larr; Previous</span>{{ prev.title }}</a>
+      <a class="p-prev" href="{{ prev.url }}"><span class="k">Previous</span>{{ prev.title }}</a>
       {%- else -%}<span></span>{%- endif -%}
 
       {%- assign lastidx = ordered | size | minus: 1 -%}
       {%- if idx < lastidx -%}
       {%- assign nextidx = idx | plus: 1 -%}
       {%- assign next = ordered[nextidx] -%}
-      <a class="p-next" href="{{ next.url }}"><span class="k">Next &rarr;</span>{{ next.title }}</a>
+      <a class="p-next" href="{{ next.url }}"><span class="k">Next</span>{{ next.title }}</a>
       {%- else -%}<span></span>{%- endif -%}
     </div>
 
-    <p class="p-all"><a href="{{ site.baseurl }}/blog">All writing &rarr;</a></p>
+    <p class="p-all"><a href="{{ site.baseurl }}/blog">All writing</a></p>
   </div>
 </article>

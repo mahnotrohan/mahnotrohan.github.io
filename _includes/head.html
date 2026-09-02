@@ -31,6 +31,7 @@
     a stale stylesheet after a deploy because the URL never changes.
   {%- endcomment -%}
   <link rel="stylesheet" href="{{ site.baseurl }}/styles.css?v={{ site.time | date: '%s' }}">
+  <link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ site.url }}{{ site.baseurl }}/feed.xml">
 
   {% if page.excerpt %}
   <meta property="og:description" content="{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}"/>
@@ -64,4 +65,7 @@
       {{ page.title }} &mdash; {{ site.title }}
     {% endif %}
   </title>
+
+  <!-- Cloudflare Web Analytics -->
+  <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"b3848e2385f949cebca5bff937d201b6"}'></script>
 </head>
