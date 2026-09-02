@@ -96,7 +96,7 @@ jobs:
           fails = []
           for p in pages:
               h = open(p, encoding='utf-8').read()
-              for needle in ['min read', 'class=\"dots\"', 'p-foot', 'All writing']:
+              for needle in ['min read', 'class=\"p-meta\"', 'p-foot', 'All writing']:
                   if needle not in h:
                       fails.append((p, needle))
           assert not fails, 'missing furniture: %s' % fails[:8]
