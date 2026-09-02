@@ -35,16 +35,16 @@ jobs:
           missing=0
           for f in \
             _site/index.html \
-            _site/blog \
-            _site/now \
-            _site/thoughts \
-            _site/about \
-            _site/uses-this \
-            _site/bookshelf \
-            _site/orrery \
-            _site/thoughts/on-coffee \
-            _site/thoughts/on-food \
-            _site/notes-in-transit \
+            _site/blog.html \
+            _site/now.html \
+            _site/thoughts.html \
+            _site/about.html \
+            _site/uses-this.html \
+            _site/bookshelf.html \
+            _site/orrery.html \
+            _site/thoughts/on-coffee.html \
+            _site/thoughts/on-food.html \
+            _site/notes-in-transit.html \
             _site/notes/cooking-and-being/index.html \
             _site/search.json \
             _site/feed.xml \
@@ -106,7 +106,7 @@ jobs:
       - name: Check unlisted pages carry noindex
         run: |
           set -e
-          grep -q 'noindex' _site/notes-in-transit || { echo '::error::notes-in-transit missing noindex'; exit 1; }
+          grep -q 'noindex' _site/notes-in-transit.html || { echo '::error::notes-in-transit missing noindex'; exit 1; }
           for f in _site/letters/*/index.html; do
             grep -q 'noindex' "$f" || { echo "::error::$f missing noindex"; exit 1; }
           done
