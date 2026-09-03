@@ -1,12 +1,23 @@
 <div class="sb">
-  <h2 class="sb-mark"><a href="{{ site.baseurl }}/">Rohan's space</a></h2>
+  <h2 class="sb-mark"><a href="{{ site.baseurl }}/">Rohan Mahnot.</a></h2>
+  <p class="sb-descriptor">Notes, work, and life.</p>
 
   <nav class="sb-nav" aria-label="Sections">
     <section class="sb-group">
       <h3>Explore</h3>
       <ul>
+        <li><a href="{{ site.baseurl }}/"{% if page.url == "/" %} class="cur" aria-current="page"{% endif %}>Home</a></li>
         <li><a href="{{ site.baseurl }}/blog"{% if page.url contains "/blog" or page.collection == "notes" %} class="cur" aria-current="page"{% endif %}>Writing</a></li>
         <li><a href="{{ site.baseurl }}/about"{% if page.url == "/about" %} class="cur" aria-current="page"{% endif %}>About</a></li>
+      </ul>
+    </section>
+
+    <section class="sb-group">
+      <h3>Interests</h3>
+      <ul>
+        <li><a href="{{ site.baseurl }}/thoughts/on-coffee"{% if page.url contains "on-coffee" %} class="cur" aria-current="page"{% endif %}>Coffee</a></li>
+        <li><a href="{{ site.baseurl }}/bookshelf"{% if page.url == "/bookshelf" %} class="cur" aria-current="page"{% endif %}>Bookshelf</a></li>
+        <li><a href="{{ site.baseurl }}/thoughts/on-food"{% if page.url contains "on-food" %} class="cur" aria-current="page"{% endif %}>Food</a></li>
       </ul>
     </section>
 
@@ -18,29 +29,5 @@
         <li><a class="ext" href="https://www.are.na/rohan-mahnot-rh85hxg6yum/project-monet-oeekarcnrdy">Monet</a></li>
       </ul>
     </section>
-
-    <section class="sb-group">
-      <h3>Off the clock</h3>
-      <ul>
-        <li><a href="{{ site.baseurl }}/bookshelf"{% if page.url == "/bookshelf" %} class="cur" aria-current="page"{% endif %}>Shelf</a></li>
-        <li><a href="{{ site.baseurl }}/thoughts/on-coffee"{% if page.url contains "on-coffee" %} class="cur" aria-current="page"{% endif %}>Coffee</a></li>
-        <li><a href="{{ site.baseurl }}/thoughts/on-food"{% if page.url contains "on-food" %} class="cur" aria-current="page"{% endif %}>Food</a></li>
-      </ul>
-    </section>
-
-    <section class="sb-group">
-      <h3>Tools</h3>
-      <ul>
-        <li><a href="{{ site.baseurl }}/uses-this"{% if page.url == "/uses-this" %} class="cur" aria-current="page"{% endif %}>Uses this</a></li>
-      </ul>
-    </section>
   </nav>
-
-  <div class="sb-foot">
-    <a href="https://x.com/mahnotrohan">x</a>
-    <a href="https://www.linkedin.com/in/rohan-mahnot-569412182/">linkedin</a>
-    <a href="mailto:mahnot.who@gmail.com">email</a>
-    <a href="https://www.yourworldoftext.com/~rohanmahnot/">guestbook</a>
-    <a href="{{ site.baseurl }}/feed.xml">rss</a>
-  </div>
 </div>

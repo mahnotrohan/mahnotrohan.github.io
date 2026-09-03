@@ -1,15 +1,16 @@
 {%- assign recent = site.notes | sort: "date" | reverse -%}
 <div class="recent-block">
+  <span class="recent-kicker">From the notebook</span>
   <h2>Recent writing</h2>
   <ol>
     {%- for n in recent limit: 4 -%}
-    {%- assign rt = n.content | strip_html | number_of_words | divided_by: 220.0 | ceil -%}
-    {%- if rt < 1 %}{% assign rt = 1 %}{% endif -%}
     <li>
-      <a href="{{ n.url }}">{{ n.title }}</a>
-      <span>{{ n.date | date: "%b %Y" }} &middot; {{ rt }} min</span>
+      <a href="{{ n.url }}">
+        <span class="recent-title">{{ n.title }}</span>
+        <time datetime="{{ n.date | date_to_xmlschema }}">{{ n.date | date: "%b %y" }}</time>
+      </a>
     </li>
     {%- endfor -%}
   </ol>
-  <a class="recent-more" href="{{ site.baseurl }}/blog">See {{ recent | size | minus: 4 }} more</a>
+  <a class="recent-more" href="{{ site.baseurl }}/blog">All writing</a>
 </div>
