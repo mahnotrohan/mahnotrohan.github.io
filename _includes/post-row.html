@@ -1,22 +1,15 @@
 {%- comment -%}
-  One row in a list of writing. Used by /blog, the homepage and tag filters.
+  One row in the writing index.
   Include it with a "note" parameter set to the note object.
 {%- endcomment -%}
 {%- assign n = include.note -%}
 {%- assign rt = n.content | strip_html | number_of_words | divided_by: 220.0 | ceil -%}
 {%- if rt < 1 %}{% assign rt = 1 %}{% endif -%}
-<div class="w-row" data-tags="{{ n.tags | join: ' ' }}">
+<div class="w-row">
   <span class="w-date">{{ n.date | date: "%b %Y" }}</span>
   <span class="w-main">
     <a class="w-title" href="{{ n.url }}">{{ n.title }}</a>
     {%- if n.description %}<span class="w-hook">{{ n.description }}</span>{% endif -%}
-    {%- if n.tags %}
-    <span class="w-tags">
-      {%- for t in n.tags -%}
-      <a class="tag" href="{{ site.baseurl }}/blog#{{ t }}">{{ t }}</a>
-      {%- endfor -%}
-    </span>
-    {%- endif -%}
   </span>
   <span class="w-meta">
     <span class="w-mins">{{ rt }} min</span>
