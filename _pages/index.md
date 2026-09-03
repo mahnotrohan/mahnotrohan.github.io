@@ -5,11 +5,29 @@ id: home
 permalink: /
 ---
 
+{%- assign starts = "the-ledger,seize-the-day,thoughts-on-forever" | split: "," -%}
+
 <header class="home-intro">
   <h1>Hi, I&rsquo;m Rohan.</h1>
   <p class="home-lede">I build products, write to untangle ideas, and care far too much about coffee.</p>
   <p class="home-intro-copy">This is where I keep notes on attention, learning, experiments, and the things I&rsquo;m working on.</p>
 </header>
+
+<section class="home-section home-start" id="start-here">
+  <div class="home-section-head">
+    <h2>Start here</h2>
+    <span>Three essays</span>
+  </div>
+
+  <div class="home-entries">
+{%- for slug in starts -%}
+{%- assign note = site.notes | where_exp: "n", "n.path contains slug" | first -%}
+{%- if note %}{% include post-card.html note=note %}{% endif -%}
+{%- endfor -%}
+  </div>
+
+  <p class="home-more"><a href="{{ site.baseurl }}/blog">All writing</a></p>
+</section>
 
 <section class="home-section" id="interests">
   <div class="home-section-head">
