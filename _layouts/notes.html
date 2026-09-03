@@ -19,14 +19,6 @@ layout: default
     <span>{{ rt }} min read</span>
   </div>
 
-  {%- if page.tags and page.tags != empty %}
-  <div class="p-tags">
-    {%- for t in page.tags -%}
-    <a class="tag" href="{{ site.baseurl }}/blog#{{ t }}">{{ t }}</a>
-    {%- endfor -%}
-  </div>
-  {%- endif -%}
-
   {%- comment -%} Series navigation, driven by `series` front matter. {%- endcomment -%}
   {%- if page.series -%}
   {%- assign parts = site.notes | where: "series", page.series | sort: "date" -%}
@@ -72,7 +64,6 @@ layout: default
         {%- assign shown = shown | plus: 1 -%}
         {%- endif -%}
         {%- endfor -%}
-        <a class="p-rel-all" href="{{ site.baseurl }}/blog#{{ t }}">All {{ t }}</a>
       </div>
       {%- endfor -%}
     </div>
