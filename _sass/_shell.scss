@@ -353,49 +353,6 @@ h2.secth {
   font-weight: 500;
 }
 
-.filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px 12px;
-  margin: 1.1rem 0 1.35rem;
-}
-
-.filters button {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  background: none;
-  color: var(--accent);
-  font: inherit;
-  font-size: 13px;
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 2px;
-  cursor: pointer;
-
-  .n {
-    color: var(--fg-faint);
-    font-size: 11px;
-    text-decoration: none;
-  }
-
-  &:hover {
-    color: var(--accent-hover);
-  }
-
-  &.on {
-    color: var(--fg-strong);
-    font-weight: 500;
-    text-decoration: none;
-  }
-}
-
-.tag {
-  color: var(--accent);
-  font-size: 12px;
-  white-space: nowrap;
-}
-
 .w-list {
   margin-top: 0;
   border-top: 1px solid var(--rule);
@@ -441,13 +398,6 @@ h2.secth {
   line-height: 1.48;
 }
 
-.w-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0 0.55rem;
-  margin-top: 0.3rem;
-}
-
 .w-meta {
   color: var(--fg-faint);
   font-family: var(--font-mono);
@@ -466,13 +416,6 @@ h2.secth {
   .sep {
     opacity: 0.55;
   }
-}
-
-.p-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0 0.55rem;
-  margin: 0.65rem 0 0;
 }
 
 .p-series {
@@ -526,7 +469,7 @@ h2.secth {
   font-weight: 500;
 }
 
-.p-rel-col > a:not(.p-rel-all) {
+.p-rel-col > a {
   display: block;
   margin-bottom: 0.7rem;
 
@@ -541,10 +484,6 @@ h2.secth {
     color: var(--fg-faint);
     font-size: 11px;
   }
-}
-
-.p-rel-all {
-  font-size: 13px;
 }
 
 .p-pn {
