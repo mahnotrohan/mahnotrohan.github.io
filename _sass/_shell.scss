@@ -799,14 +799,6 @@
   line-height: 1.6;
 }
 
-.orrery-explainer {
-  max-width: 55ch;
-  margin: 11px 0 0;
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.62;
-}
-
 .orbit-figure {
   margin: 0;
 }
@@ -816,14 +808,6 @@
   width: 100%;
   height: auto;
   overflow: visible;
-}
-
-.orbit-figure figcaption {
-  margin-top: 4px;
-  color: var(--muted);
-  font-size: 11px;
-  line-height: 1.45;
-  text-align: center;
 }
 
 .orbit {
@@ -836,10 +820,6 @@
 .orbit.is-active {
   stroke: var(--ink);
   stroke-width: 1.25;
-}
-
-.page-orrery .orbit.is-active {
-  stroke: var(--blue);
 }
 
 .orbit-axis {
@@ -859,10 +839,6 @@
   stroke-width: 2;
   transform-box: fill-box;
   transform-origin: center;
-}
-
-.page-orrery .orbit-node:not(.is-active) {
-  fill: #65656d;
 }
 
 .orbit-node.is-active {
@@ -982,10 +958,6 @@
   transform: translateY(-50%);
 }
 
-.page-orrery .constellation-choice::after {
-  border-color: #6f7078;
-}
-
 .constellation-choice:hover,
 .constellation-choice:focus-visible,
 .constellation-choice.is-selected {
@@ -1039,18 +1011,6 @@
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-}
-
-.page-orrery .text-link,
-.page-orrery .site-footer a {
-  text-decoration-color: #696970;
-}
-
-.page-orrery .text-link:hover,
-.page-orrery .text-link:focus-visible,
-.page-orrery .site-footer a:hover,
-.page-orrery .site-footer a:focus-visible {
-  text-decoration-color: var(--blue);
 }
 
 @media (max-width: 736px) {
