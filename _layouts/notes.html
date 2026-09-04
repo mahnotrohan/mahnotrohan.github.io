@@ -5,85 +5,77 @@ layout: default
 {%- assign rt = content | strip_html | number_of_words | divided_by: 220.0 | ceil -%}
 {%- if rt < 1 %}{% assign rt = 1 %}{% endif -%}
 
-{%- comment -%} Position in the collection, for previous/next. {%- endcomment -%}
-{%- assign ordered = site.notes | sort: "date" -%}
-{%- assign idx = 0 -%}
-{%- for n in ordered -%}{% if n.url == page.url %}{% assign idx = forloop.index0 %}{% endif %}{%- endfor -%}
+<article class="note-page">
+  <a class="note-back" href="{{ '/blog' | relative_url }}">Writing</a>
 
-<article>
-  <h1>{{ page.title }}</h1>
+  <header class="note-header">
+    <h1>{{ page.title }}</h1>
+    {%- if page.description %}<p class="note-hook">{{ page.description }}</p>{% endif -%}
+    <p class="p-meta"><time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%d %B %Y" }}</time> <span aria-hidden="true">&middot;</span> {{ rt }} min read</p>
+  </header>
 
-  <div class="p-meta">
-    <span>{{ page.date | date: "%b %Y" }}</span>
-    <span class="sep">&middot;</span>
-    <span>{{ rt }} min read</span>
-  </div>
-
-  {%- comment -%} Series navigation, driven by `series` front matter. {%- endcomment -%}
   {%- if page.series -%}
-  {%- assign parts = site.notes | where: "series", page.series | sort: "date" -%}
-  <div class="p-series">
-    <b>{{ page.series }}</b>
-    <span>Part {% for p in parts %}{% if p.url == page.url %}{{ forloop.index }}{% endif %}{% endfor %} of {{ parts | size }}</span>
-    <s>&middot;</s>
-    {%- for p in parts -%}
-    {%- assign short = p.title | split: " (" | first -%}
-    {%- if p.url == page.url -%}<span class="here">{{ short }}</span>
-    {%- else -%}<a href="{{ p.url }}">{{ short }}</a>{%- endif -%}
-    {%- unless forloop.last %}<s>&middot;</s>{% endunless -%}
-    {%- endfor -%}
-  </div>
+    {%- assign parts = site.notes | where: "series", page.series | sort: "date" -%}
+    <nav class="note-series" aria-label="{{ page.series }} series">
+      <div class="note-series-heading">
+        <strong>{{ page.series }}</strong>
+        <span>Part {% for p in parts %}{% if p.url == page.url %}{{ forloop.index }}{% endif %}{% endfor %} of {{ parts | size }}</span>
+      </div>
+      <ol>
+        {%- for p in parts -%}
+          {%- assign short = p.title | split: " (" | first -%}
+          <li>{%- if p.url == page.url -%}<span aria-current="page">{{ short }}</span>{%- else -%}<a href="{{ p.url | relative_url }}">{{ short }}</a>{%- endif -%}</li>
+        {%- endfor -%}
+      </ol>
+    </nav>
   {%- endif -%}
 
-  <div id="notes-entry-container">
-    <content>
-      {{ content }}
-    </content>
+  <div class="note-body" id="notes-entry-container">
+    {{ content }}
   </div>
 
-  {%- comment -%}
-    Every essay ends with somewhere to go: related pieces by shared tag,
-    then previous/next by date, then the full index.
-  {%- endcomment -%}
-  <div class="p-foot">
-    {%- if page.tags and page.tags != empty -%}
-    <div class="p-rel">
-      {%- for t in page.tags -%}
-      {%- assign sameTag = site.notes | where_exp: "n", "n.tags contains t" | sort: "date" | reverse -%}
+  {%- assign primary_tag = page.tags | first -%}
+  {%- assign related = site.notes | where_exp: "n", "n.tags contains primary_tag" | sort: "date" | reverse -%}
+  <section class="note-continue p-foot" aria-labelledby="continue-reading-title">
+    <h2 id="continue-reading-title">Continue reading</h2>
+    <ul class="continue-list">
       {%- assign shown = 0 -%}
-      <div class="p-rel-col">
-        <div class="p-rel-h">More on {{ t }}</div>
-        {%- for n in sameTag -%}
+      {%- assign rendered_urls = "|" -%}
+      {%- for n in related -%}
         {%- if n.url != page.url and shown < 3 -%}
-        {%- assign nrt = n.content | strip_html | number_of_words | divided_by: 220.0 | ceil -%}
-        {%- if nrt < 1 %}{% assign nrt = 1 %}{% endif -%}
-        <a href="{{ n.url }}">
-          <span class="t">{{ n.title }}</span>
-          <span class="m">{{ n.date | date: "%b %Y" }} &middot; {{ nrt }} min</span>
-        </a>
-        {%- assign shown = shown | plus: 1 -%}
+          {%- assign nrt = n.content | strip_html | number_of_words | divided_by: 220.0 | ceil -%}
+          {%- if nrt < 1 %}{% assign nrt = 1 %}{% endif -%}
+          <li>
+            <a href="{{ n.url | relative_url }}">
+              <span>{{ n.title }}</span>
+              <span class="continue-meta"><time datetime="{{ n.date | date_to_xmlschema }}">{{ n.date | date: "%d %b" }}</time> &middot; {{ nrt }} min</span>
+            </a>
+          </li>
+          {%- assign shown = shown | plus: 1 -%}
+          {%- assign rendered_urls = rendered_urls | append: n.url | append: "|" -%}
         {%- endif -%}
-        {%- endfor -%}
-      </div>
       {%- endfor -%}
-    </div>
-    {%- endif -%}
-
-    <div class="p-pn">
-      {%- if idx > 0 -%}
-      {%- assign previdx = idx | minus: 1 -%}
-      {%- assign prev = ordered[previdx] -%}
-      <a class="p-prev" href="{{ prev.url }}"><span class="k">Previous</span>{{ prev.title }}</a>
-      {%- else -%}<span></span>{%- endif -%}
-
-      {%- assign lastidx = ordered | size | minus: 1 -%}
-      {%- if idx < lastidx -%}
-      {%- assign nextidx = idx | plus: 1 -%}
-      {%- assign next = ordered[nextidx] -%}
-      <a class="p-next" href="{{ next.url }}"><span class="k">Next</span>{{ next.title }}</a>
-      {%- else -%}<span></span>{%- endif -%}
-    </div>
-
-    <p class="p-all"><a href="{{ site.baseurl }}/blog">All writing</a></p>
-  </div>
+      {%- if shown < 3 -%}
+        {%- assign recent_notes = site.notes | sort: "date" | reverse -%}
+        {%- for n in recent_notes -%}
+          {%- if n.url != page.url and shown < 3 -%}
+            {%- capture url_token -%}|{{ n.url }}|{%- endcapture -%}
+            {%- unless rendered_urls contains url_token -%}
+              {%- assign nrt = n.content | strip_html | number_of_words | divided_by: 220.0 | ceil -%}
+              {%- if nrt < 1 %}{% assign nrt = 1 %}{% endif -%}
+              <li>
+                <a href="{{ n.url | relative_url }}">
+                  <span>{{ n.title }}</span>
+                  <span class="continue-meta"><time datetime="{{ n.date | date_to_xmlschema }}">{{ n.date | date: "%d %b" }}</time> &middot; {{ nrt }} min</span>
+                </a>
+              </li>
+              {%- assign shown = shown | plus: 1 -%}
+              {%- assign rendered_urls = rendered_urls | append: n.url | append: "|" -%}
+            {%- endunless -%}
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endif -%}
+    </ul>
+    <a class="quiet-link note-all-writing" href="{{ '/blog' | relative_url }}">All writing</a>
+  </section>
 </article>

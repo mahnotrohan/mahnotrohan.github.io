@@ -1,0 +1,13 @@
+<header class="site-header">
+  <a class="site-brand" href="{{ '/' | relative_url }}">
+    <span class="site-brand-mark" aria-hidden="true"></span>
+    <span>Rohan Mahnot</span>
+  </a>
+
+  <nav class="site-nav" aria-label="Primary navigation">
+    <a href="{{ '/' | relative_url }}"{% if page.url == "/" %} aria-current="page"{% endif %}>Home</a>
+    <a href="{{ '/blog' | relative_url }}"{% if page.url == "/blog" or page.url == "/blog/" or page.collection == "notes" %} aria-current="page"{% endif %}>Writing</a>
+    <a href="{{ '/about' | relative_url }}"{% if page.url == "/about" or page.url == "/about/" %} aria-current="page"{% endif %}>About</a>
+    <a href="{{ '/orrery' | relative_url }}"{% if page.url == "/orrery" or page.url == "/orrery/" %} aria-current="page"{% endif %}>Orrery</a>
+  </nav>
+</header>

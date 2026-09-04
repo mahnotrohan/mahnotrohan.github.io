@@ -1,15 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
   {% include head.html %}
-  <body{% if page.url == "/" %} class="page-home"{% endif %}>
-    <div class="shell">
-      <aside class="sb-wrap">{% include sidebar.html %}</aside>
-      <div class="col">
-        <main>{{ content }}</main>
-      </div>
-      <aside class="recent-wrap" aria-label="Recent writing">
-        {% include recent-writing.html %}
-      </aside>
+  {%- capture page_class -%}
+    {%- if page.url == "/" -%}page-home
+    {%- elsif page.collection == "notes" -%}page-note
+    {%- elsif page.url == "/blog" or page.url == "/blog/" -%}page-writing
+    {%- elsif page.url == "/about" or page.url == "/about/" -%}page-about
+    {%- elsif page.url == "/orrery" or page.url == "/orrery/" -%}page-orrery
+    {%- else -%}page-standard
+    {%- endif -%}
+  {%- endcapture -%}
+  <body class="{{ page_class | strip }}">
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <div class="site">
+      {% include site-header.html %}
+      <main id="main-content">{{ content }}</main>
+      {% include footer.html %}
     </div>
     <script src="{{ site.baseurl }}/assets/site.js?v={{ site.time | date: '%s' }}" defer></script>
   </body>
