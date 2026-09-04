@@ -20,7 +20,7 @@ description: "Data tells you what is happening and by how much. Only users tell 
 - Don’t seed question with assumptions when asking questions to the users
 - Sometimes you have to set incentives to get people into a room to talk to them
 
-### Notes from the Mom Test
+## Notes from the Mom Test
 
 - **The Three Rules**
     1. **Talk about their life, not your idea.** The moment you pitch, the conversation dies and people stop telling the truth and start managing your feelings.

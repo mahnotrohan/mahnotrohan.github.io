@@ -1,5 +1,5 @@
 title:               Rohan Mahnot
-include:             ['_pages', '_notes','_letters']
+include:             ['_pages']
 
 url:                 "https://rohanmahnot.space"
 baseurl:             ''
@@ -41,4 +41,3 @@ defaults:
     values:
       noindex: true
       sitemap: false
-

@@ -7,7 +7,7 @@ permalink: /thoughts/on-coffee
 # Coffee
 
 I love drinking coffee, but what I really love is the process of making it - especially for the people close to me. If you ever want a cup, I'll never say no.
-Here's [Bloom](https://bloom.rohanmahnot.space), a little library of my recipes I enjoy. And here's my latte art project, [Project Monet](https://www.are.na/rohan-mahnot-rh85hxg6yum/project-monet-oeekarcnrdy).
+Here's [Bloom](https://bloom.rohanmahnot.space), a little library of recipes I enjoy. And here's my latte art project, [Project Monet](https://project-monet.vercel.app/).
 
 ## My Setup
 
@@ -28,4 +28,4 @@ My go-to is a cortado made with a SIF or an Aeropress. For pourovers, V60 and De
 - **Best cortado** - Shades of Coffee, HSR.
 - **Best pourover** - Baan 125, Phuket.
 
-[Back to Off the clock](/#off-the-clock)
+[Back to Interests](/#interests)

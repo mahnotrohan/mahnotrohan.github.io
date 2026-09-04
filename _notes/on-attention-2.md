@@ -12,7 +12,7 @@ Most thinking about this gets tangled up in importance and urgency. A cleaner qu
 
 Sort attention by two axes whether the effort is bounded or ongoing, and whether the reward is bounded or ongoing. The legitimate uses fall into a handful of clean cells. 
 
-# I.
+## I.
 
 Maintenance sits above the rest. Your health, your relationships, your finances, your home, your reputation. The effort is ongoing; the "reward" isn't a reward but preservation. You don't gain anything by brushing your teeth today, you just don't lose the asset. Skip a day and nothing happens. Skip a decade and the asset is gone.
 
@@ -20,25 +20,25 @@ Maintenance gets done first, every day, regardless of bandwidth. If you only had
 
 Each area needs a different kind of maintenance. Knowing both - the area that requires maintenance and the type of care it takes - is important.
 
-# II.
+## II.
 
 After maintenance, the highest return for the attention spent sits in bounded effort with an ongoing reward. Teaching your cook how you actually like your food. Hiring carefully. Setting up autopay. Writing the procedure for something you do every month. Buying the good knife once instead of cheap ones six times.
 
 Defined upfront cost, return that keeps paying. When one of these comes up, give it your full attention and finish it. The failure here looks like incompleteness, you pay the cost and get only a fraction of the return. The other is procrastination, because the upfront cost looks larger than the daily cost of not doing it. That deception only becomes apparent in hindsight.
 
-# III.
+## III.
 
 Then there's bounded effort with a bounded reward. Taxes. The leak under the sink. The form that needs signing. The annual checkup.
 
 These aren't strategic, they're friction. The mistake is treating them as either of the categories above: over-engineering them, or letting them pile up because they aren't "important." Clear them quickly. Don't dramatize them. Don't optimize them. The failure mode is letting a small bounded task become a maintenance problem because you put it off long enough.
 
-# IV.
+## IV.
 
 The next cell is ongoing effort with a bounded reward. Finishing a book. Training for a marathon. Earning a degree.
 
 These look like long bets but aren't - the reward is real and definite, you just have to keep showing up until you reach it. The failure mode is starting more of them than you can sustain. Every abandoned project costs more than not having started, because it taught you the wrong lesson: that you don't finish things. Only commit to one when you can see the finish from where you're standing.
 
-# V.
+## V.
 
 Then the actual long bet - ongoing effort with a reward you can't predict in shape, timing, or magnitude. Building a network. Writing publicly. Reading outside your field.
 

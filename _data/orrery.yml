@@ -1,57 +1,76 @@
 - title: Chaos, Luck & Ergodicity
+  thread: uncertainty
   url: /orrery/chaos-luck-ergodicity.html
   description: Uncertainty, chance, and what happens when one life cannot be averaged like a crowd.
 - title: Thinking, Fast and Slow
+  thread: thinking
   url: /orrery/thinking-fast-and-slow.html
   description: The two minds in your head, the biases they breed, and the choices they quietly shape.
 - title: How to Know a Person
+  thread: people
   url: /orrery/how-to-know-a-person.html
   description: The gaze, presence, and structures that help us see others and be deeply seen.
 - title: Thinking in Bets
+  thread: uncertainty
   url: /orrery/thinking-in-bets.html
   description: Decisions under uncertainty, probabilities, and judging choices apart from outcomes.
 - title: Why We Sleep
+  thread: inner-life
   url: /orrery/why-we-sleep.html
   description: What sleep repairs, why it matters, and how the night changes the day.
 - title: The Power Law
+  thread: uncertainty
   url: /orrery/the-power-law.html
   description: Venture capital, networks, and the uneven distributions behind outsized outcomes.
 - title: The School of Life
+  thread: inner-life
   url: /orrery/the-school-of-life.html
   description: Emotional education, relationships, and the work of becoming a person.
 - title: Decision Theory
+  thread: uncertainty
   url: /orrery/decision-theory.html
   description: How to choose when outcomes are uncertain and your preferences are still forming.
 - title: Decisive
+  thread: uncertainty
   url: /orrery/decisive.html
   description: A practical framework for making better decisions when the future will not cooperate.
 - title: Systems Thinking
+  thread: thinking
   url: /orrery/systems-thinking.html
   description: Stocks, flows, feedback loops, and where to actually push on a system.
 - title: Building Taste
+  thread: thinking
   url: /orrery/building-taste.html
   description: How judgment develops through attention, comparison, and repeated contact with good work.
 - title: Interpersonal & Communication Skills
+  thread: people
   url: /orrery/interpersonal-communication.html
   description: The structures underneath listening, conversation, conflict, and connection.
 - title: First Principles Thinking
+  thread: thinking
   url: /orrery/first-principles-thinking.html
   description: Strip a problem back to what must be true, then build from there.
 - title: Nonviolent Communication
+  thread: people
   url: /orrery/nonviolent-communication.html
   description: Observation, feeling, need, and request as a practice for clearer relationships.
 - title: The Course of Love
+  thread: people
   url: /orrery/course-of-love.html
   description: What love asks of two people after the first story of romance wears off.
 - title: Never Split the Difference
+  thread: people
   url: /orrery/never-split-the-difference.html
   description: Tactical empathy, calibrated questions, and the shape of a useful negotiation.
 - title: Desire, from first principles
+  thread: inner-life
   url: /orrery/desire.html
   description: Wanting, imitation, status, and the forces that make an object feel worth pursuing.
 - title: "Attachment: Bonds, Clinging & the Grip"
+  thread: inner-life
   url: /orrery/attachment.html
   description: How bonds form, why they tighten, and what it means to loosen the grip.
 - title: The Capability Stack
+  thread: thinking
   url: /orrery/capability-stack.html
   description: The layered abilities that turn intention into reliable action.
