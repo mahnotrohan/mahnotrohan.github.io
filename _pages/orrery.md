@@ -2,7 +2,7 @@
 layout: page
 title: Orrery
 permalink: /orrery
-description: Nineteen interactive maps for 570 ideas that make more sense in relation to one another.
+description: An orrery is a model that shows how planets move. This one shows how ideas connect.
 ---
 
 {%- assign first_constellation = site.data.orrery | where: "thread", "uncertainty" | first -%}
@@ -11,8 +11,7 @@ description: Nineteen interactive maps for 570 ideas that make more sense in rel
   <section class="orrery-hero" aria-labelledby="orrery-title">
     <div>
       <h1 id="orrery-title">Orrery</h1>
-      <p class="orrery-deck">Nineteen interactive maps for 570 ideas that make more sense in relation to one another.</p>
-      <p class="orrery-explainer">Each constellation connects questions, stories, and first principles. Follow a guided path, or explore the map and wander.</p>
+      <p class="orrery-deck">An orrery is a model that shows how planets move. This one shows how ideas connect. Pick a topic below. Follow the path, or explore on your own.</p>
     </div>
 
     <figure class="orbit-figure">
@@ -55,7 +54,6 @@ description: Nineteen interactive maps for 570 ideas that make more sense in rel
           </g>
         </g>
       </svg>
-      <figcaption>Four threads &middot; nineteen constellations</figcaption>
     </figure>
   </section>
 
