@@ -3,57 +3,35 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script>
-/* Theme is shared with the main site: same origin, same localStorage key. */
-(function(){try{var t=localStorage.getItem('theme');
-if(!t)t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
-document.documentElement.setAttribute('data-theme',t);}
-catch(e){document.documentElement.setAttribute('data-theme','light');}})();
-</script>
+<meta name="theme-color" content="#111113">
+<!-- Orrery is intentionally dark-only. -->
+<!-- ORRERY_SHELL_FIXED_DARK_V1 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&family=Inter:wght@400;500;600&display=swap">
 <title>Nonviolent Communication - Orrery</title>
 <style>
 :root{
-  /* site parity: --ground/--surface-* mirror the main site's --bg/--bg-2/--chip */
-  --ground:#fbf8f3; --surface-sunk:#f2ede4; --surface-raised:#fdfcf9;
-  --border:#e3dccf; --border-strong:#d2c8b5;
-  --ink:#211f1c; --ink-strong:#14120f; --ink-muted:#5c5751; --ink-faint:#8c867f;
-  --accent:#8f6220; --accent-dim:#c2a47c; --accent-wash:rgba(143,98,32,0.08);
-  --accent-rgb:143,98,32;
+  /* Fixed dark Orrery palette: warm white, graphite, and cobalt. */
+  --ground:#111113; --surface-sunk:#18181b; --surface-raised:#1d1d20;
+  --border:#2d2d32; --border-strong:#3b3b42;
+  --ink:#e7e7e4; --ink-strong:#f5f5f2; --ink-muted:#a1a1a7; --ink-faint:#7f7f87;
+  --accent:#4f7dff; --accent-dim:#6f91f3; --accent-wash:rgba(79,125,255,0.12);
+  --accent-rgb:79,125,255;
   --font:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
   --r:4px; --reader-w:min(760px, 58vw); --move-fast:150ms ease;
-  --ink-body:#2b2823; --ink-soft:#332f29;
-  --hdr-fade:linear-gradient(180deg, rgba(251,248,243,.96), rgba(251,248,243,.75), transparent);
-  --vp-bg:radial-gradient(ellipse at 50% 40%, #fdfbf7 0%, #fbf8f3 55%, #f2ede4 100%);
-  --btn-bg:rgba(253,252,249,.92);
-  --line-soft:rgba(33,31,28,0.10); --line-flow:rgba(143,98,32,0.45);
-  --sim-ink:#3a352e; --sim-gray:#8c867f; --sim-faint:#b3ac9f;
-  --sim-amber:#8f6220; --sim-sunk:#f2ede4; --sim-brd:#ddd4c3;
-  --grid-1:rgba(110,95,65,.13); --grid-2:rgba(110,95,65,.07);
-  --shadow:rgba(90,75,50,.16);
+  --ink-body:#d9d9d5; --ink-soft:#c9c9c5;
+  --hdr-fade:linear-gradient(180deg, rgba(17,17,19,.97), rgba(17,17,19,.78), transparent);
+  --vp-bg:radial-gradient(ellipse at 50% 40%, #19191c 0%, #111113 55%, #0c0c0e 100%);
+  --btn-bg:rgba(29,29,32,.92);
+  --line-soft:rgba(231,231,228,0.11); --line-flow:rgba(79,125,255,0.48);
+  --sim-ink:#e7e7e4; --sim-gray:#9a9aa1; --sim-faint:#66666e;
+  --sim-amber:#4f7dff; --sim-sunk:#18181b; --sim-brd:#35353a;
+  --grid-1:rgba(210,210,220,.085); --grid-2:rgba(210,210,220,.04);
+  --shadow:rgba(0,0,0,.55);
 }
 
-/* Night sky, sharing the main site's dark surfaces exactly. */
-html[data-theme="dark"]{
-  --ground:#1a1a1a; --surface-sunk:#232322; --surface-raised:#262523;
-  --border:#2e2e2e; --border-strong:#3e3e3b;
-  --ink:#e8e6e3; --ink-strong:#f5f3f0; --ink-muted:#a5a09a; --ink-faint:#7d7873;
-  --accent:#d9a25e; --accent-dim:#8b6c41; --accent-wash:rgba(217,162,94,0.10);
-  --accent-rgb:217,162,94;
-  --ink-body:#dddad5; --ink-soft:#d3cfc9;
-  --hdr-fade:linear-gradient(180deg, rgba(26,26,26,.96), rgba(26,26,26,.75), transparent);
-  --vp-bg:radial-gradient(ellipse at 50% 40%, #202020 0%, #1a1a1a 55%, #141414 100%);
-  --btn-bg:rgba(38,37,35,.92);
-  --line-soft:rgba(232,230,227,0.10); --line-flow:rgba(217,162,94,0.45);
-  --sim-ink:#e8e6e3; --sim-gray:#9d988f; --sim-faint:#6b6660;
-  --sim-amber:#d9a25e; --sim-sunk:#232322; --sim-brd:#393936;
-  --grid-1:rgba(210,203,190,.09); --grid-2:rgba(210,203,190,.045);
-  --shadow:rgba(0,0,0,.5);
-}
-html{color-scheme:light}
-html[data-theme="dark"]{color-scheme:dark}
+html{color-scheme:dark}
 *{box-sizing:border-box; margin:0; padding:0;}
 html,body{height:100%; overflow:hidden; background:var(--ground); color:var(--ink);
   font-family:var(--font); font-size:15.5px; line-height:1.75; overscroll-behavior:none;}
@@ -61,7 +39,7 @@ h1,h2,h3{color:var(--ink-strong); font-weight:600; line-height:1.3;}
 .kicker{font-size:11px; letter-spacing:.14em; text-transform:uppercase;
   color:var(--ink-muted); font-weight:500;}
 
-/* header - all navigation lives top right */
+/* constellation context, below the global navigation */
 #hdr{position:fixed; top:0; left:0; right:0; z-index:40; height:56px;
   display:flex; align-items:center; gap:1.1rem; padding:0 1.4rem;
   background:var(--hdr-fade);
@@ -253,27 +231,25 @@ figure.frame input[type=range]{flex:1; min-width:100px; accent-color:var(--accen
   #rbody>.nextbtn{max-width:100%}
 }
 
-/* ---- theming: lines, discs, marker, toggle ---- */
+/* ---- fixed dark rendering: lines, discs, and marker ---- */
 .lnk-base{stroke:var(--line-soft)}
 .lnk-flow{stroke:var(--line-flow)}
 .disc-bg{fill:var(--surface-sunk)}
 #tsvg marker path{fill:var(--accent)}
-/* band hues are mid-tone and kept in both themes; lift them on dark ground */
-html[data-theme="dark"] #tsvg line,
-html[data-theme="dark"] #astsvg line{stroke-opacity:.55}
-#themeBtn{font-size:14px;line-height:1;padding:5px 11px}
+/* Keep the territory bands legible on the dark ground. */
+#tsvg line,
+#astsvg line{stroke-opacity:.55}
 </style>
-<link rel="stylesheet" href="/assets/orrery-site-nav.css">
+<link rel="stylesheet" href="/assets/orrery-site-nav.css?v=20260904">
 </head>
 <body>
 
 <div id="hdr">
   <div>
     <div class="t">Nonviolent Communication</div>
-    <div class="sub"><a href="/">Rohan's space</a><s>/</s><a href="/orrery">Orrery</a></div>
+    <div class="sub"><a href="/orrery">All constellations</a><s>·</s><span>Interactive map</span></div>
   </div>
   <div class="spacer"></div>
-  <button class="hbtn" id="themeBtn" type="button" title="Light / dark" aria-label="Toggle light or dark">◐</button>
   <button class="hbtn" id="overviewBtn">Overview&nbsp;·&nbsp;Esc</button>
 </div>
 
@@ -300,8 +276,7 @@ html[data-theme="dark"] #astsvg line{stroke-opacity:.55}
 
 let INKC, GRAY, FAINT, AMBER, SUNK, BRD;
 let RGB_INK, RGB_GRAY, RGB_FAINT, RGB_AMBER;
-/* Canvas takes no var(), so pull the resolved values and refresh on theme flip.
-   Animated sims pick these up on their next frame; the open one is remounted. */
+/* Canvas takes no var(), so resolve the fixed palette once for simulations. */
 function syncSimColours(){
   const cs = getComputedStyle(document.documentElement);
   const v = n => cs.getPropertyValue(n).trim();
@@ -1391,19 +1366,8 @@ SIMS.fourdoors = fig=>{
 syncNav();
 overviewCam(false);
 if (window.location.hash === '#start') setTimeout(()=>openIdea(TOUR[0]), 0);
-
-
-/* ---- light / dark, shared with the main site ---- */
-document.getElementById('themeBtn').addEventListener('click', function(){
-  const r = document.documentElement;
-  const next = r.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-  r.setAttribute('data-theme', next);
-  try { localStorage.setItem('theme', next); } catch(e) {}
-  syncSimColours();
-  if (focusId) openIdea(focusId);   // repaint the open simulation
-});
 </script>
 
-<script src="/assets/orrery-site-nav.js" defer></script>
+<script src="/assets/orrery-site-nav.js?v=20260904" defer></script>
 </body>
 </html>

@@ -1,139 +1,144 @@
-/* Shared site navigation for the standalone Orrery charts. */
+/* Home-parity navigation for the standalone Orrery charts. */
 #site-nav {
   position: fixed;
   inset: 0 0 auto;
   z-index: 60;
-  height: 50px;
+  height: 71px;
   background: color-mix(in srgb, var(--ground) 94%, transparent);
-  border-bottom: 1px solid var(--border);
   backdrop-filter: blur(12px);
 }
 
 #site-nav .inner {
-  height: 100%;
+  width: min(calc(100% - 64px), 968px);
+  height: 71px;
+  margin-inline: auto;
   display: flex;
-  align-items: center;
-  gap: 1.4rem;
-  padding: 0 1.4rem;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 32px;
+  border-bottom: 1px solid var(--border);
 }
 
 #site-nav .brand {
-  color: var(--accent);
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: -.02em;
-  white-space: nowrap;
-}
-
-#site-nav nav {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 1rem;
-  min-width: 0;
-}
-
-#site-nav nav a,
-#site-nav .menu-btn {
-  color: var(--ink-muted);
-  font: inherit;
-  font-size: 12px;
+  gap: 9px;
+  min-height: 44px;
+  color: var(--ink);
+  font-family: "Geist", var(--font);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -.015em;
   text-decoration: none;
   white-space: nowrap;
 }
 
-#site-nav .search-btn {
-  border: 0;
-  background: none;
-  color: var(--ink-muted);
-  font: inherit;
-  font-size: 12px;
-  padding: 4px 0;
-  cursor: pointer;
+#site-nav .brand:hover { color: var(--ink); }
+
+#site-nav .brand-mark {
+  width: 3px;
+  height: 15px;
+  flex: 0 0 auto;
+  background: var(--accent);
 }
 
-#site-nav .search-btn:hover { color: var(--accent); }
+#site-nav nav {
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-end;
+  gap: 22px;
+  min-width: 0;
+}
+
+#site-nav nav a {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--ink-muted);
+  font-family: "Geist", var(--font);
+  font-size: 13px;
+  line-height: 1.4;
+  text-decoration: none;
+  white-space: nowrap;
+}
 
 #site-nav nav a:hover,
-#site-nav nav a.current,
-#site-nav .menu-btn:hover { color: var(--accent); }
-
-#site-nav .group {
-  color: var(--ink-faint);
-  font-size: 9px;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  margin-left: .25rem;
-}
-
-#site-nav .spacer { flex: 1; }
-
-#site-nav .menu-btn {
-  border: 1px solid var(--border-strong);
-  border-radius: var(--r);
-  padding: 5px 9px;
-  background: var(--btn-bg);
-  cursor: pointer;
-}
-
-#site-nav .drawer {
-  display: none;
-  position: absolute;
-  top: 50px;
-  right: 12px;
-  width: min(300px, calc(100vw - 24px));
-  padding: 14px 16px 16px;
-  background: var(--surface-raised);
-  border: 1px solid var(--border-strong);
-  border-radius: 0 0 8px 8px;
-  box-shadow: 0 18px 45px var(--shadow);
-}
-
-#site-nav .drawer.open { display: block; }
-#site-nav .drawer-label { color: var(--ink-faint); font-size: 9px; letter-spacing: .14em; text-transform: uppercase; margin: 12px 0 4px; }
-#site-nav .drawer-label:first-child { margin-top: 0; }
-#site-nav .drawer a { display: block; color: var(--ink-muted); font-size: 13px; padding: 5px 0; }
-#site-nav .drawer a:hover, #site-nav .drawer a.current { color: var(--accent); }
-#site-nav .drawer-search { display: block; border: 0; padding: 5px 0; background: none; color: var(--ink-muted); font: inherit; font-size: 13px; cursor: pointer; }
-#site-nav .drawer-search:hover { color: var(--accent); }
-
-#orrery-search {
-  width: min(620px, calc(100vw - 28px));
-  padding: 0;
+#site-nav nav a:focus-visible,
+#site-nav nav a.current {
   color: var(--ink);
-  background: var(--ground);
-  border: 1px solid var(--border-strong);
-  border-radius: 10px;
-  box-shadow: 0 24px 70px var(--shadow);
 }
 
-#orrery-search::backdrop { background: rgba(0, 0, 0, .55); }
-#orrery-search .search-form { display: flex; gap: 8px; padding: 12px; border-bottom: 1px solid var(--border); }
-#orrery-search input { flex: 1; min-width: 0; border: 1px solid var(--border); border-radius: var(--r); padding: 8px 10px; background: var(--surface-sunk); color: var(--ink); font: inherit; font-size: 14px; outline: none; }
-#orrery-search input:focus { border-color: var(--accent-dim); }
-#orrery-search .close-search { border: 1px solid var(--border-strong); border-radius: var(--r); padding: 7px 10px; background: var(--btn-bg); color: var(--ink-muted); font: inherit; font-size: 12px; cursor: pointer; }
-#orrery-search .close-search:hover { color: var(--ink); }
-#orrery-search .results { max-height: min(58vh, 460px); overflow-y: auto; }
-#orrery-search .result { display: block; padding: 10px 14px; border-bottom: 1px solid var(--border); text-decoration: none; }
-#orrery-search .result:hover { background: var(--surface-sunk); }
-#orrery-search .result-title { display: block; color: var(--ink-strong); font-size: 14px; font-weight: 500; }
-#orrery-search .result-meta { display: block; color: var(--ink-faint); font-size: 10px; margin-top: 2px; text-transform: uppercase; letter-spacing: .1em; }
-#orrery-search .result-desc { display: block; color: var(--ink-muted); font-size: 12px; line-height: 1.5; margin-top: 3px; }
-#orrery-search .empty { padding: 16px 14px; color: var(--ink-faint); font-size: 13px; }
-
-/* Give the chart and reader a clean place below the shared site bar. */
-#hdr { top: 50px; }
-#reader { top: 50px; height: calc(100% - 50px); }
-
-@media (max-width: 760px) {
-  #site-nav .inner { padding: 0 1rem; }
-  #site-nav nav { display: none; }
-  #site-nav .menu-btn { display: inline-block; }
-  #site-nav .search-btn { display: none; }
-  #site-nav .brand { font-size: 13px; }
-  #hdr { top: 50px; height: 60px; padding: 0 1rem; }
-  #reader { top: 50px; height: calc(100% - 50px); }
+#site-nav .brand:focus-visible,
+#site-nav nav a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
 }
 
-@media (min-width: 761px) {
-  #site-nav .menu-btn { display: none; }
+#site-nav nav a.current { font-weight: 500; }
+
+#site-nav nav a.current::after {
+  position: absolute;
+  right: 0;
+  bottom: -1px;
+  left: 0;
+  height: 2px;
+  background: var(--accent);
+  content: "";
+}
+
+/* Leave the graph and reader below the global navigation. */
+#hdr { top: 71px; }
+#reader { top: 71px; height: calc(100% - 71px); }
+
+@media (max-width: 736px) {
+  /* Keep Home's two-row hierarchy, compressed to preserve the map viewport. */
+  #site-nav { height: 96px; }
+
+  #site-nav .inner {
+    width: min(calc(100% - 48px), 968px);
+    height: 96px;
+    display: grid;
+    grid-template-columns: 1fr;
+    align-content: end;
+    gap: 3px;
+  }
+
+  #site-nav .brand {
+    width: fit-content;
+    min-height: 35px;
+  }
+
+  #site-nav nav { justify-content: flex-start; }
+
+  #site-nav nav a { min-height: 36px; }
+
+  #site-nav nav a.current::after { bottom: -1px; }
+
+  #hdr {
+    top: 96px;
+    height: 60px;
+    padding-inline: 24px;
+  }
+
+  #reader {
+    top: 96px;
+    height: calc(100% - 96px);
+  }
+}
+
+@media (max-width: 480px) {
+  #site-nav .inner { width: calc(100% - 32px); }
+
+  #site-nav nav {
+    width: 100%;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  #site-nav nav a { font-size: 12px; }
+
+  #hdr { padding-inline: 16px; }
+
+  #hdr .sub { display: none; }
 }
