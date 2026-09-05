@@ -9,8 +9,8 @@ description: Product manager at Meesho, writing about attention, learning, peopl
 <div class="home-grid">
   <header class="home-intro">
     <h1>Hello, I&rsquo;m Rohan.</h1>
-    <p class="home-lead">Product manager at Meesho, previously a data scientist at Microsoft. I live in Bangalore and write about attention, learning, people, and work.</p>
-    <p class="home-personal">Off the clock, I brew coffee, cook, read memoirs, and keep returning to questions with no clean answer.</p>
+    <p class="home-lead">Product manager at Meesho, previously a data scientist at Microsoft. I live in Bangalore.</p>
+    <p class="home-personal">Off the clock, I brew coffee, cook, read memoirs, write, and often go down rabbit holes.</p>
     <a class="quiet-link" href="{{ '/about' | relative_url }}">More about me</a>
   </header>
 
@@ -45,23 +45,23 @@ description: Product manager at Meesho, writing about attention, learning, peopl
     <div class="thread-options" role="group" aria-label="Choose a recurring question">
       <button class="thread-option" type="button" data-home-thread="control" aria-pressed="true">
         <span class="thread-knot" aria-hidden="true"></span>
-        <span class="thread-label">control / chance</span>
+        <span class="thread-label">Flukes</span>
       </button>
       <button class="thread-option" type="button" data-home-thread="identity" aria-pressed="false">
         <span class="thread-knot" aria-hidden="true"></span>
-        <span class="thread-label">identity</span>
+        <span class="thread-label">Identity</span>
       </button>
       <button class="thread-option" type="button" data-home-thread="meaning" aria-pressed="false">
         <span class="thread-knot" aria-hidden="true"></span>
-        <span class="thread-label">meaning</span>
+        <span class="thread-label">Meaning Making</span>
       </button>
       <button class="thread-option" type="button" data-home-thread="tools" aria-pressed="false">
         <span class="thread-knot" aria-hidden="true"></span>
-        <span class="thread-label">tools / thought</span>
+        <span class="thread-label">Systems and tools</span>
       </button>
       <button class="thread-option" type="button" data-home-thread="making" aria-pressed="false">
         <span class="thread-knot" aria-hidden="true"></span>
-        <span class="thread-label">making / tending</span>
+        <span class="thread-label">Building & Tending</span>
       </button>
     </div>
     <p class="thread-question" aria-live="polite">How much of what happens to us is within our control&mdash;and how much is chance?</p>
@@ -72,7 +72,7 @@ description: Product manager at Meesho, writing about attention, learning, peopl
     <div class="home-content-grid">
       <div class="home-content-item">
         <a class="text-link" href="{{ '/thoughts/on-coffee' | relative_url }}">Coffee</a>
-        <p>Brewing, dialing in espresso, and recipes worth returning to.</p>
+        <p>Brewing, learning and drinking lots of coffee.</p>
       </div>
       <div class="home-content-item">
         <a class="text-link" href="{{ '/bookshelf' | relative_url }}">Shelf</a>
@@ -97,8 +97,12 @@ description: Product manager at Meesho, writing about attention, learning, peopl
         <p>A coffee recipe builder and shared brewing library.</p>
       </div>
       <div class="home-content-item">
-        <a class="text-link" href="https://project-monet.vercel.app/">Project Monet</a>
-        <p>A latte-art practice log, one pour at a time.</p>
+        <a class="text-link" href="https://poker-dojo-xi.vercel.app">Poker Dojo</a>
+        <p>Learn poker, with the math behind it</p>
+      </div>
+      <div class="home-content-item">
+        <a class="text-link" href="https://vitals-app-v2.vercel.app">Vitals App</a>
+        <p>An extension of health tracking, using long term data, providing more insights</p>
       </div>
     </div>
   </section>
