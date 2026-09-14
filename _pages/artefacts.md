@@ -2,16 +2,17 @@
 layout: page
 title: Artefacts
 permalink: /artefacts
+description: Artefacts I've made, for extended thinking and learning
 ---
-
-{%- assign notes = site.artefacts | sort: "date" | reverse -%}
+ 
+{%- assign artefacts = site.artefacts | sort: "date" | reverse -%}
 {%- assign current_year = "" -%}
-
+ 
 <div class="writing-archive">
   <header>
-    <h1>Writing</h1>
+    <h1>Artefacts</h1>
+    <p class="page-deck">Things I've made, collected, or left lying around.</p>
   </header>
-
   {%- for note in artefacts -%}
     {%- assign note_year = note.date | date: "%Y" -%}
     {%- if note_year != current_year -%}
@@ -25,3 +26,4 @@ permalink: /artefacts
   {%- endfor -%}
   {%- unless current_year == "" -%}</ol></section>{%- endunless -%}
 </div>
+ 
