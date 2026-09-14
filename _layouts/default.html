@@ -5,6 +5,7 @@
     {%- if page.url == "/" -%}page-home
     {%- elsif page.collection == "notes" -%}page-note
     {%- elsif page.url == "/blog" or page.url == "/blog/" -%}page-writing
+    {%- elsif page.url == "/artefacts" or page.url == "/artefacts/" -%}page-writing
     {%- elsif page.url == "/about" or page.url == "/about/" -%}page-about
     {%- elsif page.url == "/orrery" or page.url == "/orrery/" -%}page-orrery
     {%- else -%}page-standard

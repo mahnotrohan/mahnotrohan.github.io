@@ -24,6 +24,9 @@ collections:
   letters:
     output: true
     permalink: /letters/:slug/
+  artefacts:
+    output: true
+    permalink: /artefacts/:slug/
 
 defaults:
   - scope:
@@ -34,6 +37,10 @@ defaults:
       path: "_notes/*.md"
     values:
       layout: "notes"
+  - scope:
+      path: "_artefacts/*.html"
+    values:
+      layout: null
   # Notes In Transit and the letters behind it stay unlisted: reachable by
   # direct URL only, never crawled, indexed, or included in search/RSS.
   - scope:

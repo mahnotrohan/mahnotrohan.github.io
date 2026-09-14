@@ -7,6 +7,7 @@
   <nav class="site-nav" aria-label="Primary navigation">
     <a href="{{ '/' | relative_url }}"{% if page.url == "/" %} aria-current="page"{% endif %}>Home</a>
     <a href="{{ '/blog' | relative_url }}"{% if page.url == "/blog" or page.url == "/blog/" or page.collection == "notes" %} aria-current="page"{% endif %}>Writing</a>
+    <a href="{{ '/artefacts' | relative_url }}"{% if page.url == "/artefacts" or page.url == "/artefacts/" or page.collection == "artefacts" %} aria-current="page"{% endif %}>Artefacts</a>
     <a href="{{ '/about' | relative_url }}"{% if page.url == "/about" or page.url == "/about/" %} aria-current="page"{% endif %}>About</a>
     <a href="{{ '/orrery' | relative_url }}"{% if page.url == "/orrery" or page.url == "/orrery/" %} aria-current="page"{% endif %}>Orrery</a>
   </nav>
