@@ -2,7 +2,6 @@
 layout: page
 title: Artefacts
 permalink: /artefacts
-
 ---
 
 {%- assign notes = site.artefacts | sort: "date" | reverse -%}
