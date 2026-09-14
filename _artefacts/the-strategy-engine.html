@@ -1,0 +1,1201 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>The Strategy Engine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,400;8..144,500;8..144,700&family=Roboto:wght@300;400;500;700&family=Roboto+Mono:wght@400;500;700&display=swap">
+<style>
+:root{
+  /* Material 3 — Google baseline, light */
+  --primary:#0B57D0; --on-primary:#FFFFFF;
+  --primary-container:#D3E3FD; --on-primary-container:#041E49;
+  --secondary:#00639B; --secondary-container:#C2E7FF; --on-secondary-container:#001D35;
+  --tertiary:#146C2E; --tertiary-container:#C4EED0; --on-tertiary-container:#072711;
+  --error:#B3261E; --error-container:#FCE8E6; --on-error-container:#410E0B;
+  --warn:#8F5000; --warn-container:#FEEFC3; --on-warn-container:#3B2300;
+
+  --surface:#FFFFFF;
+  --surface-low:#F8FAFD;
+  --surface-container:#F0F4F9;
+  --surface-high:#E9EEF6;
+  --surface-highest:#DDE3EA;
+  --on-surface:#1F1F1F;
+  --on-surface-variant:#444746;
+  --outline:#747775;
+  --outline-variant:#C7C9CC;
+
+  --g-blue:#1A73E8; --g-red:#D93025; --g-yellow:#F9AB00; --g-green:#1E8E3E;
+
+  --e1:0 1px 2px rgba(31,31,31,.16), 0 1px 3px 1px rgba(31,31,31,.06);
+  --e2:0 1px 2px rgba(31,31,31,.16), 0 2px 6px 2px rgba(31,31,31,.08);
+
+  --sans:"Roboto","Helvetica Neue",Arial,sans-serif;
+  --display:"Roboto Flex","Roboto",Arial,sans-serif;
+  --mono:"Roboto Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--surface-low); color:var(--on-surface);
+  font-family:var(--sans); font-size:16px; line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ---------- layout ---------- */
+.shell{display:grid; grid-template-columns:288px minmax(0,1fr); gap:0; max-width:1400px; margin:0 auto}
+.rail{
+  position:sticky; top:0; align-self:start; height:100dvh; overflow-y:auto;
+  padding:24px 12px 40px 16px; background:var(--surface-low);
+}
+.rail-brand{display:flex; gap:10px; align-items:center; padding:8px 12px 18px}
+.rail-dot{width:26px;height:26px;border-radius:50%;flex:none;
+  background:conic-gradient(from 200deg,var(--g-blue) 0 25%,var(--g-red) 0 50%,var(--g-yellow) 0 75%,var(--g-green) 0);}
+.rail-brand b{font-family:var(--display); font-weight:500; font-size:15px; letter-spacing:.01em}
+.rail nav{display:flex; flex-direction:column; gap:2px}
+.rail a{
+  display:flex; gap:10px; align-items:baseline; text-decoration:none; color:var(--on-surface-variant);
+  font-size:14px; font-weight:500; line-height:1.35; padding:9px 16px; border-radius:999px;
+}
+.rail a .n{font-family:var(--mono); font-size:11px; color:var(--outline); min-width:20px; font-weight:500}
+.rail a:hover{background:var(--surface-high); color:var(--on-surface)}
+.rail a.on{background:var(--primary-container); color:var(--on-primary-container)}
+.rail a.on .n{color:var(--primary)}
+.rail hr{border:0;border-top:1px solid var(--outline-variant); margin:14px 16px}
+
+main{padding:0 40px 120px; min-width:0}
+section{scroll-margin-top:24px; padding-top:56px}
+.wrap{max-width:74ch}
+
+/* ---------- type ---------- */
+h1{font-family:var(--display); font-weight:700; font-size:clamp(34px,5vw,54px); line-height:1.06;
+   letter-spacing:-.02em; margin:0 0 16px; text-wrap:balance}
+h2{font-family:var(--display); font-weight:500; font-size:clamp(26px,3.4vw,34px); line-height:1.18;
+   letter-spacing:-.01em; margin:0 0 8px; text-wrap:balance}
+h3{font-family:var(--display); font-weight:500; font-size:21px; line-height:1.3; margin:36px 0 6px; text-wrap:balance}
+h4{font-family:var(--sans); font-weight:500; font-size:16px; margin:24px 0 4px}
+p{margin:0 0 16px}
+.eyebrow{font-family:var(--mono); font-size:11px; font-weight:500; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--primary); margin:0 0 10px}
+.lede{font-size:19px; line-height:1.55; color:var(--on-surface-variant); margin-bottom:8px}
+strong{font-weight:500; color:var(--on-surface)}
+em.t{font-style:normal; font-weight:500; color:var(--primary)}
+a.link{color:var(--primary)}
+code{font-family:var(--mono); font-size:.88em; background:var(--surface-high); padding:1px 5px; border-radius:4px}
+ul,ol{margin:0 0 16px; padding-left:22px}
+li{margin-bottom:7px}
+li::marker{color:var(--outline)}
+.hr{border:0;border-top:1px solid var(--outline-variant); margin:44px 0 0}
+
+/* ---------- components ---------- */
+.spine{
+  border-left:3px solid var(--primary); background:var(--primary-container);
+  color:var(--on-primary-container); padding:14px 18px; border-radius:0 12px 12px 0; margin:0 0 24px;
+  font-size:17px; line-height:1.5;
+}
+.spine b{font-weight:500}
+.spine em.t{color:var(--on-primary-container); font-weight:500}
+.card{background:var(--surface); border:1px solid var(--outline-variant); border-radius:16px; padding:22px 24px; margin:0 0 20px}
+.card.flat{background:var(--surface-container); border-color:transparent}
+.card h4:first-child,.card h3:first-child{margin-top:0}
+.note{background:var(--surface-container); border-radius:12px; padding:14px 18px; margin:0 0 20px; font-size:15px; color:var(--on-surface-variant)}
+.note b{color:var(--on-surface)}
+.warnbox{background:var(--warn-container); color:var(--on-warn-container); border-radius:12px; padding:14px 18px; margin:0 0 20px; font-size:15px}
+.chiprow{display:flex; flex-wrap:wrap; gap:8px; margin:0 0 18px}
+.chip{font-size:13px; font-weight:500; padding:6px 14px; border-radius:999px; border:1px solid var(--outline);
+  background:transparent; color:var(--on-surface-variant); cursor:pointer; font-family:var(--sans)}
+.chip:hover{background:var(--surface-high)}
+.chip.on{background:var(--secondary-container); color:var(--on-secondary-container); border-color:transparent}
+.chip:focus-visible,button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--g-blue); outline-offset:2px}
+.tag{display:inline-block; font-family:var(--mono); font-size:11px; font-weight:500; letter-spacing:.06em;
+  text-transform:uppercase; padding:3px 9px; border-radius:6px; background:var(--surface-high); color:var(--on-surface-variant)}
+.tag.b{background:var(--primary-container); color:var(--on-primary-container)}
+.tag.g{background:var(--tertiary-container); color:var(--on-tertiary-container)}
+.tag.r{background:var(--error-container); color:var(--on-error-container)}
+.tag.y{background:var(--warn-container); color:var(--on-warn-container)}
+
+.tblwrap{overflow-x:auto; margin:0 0 22px; border:1px solid var(--outline-variant); border-radius:14px; background:var(--surface)}
+table{border-collapse:collapse; width:100%; font-size:14.5px; min-width:520px}
+th{text-align:left; font-weight:500; font-size:12px; letter-spacing:.06em; text-transform:uppercase;
+   color:var(--on-surface-variant); padding:13px 18px; border-bottom:1px solid var(--outline-variant); white-space:nowrap}
+td{padding:13px 18px; border-bottom:1px solid var(--surface-high); vertical-align:top; line-height:1.45}
+tr:last-child td{border-bottom:0}
+td:first-child{font-weight:500}
+.num{font-family:var(--mono); font-variant-numeric:tabular-nums}
+
+figure{margin:26px 0; padding:0}
+figure svg{display:block; width:100%; max-width:100%; height:auto; color:var(--on-surface-variant)}
+figcaption{font-size:13.5px; color:var(--on-surface-variant); margin-top:10px; line-height:1.5; padding-left:2px}
+figcaption b{color:var(--on-surface); font-weight:500}
+
+.grid2{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; margin:0 0 20px}
+.mini{background:var(--surface); border:1px solid var(--outline-variant); border-radius:14px; padding:16px 18px}
+.mini h4{margin:0 0 4px; font-size:15px}
+.mini p{font-size:14.5px; margin:0; color:var(--on-surface-variant); line-height:1.5}
+
+.ladder{list-style:none; padding:0; margin:0 0 22px}
+.ladder li{display:grid; grid-template-columns:34px 1fr; gap:14px; padding:0 0 18px; margin:0; position:relative}
+.ladder li::before{content:""; position:absolute; left:16px; top:30px; bottom:0; width:2px; background:var(--outline-variant)}
+.ladder li:last-child::before{display:none}
+.ladder .k{width:34px;height:34px;border-radius:50%;background:var(--primary-container);color:var(--on-primary-container);
+  display:grid;place-items:center;font-family:var(--mono);font-size:12px;font-weight:700}
+.ladder .b b{display:block; font-weight:500; font-size:16px; margin-bottom:2px}
+.ladder .b span{font-size:14.5px; color:var(--on-surface-variant); line-height:1.5}
+.ladder .b i{display:block; font-style:normal; font-family:var(--mono); font-size:11.5px; color:var(--primary); margin-top:5px; letter-spacing:.02em}
+
+/* ---------- playground ---------- */
+.lab{background:var(--surface); border:1px solid var(--outline-variant); border-radius:20px; padding:24px; margin:0 0 24px}
+.labgrid{display:grid; grid-template-columns:minmax(280px,1fr) minmax(240px,320px); gap:26px; align-items:start}
+.matrix{width:100%; border-collapse:separate; border-spacing:6px; min-width:0}
+.matrix th{padding:0 0 4px; font-size:11px; letter-spacing:.08em; text-align:center; border:0; white-space:normal}
+.matrix th.side{writing-mode:vertical-rl; transform:rotate(180deg); padding:0 4px 0 0; text-align:center}
+.matrix td{padding:0; border:0}
+.cell{background:var(--surface-container); border-radius:12px; padding:22px 8px; text-align:center; position:relative;
+  border:2px solid transparent; transition:background .15s,border-color .15s}
+.cell.ne{border-color:var(--g-blue); background:var(--primary-container)}
+.cell.ne::after{content:"NE"; position:absolute; top:5px; right:7px; font-family:var(--mono); font-size:9.5px;
+  font-weight:700; color:var(--primary); letter-spacing:.06em}
+.cell .pair{display:flex; gap:6px; justify-content:center; align-items:center}
+.cell input{width:46px; padding:5px 2px; text-align:center; font-family:var(--mono); font-variant-numeric:tabular-nums;
+  font-size:15px; font-weight:500; border:1px solid var(--outline-variant); border-radius:8px; background:var(--surface); color:var(--on-surface)}
+.cell input.r{color:var(--g-blue)} .cell input.c{color:var(--g-red)}
+.cell .comma{color:var(--outline)}
+.legendrow{display:flex; gap:16px; font-size:12px; color:var(--on-surface-variant); margin-top:10px; flex-wrap:wrap}
+.legendrow span{display:flex; gap:6px; align-items:center}
+.sw{width:10px;height:10px;border-radius:3px;display:inline-block}
+.readout{background:var(--surface-container); border-radius:16px; padding:18px 20px}
+.readout h4{margin:0 0 12px; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--on-surface-variant); font-family:var(--mono); font-weight:500}
+.ro{margin:0 0 14px}
+.ro .lbl{font-size:11.5px; letter-spacing:.07em; text-transform:uppercase; color:var(--outline); font-family:var(--mono)}
+.ro .val{font-size:15px; line-height:1.45; margin-top:2px}
+.ro .val b{font-weight:500}
+.verdict{border-radius:12px; padding:12px 14px; font-size:14.5px; line-height:1.45; margin-top:4px}
+.verdict.ok{background:var(--tertiary-container); color:var(--on-tertiary-container)}
+.verdict.bad{background:var(--error-container); color:var(--on-error-container)}
+.verdict.neu{background:var(--surface-high); color:var(--on-surface-variant)}
+
+/* ---------- hero ---------- */
+.hero{padding:64px 0 8px}
+.heroband{display:flex; gap:0; height:6px; border-radius:3px; overflow:hidden; width:190px; margin-bottom:28px}
+.heroband i{flex:1}
+.meta{display:flex; gap:18px; flex-wrap:wrap; font-family:var(--mono); font-size:11.5px; letter-spacing:.06em;
+  text-transform:uppercase; color:var(--outline); border-top:1px solid var(--outline-variant); padding-top:14px; margin-top:26px}
+
+@media (max-width:900px){
+  .shell{grid-template-columns:1fr}
+  .rail{position:sticky; top:0; height:auto; z-index:20; background:var(--surface-low);
+    border-bottom:1px solid var(--outline-variant); padding:10px 16px}
+  .rail-brand{padding:2px 4px 10px}
+  .rail nav{flex-direction:row; overflow-x:auto; gap:6px; padding-bottom:4px; scrollbar-width:thin}
+  .rail a{white-space:nowrap; padding:7px 14px; background:var(--surface-container)}
+  .rail hr{display:none}
+  main{padding:0 20px 90px}
+  .hero{padding-top:34px}
+  .labgrid{grid-template-columns:1fr}
+}
+@media (max-width:460px){
+  main{padding:0 16px 80px}
+  .lab{padding:16px}
+  .card{padding:18px}
+  .cell input{width:40px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important; animation:none!important}}
+</style>
+
+<div class="shell">
+<aside class="rail">
+  <div class="rail-brand"><span class="rail-dot"></span><b>The Strategy Engine</b></div>
+  <nav id="toc">
+    <a href="#spine"><span class="n">00</span><span>The whole thing in six lines</span></a>
+    <a href="#principles"><span class="n">01</span><span>First principles</span></a>
+    <a href="#ladder"><span class="n">02</span><span>The solution ladder</span></a>
+    <a href="#zoo"><span class="n">03</span><span>The 2×2 zoo</span></a>
+    <a href="#lab"><span class="n">04</span><span>Payoff playground</span></a>
+    <a href="#time"><span class="n">05</span><span>Time and commitment</span></a>
+    <a href="#repeat"><span class="n">06</span><span>Repetition</span></a>
+    <a href="#info"><span class="n">07</span><span>Information</span></a>
+    <a href="#design"><span class="n">08</span><span>Designing the game</span></a>
+    <a href="#bargain"><span class="n">09</span><span>Bargaining and coalitions</span></a>
+    <a href="#evolve"><span class="n">10</span><span>Evolution without rationality</span></a>
+    <hr>
+    <a href="#systems"><span class="n">11</span><span>The systems layer</span></a>
+    <a href="#world"><span class="n">12</span><span>Where it shows up</span></a>
+    <a href="#breaks"><span class="n">13</span><span>Where it breaks</span></a>
+    <a href="#field"><span class="n">14</span><span>The field guide</span></a>
+    <a href="#glossary"><span class="n">15</span><span>Glossary</span></a>
+  </nav>
+</aside>
+
+<main>
+<header class="hero wrap">
+  <div class="heroband"><i style="background:var(--g-blue)"></i><i style="background:var(--g-red)"></i><i style="background:var(--g-yellow)"></i><i style="background:var(--g-green)"></i></div>
+  <h1>Game theory, from the axioms up</h1>
+  <p class="lede">Game theory is not a theory about games. It is the mathematics of what happens when the best thing for you to do depends on what someone else does — and their best move depends on yours. That circularity is the whole subject. Everything below is built out of it.</p>
+  <p class="lede">This is written in two layers at once: the <b>first-principles layer</b> (what the object is, why each concept has to exist) and the <b>systems layer</b> (what feedback structure each game really is, and where the leverage sits). Read the spine first; drill wherever you want.</p>
+  <div class="meta"><span>15 sections</span><span>1 interactive model</span><span>6 diagrams</span></div>
+</header>
+
+<section id="spine">
+  <div class="wrap">
+  <p class="eyebrow">00 — Compression</p>
+  <h2>The whole thing in six lines</h2>
+  <p>If you retain nothing else, retain this. Every later section is an unpacking of one of these six.</p>
+  </div>
+  <div class="wrap">
+    <div class="spine"><b>1. Interdependence.</b> A situation is a <em class="t">game</em> when your payoff depends on other people's choices, not just your own. Otherwise it's a decision problem, and you just optimise.</div>
+    <div class="spine"><b>2. Best response.</b> Given a guess about what others do, one of your options is best. Strategy is the function from their behaviour to yours — not a single move.</div>
+    <div class="spine"><b>3. Equilibrium is a fixed point.</b> A configuration where everyone is already best-responding to everyone else. Nobody regrets their move given the others'. Nothing pushes the system anywhere.</div>
+    <div class="spine"><b>4. Equilibrium ≠ good.</b> The fixed point can be worse for everyone than an outcome they could all have reached. That gap — between what's individually stable and what's collectively best — is where almost all real-world pain lives.</div>
+    <div class="spine"><b>5. Structure beats cleverness.</b> The outcome is mostly determined by four things: who plays, what they can do, what they know, and what they get. Change one of those four and the equilibrium moves. Trying harder inside a bad structure does not.</div>
+    <div class="spine"><b>6. The rules are a choice.</b> The highest-leverage move is almost never playing the game well. It's changing the game — the payoffs, the information, the order of moves, the number of rounds, or who's at the table.</div>
+  </div>
+  <div class="wrap">
+  <div class="note"><b>Systems translation.</b> Lines 1–3 say a game is a system of coupled decision rules that settles into an attractor. Line 4 says the attractor need not be desirable — stability and optimality are unrelated properties. Lines 5–6 say the attractor is a property of the structure, so intervention belongs at the structure, not at the behaviour. That is Meadows' leverage-point hierarchy arriving from a completely different direction.</div>
+  </div>
+</section>
+
+<section id="principles">
+  <div class="wrap">
+  <p class="eyebrow">01 — First principles</p>
+  <h2>Building the object from nothing</h2>
+  <p>Start with an empty room and add only what you're forced to add. Each addition below is forced: remove it and you can no longer describe the situation.</p>
+
+  <h3>Primitive 1: more than one chooser</h3>
+  <p>One chooser facing a fixed world is <strong>optimisation</strong>. Add a second chooser whose choice affects your outcome and something breaks: you can no longer evaluate your options, because their value isn't defined until you know what the other does. This is the birth defect of the subject, and every solution concept is an attempt to patch it.</p>
+
+  <h3>Primitive 2: actions, and then strategies</h3>
+  <p>An <strong>action</strong> is a move. A <strong>strategy</strong> is a complete contingent plan — what you'd do at every point you might have to act, including points you never expect to reach. The distinction feels pedantic and is load-bearing: threats, promises, deterrence and reputation all live in the parts of the plan that never execute. "I'll match any competitor's price" is a strategy whose value comes entirely from the branch where nobody undercuts you.</p>
+
+  <h3>Primitive 3: payoffs are preferences, not money</h3>
+  <p>A payoff number is a <strong>ranking with an attitude to risk attached</strong> (a von Neumann–Morgenstern utility). It already contains everything the player cares about: money, status, spite, fairness, the wish to be seen as tough, next quarter's bonus. When a real person "behaves irrationally", 90% of the time the model just had the wrong payoffs written into it. Payoff misspecification, not human irrationality, is the usual failure.</p>
+  <div class="note"><b>Practical rule.</b> Before you call someone irrational, write down the payoff matrix under which their behaviour is optimal. Then ask whether that matrix is the real one. It very often is — you were solving a different game than they were playing.</div>
+
+  <h3>Primitive 4: information</h3>
+  <p>Who knows what, and who knows that others know it. Three separate things get confused here:</p>
+  <ul>
+    <li><strong>Perfect information</strong> — you can see every move already made. Chess yes, poker no.</li>
+    <li><strong>Complete information</strong> — you know the other players' payoffs. Rare in real life; you usually don't know what your competitor is actually optimising for.</li>
+    <li><strong>Common knowledge</strong> — I know it, you know it, I know you know it, forever. This is far stronger than "we both know", and coordination collapses without it. It's why announcements, launches and public commitments matter: they don't add information so much as make information <em>common</em>.</li>
+  </ul>
+
+  <h3>Primitive 5: rationality (the weakest version that works)</h3>
+  <p>Rationality here means only: preferences are consistent, and you pick a best response to your beliefs. Not selfish, not calculating, not smart. And you don't even need it — section 10 shows the same equilibria emerging from blind selection with no thinking anywhere in the system. Rationality is a convenient shortcut for "whatever process ends up doing the locally best thing".</p>
+
+  <h3>The forced construction: best response and fixed point</h3>
+  <p>Now the circularity resolves. Define each player's <strong>best-response correspondence</strong>: a map from "what everyone else does" to "what I should do". Every player has one. An equilibrium is a profile of strategies that is a <em class="t">fixed point</em> of all these maps simultaneously — plug it in, get it back out.</p>
+  <p>Nash's contribution was proving such a point always exists in finite games once you allow randomised strategies (via Kakutani's fixed-point theorem). That existence result is what makes the field a science rather than a collection of puzzles: the question "what happens here?" always has at least one answer.</p>
+  </div>
+
+  <figure class="wrap">
+    <svg viewBox="0 0 700 250" role="img" aria-label="Two players' best-response maps feeding into each other; equilibrium is the point where the loop returns the same pair of strategies it started with.">
+      <defs>
+        <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0 0 L10 5 L0 10 z" fill="currentColor"/>
+        </marker>
+        <marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0 0 L10 5 L0 10 z" fill="#1A73E8"/>
+        </marker>
+      </defs>
+      <rect x="40" y="60" width="180" height="76" rx="14" fill="#F0F4F9" stroke="currentColor" stroke-width="1"/>
+      <text x="130" y="90" text-anchor="middle" font-size="13" font-weight="500" fill="currentColor">Player A picks</text>
+      <text x="130" y="110" text-anchor="middle" font-size="13" font-weight="500" fill="currentColor">best reply to B</text>
+      <rect x="480" y="60" width="180" height="76" rx="14" fill="#F0F4F9" stroke="currentColor" stroke-width="1"/>
+      <text x="570" y="90" text-anchor="middle" font-size="13" font-weight="500" fill="currentColor">Player B picks</text>
+      <text x="570" y="110" text-anchor="middle" font-size="13" font-weight="500" fill="currentColor">best reply to A</text>
+      <path d="M220 84 L474 84" stroke="currentColor" stroke-width="1.6" fill="none" marker-end="url(#ar)"/>
+      <path d="M480 118 L226 118" stroke="currentColor" stroke-width="1.6" fill="none" marker-end="url(#ar)"/>
+      <text x="350" y="76" text-anchor="middle" font-size="11.5" fill="currentColor">A's move changes B's best reply</text>
+      <text x="350" y="138" text-anchor="middle" font-size="11.5" fill="currentColor">B's move changes A's best reply</text>
+      <path d="M130 136 C 130 200, 350 210, 350 210 C 350 210, 570 200, 570 136" stroke="#1A73E8" stroke-width="1.6" fill="none" stroke-dasharray="5 4"/>
+      <rect x="250" y="192" width="200" height="36" rx="18" fill="#D3E3FD"/>
+      <text x="350" y="215" text-anchor="middle" font-size="12.5" font-weight="500" fill="#041E49">Equilibrium: loop returns itself</text>
+    </svg>
+    <figcaption><b>The engine of the whole subject.</b> Each player's rule takes the other's behaviour as input. An equilibrium is the input that the loop reproduces exactly — the system's attractor. Out of equilibrium, the loop keeps moving someone.</figcaption>
+  </figure>
+</section>
+
+<section id="ladder">
+  <div class="wrap">
+  <p class="eyebrow">02 — The solution ladder</p>
+  <h2>Every solution concept, and the assumption it buys</h2>
+  <p>Solution concepts look like a grab-bag of names. They're not. They're a strictly ordered ladder: each rung assumes more about the players and, in exchange, predicts more sharply. Knowing which rung you're standing on tells you exactly how much to trust the prediction.</p>
+
+  <ol class="ladder">
+    <li><span class="k">1</span><span class="b"><b>Dominant strategy</b><span>One option is best no matter what anyone else does. No beliefs about others required at all.</span><i>Assumes: you can compare your own options. Predicts: strongly. Rare.</i></span></li>
+    <li><span class="k">2</span><span class="b"><b>Iterated dominance</b><span>Delete strategies nobody would ever play; that deletion makes new strategies never-playable; repeat.</span><i>Assumes: common knowledge of rationality. Predicts: sometimes uniquely.</i></span></li>
+    <li><span class="k">3</span><span class="b"><b>Nash equilibrium</b><span>Nobody can gain by unilaterally deviating. The workhorse.</span><i>Assumes: correct beliefs about others. Predicts: often several answers at once.</i></span></li>
+    <li><span class="k">4</span><span class="b"><b>Mixed Nash</b><span>Randomising is optimal when being predictable is fatal. Always exists in finite games.</span><i>Assumes: players can randomise, or beliefs are diffuse. Predicts: probabilities, not moves.</i></span></li>
+    <li><span class="k">5</span><span class="b"><b>Subgame perfect equilibrium</b><span>Nash, plus: your plan must be optimal at every point in the tree, including ones you hoped to avoid. Kills threats you'd never carry out.</span><i>Assumes: sequential rationality. Predicts: which threats are believed.</i></span></li>
+    <li><span class="k">6</span><span class="b"><b>Bayesian Nash</b><span>Players don't know each other's types (costs, values, resolve), only a distribution over them. Best-respond to the distribution.</span><i>Assumes: a shared prior. Predicts: behaviour under uncertainty about who you're facing.</i></span></li>
+    <li><span class="k">7</span><span class="b"><b>Perfect Bayesian / sequential</b><span>Beliefs update by Bayes' rule as the game unfolds, and actions are optimal given those updated beliefs. The home of signalling and reputation.</span><i>Assumes: consistent belief revision. Predicts: what actions reveal.</i></span></li>
+    <li><span class="k">8</span><span class="b"><b>Correlated equilibrium</b><span>Add a public signal — a traffic light, a schedule, a norm — that players condition on. Often beats every Nash equilibrium for everyone.</span><i>Assumes: a shared coordination device. Predicts: how institutions add value.</i></span></li>
+    <li><span class="k">9</span><span class="b"><b>Evolutionarily stable strategy</b><span>A population mix that resists invasion by mutants. No thinking required — selection does the optimising.</span><i>Assumes: replication and selection. Predicts: which norms survive.</i></span></li>
+  </ol>
+
+  <div class="note"><b>How to use the ladder in practice.</b> Climb to the lowest rung that resolves your question, and stop. If dominance settles it, you don't need Nash — and a dominance argument is far more robust, because it doesn't require the other side to be smart. Most real strategic errors come from assuming the other side is at rung 5 when they're at rung 1.</div>
+
+  <h3>The three properties every prediction has</h3>
+  <div class="grid2">
+    <div class="mini"><h4>Existence</h4><p>Is there an answer? Nash: always, in finite games with mixing. This is why the framework is usable at all.</p></div>
+    <div class="mini"><h4>Uniqueness</h4><p>Usually no. Multiple equilibria are the norm, and the theory alone can't tell you which one you'll land in. History, focal points and norms do that.</p></div>
+    <div class="mini"><h4>Stability</h4><p>Will the system move toward it if it's off? Nash says nothing about this. Evolutionary dynamics do — and some equilibria are attractors, others are knife-edges.</p></div>
+  </div>
+  <p><strong>The multiplicity problem is the most underrated fact in the field.</strong> When several equilibria exist, the outcome is decided by something outside the model: precedent, a salient number, a public statement, the way the question was framed. Schelling called these <em class="t">focal points</em>. This is why "let's all meet at the clock tower" works, why round numbers anchor negotiations, and why the first credible standard usually wins a standards war regardless of quality.</p>
+  </div>
+</section>
+
+<section id="zoo">
+  <div class="wrap">
+  <p class="eyebrow">03 — The zoo</p>
+  <h2>Six 2×2 games that cover most of life</h2>
+  <p>Almost every two-party strategic situation you'll meet is one of a handful of shapes. The shape is determined entirely by the <em>ordering</em> of four numbers, not their size. Learn the orderings and you can classify a real situation in about thirty seconds.</p>
+  <p>Notation, for symmetric games: <span class="num">R</span> = reward if both cooperate, <span class="num">T</span> = temptation to defect while they cooperate, <span class="num">S</span> = sucker's payoff, <span class="num">P</span> = punishment if both defect.</p>
+  </div>
+
+  <div class="tblwrap wrap" style="max-width:none">
+  <table>
+    <thead><tr><th>Game</th><th>Ordering</th><th>Equilibrium</th><th>The pathology</th><th>Real signature</th></tr></thead>
+    <tbody>
+      <tr><td>Prisoner's Dilemma</td><td class="num">T&gt;R&gt;P&gt;S</td><td>Both defect (dominant)</td><td>The stable outcome is worse for everyone than the available one</td><td>Price wars, ad spend, discount escalation, overfishing, doping</td></tr>
+      <tr><td>Stag Hunt</td><td class="num">R&gt;T&gt;P&gt;S</td><td>Both cooperate <em>or</em> both defect</td><td>Cooperation is best but risky; trust decides which world you live in</td><td>Platform migrations, team norms, bank runs, joint standards</td></tr>
+      <tr><td>Chicken / Hawk–Dove</td><td class="num">T&gt;R&gt;S&gt;P</td><td>One yields, the other doesn't (two asymmetric)</td><td>Both-tough is catastrophic; the winner is whoever commits first</td><td>Strikes, brinkmanship, capacity races, merger standoffs</td></tr>
+      <tr><td>Battle of the Sexes</td><td>coordination, unequal</td><td>Two, each favouring one side</td><td>Everyone wants agreement; they disagree on which agreement</td><td>Standards bodies, API formats, coalition governments, meeting times</td></tr>
+      <tr><td>Matching Pennies</td><td>strictly opposed</td><td>Mixed only</td><td>Being predictable is fatal; there is no restful outcome</td><td>Audits vs fraud, penalty kicks, security vs attacker, ad bidding</td></tr>
+      <tr><td>Harmony</td><td class="num">R&gt;T&gt;S&gt;P</td><td>Both cooperate (dominant)</td><td>None — and this is why it's invisible</td><td>Most of normal commerce, which is why it never makes the news</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="wrap">
+  <h3>The three that actually matter, and how to tell them apart</h3>
+  <p>The whole diagnostic reduces to two questions.</p>
+  <div class="grid2">
+    <div class="mini"><h4>Q1 — If they cooperate, do I want to defect?</h4><p>Yes → temptation exists (Dilemma or Chicken). No → you're in a Stag Hunt or Harmony, and the problem is trust, not incentives.</p></div>
+    <div class="mini"><h4>Q2 — If they defect, do I want to defect too?</h4><p>Yes → Prisoner's Dilemma: mutual destruction is the equilibrium. No → Chicken: someone must yield, and the fight is over who.</p></div>
+  </div>
+  <p>These need completely different interventions, and confusing them is the most common applied error:</p>
+  <ul>
+    <li><strong>Dilemma</strong> → change the payoffs. Contracts, penalties, regulation, repeated interaction, side payments. Talk alone does nothing, because talk doesn't move <span class="num">T</span> above <span class="num">R</span>.</li>
+    <li><strong>Stag Hunt</strong> → change the beliefs. Here talk works. Announcements, visible early commitments, guarantees, a critical mass of visible adopters. You aren't fixing incentives, you're removing risk.</li>
+    <li><strong>Chicken</strong> → change the commitment. Whoever can credibly remove their own option to swerve wins. Rationality is a liability; the visibly irrational, or visibly locked-in, party takes the pot.</li>
+  </ul>
+  <div class="warnbox"><b>The single most useful sentence in applied game theory:</b> "Is this a trust problem or an incentive problem?" A trust problem solved with penalties creates resentment and no cooperation. An incentive problem solved with reassurance creates a very well-attended meeting followed by everyone defecting.</div>
+  </div>
+</section>
+
+<section id="lab">
+  <div class="wrap">
+  <p class="eyebrow">04 — Interactive</p>
+  <h2>Payoff playground</h2>
+  <p>Change the numbers and watch the game change species. This is the fastest way to internalise the central claim of section 03: the outcome is a property of the payoff <em>ordering</em>, and nothing else. Two players, two options each. Blue numbers are the row player's payoff, red the column player's.</p>
+  </div>
+
+  <div class="lab wrap" style="max-width:none">
+    <div class="chiprow" id="presets">
+      <button class="chip on" data-p="pd">Prisoner's Dilemma</button>
+      <button class="chip" data-p="stag">Stag Hunt</button>
+      <button class="chip" data-p="chicken">Chicken</button>
+      <button class="chip" data-p="bos">Battle of the Sexes</button>
+      <button class="chip" data-p="pennies">Matching Pennies</button>
+      <button class="chip" data-p="harmony">Harmony</button>
+    </div>
+
+    <div class="labgrid">
+      <div>
+        <table class="matrix">
+          <thead>
+            <tr><th></th><th id="lc0">Cooperate</th><th id="lc1">Defect</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th class="side" id="lr0">Cooperate</th>
+              <td><div class="cell" id="cell00"><div class="pair"><input class="r" id="r00" type="number" step="1" aria-label="Row payoff, top left"><span class="comma">,</span><input class="c" id="c00" type="number" step="1" aria-label="Column payoff, top left"></div></div></td>
+              <td><div class="cell" id="cell01"><div class="pair"><input class="r" id="r01" type="number" step="1" aria-label="Row payoff, top right"><span class="comma">,</span><input class="c" id="c01" type="number" step="1" aria-label="Column payoff, top right"></div></div></td>
+            </tr>
+            <tr>
+              <th class="side" id="lr1">Defect</th>
+              <td><div class="cell" id="cell10"><div class="pair"><input class="r" id="r10" type="number" step="1" aria-label="Row payoff, bottom left"><span class="comma">,</span><input class="c" id="c10" type="number" step="1" aria-label="Column payoff, bottom left"></div></div></td>
+              <td><div class="cell" id="cell11"><div class="pair"><input class="r" id="r11" type="number" step="1" aria-label="Row payoff, bottom right"><span class="comma">,</span><input class="c" id="c11" type="number" step="1" aria-label="Column payoff, bottom right"></div></div></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="legendrow">
+          <span><i class="sw" style="background:#1A73E8"></i> Row player</span>
+          <span><i class="sw" style="background:#D93025"></i> Column player</span>
+          <span><i class="sw" style="background:#D3E3FD;border:2px solid #1A73E8"></i> Nash equilibrium</span>
+        </div>
+        <p style="font-size:13.5px;color:var(--on-surface-variant);margin:14px 0 0;line-height:1.5">Type any numbers you like — negatives included. The analysis recomputes on every keystroke, and the highlighted cells are wherever neither player would want to move alone.</p>
+      </div>
+
+      <div class="readout">
+        <h4>Analysis</h4>
+        <div class="ro"><div class="lbl">Game family</div><div class="val" id="oFamily">—</div></div>
+        <div class="ro"><div class="lbl">Dominant strategies</div><div class="val" id="oDom">—</div></div>
+        <div class="ro"><div class="lbl">Pure equilibria</div><div class="val" id="oPure">—</div></div>
+        <div class="ro"><div class="lbl">Mixed equilibrium</div><div class="val" id="oMix">—</div></div>
+        <div class="ro" style="margin-bottom:0"><div class="lbl">Efficiency</div><div class="verdict neu" id="oEff">—</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+  <h3>Three experiments worth running</h3>
+  <ol>
+    <li><strong>Turn a Dilemma into a Stag Hunt.</strong> Load the Prisoner's Dilemma, then lower the temptation payoff (bottom-left blue, top-right red) from 5 to 2. Mutual cooperation becomes an equilibrium. That single number is what a contract penalty, a reputation system, or a repeated relationship actually does — it doesn't appeal to anyone's better nature, it edits <span class="num">T</span>.</li>
+    <li><strong>Watch a mixed equilibrium refuse to depend on you.</strong> Load Matching Pennies and change <em>only the row player's</em> payoffs. The row player's own mixing probability doesn't move; the column player's does. Your randomisation is calibrated to make <em>your opponent</em> indifferent, so it's controlled by their numbers, not yours. This is deeply counterintuitive and completely general — it's why raising penalties for fraud changes how often auditors audit, not how often fraudsters cheat.</li>
+    <li><strong>Find the equilibrium nobody wants.</strong> In Chicken, note there is no symmetric pure equilibrium: both stable outcomes have a loser. The mixed one has a positive chance of the crash. Brinkmanship is not a mistake in the model; it is priced in.</li>
+  </ol>
+  </div>
+</section>
+
+<section id="time">
+  <div class="wrap">
+  <p class="eyebrow">05 — Sequence</p>
+  <h2>Time, threats and the strategic value of losing options</h2>
+  <p>Everything so far assumed simultaneous moves. Let people move in sequence and two new forces appear: <strong>order matters</strong>, and <strong>most threats are lies</strong>.</p>
+
+  <h3>Backward induction</h3>
+  <p>Draw the game as a tree. Start at the end. At each final decision, the player takes their best option — that's not a guess, it's forced. Now that node has a known value, so the decision before it is also forced. Roll backwards to the root. The result is a <strong>subgame perfect equilibrium</strong>: a plan that's optimal not just overall but at every branch, including branches you're trying to prevent anyone from reaching.</p>
+  <p>This is the single most transferable technique in the subject. Any time you're planning a negotiation, a launch sequence, a hiring loop or a multi-quarter roadmap: <em class="t">start from the end state and reason backwards about what each party will do when they get there.</em></p>
+
+  <h3>Credible vs incredible threats</h3>
+  <p>A threat is credible only if carrying it out is in your interest <em>at the moment you'd have to carry it out</em>. Backward induction is a lie detector for threats.</p>
+  </div>
+
+  <figure class="wrap">
+    <svg viewBox="0 0 700 300" role="img" aria-label="Entry deterrence tree: the entrant enters or stays out; the incumbent then fights or accommodates. Fighting loses the incumbent money, so the threat to fight is not credible and entry occurs.">
+      <circle cx="60" cy="150" r="7" fill="#1A73E8"/>
+      <text x="60" y="178" text-anchor="middle" font-size="11.5" fill="currentColor">Entrant</text>
+      <line x1="67" y1="145" x2="243" y2="70" stroke="currentColor" stroke-width="1.6"/>
+      <line x1="67" y1="157" x2="243" y2="238" stroke="currentColor" stroke-width="1.6"/>
+      <text x="150" y="98" text-anchor="middle" font-size="12" font-weight="500" fill="currentColor">Enter</text>
+      <text x="150" y="215" text-anchor="middle" font-size="12" font-weight="500" fill="currentColor">Stay out</text>
+
+      <circle cx="250" cy="66" r="7" fill="#D93025"/>
+      <text x="250" y="46" text-anchor="middle" font-size="11.5" fill="currentColor">Incumbent</text>
+      <line x1="257" y1="62" x2="452" y2="30" stroke="#D93025" stroke-width="1.6" stroke-dasharray="5 4"/>
+      <line x1="257" y1="72" x2="452" y2="118" stroke="currentColor" stroke-width="2.2"/>
+      <text x="352" y="34" text-anchor="middle" font-size="12" font-weight="500" fill="#D93025">Fight</text>
+      <text x="352" y="110" text-anchor="middle" font-size="12" font-weight="500" fill="currentColor">Accommodate</text>
+
+      <rect x="458" y="16" width="180" height="30" rx="9" fill="#FCE8E6"/>
+      <text x="470" y="36" font-size="12.5" fill="#410E0B">Entrant −2, Incumbent 1</text>
+      <rect x="458" y="104" width="180" height="30" rx="9" fill="#C4EED0"/>
+      <text x="470" y="124" font-size="12.5" fill="#072711">Entrant 3, Incumbent 4</text>
+      <rect x="458" y="224" width="180" height="30" rx="9" fill="#F0F4F9"/>
+      <text x="470" y="244" font-size="12.5" fill="currentColor">Entrant 0, Incumbent 9</text>
+
+      <text x="352" y="284" text-anchor="middle" font-size="12" fill="#D93025">Fighting pays the incumbent 1, accommodating pays 4 — so "we'll fight" is not believed.</text>
+    </svg>
+    <figcaption><b>Why "we will crush any new entrant" usually fails.</b> The incumbent prefers 9 (no entry) to 4 (accommodate) to 1 (fight). But once entry has happened, 9 is off the table and fighting is simply worse than accommodating. The entrant knows this, so enters. <b>The dashed branch is the threat nobody believes.</b> The incumbent's only real move is made <em>before</em> this tree starts.</figcaption>
+  </figure>
+
+  <div class="wrap">
+  <h3>Commitment: winning by destroying your own options</h3>
+  <p>Here is the deepest inversion in game theory. In one-person decision problems, more options are never worse. In games, <strong>having fewer options is often strictly better</strong>, because your options are also information the other side uses against you.</p>
+  <p>The incumbent above wins by making "fight" cheaper or "accommodate" impossible before entry is contemplated: build excess capacity that's worthless unless used aggressively, sign most-favoured-customer clauses that make discounting expensive, publish a price-match guarantee. Cortés burning his ships is the pure case. So is a union's strike fund, a constitutional debt ceiling, an escrow, a public deadline, a resignation-if-this-fails statement.</p>
+  <div class="grid2">
+    <div class="mini"><h4>What makes commitment work</h4><p>It must be <b>visible</b>, <b>irreversible</b>, and <b>costly to fake</b>. Fail any one and it's just an announcement.</p></div>
+    <div class="mini"><h4>First-mover advantage</h4><p>Real when moving first commits you and the other must adapt (capacity, standards, land grab). Stackelberg leadership.</p></div>
+    <div class="mini"><h4>Second-mover advantage</h4><p>Real when information is more valuable than position — you see their move and counter it. Fast-follower strategies, patent-around, category creation.</p></div>
+    <div class="mini"><h4>The test</h4><p>Ask: does moving first <em>constrain</em> me or <em>inform</em> them? Constrain → move first. Inform → wait.</p></div>
+  </div>
+  <div class="note"><b>Systems reading.</b> Commitment is deliberately removing a feedback path. You are cutting the link from "their move" to "my response" so that your behaviour stops being a function of theirs. In systems terms you convert yourself from a responsive element into a fixed constraint — and constraints propagate through the rest of the system as boundary conditions.</div>
+  </div>
+</section>
+
+<section id="repeat">
+  <div class="wrap">
+  <p class="eyebrow">06 — Repetition</p>
+  <h2>How cooperation becomes rational</h2>
+  <p>The Prisoner's Dilemma says self-interested parties destroy each other. Reality is full of cooperation between self-interested parties. The resolution is one variable: <strong>the shadow of the future</strong>.</p>
+
+  <h3>The master variable, δ</h3>
+  <p>Let <span class="num">δ</span> (delta) be how much you weight the next round relative to this one — a blend of the probability the relationship continues and your patience. Cooperation is sustainable when the one-time gain from defecting is smaller than the discounted stream of losses from the retaliation it triggers.</p>
+  <p>For a standard Prisoner's Dilemma with payoffs <span class="num">T&gt;R&gt;P&gt;S</span> and a grim-trigger opponent, cooperation holds when</p>
+  <div class="card flat"><p style="margin:0;font-size:17px" class="num">δ ≥ (T − R) / (T − P)</p></div>
+  <p>Read the structure, not the formula. The numerator is <strong>what you gain by cheating</strong>. The denominator is <strong>what cheating destroys</strong>. Cooperation survives when the future is heavy enough to outweigh the gain. Three levers fall straight out:</p>
+  <ul>
+    <li><strong>Raise δ</strong> — make the relationship longer, more certain, or more frequent. Long-term contracts, recurring revenue, community membership, repeat games with the same supplier.</li>
+    <li><strong>Lower T</strong> — reduce the payoff from cheating. Escrow, milestone payments, caps, audits.</li>
+    <li><strong>Raise the cost of P</strong> — make retaliation bite. Reputation systems, public ratings, blacklists.</li>
+  </ul>
+
+  <h3>The folk theorem, and its warning</h3>
+  <p>If players are patient enough, <em>almost any</em> outcome better than the mutual-punishment payoff can be sustained as an equilibrium of the repeated game. That's liberating and useless in equal measure: repetition makes cooperation <em>possible</em>, not <em>predictable</em>. It also makes extortion, cartels and protection rackets possible on exactly the same logic. Repetition is not a moral force. It's an amplifier of whatever the parties can coordinate on.</p>
+
+  <h3>What Axelrod's tournaments actually showed</h3>
+  <p>Tit-for-tat won not because it was clever but because it had four properties, and these generalise far beyond the tournament:</p>
+  <div class="grid2">
+    <div class="mini"><h4>Nice</h4><p>Never defects first. Never pays the cost of starting a war.</p></div>
+    <div class="mini"><h4>Retaliatory</h4><p>Punishes immediately. Exploitation is never profitable against it.</p></div>
+    <div class="mini"><h4>Forgiving</h4><p>Returns to cooperation the moment they do. Doesn't lock into a death spiral.</p></div>
+    <div class="mini"><h4>Clear</h4><p>Trivially legible. The other side can learn the rule in one round, which is what lets them adapt to it.</p></div>
+  </div>
+  <p>The known weakness: with noise — a defection that was actually a mistake, a late delivery that was a courier failure — pure tit-for-tat enters an echo of mutual recrimination. The fix is <strong>generous tit-for-tat</strong>: forgive with some probability, or forgive after two offences rather than one. Every functioning human institution does some version of this.</p>
+
+  <h3>The unravelling problem</h3>
+  <p>If everyone knows the relationship ends at a known round, backward induction destroys cooperation entirely: the last round is a one-shot Dilemma, so defect; knowing that, the second-last is effectively last, so defect; all the way back. <strong>A known endpoint kills cooperation.</strong> This is why departing employees get locked out, why last-period incentives are perverse, why term-limited politicians behave differently, and why "this is our final round of funding" changes founder behaviour immediately. In practice, uncertainty about the end is what saves us: keep the horizon open and δ stays high.</p>
+  </div>
+</section>
+
+<section id="info">
+  <div class="wrap">
+  <p class="eyebrow">07 — Information</p>
+  <h2>Asymmetric information: the games about what you can't see</h2>
+  <p>Most real strategic problems are not about what people <em>do</em>. They're about what people <em>are</em>, and can't be verified. This branch is where game theory earns most of its practical money.</p>
+
+  <h3>The two failures</h3>
+  <div class="grid2">
+    <div class="mini"><h4>Adverse selection — hidden type</h4><p>You can't tell good from bad <em>before</em> the deal. Bad types are attracted by terms priced for the average. The average worsens. Repeat. Akerlof's used-car market unravels this way.</p></div>
+    <div class="mini"><h4>Moral hazard — hidden action</h4><p>You can't observe effort <em>after</em> the deal. Insured drivers drive worse; salaried agents optimise for what's measured. Contracts must be written on outcomes, which imports risk.</p></div>
+  </div>
+  <p>The distinction is <strong>before vs after</strong>, and the cures differ completely: adverse selection is fixed by <em class="t">screening and signalling</em>; moral hazard is fixed by <em class="t">incentive alignment and monitoring</em>.</p>
+
+  <h3>Signalling: why the signal must be expensive</h3>
+  <p>A signal only separates types if it is <strong>cheaper for the good type than the bad type</strong>. That's the entire theory. If the cost is the same for everyone, everybody sends it and it conveys nothing.</p>
+  <ul>
+    <li>A degree signals ability partly because it's less painful for the able — Spence's original model works even if education teaches nothing.</li>
+    <li>A long warranty signals reliability because it's cheap for a firm whose products don't break.</li>
+    <li>A peacock's tail signals fitness because it's a genuine survival cost only the fit can carry.</li>
+    <li>A startup founder taking below-market salary signals belief, because the cost is real and it's lower if you expect the equity to pay.</li>
+    <li>A refundable deposit signals intent to show up.</li>
+  </ul>
+  <div class="note"><b>Design rule.</b> Want to know who's serious? Don't ask — ask for something that costs the unserious more than the serious. Every good qualification mechanism, from an application form to a paid pilot, is this rule wearing a costume.</div>
+
+  <h3>Screening: the same problem from the other side</h3>
+  <p>Signalling is the informed party moving first. <strong>Screening</strong> is the uninformed party moving first: offer a <em>menu</em> designed so each type self-selects. Insurance deductibles (safe drivers take the high deductible), versioned pricing (heavy users reveal themselves), free tiers with usage caps, interview take-homes. The design condition is <em class="t">incentive compatibility</em>: each type must strictly prefer the option meant for it.</p>
+
+  <h3>Cheap talk</h3>
+  <p>Costless, unverifiable statements. Cheap talk is informative <strong>only where interests are sufficiently aligned</strong>. Two people trying to meet can just say where they'll be — nobody gains by lying. A seller saying "this is the best price I can do" carries almost no information, because the incentive to say it is identical regardless of truth. Before believing a statement, ask: <em>would they say this if it weren't true?</em> If yes, it's noise.</p>
+
+  <h3>Reputation: the bridge between information and repetition</h3>
+  <p>Reputation is what makes an incredible threat credible. A single incumbent facing one entrant can't credibly threaten to fight. An incumbent facing twenty markets in sequence can — fighting the first entrant is an investment in the belief of the other nineteen. Kreps and Wilson showed that a small doubt about your type ("maybe they're the kind who always fights") plus a long horizon is enough to sustain tough behaviour rationally. This is the formal basis for: brands, credit scores, marketplace ratings, diplomatic red lines, and "we don't negotiate with hostage-takers".</p>
+  <div class="warnbox"><b>The cost side.</b> Reputation is an asset that must be defended, which means you sometimes have to take a locally irrational action to preserve it. A firm that never fights any entrant has cheap peace and no deterrence. A firm that fights everything has deterrence and no profit. The equilibrium is fighting <em>visibly and occasionally</em>, in the cases most legible to observers.</div>
+  </div>
+</section>
+
+<section id="design">
+  <div class="wrap">
+  <p class="eyebrow">08 — Reverse game theory</p>
+  <h2>Designing the game instead of playing it</h2>
+  <p>Mechanism design flips the question. Instead of "given these rules, what happens?", it asks: <strong>given the outcome I want, what rules produce it when everyone acts in their own interest?</strong> This is the branch a product manager, regulator or platform operator actually lives in.</p>
+
+  <h3>The two constraints every mechanism must satisfy</h3>
+  <ul>
+    <li><strong>Individual rationality (participation):</strong> everyone must be better off inside than outside. A perfectly incentive-compatible mechanism nobody joins is worth nothing.</li>
+    <li><strong>Incentive compatibility (truthfulness):</strong> acting honestly must be each participant's best move. If gaming pays, you are not running the mechanism you designed — you're running the one people discovered.</li>
+  </ul>
+  <p>The <strong>revelation principle</strong> says: anything achievable by any mechanism is achievable by one where telling the truth is optimal. That's a huge search-space reduction — you only ever need to look for truthful mechanisms.</p>
+
+  <h3>Auctions, and the one result worth memorising</h3>
+  <div class="tblwrap">
+  <table>
+    <thead><tr><th>Format</th><th>How it works</th><th>Optimal bid</th><th>Where you see it</th></tr></thead>
+    <tbody>
+      <tr><td>First-price sealed</td><td>Highest bid wins, pays own bid</td><td>Shade below your value; how much depends on rivals</td><td>Procurement, construction tenders, most ad exchanges today</td></tr>
+      <tr><td>Second-price (Vickrey)</td><td>Highest bid wins, pays second-highest</td><td class="num">Bid your true value — dominant</td><td>Classic ad auctions, spectrum design, eBay proxy bidding</td></tr>
+      <tr><td>English (ascending)</td><td>Price rises until one bidder left</td><td>Stay in until price = value</td><td>Art, real estate, cattle</td></tr>
+      <tr><td>Dutch (descending)</td><td>Price falls until someone accepts</td><td>Strategically equivalent to first-price</td><td>Flowers, perishables, some token sales</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><strong>Revenue equivalence:</strong> under independent private values, risk-neutral bidders and symmetric conditions, all four raise the same expected revenue. So the choice between them is never really about revenue — it's about <em>which assumption you're willing to break</em>. Second-price wins on simplicity and truthfulness; first-price wins when bidders are risk-averse or you fear collusion; ascending wins when bidders learn from each other; sealed wins when you want to prevent signalling between bidders.</p>
+  <div class="note"><b>The winner's curse.</b> When bidders estimate a <em>common</em> value (an oil field, an acquisition target, a hiring decision), the winner is systematically the one who overestimated most. Correct by bidding as if you already know you won — that is, condition on being the highest estimate — which means shading down substantially as the number of bidders grows. Most acquisition overpayment is this, not hubris.</div>
+
+  <h3>Matching: markets without prices</h3>
+  <p>When money can't clear the market — students to schools, doctors to hospitals, kidneys to patients — you need a matching mechanism. <strong>Gale–Shapley deferred acceptance</strong> produces a stable matching (no pair who'd both rather have each other), and it's strategy-proof for the side that proposes. Which side proposes decides who gets their better outcomes. Whoever writes the algorithm allocates the surplus.</p>
+
+  <h3>Voting: the impossibility results</h3>
+  <ul>
+    <li><strong>Arrow:</strong> with three or more options, no ranked voting rule can satisfy a small set of obviously reasonable fairness conditions at once. There is no "correct" voting system, only trade-offs.</li>
+    <li><strong>Gibbard–Satterthwaite:</strong> every non-dictatorial voting rule over three or more options is manipulable. Strategic voting isn't a bug to be designed out; it's mathematically unavoidable.</li>
+    <li><strong>Median voter theorem:</strong> with single-peaked preferences on one dimension and two competitors, both converge to the median. This explains political convergence, and equally why two competing products drift toward the same feature set.</li>
+    <li><strong>Condorcet cycles:</strong> majorities can prefer A to B, B to C and C to A. Which means <em>agenda order determines the winner</em> — whoever controls the sequence of votes controls the outcome, without ever changing a single preference.</li>
+  </ul>
+  <div class="warnbox"><b>The practical version of all three:</b> in any committee, the person who sets the agenda has more power than the people who vote. Design your decision processes with that in mind, and notice when someone else is exercising it on you.</div>
+  </div>
+</section>
+
+<section id="bargain">
+  <div class="wrap">
+  <p class="eyebrow">09 — Splitting the surplus</p>
+  <h2>Bargaining and coalitions</h2>
+  <p>Every negotiation has the same skeleton: there is a surplus that exists only if you agree, and a fight over how to divide it. Two questions decide everything.</p>
+
+  <h3>Question one: what happens if we don't agree?</h3>
+  <p>Your <strong>BATNA</strong> — the value of no deal — is not a detail, it's the foundation. Bargaining divides only the surplus <em>above</em> both parties' no-deal values. Which yields the most practical negotiation advice in existence: <em class="t">the highest-return work in a negotiation happens before it starts, and consists of improving your outside option or worsening theirs.</em> Arguing well inside the room moves the split a little. A second bidder moves it a lot.</p>
+
+  <h3>Question two: who is impatient?</h3>
+  <p>In Rubinstein's alternating-offers model, two players trade offers until one accepts, with the pie shrinking each round. The unique equilibrium splits it in proportion to <strong>relative patience</strong>: the more patient party gets more, and there's no delay at all — the first offer is accepted, because both can compute the ending. Delay in real bargaining is therefore evidence of something the model excludes: private information, internal politics, or theatre for an audience.</p>
+  <div class="grid2">
+    <div class="mini"><h4>Deadlines are weapons</h4><p>A deadline binding on you alone destroys your position. Quarter-end targets, expiring funding, a flight home — all are impatience made public.</p></div>
+    <div class="mini"><h4>Nash bargaining solution</h4><p>Maximise the product of gains over BATNAs. Practically: symmetric split of the surplus, weighted by risk tolerance.</p></div>
+    <div class="mini"><h4>Anchoring is real</h4><p>Formal theory says the first number shouldn't matter. Empirically it does — it acts as a focal point in a game with many equilibria.</p></div>
+    <div class="mini"><h4>Bargaining ranges</h4><p>Zone of possible agreement = between the two BATNAs. If it's empty, no amount of skill closes the deal, and recognising that early is the win.</p></div>
+  </div>
+
+  <h3>More than two: coalitions</h3>
+  <p>With three or more parties, the question becomes who teams up with whom, and what a member is worth. The <strong>Shapley value</strong> answers it cleanly: your share is your average marginal contribution across every possible order of joining. It's the formal version of "what would break if you left?" — and it's the right lens for splitting equity, allocating credit across teams, or valuing a partner in a consortium.</p>
+  <p>The <strong>core</strong> is the set of divisions no subgroup can beat by walking out together. Sometimes the core is empty: <em>every</em> arrangement can be broken by some coalition, so instability is structural and no clever deal fixes it. Recognising an empty core saves months.</p>
+  <p><strong>Pivotality beats size.</strong> In coalition politics, a small party that can complete a majority has power out of proportion to its seats; a large party that no majority needs has almost none. The same is true inside companies: influence tracks being necessary to a winning coalition, not headcount.</p>
+  </div>
+</section>
+
+<section id="evolve">
+  <div class="wrap">
+  <p class="eyebrow">10 — No rationality required</p>
+  <h2>Evolutionary game theory</h2>
+  <p>Everything so far assumed reasoning players. Now remove reasoning entirely. Keep only: strategies that vary, payoffs that determine reproduction or imitation, and repetition. The same equilibria reappear.</p>
+  <p>This is the most important conceptual move in the field for a systems thinker, because it decouples the result from the psychology. Nash equilibrium stops being a claim about how clever people are and becomes <strong>a claim about what a selection process settles on</strong>. Firms don't need to calculate optimal strategies; markets kill the ones that don't have them. Norms don't need to be designed; the ones that survive transmission are the ones that spread.</p>
+
+  <h3>ESS: stability against invasion</h3>
+  <p>A strategy is <strong>evolutionarily stable</strong> if a population playing it can't be invaded by a small group playing something else. It's Nash plus a stability condition — and it's stricter, which is useful: many Nash equilibria are not ESS, and those are the ones that don't survive contact with a real, noisy world.</p>
+
+  <h3>Hawk–Dove, and why mixed equilibria are populations</h3>
+  <p>Hawks fight, Doves display and yield. Hawks beat Doves. But hawks meeting hawks pay injury costs. So the fraction of hawks self-corrects: too many hawks and fighting costs make dovishness pay; too few and aggression pays. The population settles at a mix determined by the ratio of the contested value to the injury cost.</p>
+  <p>The reinterpretation matters: <strong>a mixed strategy needn't be one player randomising. It can be a stable proportion in a population.</strong> "30% of sellers cut corners" is the same mathematical object as "each seller cuts corners 30% of the time" — and the intervention (raise the cost of aggression, lower the value of winning) is the same either way.</p>
+
+  <h3>Replicator dynamics: the systems view</h3>
+  <p>Strategies that do better than average grow; worse than average shrink. That's it. This turns game theory into a dynamical system with attractors, basins and tipping points — which is exactly the language for the next section.</p>
+  <div class="grid2">
+    <div class="mini"><h4>Attractors</h4><p>Stable equilibria the system falls into from a whole region of starting points.</p></div>
+    <div class="mini"><h4>Basins</h4><p>Which starting mixes lead where. In a Stag Hunt, the basin boundary is the trust threshold.</p></div>
+    <div class="mini"><h4>Tipping points</h4><p>Cross the boundary and the system runs to a different attractor on its own. Adoption cascades, bank runs, norm collapse.</p></div>
+    <div class="mini"><h4>Path dependence</h4><p>Where you end up depends on where you started. History is a parameter, not noise.</p></div>
+  </div>
+  <div class="note"><b>Why this is the practical version.</b> If you want a population to move to a better equilibrium, you have two options: shift the payoffs so the bad attractor disappears, or push the population past the basin boundary hard enough that it runs to the good attractor by itself. The second is much cheaper — it explains why subsidies for early adopters, seeded supply, and launch-day critical mass work, and why the same spend dribbled out over two years does nothing.</div>
+  </div>
+</section>
+
+<section id="systems">
+  <div class="wrap">
+  <p class="eyebrow">11 — The systems layer</p>
+  <h2>Games are feedback structures</h2>
+  <p>Here is the translation that makes game theory compose with everything else you know about systems. A game is a set of coupled decision rules. Iterate them and you get a dynamical system. Every classic game is a recognisable feedback structure, and once you see the structure you already know how it behaves and where to intervene.</p>
+
+  <div class="tblwrap" style="max-width:none">
+  <table>
+    <thead><tr><th>Game</th><th>Loop structure</th><th>Behaviour over time</th><th>Where the leverage is</th></tr></thead>
+    <tbody>
+      <tr><td>Prisoner's Dilemma, one-shot</td><td>No loop — a single settling</td><td>Straight to the bad outcome</td><td>Add a loop: repeat it, or bind it with a contract</td></tr>
+      <tr><td>Arms race / price war</td><td>Reinforcing (R), escalating</td><td>Exponential escalation until a hard limit</td><td>Cap the loop gain, or cut the link from their move to yours</td></tr>
+      <tr><td>Tit-for-tat</td><td>Balancing (B) with a one-round delay</td><td>Stable at cooperation; oscillates under noise</td><td>Add forgiveness — reduce loop gain to damp the oscillation</td></tr>
+      <tr><td>Stag Hunt</td><td>Two attractors, one basin boundary</td><td>Locks into whichever side you start on</td><td>Push past the boundary once; it self-sustains after</td></tr>
+      <tr><td>Tragedy of the commons</td><td>R loops per actor against one shared, delayed B</td><td>Growth, overshoot, then collapse</td><td>Make the shared limit visible and felt <em>now</em>, per actor</td></tr>
+      <tr><td>Network effects</td><td>Reinforcing, cross-side</td><td>Slow, slow, then winner-take-most</td><td>Seed one side hard enough to cross the threshold</td></tr>
+      <tr><td>Chicken</td><td>R loop with a catastrophic boundary</td><td>Escalation until someone exits or both crash</td><td>Change the boundary conditions before the loop starts</td></tr>
+    </tbody>
+  </table>
+  </div>
+  </div>
+
+  <figure class="wrap">
+    <svg viewBox="0 0 660 300" role="img" aria-label="Reinforcing loop: A arms, B perceives threat, B arms, A perceives threat, A arms again — escalation with no balancing link.">
+      <defs><marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#D93025"/></marker></defs>
+      <rect x="40" y="34" width="210" height="58" rx="12" fill="#FCE8E6" stroke="#D93025" stroke-width="1"/>
+      <text x="145" y="60" text-anchor="middle" font-size="13" font-weight="500" fill="#410E0B">A increases spend</text>
+      <text x="145" y="78" text-anchor="middle" font-size="13" fill="#410E0B">on capability</text>
+      <rect x="410" y="34" width="210" height="58" rx="12" fill="#F0F4F9" stroke="currentColor" stroke-width="1"/>
+      <text x="515" y="60" text-anchor="middle" font-size="13" font-weight="500" fill="currentColor">B perceives it</text>
+      <text x="515" y="78" text-anchor="middle" font-size="13" fill="currentColor">as a threat</text>
+      <rect x="410" y="208" width="210" height="58" rx="12" fill="#FCE8E6" stroke="#D93025" stroke-width="1"/>
+      <text x="515" y="234" text-anchor="middle" font-size="13" font-weight="500" fill="#410E0B">B increases spend</text>
+      <text x="515" y="252" text-anchor="middle" font-size="13" fill="#410E0B">on capability</text>
+      <rect x="40" y="208" width="210" height="58" rx="12" fill="#F0F4F9" stroke="currentColor" stroke-width="1"/>
+      <text x="145" y="234" text-anchor="middle" font-size="13" font-weight="500" fill="currentColor">A perceives it</text>
+      <text x="145" y="252" text-anchor="middle" font-size="13" fill="currentColor">as a threat</text>
+
+      <line x1="250" y1="63" x2="404" y2="63" stroke="#D93025" stroke-width="1.8" marker-end="url(#ar2)"/>
+      <text x="327" y="52" text-anchor="middle" font-size="14" font-weight="700" fill="#D93025">+</text>
+      <line x1="515" y1="92" x2="515" y2="202" stroke="#D93025" stroke-width="1.8" marker-end="url(#ar2)"/>
+      <text x="530" y="150" font-size="14" font-weight="700" fill="#D93025">+</text>
+      <line x1="410" y1="237" x2="256" y2="237" stroke="#D93025" stroke-width="1.8" marker-end="url(#ar2)"/>
+      <text x="333" y="258" text-anchor="middle" font-size="14" font-weight="700" fill="#D93025">+</text>
+      <line x1="145" y1="208" x2="145" y2="98" stroke="#D93025" stroke-width="1.8" marker-end="url(#ar2)"/>
+      <text x="160" y="155" font-size="14" font-weight="700" fill="#D93025">+</text>
+      <circle cx="330" cy="150" r="30" fill="none" stroke="#D93025" stroke-width="1.2" stroke-dasharray="4 4"/>
+      <text x="330" y="156" text-anchor="middle" font-size="17" font-weight="700" fill="#D93025">R</text>
+    </svg>
+    <figcaption><b>The escalation archetype: a Prisoner's Dilemma running in continuous time.</b> Every link is positive, so the loop has no natural stopping point — it runs until a budget, an exhaustion, or an outside agreement stops it. Price wars, ad-spend races, discount escalation between marketplaces and nuclear buildups are the same diagram. <b>Note where the leverage is not:</b> persuading either side to "be reasonable" changes no link in this picture.</figcaption>
+  </figure>
+
+  <figure class="wrap">
+    <svg viewBox="0 0 660 300" role="img" aria-label="Balancing loop: A defects, B retaliates after a delay, A's payoff falls, A returns to cooperating — which reduces defection.">
+      <defs><marker id="ar3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#1E8E3E"/></marker></defs>
+      <rect x="40" y="34" width="210" height="58" rx="12" fill="#F0F4F9" stroke="currentColor" stroke-width="1"/>
+      <text x="145" y="69" text-anchor="middle" font-size="13" font-weight="500" fill="currentColor">A defects</text>
+      <rect x="410" y="34" width="210" height="58" rx="12" fill="#C4EED0" stroke="#1E8E3E" stroke-width="1"/>
+      <text x="515" y="60" text-anchor="middle" font-size="13" font-weight="500" fill="#072711">B retaliates</text>
+      <text x="515" y="78" text-anchor="middle" font-size="13" fill="#072711">next round</text>
+      <rect x="410" y="208" width="210" height="58" rx="12" fill="#F0F4F9" stroke="currentColor" stroke-width="1"/>
+      <text x="515" y="243" text-anchor="middle" font-size="13" font-weight="500" fill="currentColor">A's payoff falls</text>
+      <rect x="40" y="208" width="210" height="58" rx="12" fill="#C4EED0" stroke="#1E8E3E" stroke-width="1"/>
+      <text x="145" y="234" text-anchor="middle" font-size="13" font-weight="500" fill="#072711">A returns to</text>
+      <text x="145" y="252" text-anchor="middle" font-size="13" fill="#072711">cooperating</text>
+
+      <line x1="250" y1="63" x2="404" y2="63" stroke="#1E8E3E" stroke-width="1.8" marker-end="url(#ar3)"/>
+      <text x="322" y="52" text-anchor="middle" font-size="14" font-weight="700" fill="#1E8E3E">+</text>
+      <line x1="338" y1="55" x2="338" y2="71" stroke="#1E8E3E" stroke-width="2.4"/>
+      <line x1="346" y1="55" x2="346" y2="71" stroke="#1E8E3E" stroke-width="2.4"/>
+      <text x="366" y="52" font-size="11" fill="#1E8E3E">delay</text>
+      <line x1="515" y1="92" x2="515" y2="202" stroke="#1E8E3E" stroke-width="1.8" marker-end="url(#ar3)"/>
+      <text x="530" y="150" font-size="14" font-weight="700" fill="#1E8E3E">+</text>
+      <line x1="410" y1="237" x2="256" y2="237" stroke="#1E8E3E" stroke-width="1.8" marker-end="url(#ar3)"/>
+      <text x="333" y="258" text-anchor="middle" font-size="14" font-weight="700" fill="#1E8E3E">+</text>
+      <line x1="145" y1="208" x2="145" y2="98" stroke="#1E8E3E" stroke-width="1.8" marker-end="url(#ar3)"/>
+      <text x="160" y="155" font-size="14" font-weight="700" fill="#1E8E3E">−</text>
+      <circle cx="330" cy="150" r="30" fill="none" stroke="#1E8E3E" stroke-width="1.2" stroke-dasharray="4 4"/>
+      <text x="330" y="156" text-anchor="middle" font-size="17" font-weight="700" fill="#1E8E3E">B</text>
+    </svg>
+    <figcaption><b>Reciprocity is a balancing loop with a delay.</b> One negative link closes it, which is exactly what makes defection self-correcting rather than self-amplifying. The delay is why noise hurts: a mistaken defection is punished a round later, that punishment is read as a fresh defection, and the loop oscillates. <b>Forgiveness is loop-gain reduction</b> — it damps the oscillation without removing the correction.</figcaption>
+  </figure>
+
+  <div class="wrap">
+  <h3>Stocks, not just flows</h3>
+  <p>Classical game theory is about flows — decisions, per-round payoffs. The systems upgrade is to notice the <strong>stocks</strong> that accumulate underneath, because stocks are what create inertia, delay and path dependence:</p>
+  <div class="grid2">
+    <div class="mini"><h4>Trust</h4><p>Accumulates slowly from consistent cooperation, drains fast from one defection. Asymmetric fill and drain rates are why reputational damage is so hard to reverse.</p></div>
+    <div class="mini"><h4>Reputation / brand</h4><p>A stock of others' beliefs. Converts incredible threats into credible ones. Spending it is sometimes correct; forgetting it's finite is not.</p></div>
+    <div class="mini"><h4>Commitment capital</h4><p>Sunk, irreversible positions. Raises your credibility and lowers your flexibility — the same property viewed twice.</p></div>
+    <div class="mini"><h4>Shared resources</h4><p>Fish, attention, groundwater, user goodwill, buyer patience. Depletable, with a regeneration rate people systematically overestimate.</p></div>
+  </div>
+  </div>
+
+  <figure class="wrap">
+    <svg viewBox="0 0 660 320" role="img" aria-label="Tragedy of the commons: each actor's individual gain drives more extraction, which depletes a shared stock after a delay, which lowers everyone's return and drives still more extraction.">
+      <defs><marker id="ar4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="currentColor"/></marker>
+      <marker id="ar4y" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#8F5000"/></marker></defs>
+      <rect x="30" y="30" width="180" height="54" rx="12" fill="#F0F4F9" stroke="currentColor"/>
+      <text x="120" y="53" text-anchor="middle" font-size="12.5" font-weight="500" fill="currentColor">A's own extraction</text>
+      <text x="120" y="71" text-anchor="middle" font-size="12.5" fill="currentColor">(private gain)</text>
+      <rect x="450" y="30" width="180" height="54" rx="12" fill="#F0F4F9" stroke="currentColor"/>
+      <text x="540" y="53" text-anchor="middle" font-size="12.5" font-weight="500" fill="currentColor">B's own extraction</text>
+      <text x="540" y="71" text-anchor="middle" font-size="12.5" fill="currentColor">(private gain)</text>
+      <rect x="235" y="118" width="190" height="60" rx="12" fill="#FEEFC3" stroke="#8F5000" stroke-width="1.4"/>
+      <text x="330" y="143" text-anchor="middle" font-size="13" font-weight="500" fill="#3B2300">Shared stock</text>
+      <text x="330" y="162" text-anchor="middle" font-size="12" fill="#3B2300">depletes — cost is shared</text>
+      <rect x="235" y="240" width="190" height="54" rx="12" fill="#F0F4F9" stroke="currentColor"/>
+      <text x="330" y="263" text-anchor="middle" font-size="12.5" font-weight="500" fill="currentColor">Return per unit</text>
+      <text x="330" y="281" text-anchor="middle" font-size="12.5" fill="currentColor">of effort falls</text>
+
+      <line x1="150" y1="84" x2="255" y2="114" stroke="#8F5000" stroke-width="1.7" marker-end="url(#ar4y)"/>
+      <line x1="510" y1="84" x2="405" y2="114" stroke="#8F5000" stroke-width="1.7" marker-end="url(#ar4y)"/>
+      <line x1="330" y1="178" x2="330" y2="234" stroke="#8F5000" stroke-width="1.7" marker-end="url(#ar4y)"/>
+      <line x1="344" y1="192" x2="344" y2="208" stroke="#8F5000" stroke-width="2.4"/>
+      <line x1="352" y1="192" x2="352" y2="208" stroke="#8F5000" stroke-width="2.4"/>
+      <text x="374" y="206" font-size="11" fill="#8F5000">long delay</text>
+      <path d="M235 267 C 90 267, 60 200, 75 88" stroke="currentColor" stroke-width="1.7" fill="none" marker-end="url(#ar4)"/>
+      <path d="M425 267 C 570 267, 600 200, 585 88" stroke="currentColor" stroke-width="1.7" fill="none" marker-end="url(#ar4)"/>
+      <text x="96" y="180" font-size="11.5" fill="currentColor">A works harder</text>
+      <text x="500" y="180" font-size="11.5" fill="currentColor">B works harder</text>
+      <text x="120" y="112" font-size="14" font-weight="700" fill="#8F5000">+</text>
+      <text x="530" y="112" font-size="14" font-weight="700" fill="#8F5000">+</text>
+    </svg>
+    <figcaption><b>Why shared resources collapse even when everyone can see it happening.</b> Each actor captures the whole gain from extracting and bears only a fraction of the depletion, so the private calculation stays positive right up to collapse. <b>The delay is the killer</b> — the feedback that should stop the behaviour arrives after the behaviour has already scaled. Ostrom's finding is the practical answer: real communities avoid this with monitoring, graduated sanctions and clear boundaries, i.e. by installing a fast, local, per-actor balancing loop that the raw payoff structure doesn't provide.</figcaption>
+  </figure>
+
+  <div class="wrap">
+  <h3>Leverage points, ranked for games</h3>
+  <p>Meadows ranked intervention points by power. Applied to strategic systems, the ranking comes out almost identically — and almost inverted from where effort usually goes.</p>
+  <div class="tblwrap">
+  <table>
+    <thead><tr><th>Leverage</th><th>Intervention</th><th>Example</th></tr></thead>
+    <tbody>
+      <tr><td><span class="tag r">Weakest</span> Play better</td><td>Optimise your move inside fixed rules</td><td>Sharper pricing decisions inside a price war</td></tr>
+      <tr><td>Change parameters</td><td>Adjust payoff magnitudes</td><td>Raise a penalty, add a discount cap</td></tr>
+      <tr><td>Change delays</td><td>Speed up feedback</td><td>Weekly rather than quarterly reporting of a shared metric</td></tr>
+      <tr><td>Change information</td><td>Who sees what, when</td><td>Public dashboards, escrow, ratings, sealed vs open bids</td></tr>
+      <tr><td>Change the loop set</td><td>Add or cut feedback links</td><td>Long-term contract (adds repetition); commitment (cuts a link)</td></tr>
+      <tr><td>Change who plays</td><td>Add, remove or merge players</td><td>Second supplier, regulator, industry body, acquisition</td></tr>
+      <tr><td><span class="tag g">Strongest</span> Change the rules</td><td>Redesign the game itself</td><td>Move from open auction to sealed bid; from ranking to matching</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="note"><b>The observation worth carrying around.</b> Nearly all organisational effort goes into the top row. Nearly all durable change comes from the bottom two. If you're a product manager, the bottom two rows are literally your job description: you decide who is in the market, what they can see, and what the rules of exchange are.</div>
+  </div>
+</section>
+
+<section id="world">
+  <div class="wrap">
+  <p class="eyebrow">12 — Applications</p>
+  <h2>Where it actually shows up</h2>
+  <p>The point of the classification work is speed: recognise the shape, and you inherit everything known about it.</p>
+
+  <h3>In games proper</h3>
+  <p>Actual games are the field's laboratory because their rules are unambiguous.</p>
+  <ul>
+    <li><strong>Chess, Go</strong> — finite, perfect information, zero-sum. Zermelo's theorem says a determinate result exists; it's just uncomputable for us. Strategy here is search under bounded rationality, which is why heuristics and "sense of position" matter more than theory.</li>
+    <li><strong>Poker</strong> — imperfect information, and therefore the purest illustration of mixed strategies. You must bluff with some frequency because a never-bluffing player is exploitable, and your bluff frequency is set to make your <em>opponent</em> indifferent to calling. Poker is where the indifference principle stops feeling abstract.</li>
+    <li><strong>Football penalties</strong> — Matching Pennies, and the empirical mixing frequencies of professional players are startlingly close to the theoretical prediction.</li>
+    <li><strong>Auctions in games, drafting, tempo</strong> — resource commitment under uncertainty, i.e. real auction theory played fast.</li>
+  </ul>
+
+  <h3>In business</h3>
+  <div class="tblwrap">
+  <table>
+    <thead><tr><th>Situation</th><th>Game</th><th>The move</th></tr></thead>
+    <tbody>
+      <tr><td>Price war between two majors</td><td>Prisoner's Dilemma</td><td>Change the payoff, not the mood: price-match guarantees make undercutting unprofitable — legally, and without any conversation</td></tr>
+      <tr><td>Entry deterrence</td><td>Sequential, credibility</td><td>Commit before they decide — capacity, exclusivity, a visible cost structure. Threats after entry are worthless</td></tr>
+      <tr><td>Capacity expansion race</td><td>Chicken</td><td>Announce and build first; whoever is irrevocably committed wins the standoff</td></tr>
+      <tr><td>Standards war</td><td>Battle of the Sexes</td><td>Build the coalition before the fight; a focal point beats a better standard</td></tr>
+      <tr><td>Supplier negotiation</td><td>Bargaining</td><td>Work on the BATNA before the meeting. Find a second supplier; that changes the split more than any tactic</td></tr>
+      <tr><td>Hiring and comp</td><td>Adverse selection + signalling</td><td>Design offers so different types self-select — equity-heavy vs cash-heavy reveals belief</td></tr>
+      <tr><td>Agency and incentives</td><td>Moral hazard</td><td>Pay on outcomes you can measure, and accept that everything unmeasured will be neglected. Choose metrics knowing they will be optimised against</td></tr>
+      <tr><td>Acquisition bidding</td><td>Common-value auction</td><td>Assume winning means you were the most optimistic. Shade the bid down as bidder count goes up</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>In products and platforms</h3>
+  <p>Product work is mostly mechanism design that isn't labelled as such. You are setting the rules under which strangers with conflicting interests transact, and then living with the equilibrium.</p>
+  </div>
+
+  <figure class="wrap">
+    <svg viewBox="0 0 660 320" role="img" aria-label="Two-sided marketplace: more sellers improve selection which attracts buyers which attracts sellers — a reinforcing loop — while a balancing loop runs through competition compressing seller margins.">
+      <defs><marker id="ar5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#1A73E8"/></marker>
+      <marker id="ar5g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#8F5000"/></marker></defs>
+      <rect x="40" y="36" width="170" height="52" rx="12" fill="#D3E3FD" stroke="#1A73E8"/>
+      <text x="125" y="68" text-anchor="middle" font-size="13" font-weight="500" fill="#041E49">More sellers</text>
+      <rect x="250" y="36" width="170" height="52" rx="12" fill="#F0F4F9" stroke="currentColor"/>
+      <text x="335" y="68" text-anchor="middle" font-size="13" font-weight="500" fill="currentColor">Better selection</text>
+      <rect x="250" y="140" width="170" height="52" rx="12" fill="#D3E3FD" stroke="#1A73E8"/>
+      <text x="335" y="172" text-anchor="middle" font-size="13" font-weight="500" fill="#041E49">More buyers</text>
+      <rect x="40" y="140" width="170" height="52" rx="12" fill="#F0F4F9" stroke="currentColor"/>
+      <text x="125" y="165" text-anchor="middle" font-size="13" font-weight="500" fill="currentColor">Higher expected</text>
+      <text x="125" y="182" text-anchor="middle" font-size="13" fill="currentColor">sales per seller</text>
+      <line x1="210" y1="62" x2="244" y2="62" stroke="#1A73E8" stroke-width="1.8" marker-end="url(#ar5)"/>
+      <line x1="335" y1="88" x2="335" y2="134" stroke="#1A73E8" stroke-width="1.8" marker-end="url(#ar5)"/>
+      <line x1="250" y1="166" x2="216" y2="166" stroke="#1A73E8" stroke-width="1.8" marker-end="url(#ar5)"/>
+      <line x1="125" y1="140" x2="125" y2="94" stroke="#1A73E8" stroke-width="1.8" marker-end="url(#ar5)"/>
+      <circle cx="230" cy="114" r="26" fill="none" stroke="#1A73E8" stroke-width="1.2" stroke-dasharray="4 4"/>
+      <text x="230" y="120" text-anchor="middle" font-size="16" font-weight="700" fill="#1A73E8">R</text>
+
+      <rect x="450" y="36" width="180" height="52" rx="12" fill="#FEEFC3" stroke="#8F5000"/>
+      <text x="540" y="60" text-anchor="middle" font-size="12.5" font-weight="500" fill="#3B2300">Price competition</text>
+      <text x="540" y="78" text-anchor="middle" font-size="12.5" fill="#3B2300">among sellers</text>
+      <rect x="450" y="140" width="180" height="52" rx="12" fill="#F0F4F9" stroke="currentColor"/>
+      <text x="540" y="164" text-anchor="middle" font-size="12.5" font-weight="500" fill="currentColor">Seller margin falls;</text>
+      <text x="540" y="182" text-anchor="middle" font-size="12.5" fill="currentColor">quality is cut</text>
+      <line x1="210" y1="50" x2="444" y2="50" stroke="#8F5000" stroke-width="1.7" marker-end="url(#ar5g)"/>
+      <line x1="540" y1="88" x2="540" y2="134" stroke="#8F5000" stroke-width="1.7" marker-end="url(#ar5g)"/>
+      <path d="M450 178 C 400 220, 300 236, 250 236" stroke="#8F5000" stroke-width="1.7" fill="none" marker-end="url(#ar5g)"/>
+      <rect x="70" y="212" width="180" height="48" rx="12" fill="#FEEFC3" stroke="#8F5000"/>
+      <text x="160" y="234" text-anchor="middle" font-size="12.5" font-weight="500" fill="#3B2300">Buyer trust erodes</text>
+      <text x="160" y="251" text-anchor="middle" font-size="12.5" fill="#3B2300">(a slow stock)</text>
+      <path d="M160 212 C 160 205, 250 200, 300 196" stroke="#8F5000" stroke-width="1.7" fill="none" marker-end="url(#ar5g)"/>
+      <text x="300" y="290" text-anchor="middle" font-size="12" fill="#8F5000">The B loop is slower than the R loop — which is why growth looks free right up until it doesn't.</text>
+    </svg>
+    <figcaption><b>Every marketplace runs both loops at once.</b> The blue reinforcing loop is the growth story. The amber balancing loop is the quality story, and it runs through a slow stock (buyer trust) with a long delay, so it is invisible during the phase when the reinforcing loop is compounding. <b>The design job is to add a fast local feedback</b> — ratings, returns costs charged to the seller, quality-weighted ranking — so that the cost of a bad transaction lands on the seller who caused it, in days rather than quarters.</figcaption>
+  </figure>
+
+  <div class="wrap">
+  <ul>
+    <li><strong>Cold start</strong> is a Stag Hunt with an empty basin: neither side joins until the other does. The fix is never persuasion; it's subsidising one side past the tipping point, or faking the other side's presence honestly (curated supply, house-run inventory, guaranteed demand).</li>
+    <li><strong>Ratings and reviews</strong> are a repetition machine — they convert one-shot transactions into a repeated game against a reputation stock. That single mechanism is what makes trading with strangers possible at all.</li>
+    <li><strong>Discount and coupon escalation</strong> between competing platforms is a textbook Dilemma, and it never resolves through restraint. It resolves through differentiation (change the payoff structure) or exhaustion.</li>
+    <li><strong>Ranking algorithms</strong> are auctions whether or not money changes hands: sellers spend effort on whatever the ranking rewards. Publish the ranking rule and you get gaming; hide it and you get uncertainty and complaint. Either way, the ranking rule <em>is</em> your product strategy, because it defines the game your supply side is playing all day.</li>
+    <li><strong>Freemium tiers</strong> are screening. The free tier must be genuinely useful and genuinely limited in a dimension that correlates with willingness to pay, or it separates nobody.</li>
+    <li><strong>Internal roadmaps</strong> are coalition games. A feature ships when it's part of a winning coalition, which is why pivotality — being necessary to somebody's win — predicts influence better than seniority.</li>
+  </ul>
+
+  <h3>In politics</h3>
+  <ul>
+    <li><strong>Elections</strong> — median voter convergence on a single dimension; multi-dimensional issue spaces have no stable centre, which is why agenda-setting and issue framing decide so much.</li>
+    <li><strong>Coalition formation</strong> — the Shapley/Banzhaf logic: pivotality, not size. Small pivotal parties extract disproportionate concessions.</li>
+    <li><strong>Deterrence</strong> — Chicken with catastrophic payoffs. Mutually assured destruction is a commitment device: it works by removing the option to survive a first strike, and the entire theory of it is Schelling's.</li>
+    <li><strong>Legislative bargaining</strong> — Rubinstein with an audience. Public positions are commitment moves that raise the cost of conceding, which is precisely why they're made.</li>
+    <li><strong>Veto players</strong> — the more actors whose consent is required, the smaller the set of feasible changes. Institutional design determines policy stability more than the preferences of anyone in office.</li>
+  </ul>
+
+  <h3>In the world</h3>
+  <ul>
+    <li><strong>Climate</strong> — the largest commons problem ever run, with the worst possible delay structure: costs now, benefits later, benefits shared globally. This is why voluntary appeals fail and why the real work is treaty architecture, border adjustments and technology cost curves — payoff editing, not persuasion.</li>
+    <li><strong>Antibiotic resistance and vaccination</strong> — commons and free-riding, with the twist that the free-rider strategy is individually rational and stops being so once enough people adopt it.</li>
+    <li><strong>Trade wars</strong> — Dilemma with retaliation loops; the WTO's function is to be the repeated-game enforcement mechanism that makes cooperation an equilibrium.</li>
+    <li><strong>Arms control and AI development races</strong> — Chicken and Stag Hunt overlapping. Whether it's one or the other depends on whether unilateral restraint is survivable, which is why verification regimes are the whole ballgame: verification converts a Dilemma into a Stag Hunt by removing the fear of being the sucker.</li>
+    <li><strong>Migration, congestion, queues</strong> — congestion games, where everyone's best response makes the shared resource worse. Braess's paradox: adding a road can slow everyone down, because equilibrium routing isn't optimal routing.</li>
+  </ul>
+  </div>
+</section>
+
+<section id="breaks">
+  <div class="wrap">
+  <p class="eyebrow">13 — Limits</p>
+  <h2>Where the theory misleads</h2>
+  <p>A tool you can't criticise isn't a tool, it's an ideology. The failure modes are well mapped.</p>
+
+  <h3>Failure 1 — the payoffs are wrong</h3>
+  <p>By far the most common. People care about fairness, status, revenge, being seen to be consistent, and not looking foolish in front of their team. The Ultimatum Game is the canonical demonstration: offered a split of £10, standard theory predicts the responder accepts £1, since £1 beats £0. Real responders reject anything under roughly 20–30%, and are willing to pay for the privilege. They're not irrational; spite has positive value in their utility function, and having a reputation for rejecting lowballs pays across future encounters.</p>
+
+  <h3>Failure 2 — nobody solves to equilibrium</h3>
+  <p>People reason a step or two, not to a fixed point. <strong>Level-k thinking</strong> models this directly: level-0 plays randomly or naively, level-1 best-responds to level-0, level-2 to level-1. Most people sit at level 1 or 2. This predicts real behaviour in beauty-contest games far better than Nash does — and it has a direct practical corollary: <em class="t">don't out-think the room. Model the depth your counterpart is actually operating at.</em> Assuming your competitor has anticipated your anticipation of their anticipation is usually a modelling error.</p>
+
+  <h3>Failure 3 — multiple equilibria, no selection rule</h3>
+  <p>The model says "one of these three things happens" and stops. All the interesting work — which one, and why — is done by focal points, history and institutions the model doesn't contain.</p>
+
+  <h3>Failure 4 — common knowledge is fiction</h3>
+  <p>The theory routinely assumes everyone knows the payoffs, knows everyone knows, ad infinitum. Almost never true. Most real conflicts persist precisely because the parties have different models of the same game.</p>
+
+  <h3>Failure 5 — the model becomes the belief</h3>
+  <p>Teaching people that defection is rational makes them defect more. Economics students play the Prisoner's Dilemma less cooperatively than others. A model of strategic behaviour is not a neutral description; adopted widely, it edits the payoffs it claims to describe. Treat the framework as a lens for seeing structure, not as permission.</p>
+
+  <div class="note"><b>What survives the critique.</b> Almost all of it, if you use the theory the right way round. Its power is <em>diagnostic</em>, not predictive: it tells you what kind of situation you're in and therefore which class of intervention can possibly work. Even a badly-parameterised model that correctly identifies "this is a trust problem, not an incentive problem" beats a perfectly-executed intervention pointed at the wrong one.</div>
+  </div>
+</section>
+
+<section id="field">
+  <div class="wrap">
+  <p class="eyebrow">14 — Practice</p>
+  <h2>The field guide</h2>
+  <p>Seven questions, in order. Run them on any real situation — a negotiation, a competitor's move, a team dysfunction, a policy — and you'll have a structural read in about ten minutes.</p>
+
+  <ol class="ladder">
+    <li><span class="k">1</span><span class="b"><b>Who are the players, really?</b><span>Include the ones who aren't in the room: the regulator, the other side's board, the internal faction, the future entrant. Getting the player set wrong invalidates everything downstream.</span></span></li>
+    <li><span class="k">2</span><span class="b"><b>What can each actually do?</b><span>Real options, not stated positions. What can they do that they're not doing? An option they don't have is worth knowing about.</span></span></li>
+    <li><span class="k">3</span><span class="b"><b>What does each get?</b><span>Write the payoffs from <em>their</em> seat — their incentives, their career, their measurement. Not what you think they should want. This step does most of the work.</span></span></li>
+    <li><span class="k">4</span><span class="b"><b>Who knows what?</b><span>What's private, what's verifiable, what's merely asserted. Every asymmetry is either a vulnerability or an instrument.</span></span></li>
+    <li><span class="k">5</span><span class="b"><b>Simultaneous or sequential? Once or repeated?</b><span>This determines whether commitment and reputation are available to you. It's the highest-information question on the list.</span></span></li>
+    <li><span class="k">6</span><span class="b"><b>What shape is it?</b><span>Dilemma, Stag Hunt, Chicken, coordination, zero-sum, commons. Name it — you now inherit the known interventions.</span></span></li>
+    <li><span class="k">7</span><span class="b"><b>Can I change the game instead of playing it?</b><span>Ask it last, act on it first. New player, new information, new payoff, new order of moves, new rules. This is where the returns are.</span></span></li>
+  </ol>
+
+  <h3>Symptom → diagnosis → move</h3>
+  <div class="tblwrap">
+  <table>
+    <thead><tr><th>What you observe</th><th>Likely structure</th><th>What actually works</th></tr></thead>
+    <tbody>
+      <tr><td>"Everyone agrees this is bad and it keeps happening"</td><td>Prisoner's Dilemma</td><td>Edit payoffs or add repetition. Meetings will not help.</td></tr>
+      <tr><td>"Everyone wants to move but nobody moves first"</td><td>Stag Hunt</td><td>Visible commitment by a credible first mover; guarantees against being the sucker.</td></tr>
+      <tr><td>"Both sides are escalating and can't back down"</td><td>Chicken</td><td>Build a face-saving exit for them; find a third party to impose a focal split.</td></tr>
+      <tr><td>"We agree on the goal, we're stuck on the standard"</td><td>Battle of the Sexes</td><td>Any decision beats the best decision late. Pick a focal point and commit publicly.</td></tr>
+      <tr><td>"They keep gaming the metric"</td><td>Mechanism, not incentive-compatible</td><td>Redesign the measure, or measure the thing you actually want. Enforcement scales badly.</td></tr>
+      <tr><td>"Quality is declining and nobody's responsible"</td><td>Commons with delayed feedback</td><td>Localise the cost to the actor, and shorten the delay.</td></tr>
+      <tr><td>"Their threat doesn't make sense"</td><td>Incredible threat, or wrong payoff model</td><td>Check the tree. If it's not in their interest to execute, discount it — unless reputation is in play.</td></tr>
+      <tr><td>"We keep losing negotiations we should win"</td><td>Weak BATNA</td><td>Stop training negotiators. Build the alternative option.</td></tr>
+      <tr><td>"There's no stable arrangement, every proposal gets blocked"</td><td>Empty core</td><td>Change the coalition set — add a player, or change what's on the table.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  </div>
+</section>
+
+<section id="glossary">
+  <div class="wrap">
+  <p class="eyebrow">15 — Reference</p>
+  <h2>Glossary</h2>
+  <div class="tblwrap">
+  <table>
+    <thead><tr><th>Term</th><th>In one line</th></tr></thead>
+    <tbody>
+      <tr><td>Strategy</td><td>A complete plan covering every situation you might face, including ones you never reach.</td></tr>
+      <tr><td>Best response</td><td>Your optimal move given a specific belief about what others do.</td></tr>
+      <tr><td>Dominant strategy</td><td>Best regardless of what anyone else does. Requires no beliefs.</td></tr>
+      <tr><td>Nash equilibrium</td><td>Everyone is best-responding to everyone else; no unilateral gain from deviating.</td></tr>
+      <tr><td>Mixed strategy</td><td>A probability distribution over actions — or, equivalently, a stable proportion in a population.</td></tr>
+      <tr><td>Indifference principle</td><td>Your mixing probabilities are set to make your <em>opponent</em> indifferent — so they depend on their payoffs, not yours.</td></tr>
+      <tr><td>Pareto efficient</td><td>No one can be made better off without making someone worse off. Unrelated to being an equilibrium.</td></tr>
+      <tr><td>Subgame perfect</td><td>Optimal at every node of the tree, so it contains no threats you wouldn't carry out.</td></tr>
+      <tr><td>Backward induction</td><td>Solve from the last move backwards. The lie detector for threats and promises.</td></tr>
+      <tr><td>Commitment</td><td>Deliberately removing your own options to change what others expect. Must be visible and irreversible.</td></tr>
+      <tr><td>Credibility</td><td>A threat or promise is credible when executing it is in your interest at the moment of execution.</td></tr>
+      <tr><td>Focal point</td><td>The equilibrium people converge on for reasons outside the model — salience, precedent, roundness.</td></tr>
+      <tr><td>Common knowledge</td><td>Everyone knows, and knows everyone knows, without limit. Much stronger than shared information.</td></tr>
+      <tr><td>δ (discount factor)</td><td>Weight on the future. The master variable of cooperation.</td></tr>
+      <tr><td>Folk theorem</td><td>With patient players, almost any reasonable outcome can be an equilibrium of the repeated game.</td></tr>
+      <tr><td>Adverse selection</td><td>Hidden type, before the deal. Cured by signalling and screening.</td></tr>
+      <tr><td>Moral hazard</td><td>Hidden action, after the deal. Cured by aligned incentives and monitoring.</td></tr>
+      <tr><td>Signal</td><td>A costly action that separates types because it's cheaper for the good type.</td></tr>
+      <tr><td>Screening</td><td>A menu built so each type reveals itself by which option it takes.</td></tr>
+      <tr><td>Cheap talk</td><td>Costless, unverifiable claims. Informative only when interests align.</td></tr>
+      <tr><td>Incentive compatibility</td><td>Honest behaviour is each participant's best move. The core test of any mechanism.</td></tr>
+      <tr><td>Revelation principle</td><td>Anything achievable by some mechanism is achievable by a truthful one.</td></tr>
+      <tr><td>Revenue equivalence</td><td>Under standard assumptions, the main auction formats raise the same expected revenue.</td></tr>
+      <tr><td>Winner's curse</td><td>In common-value auctions, winning means you probably overestimated. Bid as if you already won.</td></tr>
+      <tr><td>BATNA</td><td>Your value if no deal happens. The real determinant of bargaining power.</td></tr>
+      <tr><td>Shapley value</td><td>Your average marginal contribution across all orders of joining. A fair-share rule.</td></tr>
+      <tr><td>Core</td><td>Divisions no subgroup can improve on by leaving. Sometimes empty — meaning nothing is stable.</td></tr>
+      <tr><td>ESS</td><td>A population strategy that resists invasion by mutants. Nash plus stability.</td></tr>
+      <tr><td>Replicator dynamics</td><td>Above-average strategies grow. Turns game theory into a dynamical system.</td></tr>
+      <tr><td>Level-k</td><td>People reason a bounded number of steps. Usually one or two, not to a fixed point.</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>If you want to go deeper</h3>
+  <ul>
+    <li><strong>Thomas Schelling, <em>The Strategy of Conflict</em></strong> — commitment, focal points, credibility. Almost no mathematics and the most original thinking in the field.</li>
+    <li><strong>Robert Axelrod, <em>The Evolution of Cooperation</em></strong> — the tournaments, and what makes cooperative strategies robust.</li>
+    <li><strong>Dixit &amp; Nalebuff, <em>The Art of Strategy</em></strong> — the best applied treatment; reads fast and sticks.</li>
+    <li><strong>Elinor Ostrom, <em>Governing the Commons</em></strong> — the empirical demolition of the idea that commons problems have only two solutions.</li>
+    <li><strong>Martin Osborne, <em>An Introduction to Game Theory</em></strong> — when you want the formal machinery done properly.</li>
+    <li><strong>Donella Meadows, <em>Thinking in Systems</em></strong> — the other half of section 11, and the reason the two frameworks fit together so cleanly.</li>
+  </ul>
+  <hr class="hr">
+  <p style="color:var(--on-surface-variant); font-size:14.5px; margin-top:22px">Built as a layered reference: the spine in section 00, the machinery in 01–10, the systems reading in 11, and the working tools in 12–15. The payoff playground is the fastest way back into the intuition when it fades.</p>
+  </div>
+</section>
+</main>
+</div>
+
+<script>
+(function(){
+  var PRESETS = {
+    pd:      {rl:["Cooperate","Defect"], cl:["Cooperate","Defect"], r:[[3,0],[5,1]], c:[[3,5],[0,1]]},
+    stag:    {rl:["Hunt stag","Hunt hare"], cl:["Hunt stag","Hunt hare"], r:[[4,0],[3,2]], c:[[4,3],[0,2]]},
+    chicken: {rl:["Swerve","Straight"], cl:["Swerve","Straight"], r:[[3,1],[5,0]], c:[[3,5],[1,0]]},
+    bos:     {rl:["Option A","Option B"], cl:["Option A","Option B"], r:[[3,0],[0,2]], c:[[2,0],[0,3]]},
+    pennies: {rl:["Heads","Tails"], cl:["Heads","Tails"], r:[[1,-1],[-1,1]], c:[[-1,1],[1,-1]]},
+    harmony: {rl:["Cooperate","Defect"], cl:["Cooperate","Defect"], r:[[4,2],[3,1]], c:[[4,3],[2,1]]}
+  };
+  var ids = [["r00","r01"],["r10","r11"]], cids = [["c00","c01"],["c10","c11"]];
+  function el(i){return document.getElementById(i);}
+  function num(i){var v=parseFloat(el(i).value); return isNaN(v)?0:v;}
+  function readR(){return [[num("r00"),num("r01")],[num("r10"),num("r11")]];}
+  function readC(){return [[num("c00"),num("c01")],[num("c10"),num("c11")]];}
+  function fmt(x){return (Math.round(x*100)/100).toString();}
+  function pct(x){return Math.round(x*100)+"%";}
+
+  function load(key){
+    var p = PRESETS[key];
+    for(var i=0;i<2;i++)for(var j=0;j<2;j++){el(ids[i][j]).value=p.r[i][j]; el(cids[i][j]).value=p.c[i][j];}
+    el("lr0").textContent=p.rl[0]; el("lr1").textContent=p.rl[1];
+    el("lc0").textContent=p.cl[0]; el("lc1").textContent=p.cl[1];
+    solve();
+  }
+
+  function solve(){
+    var R=readR(), C=readC();
+    var rl=[el("lr0").textContent, el("lr1").textContent];
+    var cl=[el("lc0").textContent, el("lc1").textContent];
+
+    // pure equilibria
+    var pure=[];
+    for(var i=0;i<2;i++)for(var j=0;j<2;j++){
+      if(R[i][j]>=R[1-i][j] && C[i][j]>=C[i][1-j]) pure.push([i,j]);
+      el("cell"+i+""+j).classList.remove("ne");
+    }
+    pure.forEach(function(p){ el("cell"+p[0]+""+p[1]).classList.add("ne"); });
+
+    // dominance
+    var domTxt=[];
+    function checkDom(m, labels, who){
+      // m[k][o] = payoff to this player choosing k when other chooses o
+      for(var k=0;k<2;k++){
+        var o=1-k, ge=true, anyStrict=true, someStrict=false;
+        for(var t=0;t<2;t++){ if(!(m[k][t]>=m[o][t])) ge=false; if(!(m[k][t]>m[o][t])) anyStrict=false; if(m[k][t]>m[o][t]) someStrict=true; }
+        if(ge && someStrict) domTxt.push("<b>"+who+":</b> "+labels[k]+(anyStrict?" strictly":" weakly")+" dominates "+labels[o]);
+      }
+    }
+    checkDom(R, rl, "Row");
+    checkDom([[C[0][0],C[1][0]],[C[0][1],C[1][1]]], cl, "Column");
+    el("oDom").innerHTML = domTxt.length ? domTxt.join("<br>") : "None — every option is best against something.";
+
+    // mixed
+    var dr = R[0][0]-R[0][1]-R[1][0]+R[1][1];
+    var dc = C[0][0]-C[1][0]-C[0][1]+C[1][1];
+    var q = dr!==0 ? (R[1][1]-R[0][1])/dr : NaN;   // prob column plays option 0
+    var p = dc!==0 ? (C[1][1]-C[1][0])/dc : NaN;   // prob row plays option 0
+    var mixOK = (p>0&&p<1&&q>0&&q<1);
+    var evR=null, evC=null;
+    if(mixOK){
+      evR = p*q*R[0][0] + p*(1-q)*R[0][1] + (1-p)*q*R[1][0] + (1-p)*(1-q)*R[1][1];
+      evC = p*q*C[0][0] + p*(1-q)*C[0][1] + (1-p)*q*C[1][0] + (1-p)*(1-q)*C[1][1];
+      el("oMix").innerHTML = "Row plays <b>"+rl[0]+"</b> "+pct(p)+" of the time; Column plays <b>"+cl[0]+"</b> "+pct(q)+
+        ".<br><span style='color:var(--on-surface-variant)'>Expected payoffs "+fmt(evR)+" / "+fmt(evC)+"</span>";
+    } else {
+      el("oMix").textContent = "None in the interior — at least one player has a clearly better option whatever the other does.";
+    }
+
+    // pure display
+    if(pure.length===0){
+      el("oPure").innerHTML="<b>None.</b> Every cell has someone who wants to move. The system never rests — it cycles.";
+    } else {
+      el("oPure").innerHTML = pure.map(function(x){
+        return "<b>("+rl[x[0]]+", "+cl[x[1]]+")</b> → "+fmt(R[x[0]][x[1]])+" / "+fmt(C[x[0]][x[1]]);
+      }).join("<br>");
+    }
+
+    // family
+    var sym = (R[0][0]===C[0][0] && R[1][1]===C[1][1] && R[0][1]===C[1][0] && R[1][0]===C[0][1]);
+    var fam="", why="";
+    if(sym){
+      var Rw=R[0][0], S=R[0][1], T=R[1][0], P=R[1][1];
+      if(T>Rw&&Rw>P&&P>S){fam="Prisoner's Dilemma"; why="T &gt; R &gt; P &gt; S — defection dominates, and both suffer for it.";}
+      else if(Rw>T&&T>P&&P>S){fam="Stag Hunt"; why="R &gt; T &gt; P &gt; S — cooperation pays best but is risky. A trust problem, not an incentive problem.";}
+      else if(T>Rw&&Rw>S&&S>P){fam="Chicken / Hawk–Dove"; why="T &gt; R &gt; S &gt; P — mutual aggression is the worst outcome. Whoever commits first wins.";}
+      else if(Rw>T&&T>S&&S>P){fam="Harmony"; why="R &gt; T &gt; S &gt; P — cooperation dominates. No conflict to manage.";}
+      else {fam="Symmetric game"; why="Ordering doesn't match a named archetype — read the equilibria directly.";}
+    }
+    if(!fam){
+      var zs=true, k=R[0][0]+C[0][0];
+      for(var a=0;a<2;a++)for(var b=0;b<2;b++){ if(R[a][b]+C[a][b]!==k) zs=false; }
+      if(zs && pure.length===0){fam="Strictly competitive (zero-sum)"; why="One player's gain is the other's loss and there is no resting point — only mixing.";}
+      else if(pure.length===2){
+        var d0=R[pure[0][0]][pure[0][1]]-R[pure[1][0]][pure[1][1]];
+        var d1=C[pure[0][0]][pure[0][1]]-C[pure[1][0]][pure[1][1]];
+        if(d0*d1<0){fam="Battle of the Sexes"; why="Both want to agree; each prefers a different agreement. Whoever commits publicly first sets the standard.";}
+        else {fam="Coordination game"; why="Two attractors. Which one you land in is decided by history and focal points, not by the payoffs.";}
+      }
+      else if(pure.length===0){fam="Cycling game"; why="No pure equilibrium — predictability is punished, so the answer is a mixing frequency.";}
+      else {fam="Single-equilibrium game"; why="One attractor. The system settles here from anywhere.";}
+    }
+    el("oFamily").innerHTML="<b>"+fam+"</b><br><span style='color:var(--on-surface-variant);font-size:14px'>"+why+"</span>";
+
+    // efficiency
+    var eff = el("oEff");
+    function dominatedBy(vr, vc){
+      for(var a=0;a<2;a++)for(var b=0;b<2;b++){
+        if(R[a][b]>=vr && C[a][b]>=vc && (R[a][b]>vr || C[a][b]>vc)) return [a,b];
+      }
+      return null;
+    }
+    if(pure.length>0){
+      var bad=null, bp=null;
+      pure.forEach(function(x){ var d=dominatedBy(R[x[0]][x[1]], C[x[0]][x[1]]); if(d && !bad){bad=d; bp=x;} });
+      if(bad){
+        eff.className="verdict bad";
+        eff.innerHTML="The equilibrium <b>("+rl[bp[0]]+", "+cl[bp[1]]+")</b> is beaten for both players by <b>("+rl[bad[0]]+", "+cl[bad[1]]+")</b> — "+fmt(R[bad[0]][bad[1]])+" / "+fmt(C[bad[0]][bad[1]])+". Stability and desirability have come apart. Fixing this needs a change to the payoffs, not to anyone's attitude.";
+      } else {
+        eff.className="verdict ok";
+        eff.innerHTML="No equilibrium here is beaten for both players by another cell. The stable outcome is also on the efficient frontier.";
+      }
+    } else if(mixOK){
+      var d2=dominatedBy(evR, evC);
+      eff.className = d2 ? "verdict bad" : "verdict neu";
+      eff.innerHTML = d2
+        ? "The mixed outcome ("+fmt(evR)+" / "+fmt(evC)+") is beaten for both by <b>("+rl[d2[0]]+", "+cl[d2[1]]+")</b> — but that cell isn't stable, so nobody can hold it without an enforcement mechanism."
+        : "Only a mixed equilibrium exists. There's no restful outcome to compare against.";
+    } else {
+      eff.className="verdict neu"; eff.textContent="—";
+    }
+  }
+
+  document.getElementById("presets").addEventListener("click", function(e){
+    var b=e.target.closest(".chip"); if(!b) return;
+    Array.prototype.forEach.call(this.querySelectorAll(".chip"), function(c){c.classList.remove("on");});
+    b.classList.add("on"); load(b.dataset.p);
+  });
+  ["r00","r01","r10","r11","c00","c01","c10","c11"].forEach(function(i){
+    document.getElementById(i).addEventListener("input", function(){
+      Array.prototype.forEach.call(document.querySelectorAll("#presets .chip"), function(c){c.classList.remove("on");});
+      solve();
+    });
+  });
+  load("pd");
+
+  // scrollspy
+  var links = Array.prototype.slice.call(document.querySelectorAll("#toc a"));
+  var map = {};
+  links.forEach(function(a){ map[a.getAttribute("href").slice(1)] = a; });
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if(en.isIntersecting){
+        links.forEach(function(a){a.classList.remove("on");});
+        var a = map[en.target.id]; if(a) a.classList.add("on");
+      }
+    });
+  }, {rootMargin:"-10% 0px -80% 0px", threshold:0});
+  Object.keys(map).forEach(function(id){ var s=document.getElementById(id); if(s) obs.observe(s); });
+})();
+</script>
+
+</body></html>

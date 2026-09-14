@@ -1,0 +1,1015 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Anatomy of Social Systems</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,300..800&family=Roboto:ital,wght@0,400;0,500;0,700;1,400&family=Roboto+Mono:wght@400;500&display=swap">
+<style>
+/* ============ Material 3 tokens ============ */
+:root{
+  --primary:#35548e; --on-primary:#ffffff;
+  --primary-container:#d8e2ff; --on-primary-container:#00174a;
+  --secondary:#565e71; --on-secondary:#ffffff;
+  --secondary-container:#dbe2f9; --on-secondary-container:#131c2b;
+  --tertiary:#2f6a4f; --on-tertiary:#ffffff;
+  --tertiary-container:#b3f1cc; --on-tertiary-container:#002112;
+  --warn:#8a5100; --warn-container:#ffddb6; --on-warn-container:#2c1700;
+  --error:#ba1a1a; --on-error:#ffffff;
+  --error-container:#ffdad6; --on-error-container:#410002;
+  --surface:#faf8ff; --on-surface:#1a1b20;
+  --on-surface-variant:#44464f; --outline:#757780; --outline-variant:#c5c6d0;
+  --s-lowest:#ffffff; --s-low:#f4f3fa; --s-container:#eeedf4; --s-high:#e8e7ef; --s-highest:#e2e2e9;
+  --inverse-surface:#2f3036; --inverse-on-surface:#f1f0f7;
+  --fail-bg:var(--error-container); --fail-fg:var(--on-error-container);
+  color-scheme:light;
+  --scrim:rgba(0,0,0,.10);
+  --el1:0 1px 2px rgba(16,20,40,.09),0 1px 3px 1px rgba(16,20,40,.07);
+  --el2:0 1px 2px rgba(16,20,40,.09),0 2px 6px 2px rgba(16,20,40,.07);
+  --r-xs:4px; --r-s:8px; --r-m:12px; --r-l:16px; --r-xl:28px; --r-full:999px;
+}
+*{box-sizing:border-box}
+body{
+  background:var(--surface); color:var(--on-surface);
+  font-family:"Roboto","Helvetica Neue",Arial,sans-serif;
+  font-size:16px; line-height:1.55; margin:0;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--primary-container);color:var(--on-primary-container)}
+
+/* ============ type scale ============ */
+.display{font-family:"Roboto Flex","Roboto",sans-serif;font-weight:600;font-size:clamp(2.2rem,6vw,3.4rem);line-height:1.08;letter-spacing:-.02em;text-wrap:balance;margin:0}
+h2{font-family:"Roboto Flex","Roboto",sans-serif;font-weight:600;font-size:clamp(1.6rem,3.6vw,2.1rem);line-height:1.18;letter-spacing:-.015em;text-wrap:balance;margin:0}
+h3{font-family:"Roboto Flex","Roboto",sans-serif;font-weight:600;font-size:1.2rem;line-height:1.3;letter-spacing:-.005em;text-wrap:balance;margin:0}
+h4{font-family:"Roboto Flex","Roboto",sans-serif;font-weight:600;font-size:1rem;line-height:1.35;margin:0}
+p{margin:0}
+.eyebrow{font-family:"Roboto Mono",ui-monospace,monospace;font-size:.72rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--primary)}
+.label{font-family:"Roboto Mono",ui-monospace,monospace;font-size:.7rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--on-surface-variant)}
+.lead{font-size:1.1rem;line-height:1.6;color:var(--on-surface-variant)}
+.muted{color:var(--on-surface-variant)}
+strong{font-weight:700;color:var(--on-surface)}
+em{font-style:italic}
+a{color:var(--primary)}
+
+/* ============ shell ============ */
+.app{display:grid;grid-template-columns:88px minmax(0,1fr);min-height:100vh}
+.rail{
+  position:sticky;top:0;align-self:start;height:100vh;overflow-y:auto;
+  background:var(--surface);border-right:1px solid var(--outline-variant);
+  display:flex;flex-direction:column;align-items:center;gap:4px;padding:14px 0 24px;
+  scrollbar-width:thin;
+}
+.rail-mark{width:40px;height:40px;border-radius:var(--r-m);background:var(--primary-container);
+  color:var(--on-primary-container);display:grid;place-items:center;margin-bottom:12px;flex:none;
+  font-family:"Roboto Flex",sans-serif;font-weight:700;font-size:.95rem}
+.dest{display:flex;flex-direction:column;align-items:center;gap:3px;width:72px;padding:0;border:0;background:none;
+  color:var(--on-surface-variant);cursor:pointer;flex:none;text-decoration:none;font:inherit}
+.dest .ind{width:56px;height:32px;border-radius:var(--r-full);display:grid;place-items:center;
+  transition:background .18s ease,color .18s ease}
+.dest .txt{font-family:"Roboto",sans-serif;font-size:.68rem;font-weight:500;letter-spacing:.03em;line-height:1.2;text-align:center}
+.dest:hover .ind{background:var(--s-high)}
+.dest.active{color:var(--on-surface)}
+.dest.active .ind{background:var(--secondary-container);color:var(--on-secondary-container)}
+.dest:focus-visible{outline:3px solid var(--primary);outline-offset:3px;border-radius:var(--r-s)}
+
+.wrap{max-width:820px;margin-inline:auto;padding-inline:28px;padding-block:0 110px;width:100%}
+main{min-width:0}
+
+/* mobile nav */
+@media (max-width:900px){
+  .app{grid-template-columns:minmax(0,1fr)}
+  .rail{position:sticky;top:0;z-index:20;height:auto;flex-direction:row;align-items:center;
+    border-right:0;border-bottom:1px solid var(--outline-variant);overflow-x:auto;overflow-y:hidden;
+    padding:6px 12px;gap:2px;background:var(--s-low)}
+  .rail-mark{display:none}
+  .dest{flex-direction:row;width:auto;gap:6px;padding:7px 13px;border-radius:var(--r-full);white-space:nowrap}
+  .dest .ind{width:auto;height:auto;background:none!important}
+  .dest .txt{font-size:.8rem}
+  .dest.active{background:var(--secondary-container);color:var(--on-secondary-container)}
+  .wrap{padding-inline:18px}
+}
+@media (max-width:420px){ .wrap{padding-inline:16px} }
+
+/* ============ app bar / hero ============ */
+.appbar{padding-block:40px 8px}
+.appbar .display{margin-top:14px}
+.hero-sub{margin-top:20px;max-width:62ch}
+.thesis{margin-top:28px;border:1px solid var(--outline-variant);border-radius:var(--r-l);
+  background:var(--s-low);padding:20px 22px;display:flex;flex-direction:column;gap:9px}
+.thesis p{font-size:1.02rem;line-height:1.55}
+
+/* ============ sections ============ */
+section{padding-block:56px 0;scroll-margin-top:96px}
+.sechead{display:flex;flex-direction:column;gap:10px;margin-bottom:26px;
+  padding-bottom:18px;border-bottom:1px solid var(--outline-variant)}
+.sechead .intro{max-width:64ch;color:var(--on-surface-variant)}
+.stack{display:flex;flex-direction:column;gap:18px}
+.stack-s{display:flex;flex-direction:column;gap:12px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+
+/* ============ cards ============ */
+.card{background:var(--s-low);border-radius:var(--r-l);padding:20px 22px;display:flex;flex-direction:column;gap:11px}
+.card-out{background:transparent;border:1px solid var(--outline-variant)}
+.card-el{background:var(--s-lowest);box-shadow:var(--el1)}
+.card-tint{background:var(--s-container)}
+.card p{max-width:64ch}
+.card-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+
+/* axiom cards */
+.axiom{display:flex;gap:14px;align-items:flex-start;background:var(--s-low);border-radius:var(--r-m);padding:16px 18px}
+.axiom .tag{font-family:"Roboto Mono",monospace;font-size:.78rem;font-weight:500;color:var(--on-primary-container);
+  background:var(--primary-container);border-radius:var(--r-s);padding:3px 8px;flex:none}
+.axiom h4{margin-bottom:3px}
+.axiom .body{min-width:0}
+.axiom p{font-size:.93rem;color:var(--on-surface-variant)}
+
+/* principle callout */
+.principle{display:flex;gap:14px;align-items:flex-start;background:var(--primary-container);
+  color:var(--on-primary-container);border-radius:var(--r-m);padding:16px 18px}
+.principle p{font-size:1rem;line-height:1.5;max-width:60ch}
+.note{background:var(--tertiary-container);color:var(--on-tertiary-container);border-radius:var(--r-m);padding:15px 18px}
+.note p{font-size:.94rem;max-width:62ch}
+.fail{background:var(--fail-bg);color:var(--fail-fg);border-radius:var(--r-s);
+  border-left:3px solid var(--error);
+  padding:11px 14px;font-size:.9rem;line-height:1.45}
+.fail b{font-family:"Roboto Mono",monospace;font-size:.7rem;letter-spacing:.09em;text-transform:uppercase;
+  display:block;margin-bottom:3px;opacity:.85}
+
+/* chips */
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-family:"Roboto",sans-serif;font-size:.76rem;font-weight:500;line-height:1;
+  border:1px solid var(--outline-variant);border-radius:var(--r-s);padding:6px 10px;color:var(--on-surface-variant)}
+.chip.on{background:var(--secondary-container);color:var(--on-secondary-container);border-color:transparent}
+.chip.lead-mech{background:var(--primary-container);color:var(--on-primary-container);border-color:transparent}
+
+/* definition rows */
+.defs{display:flex;flex-direction:column;gap:0;border-top:1px solid var(--outline-variant)}
+.defs div{display:grid;grid-template-columns:104px minmax(0,1fr);gap:12px;padding:8px 0;
+  border-bottom:1px solid var(--outline-variant);font-size:.92rem;align-items:baseline}
+.defs dt,.defs .k{font-family:"Roboto Mono",monospace;font-size:.68rem;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--on-surface-variant)}
+.defs .v{color:var(--on-surface)}
+@media (max-width:520px){ .defs div{grid-template-columns:minmax(0,1fr);gap:2px} }
+
+/* icons */
+.ic{width:22px;height:22px;display:block;fill:none;stroke:currentColor;stroke-width:1.7;
+  stroke-linecap:round;stroke-linejoin:round}
+.iconbox{width:40px;height:40px;border-radius:var(--r-m);display:grid;place-items:center;flex:none;
+  background:var(--secondary-container);color:var(--on-secondary-container)}
+.iconbox .ic{width:21px;height:21px}
+.principle .ic{margin-top:3px;flex:none;color:var(--on-primary-container)}
+
+/* tables */
+.scroller{overflow-x:auto;border:1px solid var(--outline-variant);border-radius:var(--r-m);-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:.88rem}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--outline-variant);vertical-align:top}
+thead th{font-family:"Roboto Mono",monospace;font-size:.66rem;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--on-surface-variant);background:var(--s-container);position:sticky;top:0}
+tbody tr:last-child td{border-bottom:0}
+tbody th{font-weight:500;white-space:nowrap}
+td.num{text-align:center;font-variant-numeric:tabular-nums}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--outline-variant)}
+.dot.d2{background:var(--primary);opacity:.45}
+.dot.d3{background:var(--primary);width:12px;height:12px}
+
+/* diagram frames */
+figure{margin:0;background:var(--s-low);border-radius:var(--r-l);padding:18px;display:flex;flex-direction:column;gap:12px}
+figure .svgbox{overflow-x:auto}
+figure svg{display:block;min-width:520px;width:100%;height:auto}
+figcaption{font-size:.84rem;color:var(--on-surface-variant);max-width:62ch}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:.8rem;color:var(--on-surface-variant)}
+.legend span{display:flex;align-items:center;gap:6px}
+.swatch{width:14px;height:3px;border-radius:2px;display:inline-block}
+
+/* layer stack */
+.layers{display:flex;flex-direction:column;gap:5px}
+.layer{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;align-items:center;
+  border-radius:var(--r-s);padding:11px 15px;background:var(--s-container)}
+.layer .nm{font-weight:500;font-size:.95rem}
+.layer .mech{font-family:"Roboto Mono",monospace;font-size:.72rem;color:var(--on-surface-variant);text-align:right}
+.layer .sz{font-family:"Roboto Mono",monospace;font-size:.72rem;color:var(--primary);font-variant-numeric:tabular-nums}
+
+/* leverage ladder */
+.lever{display:grid;grid-template-columns:40px 1fr;gap:14px;align-items:start;padding:11px 0;border-bottom:1px solid var(--outline-variant)}
+.lever:last-child{border-bottom:0}
+.lever .n{font-family:"Roboto Mono",monospace;font-size:.82rem;font-variant-numeric:tabular-nums;
+  color:var(--on-surface-variant);padding-top:2px}
+.lever .t{font-weight:500}
+.lever .d{font-size:.9rem;color:var(--on-surface-variant);margin-top:2px}
+.lever.hi .n{color:var(--primary);font-weight:500}
+.lever.hi .t{color:var(--on-surface)}
+.ladder-key{display:flex;justify-content:space-between;font-family:"Roboto Mono",monospace;
+  font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--on-surface-variant);margin-bottom:4px}
+
+/* numbered questions */
+.q{display:grid;grid-template-columns:34px 1fr;gap:14px;align-items:start;padding:13px 0;border-bottom:1px solid var(--outline-variant)}
+.q:last-child{border-bottom:0}
+.q .n{width:28px;height:28px;border-radius:50%;background:var(--primary);color:var(--on-primary);
+  display:grid;place-items:center;font-family:"Roboto Mono",monospace;font-size:.78rem;font-weight:500}
+.q p{font-size:.98rem}
+.q .why{font-size:.85rem;color:var(--on-surface-variant);margin-top:3px}
+
+footer{margin-top:64px;padding-top:26px;border-top:1px solid var(--outline-variant);
+  font-size:.85rem;color:var(--on-surface-variant);display:flex;flex-direction:column;gap:8px}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<svg style="display:none" aria-hidden="true"><defs>
+<symbol id="i-axioms" viewBox="0 0 24 24"><path d="M3 20h18M6.5 20v-7h4.5v7M14 20V8h4.5v12"/></symbol>
+<symbol id="i-engine" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><circle cx="12" cy="12" r="7.6"/><path d="M12 2v2.4M12 19.6V22M2 12h2.4M19.6 12H22M5 5l1.7 1.7M17.3 17.3 19 19M19 5l-1.7 1.7M6.7 17.3 5 19"/></symbol>
+<symbol id="i-anatomy" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></symbol>
+<symbol id="i-map" viewBox="0 0 24 24"><path d="M9 4 3 6.2v14L9 18l6 2.2 6-2.2v-14L15 6.2 9 4zM9 4v14M15 6.2v14"/></symbol>
+<symbol id="i-dynamics" viewBox="0 0 24 24"><path d="M20.2 12a8.2 8.2 0 0 1-13.4 6.3M3.8 12A8.2 8.2 0 0 1 17.2 5.7"/><path d="M17.2 2.2v3.6h-3.6M6.8 21.8v-3.6h3.6"/></symbol>
+<symbol id="i-archetypes" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="10" height="10" rx="1.6"/><rect x="10.5" y="10.5" width="10" height="10" rx="1.6"/></symbol>
+<symbol id="i-coupling" viewBox="0 0 24 24"><path d="M10.2 13.8a4.2 4.2 0 0 0 5.9 0l3-3a4.2 4.2 0 0 0-5.9-5.9l-1.2 1.2M13.8 10.2a4.2 4.2 0 0 0-5.9 0l-3 3a4.2 4.2 0 0 0 5.9 5.9l1.2-1.2"/></symbol>
+<symbol id="i-leverage" viewBox="0 0 24 24"><path d="M3 20.5v-4.2h4.6V12h4.6V7.7h4.6V3.5H21"/></symbol>
+<symbol id="i-diagnostic" viewBox="0 0 24 24"><path d="M10 6h10M10 12h10M10 18h10M3.5 5.8 5 7.3 7.8 4.5M3.5 11.8 5 13.3l2.8-2.8M3.5 17.8 5 19.3l2.8-2.8"/></symbol>
+<symbol id="i-boundary" viewBox="0 0 24 24"><path d="M6.5 3.5v17M12 3.5v17M17.5 3.5v17M3 9h18M3 15h18"/></symbol>
+<symbol id="i-currency" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.3"/><circle cx="12" cy="12" r="3.4"/></symbol>
+<symbol id="i-feedback" viewBox="0 0 24 24"><path d="M3.8 8.8h14.4l-3.4-3.4M20.2 15.2H5.8l3.4 3.4"/></symbol>
+<symbol id="i-memory" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="4.6" rx="1.2"/><path d="M5 9.1v9.2a1.2 1.2 0 0 0 1.2 1.2h11.6a1.2 1.2 0 0 0 1.2-1.2V9.1M10 13.3h4"/></symbol>
+<symbol id="i-legitimacy" viewBox="0 0 24 24"><path d="M12 3 19.5 5.8v5.8c0 4.7-3.2 7.7-7.5 8.6-4.3-.9-7.5-3.9-7.5-8.6V5.8L12 3z"/><path d="M8.6 12.1 11 14.5l4.4-4.4"/></symbol>
+<symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13.2 2.5 4.8 13.6h5.6l-.6 7.9 8.4-11.1h-5.6l.6-7.9z"/></symbol>
+<symbol id="i-swap" viewBox="0 0 24 24"><path d="M4.8 8.6h14.4l-3.4-3.4M19.2 15.4H4.8l3.4 3.4"/></symbol>
+</defs></svg>
+
+<div class="app">
+<nav class="rail" aria-label="Sections">
+  <div class="rail-mark" aria-hidden="true">SS</div>
+  <a class="dest" href="#axioms"><span class="ind"><svg class="ic" aria-hidden="true"><use href="#i-axioms"/></svg></span><span class="txt">Axioms</span></a>
+  <a class="dest" href="#engine"><span class="ind"><svg class="ic" aria-hidden="true"><use href="#i-engine"/></svg></span><span class="txt">Engine</span></a>
+  <a class="dest" href="#anatomy"><span class="ind"><svg class="ic" aria-hidden="true"><use href="#i-anatomy"/></svg></span><span class="txt">Anatomy</span></a>
+  <a class="dest" href="#map"><span class="ind"><svg class="ic" aria-hidden="true"><use href="#i-map"/></svg></span><span class="txt">The map</span></a>
+  <a class="dest" href="#dynamics"><span class="ind"><svg class="ic" aria-hidden="true"><use href="#i-dynamics"/></svg></span><span class="txt">Dynamics</span></a>
+  <a class="dest" href="#archetypes"><span class="ind"><svg class="ic" aria-hidden="true"><use href="#i-archetypes"/></svg></span><span class="txt">Archetypes</span></a>
+  <a class="dest" href="#coupling"><span class="ind"><svg class="ic" aria-hidden="true"><use href="#i-coupling"/></svg></span><span class="txt">Coupling</span></a>
+  <a class="dest" href="#leverage"><span class="ind"><svg class="ic" aria-hidden="true"><use href="#i-leverage"/></svg></span><span class="txt">Leverage</span></a>
+  <a class="dest" href="#diagnostic"><span class="ind"><svg class="ic" aria-hidden="true"><use href="#i-diagnostic"/></svg></span><span class="txt">Diagnostic</span></a>
+</nav>
+
+<main>
+<div class="wrap">
+
+<header class="appbar">
+  <p class="eyebrow">First principles &rarr; systems</p>
+  <h1 class="display">Anatomy of Social Systems</h1>
+  <p class="lead hero-sub">Six facts about being human generate every institution humans have ever built. This derives them from those six, maps the major ones as instances of a single mechanism, and then treats them as what they are &mdash; feedback systems with stocks, loops, delays and leverage points.</p>
+  <div class="thesis">
+    <p class="label">The argument in one sentence</p>
+    <p>A social system is a <strong>cached answer to a recurring coordination problem</strong>, held in place by one of exactly four enforcement mechanisms, and it behaves like any other feedback system &mdash; which is why the same failures recur in institutions that have nothing else in common.</p>
+  </div>
+</header>
+
+<!-- ================= AXIOMS ================= -->
+<section id="axioms">
+  <div class="sechead">
+    <p class="eyebrow">Layer 1</p>
+    <h2>The six axioms</h2>
+    <p class="intro">These are the irreducibles &mdash; facts about humans in a physical world that you cannot subtract without ceasing to describe humans. Everything after this is derived from them. They are numbered so later derivations can cite them.</p>
+  </div>
+  <div class="stack-s">
+    <div class="axiom"><span class="tag">A1</span><div class="body"><h4>Scarcity</h4><p>Wants exceed means at every moment. Something must decide who gets what, and the decision recurs forever.</p></div></div>
+    <div class="axiom"><span class="tag">A2</span><div class="body"><h4>Interdependence</h4><p>A human among humans produces vastly more than a human alone. Specialisation and joint action create a surplus that solitary life cannot.</p></div></div>
+    <div class="axiom"><span class="tag">A3</span><div class="body"><h4>Divergent interest</h4><p>The surplus can be divided many ways, and each party prefers a different division. <em>Every cooperative act contains a distributive conflict.</em> This is why cooperation is never automatic.</p></div></div>
+    <div class="axiom"><span class="tag">A4</span><div class="body"><h4>Opacity</h4><p>I cannot directly observe your intentions, your effort, or the quality of what you are selling me. Information is private, asymmetric, and cheap to misrepresent.</p></div></div>
+    <div class="axiom"><span class="tag">A5</span><div class="body"><h4>Sequence</h4><p>Cooperation is spread over time &mdash; I give now, you repay later. That gap is where defection lives, and the further apart the halves, the wider the gap.</p></div></div>
+    <div class="axiom"><span class="tag">A6</span><div class="body"><h4>Turnover</h4><p>Every person exits. Anything that must outlive a person has to be re-installed, from scratch, in people who were not there when it was agreed.</p></div></div>
+  </div>
+</section>
+
+<!-- ================= ENGINE ================= -->
+<section id="engine">
+  <div class="sechead">
+    <p class="eyebrow">Layer 2</p>
+    <h2>The engine: five derivations</h2>
+    <p class="intro">Each step takes only the axioms above and what precedes it. By the end you have a general definition of a social system, a complete list of the mechanisms that can hold one together, and an explanation of why they all eventually turn on their own purpose.</p>
+  </div>
+  <div class="stack">
+
+    <article class="card">
+      <div class="card-head"><h3>1 &middot; Why institutions exist at all</h3><span class="chip">from A1&ndash;A3</span></div>
+      <p>Scarcity and divergent interest mean a group faces the same distributive decisions over and over: who eats first, who leads, who takes the risk, who keeps the output. If each instance were negotiated fresh, the cost of <em>deciding</em> would consume the surplus that cooperation created in the first place.</p>
+      <p>So groups do the only thing available: they <strong>precompute the answer</strong>. A rule is a cached decision. A norm is a cache with social enforcement. An institution is a cache with a maintenance staff, an eviction policy, and an enforcement arm.</p>
+      <div class="principle"><svg class="ic" aria-hidden="true"><use href="#i-bolt"/></svg><p><strong>Principle 1.</strong> A social system is <strong>compressed coordination</strong> &mdash; it exists to make a recurring decision cheap, predictable, and survivable across the people who make it.</p></div>
+      <p>Two consequences follow immediately, and they are the same fact seen from two sides. Institutions are <em>rigid</em>, and rigidity is not a defect but the source of the saving: a rule you can renegotiate is a rule that costs as much as deciding fresh. And institutions <em>misfire</em>, because a cache by definition returns yesterday's answer to today's question. Every complaint about bureaucracy and every defence of the rule of law are both restatements of this trade-off.</p>
+      <p class="muted">It also gives you a rough valuation: an institution is worth keeping when <span style="font-family:'Roboto Mono',monospace;font-size:.9em">(cost of deciding fresh &times; frequency)</span> exceeds <span style="font-family:'Roboto Mono',monospace;font-size:.9em">(maintenance + the damage done by the cases the cached answer gets wrong)</span>. Most arguments about reform are arguments about one of those four terms.</p>
+    </article>
+
+    <article class="card">
+      <div class="card-head"><h3>2 &middot; Why cooperation needs enforcement, and the only four ways to get it</h3><span class="chip">from A4&ndash;A5</span></div>
+      <p>Opacity plus sequence gives you the defection problem: at the moment I must repay you, defecting is locally better for me, and you cannot see that I am about to. Cooperation is therefore only stable if something makes defection unprofitable. Exhaustively, there are four ways to do that &mdash; and every institution in history is a particular blend of them.</p>
+      <div class="stack-s">
+        <div class="axiom"><span class="tag">1</span><div class="body"><h4>Repetition &mdash; direct reciprocity</h4><p>I will meet you again, so defecting costs me our future. Needs only memory of one person. Free to run. Breaks the moment interactions become one-shot &mdash; which is what &ldquo;a city&rdquo; means.</p></div></div>
+        <div class="axiom"><span class="tag">2</span><div class="body"><h4>Reputation &mdash; indirect reciprocity</h4><p>Others will hear, so defecting costs me my future partners. Needs an information channel: gossip, references, credit records, ratings. Extends trust to people I have never met but can look up. Breaks when the channel gets too noisy or too large to cover everyone.</p></div></div>
+        <div class="axiom"><span class="tag">3</span><div class="body"><h4>Third-party enforcement</h4><p>Someone with power punishes on the group's behalf. Scales indefinitely and is the only mechanism that works between strangers with no shared future. Its price is a hard second-order problem: <em>who enforces against the enforcer?</em> Most of constitutional design is an answer to that one question.</p></div></div>
+        <div class="axiom"><span class="tag">4</span><div class="body"><h4>Internalisation</h4><p>I do not defect because I do not want to &mdash; the cost has been moved inside me as conscience, honour, shame, professional ethic, faith. Infinitely scalable and nearly free to operate, because no one has to watch. Extremely expensive to install: the installation takes a childhood, and it can only be done by institutions that have people for years.</p></div></div>
+      </div>
+      <div class="principle"><svg class="ic" aria-hidden="true"><use href="#i-bolt"/></svg><p><strong>Principle 2.</strong> Identify which of the four mechanisms is <strong>carrying the load</strong> in a given system. It predicts the system's maximum size, its running cost, and how it will fail &mdash; more than any other single fact about it.</p></div>
+    </article>
+
+    <article class="card">
+      <div class="card-head"><h3>3 &middot; The scale problem, and why society is layered</h3><span class="chip">from 2 + A6</span></div>
+      <p>The four mechanisms have carrying capacities, and they are wildly different. Repetition holds a few dozen people. Reputation-by-gossip holds a few hundred &mdash; the range Dunbar's work associates with stable human groupings. Beyond that, most of the people you depend on are strangers you will never meet twice and cannot look up, and both mechanisms are simply gone.</p>
+      <p>So every increase in group size <em>breaks</em> the mechanism that was holding the previous size together, and forces the invention of a replacement. That is not a metaphor for history; it is the plot of history.</p>
+      <div class="principle"><svg class="ic" aria-hidden="true"><use href="#i-bolt"/></svg><p><strong>Principle 3.</strong> A society is a <strong>stack of trust technologies</strong>, each invented to reach a group size the one below it could not hold. New layers do not replace old ones &mdash; they sit on top, and the old ones keep running underneath.</p></div>
+      <p>You use all of them before lunch: repetition with your household, reputation with your colleagues, third-party enforcement with your landlord and your bank, and internalised norms for the very large number of things nobody is checking.</p>
+    </article>
+
+    <article class="card">
+      <div class="card-head"><h3>4 &middot; The five parts every system must have</h3><span class="chip">from 1&ndash;3 + A6</span></div>
+      <p>Given that a system must decide, enforce, and survive turnover, five components are individually necessary. Remove any one and the thing dissolves &mdash; usually within a generation, because A6 keeps supplying people who were not there for the founding.</p>
+      <p>They are set out in full in the next section, because they are the working tool: <strong>boundary, currency, feedback, memory, legitimacy</strong>.</p>
+      <div class="note"><p><strong>Why this matters practically:</strong> almost every institutional failure is a failure in exactly one of the five, not in all of them. Naming which one converts &ldquo;this is broken&rdquo; into a specific, addressable claim.</p></div>
+    </article>
+
+    <article class="card">
+      <div class="card-head"><h3>5 &middot; Why every system acquires a goal of its own</h3><span class="chip">from 1 + A1</span></div>
+      <p>The moment an institution exists, it contains people whose livelihood, status and identity depend on its continuation. That creates a second-order interest that no one designed: <strong>the survival of the system, independent of the function it was built for.</strong></p>
+      <p>This needs no conspiracy and no bad actors &mdash; it is a selection effect. Among institutions that exist, the ones that did not prioritise their own reproduction have already stopped existing. What survives to be observed is, on average, what protects itself.</p>
+      <div class="principle"><svg class="ic" aria-hidden="true"><use href="#i-bolt"/></svg><p><strong>Principle 4.</strong> Every social system has at least two goals &mdash; the <strong>stated</strong> one and the <strong>reproductive</strong> one. Where they conflict over long horizons, the reproductive one tends to win.</p></div>
+      <p>One fact, and you have explained goal displacement, mission creep, credential inflation, regulatory capture, the difficulty of shutting down a programme that has succeeded, and why reform is harder than founding.</p>
+    </article>
+
+  </div>
+</section>
+
+<!-- ================= ANATOMY ================= -->
+<section id="anatomy">
+  <div class="sechead">
+    <p class="eyebrow">Layer 3</p>
+    <h2>Anatomy: the five invariants</h2>
+    <p class="intro">Every durable social system &mdash; a family, a central bank, a religion, a trade union, a scientific field &mdash; has all five of these. They are the parts list. Naming them for an unfamiliar institution is the fastest way to understand it, and naming the broken one is the fastest way to diagnose it.</p>
+  </div>
+
+  <div class="stack-s">
+    <div class="card card-tint" style="flex-direction:row;gap:16px;align-items:flex-start">
+      <span class="iconbox"><svg class="ic" aria-hidden="true"><use href="#i-boundary"/></svg></span>
+      <div class="stack-s" style="min-width:0"><h3>1 &middot; Boundary</h3>
+      <p>Who is inside, who is outside, and how you cross. Citizenship, membership, employment, marriage, baptism, caste, verification. Without a boundary nobody is <em>bound</em> &mdash; there is no one the rules apply to and no penalty that means anything, because exit is free.</p>
+      <p class="muted">Watch the entry and exit costs: a system with cheap exit must earn compliance continuously; a system with costly exit can afford to be bad for a long time.</p></div>
+    </div>
+
+    <div class="card card-tint" style="flex-direction:row;gap:16px;align-items:flex-start">
+      <span class="iconbox"><svg class="ic" aria-hidden="true"><use href="#i-currency"/></svg></span>
+      <div class="stack-s" style="min-width:0"><h3>2 &middot; Currency</h3>
+      <p>What counts as value inside the system &mdash; the thing members are actually competing for. Money, votes, citations, grades, rank, followers, honour, salvation, tenure. It need not be numeric and is usually not designed.</p>
+      <p class="muted">The currency, not the mission statement, tells you what the system will produce. If you want to predict behaviour, find what gets people more of the currency.</p></div>
+    </div>
+
+    <div class="card card-tint" style="flex-direction:row;gap:16px;align-items:flex-start">
+      <span class="iconbox"><svg class="ic" aria-hidden="true"><use href="#i-feedback"/></svg></span>
+      <div class="stack-s" style="min-width:0"><h3>3 &middot; Feedback</h3>
+      <p>How the system rewards and punishes &mdash; and crucially, <em>how fast</em>. Price, profit and loss, promotion, verdict, grade, election, excommunication, a rating. Without feedback, behaviour has no reason to adjust and the system drifts.</p>
+      <p class="muted">Speed matters more than strength. A weak signal that arrives in a week shapes behaviour more than a severe one that arrives in a decade.</p></div>
+    </div>
+
+    <div class="card card-tint" style="flex-direction:row;gap:16px;align-items:flex-start">
+      <span class="iconbox"><svg class="ic" aria-hidden="true"><use href="#i-memory"/></svg></span>
+      <div class="stack-s" style="min-width:0"><h3>4 &middot; Memory</h3>
+      <p>How the rules survive the people who made them &mdash; the direct answer to turnover (A6). Ritual, oral law, scripture, written statute, precedent, the bureaucratic file, the audit trail, the database schema.</p>
+      <p class="muted">Each memory technology has a different rewrite cost, and the rewrite cost <em>is</em> the system's adaptability. Ritual is almost unamendable; a database schema changes on Tuesday. Most of what feels like a system's temperament is really the cost of editing its memory.</p></div>
+    </div>
+
+    <div class="card card-tint" style="flex-direction:row;gap:16px;align-items:flex-start">
+      <span class="iconbox"><svg class="ic" aria-hidden="true"><use href="#i-legitimacy"/></svg></span>
+      <div class="stack-s" style="min-width:0"><h3>5 &middot; Legitimacy</h3>
+      <p>Why people comply when nobody is watching. Weber's three grounds &mdash; tradition, charisma, legality &mdash; plus consent and demonstrated performance; fear is the degenerate case that has to be paid for continuously.</p>
+      <p class="muted">Legitimacy is an <strong>economic</strong> variable, not a sentimental one: it is the discount on enforcement. A system with high legitimacy polices itself almost for free; one without it must buy compliance, and the bill grows faster than the system can pay.</p></div>
+    </div>
+  </div>
+
+  <div style="height:34px"></div>
+  <h3>Where each mechanism stops working</h3>
+  <p class="muted" style="margin-top:8px;max-width:64ch">The four enforcement mechanisms are not interchangeable &mdash; each has a group size beyond which it simply cannot function, and third-party enforcement has a <em>floor</em> as well as no ceiling: it needs enough surplus to pay specialists and enough record-keeping to prove what happened. This is the constraint that forces societies to keep inventing new layers.</p>
+  <div style="height:14px"></div>
+
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 760 268" role="img" aria-label="Bar chart of the group size each enforcement mechanism can hold. Repetition reaches about 50 people, reputation about 500, third-party enforcement spans roughly 1,000 to over a billion, and internalisation has no ceiling.">
+      <g font-family="Roboto Mono, monospace" font-size="11" fill="var(--on-surface-variant)">
+        <text x="16" y="30" letter-spacing="1.2">GROUP SIZE HELD &rarr;</text>
+      </g>
+      <!-- gridlines -->
+      <g stroke="var(--outline-variant)" stroke-width="1">
+        <line x1="186.2" y1="40" x2="186.2" y2="236"/>
+        <line x1="289.6" y1="40" x2="289.6" y2="236"/>
+        <line x1="393.1" y1="40" x2="393.1" y2="236"/>
+        <line x1="496.6" y1="40" x2="496.6" y2="236"/>
+        <line x1="600" y1="40" x2="600" y2="236"/>
+      </g>
+      <line x1="150" y1="236" x2="600" y2="236" stroke="var(--outline)" stroke-width="1.5"/>
+      <g font-family="Roboto Mono, monospace" font-size="11" fill="var(--on-surface-variant)" text-anchor="middle">
+        <text x="186.2" y="253">10</text>
+        <text x="289.6" y="253">1k</text>
+        <text x="393.1" y="253">100k</text>
+        <text x="496.6" y="253">10M</text>
+        <text x="600" y="253">1B</text>
+      </g>
+      <!-- bars -->
+      <g>
+        <rect x="150" y="44" width="72.4" height="28" rx="6" fill="var(--tertiary)"/>
+        <rect x="150" y="90" width="124.1" height="28" rx="6" fill="var(--tertiary)"/>
+        <rect x="289.6" y="136" width="310.4" height="28" rx="6" fill="var(--primary)"/>
+        <rect x="150" y="182" width="450" height="28" rx="6" fill="var(--primary)"/>
+      </g>
+      <g font-family="Roboto, sans-serif" font-size="13" fill="var(--on-surface)">
+        <text x="16" y="63">Repetition</text>
+        <text x="16" y="109">Reputation</text>
+        <text x="16" y="155">Third party</text>
+        <text x="16" y="201">Internalised</text>
+      </g>
+      <g font-family="Roboto Mono, monospace" font-size="11.5" fill="var(--on-surface-variant)">
+        <text x="232.4" y="63">&asymp; 50</text>
+        <text x="284.1" y="109">&asymp; 500</text>
+        <text x="610" y="155">no ceiling</text>
+        <text x="610" y="201">no ceiling</text>
+      </g>
+      <text x="289.6" y="128" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--on-surface-variant)">floor: needs surplus + records</text>
+    </svg>
+    </div>
+    <div class="legend">
+      <span><span class="swatch" style="background:var(--tertiary)"></span> personal &mdash; needs you to be known</span>
+      <span><span class="swatch" style="background:var(--primary)"></span> impersonal &mdash; works between strangers</span>
+    </div>
+    <figcaption>Log scale; capacities are orders of magnitude, not measurements. The useful reading is the <em>shape</em>: the two cheap mechanisms run out early, and the two that scale are the two that are hardest to build &mdash; one needs a state, the other needs a childhood.</figcaption>
+  </figure>
+
+  <div style="height:34px"></div>
+  <h3>The historical stack</h3>
+  <p class="muted" style="margin-top:8px;max-width:64ch">Read this bottom-up as an answer to the same repeated question: <em>the last mechanism stopped working at this size &mdash; now what?</em> Each row is a new trust technology, not a replacement for the row below it.</p>
+  <div style="height:14px"></div>
+  <div class="layers">
+    <div class="layer"><span class="nm">Networked &mdash; platforms, ratings, algorithmic reputation<br><span class="sz">1B+</span></span><span class="mech">reputation, rebuilt<br>at stranger scale</span></div>
+    <div class="layer"><span class="nm">Administrative &mdash; bureaucracy, records, credentials<br><span class="sz">10M – 1B+</span></span><span class="mech">third party<br>+ professional ethic</span></div>
+    <div class="layer"><span class="nm">Market &mdash; money, contract, impersonal exchange<br><span class="sz">1M – 1B+</span></span><span class="mech">third party<br>+ reputation</span></div>
+    <div class="layer"><span class="nm">State &mdash; writing, law, taxation, standing force<br><span class="sz">10k – 10M</span></span><span class="mech">third party</span></div>
+    <div class="layer"><span class="nm">Chiefdom &mdash; redistribution, rank, shared cult<br><span class="sz">1k – 10k</span></span><span class="mech">internalisation<br>+ reputation</span></div>
+    <div class="layer"><span class="nm">Tribe &mdash; kinship reckoning, ritual, honour<br><span class="sz">100 – 1k</span></span><span class="mech">reputation</span></div>
+    <div class="layer"><span class="nm">Band &mdash; face-to-face, everyone known to everyone<br><span class="sz">10 – 100</span></span><span class="mech">repetition</span></div>
+  </div>
+  <div style="height:16px"></div>
+  <div class="note"><p>The stack explains a persistent confusion. When people say a society is &ldquo;low-trust&rdquo; they usually mean something precise: its <em>upper</em> layers are weak, so load falls back onto the lower ones. Kinship and personal networks then do the work that contract and courts do elsewhere &mdash; which looks like a cultural preference for family, and is in fact an enforcement substitution.</p></div>
+</section>
+
+<!-- ================= MAP ================= -->
+<section id="map">
+  <div class="sechead">
+    <p class="eyebrow">Layer 4</p>
+    <h2>The map: twelve systems, one mechanism</h2>
+    <p class="intro">Each of these is the same object &mdash; a cached answer, an enforcement blend, five invariants &mdash; specialised to a different coordination problem. Read them as instances, not as a taxonomy: the interest is in how the <em>same</em> parts get configured differently, and how that configuration predicts the characteristic failure.</p>
+  </div>
+  <div class="stack">
+
+  <article class="card card-el">
+    <h3>Kinship &amp; family</h3>
+    <p><strong>Problem:</strong> reproduction, the care of people who cannot reciprocate, and transfer across generations &mdash; the direct answer to A6.</p>
+    <div class="defs">
+      <div><span class="k">Boundary</span><span class="v">Blood, marriage, adoption &mdash; the only major boundary that is largely unchosen</span></div>
+      <div><span class="k">Currency</span><span class="v">Obligation and affection; explicitly not priced</span></div>
+      <div><span class="k">Feedback</span><span class="v">Lifelong, diffuse, almost never settled in any single transaction</span></div>
+      <div><span class="k">Memory</span><span class="v">Ritual, naming, inheritance rules</span></div>
+      <div><span class="k">Legitimacy</span><span class="v">Tradition and biology &mdash; the least argued-for of any system</span></div>
+    </div>
+    <div class="chips"><span class="chip lead-mech">Internalisation</span><span class="chip on">Repetition</span><span class="chip">Reputation</span><span class="chip">Third party</span></div>
+    <p>Its distinctive property is the high exit cost, and that is not incidental &mdash; it is what lets the family carry obligations no contract could express. Nobody can specify in advance what caring for an infant or a dying parent requires, so no market or bureaucracy can contract for it. The family handles exactly the class of obligation that is <em>unenumerable</em>, and it can do so only because leaving is hard.</p>
+    <div class="fail"><b>Characteristic failure</b>Leakage: when kinship logic enters systems built on impersonal rules, it reads as nepotism &mdash; and it is, but it is also just the older layer doing what it always did. The mirror failure is overload: handing the family risks (income smoothing, elder care, unemployment) that exceed the scale a household can pool.</div>
+  </article>
+
+  <article class="card card-el">
+    <h3>Economy &amp; markets</h3>
+    <p><strong>Problem:</strong> allocating scarce goods when the relevant knowledge &mdash; who wants what, who can make it cheapest &mdash; is scattered across millions of heads and nobody can collect it.</p>
+    <div class="defs">
+      <div><span class="k">Boundary</span><span class="v">Property rights: who may exclude whom from what</span></div>
+      <div><span class="k">Currency</span><span class="v">Money &mdash; the only currency here that is literally a currency</span></div>
+      <div><span class="k">Feedback</span><span class="v">Profit and loss; among the fastest signals any social system generates</span></div>
+      <div><span class="k">Memory</span><span class="v">Contract, ledger, the firm as a persistent bundle of routines</span></div>
+      <div><span class="k">Legitimacy</span><span class="v">Voluntariness of each exchange, plus aggregate prosperity</span></div>
+    </div>
+    <div class="chips"><span class="chip lead-mech">Third party</span><span class="chip on">Reputation</span><span class="chip on">Repetition</span><span class="chip">Internalisation</span></div>
+    <p>The price system is best understood as a distributed computer. It compresses everything anyone knows about relative scarcity into one number per good, and that number travels to strangers who need none of the underlying information to act correctly on it. This is why markets beat central allocation precisely where local knowledge is dense and changing &mdash; and why they do no better than anything else where the relevant facts are few, stable, and already known.</p>
+    <p><strong>The firm is the market's own exception.</strong> Coase's question &mdash; if markets are efficient, why is so much economic life organised as command hierarchies? &mdash; has the answer that using the market costs something: search, negotiation, contracting, enforcement. Where that cost exceeds the cost of just telling someone what to do, you get a firm. The boundary between firm and market sits wherever the two costs meet, which is why falling information costs reshape company size in both directions.</p>
+    <div class="fail"><b>Characteristic failure</b>Every market failure is a case where <em>the price is not telling the truth</em>: externalities (a real cost that never enters the number), public goods (no way to exclude, so no price forms), asymmetric information (the buyer cannot evaluate what the number is for), and concentration (the number is set rather than discovered).</div>
+  </article>
+
+  <article class="card card-el">
+    <h3>State &amp; polity</h3>
+    <p><strong>Problem:</strong> making decisions that bind everyone including dissenters, and being the enforcer of last resort so that other systems can rely on one.</p>
+    <div class="defs">
+      <div><span class="k">Boundary</span><span class="v">Territory and citizenship &mdash; exit requires physical movement</span></div>
+      <div><span class="k">Currency</span><span class="v">Authority, and its meta-currency, legitimacy</span></div>
+      <div><span class="k">Feedback</span><span class="v">Elections, fiscal solvency, unrest, war &mdash; all slow, coarse and bundled</span></div>
+      <div><span class="k">Memory</span><span class="v">Constitution, statute, the permanent bureaucracy, the archive</span></div>
+      <div><span class="k">Legitimacy</span><span class="v">The entire game &mdash; nothing else determines its running cost</span></div>
+    </div>
+    <div class="chips"><span class="chip lead-mech">Third party</span><span class="chip on">Internalisation</span><span class="chip">Reputation</span><span class="chip">Repetition</span></div>
+    <p>The state does not merely <em>use</em> third-party enforcement; it <em>is</em> the third party. That makes the second-order problem from Derivation 2 &mdash; who enforces against the enforcer &mdash; not one problem among many but the central one. Separation of powers, independent courts, federalism, fixed terms, a free press, civilian control of the military: these are not separate good ideas. They are a family of answers to a single structural question, each installing a balancing loop against the one actor no external loop can reach.</p>
+    <p>The feedback signal is also unusually poor. An election is one bundled verdict, delivered every few years, on dozens of unrelated decisions, by people who cannot observe most of them. Almost everything strange about democratic politics follows from trying to steer a complex system through a channel that narrow.</p>
+    <div class="fail"><b>Characteristic failure</b>Two opposite ones, often confused. <em>Capture</em>: the enforcer is bought by those it should constrain. <em>Insufficient capacity</em>: the writ does not actually reach, and kinship networks, local strongmen or protection rackets supply enforcement instead &mdash; because the demand for enforcement does not disappear when the supply does.</div>
+  </article>
+
+  <article class="card card-el">
+    <h3>Law</h3>
+    <p><strong>Problem:</strong> making the cached answers explicit, general and predictable, so that people can plan their lives around what will happen.</p>
+    <div class="defs">
+      <div><span class="k">Boundary</span><span class="v">Jurisdiction</span></div>
+      <div><span class="k">Currency</span><span class="v">Rights, standing, liability</span></div>
+      <div><span class="k">Feedback</span><span class="v">Verdicts &mdash; accurate but very slow, and only for disputes someone can afford to bring</span></div>
+      <div><span class="k">Memory</span><span class="v">Statute and precedent</span></div>
+      <div><span class="k">Legitimacy</span><span class="v">Procedure: the outcome is legitimate because the process was followed</span></div>
+    </div>
+    <div class="chips"><span class="chip lead-mech">Third party</span><span class="chip on">Internalisation</span><span class="chip">Reputation</span><span class="chip">Repetition</span></div>
+    <p>Law is the purest memory institution in existence &mdash; a literal written cache of past decisions, with an explicit protocol for when the cache may be overwritten. Precedent is cache reuse; distinguishing a case is a cache miss; legislation is an invalidation. Its unusual legitimacy basis follows from this: because the whole value is predictability, the <em>process</em> has to be the thing that confers rightness, or the cache cannot be trusted.</p>
+    <div class="fail"><b>Characteristic failure</b><em>Delay</em> &mdash; feedback slower than the behaviour it governs, which makes the sanction stop deterring. <em>Formalism</em> &mdash; the cached answer no longer matches the world but the invalidation protocol is too expensive to run. <em>Access</em> &mdash; enforcement exists in principle and is available only to those who can pay for it, which quietly converts a third-party system into a market one.</div>
+  </article>
+
+  <article class="card card-el">
+    <h3>Religion &amp; morality</h3>
+    <p><strong>Problem:</strong> making internalisation scale &mdash; moving the cost of punishment inside the person, where no monitoring is required.</p>
+    <div class="defs">
+      <div><span class="k">Boundary</span><span class="v">Profession of faith, ritual participation, community membership</span></div>
+      <div><span class="k">Currency</span><span class="v">Righteousness, standing, salvation</span></div>
+      <div><span class="k">Feedback</span><span class="v">Conscience (instant), community sanction (fast), the afterlife (infinitely delayed, infinitely large)</span></div>
+      <div><span class="k">Memory</span><span class="v">Scripture plus ritual repetition &mdash; the highest-fidelity, highest-rewrite-cost memory there is</span></div>
+      <div><span class="k">Legitimacy</span><span class="v">Transcendence &mdash; grounded outside the system, so not falsifiable from inside it</span></div>
+    </div>
+    <div class="chips"><span class="chip lead-mech">Internalisation</span><span class="chip on">Reputation</span><span class="chip on">Repetition</span><span class="chip">Third party</span></div>
+    <p>Three mechanisms here are worth isolating. The <strong>afterlife solves time discounting</strong>: the defection problem in A5 exists because the payoff is now and the punishment is later, and an unboundedly large delayed sanction is a direct counterweight to that discount. <strong>Costly signalling solves A4</strong>: fasting, tithing, dietary law and pilgrimage are expensive and hard to fake, so they identify genuine members cheaply &mdash; the apparent irrationality is the point. And <strong>ritual is memory with an almost infinite rewrite cost</strong>, which is what lets rules survive the generational turnover that destroys everything easier to edit.</p>
+    <div class="fail"><b>Characteristic failure</b>Rigidity, as the cost of the same feature that gives it persistence: a memory this expensive to edit cannot track new knowledge. And boundary-hardening: when the in-group marker is the enforcement mechanism, strengthening compliance and sharpening conflict are the same operation.</div>
+  </article>
+
+  <article class="card card-el">
+    <h3>Education</h3>
+    <p><strong>Problem:</strong> two of them, which is why the institution is permanently contested and permanently unsatisfying.</p>
+    <div class="defs">
+      <div><span class="k">Job A</span><span class="v"><strong>Transmission</strong> &mdash; reinstall the culture, skills and internalised norms in new people (answers A6)</span></div>
+      <div><span class="k">Job B</span><span class="v"><strong>Sorting</strong> &mdash; rank and certify people so other systems can allocate them (answers A4)</span></div>
+      <div><span class="k">Currency</span><span class="v">Credentials</span></div>
+      <div><span class="k">Feedback</span><span class="v">Grades: fast and noisy. Lifetime outcomes: accurate and twenty years late.</span></div>
+      <div><span class="k">Legitimacy</span><span class="v">Meritocratic fairness of the sorting, which the transmission job never gets asked about</span></div>
+    </div>
+    <div class="chips"><span class="chip lead-mech">Internalisation</span><span class="chip on">Third party</span><span class="chip on">Reputation</span><span class="chip">Repetition</span></div>
+    <p>The two jobs pull in opposite directions and one of them is measurable. Transmission wants difficulty, slack, failure without consequence, and things learned for their own sake; sorting wants a clean comparable ranking. Because only the second produces a number, it dominates &mdash; and once it dominates you have a positional good, where my credential is worth less the more of them exist. That is a pure arms race: everyone runs faster and nobody arrives earlier.</p>
+    <div class="fail"><b>Characteristic failure</b>Credential inflation, which is the escalation archetype with a twenty-year delay attached. Note that no individual is behaving irrationally at any point &mdash; which is why exhortation never fixes it and only a change to the sorting rule can.</div>
+  </article>
+
+  <article class="card card-el">
+    <h3>Information &amp; media</h3>
+    <p><strong>Problem:</strong> strangers cannot coordinate without shared facts, and almost nothing anyone acts on can be personally verified.</p>
+    <div class="defs">
+      <div><span class="k">Boundary</span><span class="v">Weak and porous &mdash; audience, not membership</span></div>
+      <div><span class="k">Currency</span><span class="v">Attention</span></div>
+      <div><span class="k">Feedback</span><span class="v">Whatever the revenue model rewards, and nothing else</span></div>
+      <div><span class="k">Memory</span><span class="v">Archive and record &mdash; historically strong, structurally weakening</span></div>
+      <div><span class="k">Legitimacy</span><span class="v">Accuracy, professional norms, institutional reputation</span></div>
+    </div>
+    <div class="chips"><span class="chip lead-mech">Reputation</span><span class="chip on">Internalisation</span><span class="chip">Third party</span><span class="chip">Repetition</span></div>
+    <p>This system has the sharpest currency-versus-goal gap of any on the map. The goal is accuracy; the currency is attention; and attention is maximised by arousal, not by truth. Where the enforcement mechanism is professional internalisation (an editorial norm) the gap stays bounded; where the norm is absent and the feedback is engagement, the system optimises straight through it.</p>
+    <p>It also deserves a different status from its neighbours: information is not one system among twelve, it is an <em>input to all of them</em>. Markets need honest prices, courts need evidence, elections need a shared record, science needs a literature. When shared reality fragments, every other system's coordination cost rises at once &mdash; which is why this failure feels more general than its size would suggest.</p>
+    <div class="fail"><b>Characteristic failure</b>Goodhart on attention, then fragmentation of the shared factual baseline that every other system silently assumed it had.</div>
+  </article>
+
+  <article class="card card-el">
+    <h3>Science</h3>
+    <p><strong>Problem:</strong> producing reliable knowledge despite the fact that every individual producing it is error-prone and motivated.</p>
+    <div class="defs">
+      <div><span class="k">Boundary</span><span class="v">Training, method, publication &mdash; entry by demonstrated competence</span></div>
+      <div><span class="k">Currency</span><span class="v">Priority and citation</span></div>
+      <div><span class="k">Feedback</span><span class="v">Peer review (fast, weak), replication (slow, strong), predictive success (slowest, decisive)</span></div>
+      <div><span class="k">Memory</span><span class="v">The literature &mdash; the only memory here designed to be overwritten</span></div>
+      <div><span class="k">Legitimacy</span><span class="v">Things work: bridges stand, vaccines take, predictions land</span></div>
+    </div>
+    <div class="chips"><span class="chip lead-mech">Internalisation</span><span class="chip on">Reputation</span><span class="chip">Third party</span><span class="chip">Repetition</span></div>
+    <p>Science made one move no other system has managed: it gave the highest status to <em>being shown wrong</em>. Every other institution treats error correction as a cost centre and a threat to legitimacy; this one made it the currency. That is the whole trick, and everything else &mdash; method, review, replication, open publication &mdash; is infrastructure for it.</p>
+    <div class="fail"><b>Characteristic failure</b>Goodhart on citation. Once careers are allocated by publication count, the optimisation pressure finds the gap between &ldquo;cited&rdquo; and &ldquo;true&rdquo;: salami-sliced papers, novelty over replication, selective reporting. A system whose entire value is self-correction can have its self-correction defunded by its own metric.</div>
+  </article>
+
+  <article class="card card-el">
+    <h3>Health &amp; care</h3>
+    <p><strong>Problem:</strong> repairing bodies &mdash; a good with catastrophic tails, where the buyer cannot evaluate the seller and the need is uncorrelated with the ability to pay.</p>
+    <div class="defs">
+      <div><span class="k">Boundary</span><span class="v">Licensure on the supply side; insurance pool or citizenship on the demand side</span></div>
+      <div><span class="k">Currency</span><span class="v">Professional standing; in parallel, money</span></div>
+      <div><span class="k">Feedback</span><span class="v">Outcomes, confounded by the fact that people get better and worse on their own</span></div>
+      <div><span class="k">Memory</span><span class="v">Guidelines, the record, the training pipeline</span></div>
+      <div><span class="k">Legitimacy</span><span class="v">Professional duty &mdash; an oath, not a contract</span></div>
+    </div>
+    <div class="chips"><span class="chip lead-mech">Internalisation</span><span class="chip on">Third party</span><span class="chip on">Reputation</span><span class="chip">Repetition</span></div>
+    <p>Its structure is dictated by an extreme case of A4. The patient cannot judge whether the treatment was right, often cannot judge afterwards either, and is at their least capable of shopping around at the moment of need. Price signals and reputation are therefore unusually weak here, so the load is shifted onto licensure (a third-party gate at entry) and professional ethics (internalisation). Reading it this way explains why every attempt to make medicine behave like an ordinary market runs into the same wall, and why so much of its governance is about <em>who is allowed to practise</em> rather than what things cost.</p>
+    <div class="fail"><b>Characteristic failure</b>Supplier-induced demand &mdash; the agent chooses the quantity the principal buys. Guild capture, where licensure protects incumbents rather than patients. And insurance moral hazard on both sides at once.</div>
+  </article>
+
+  <article class="card card-el">
+    <h3>Status &amp; stratification</h3>
+    <p><strong>Problem:</strong> ranking &mdash; deciding whose claim wins when two members want the same thing and no formal rule covers it.</p>
+    <div class="defs">
+      <div><span class="k">Boundary</span><span class="v">None &mdash; it is present in every group without being established by any</span></div>
+      <div><span class="k">Currency</span><span class="v">Esteem, deference, honour, prestige</span></div>
+      <div><span class="k">Feedback</span><span class="v">Instant and continuous: every interaction is a small verdict</span></div>
+      <div><span class="k">Memory</span><span class="v">Reputation, held in people rather than records &mdash; which is why it is so hard to abolish by decree</span></div>
+      <div><span class="k">Legitimacy</span><span class="v">Whatever story the group tells about why the ranking is deserved</span></div>
+    </div>
+    <div class="chips"><span class="chip lead-mech">Reputation</span><span class="chip on">Internalisation</span><span class="chip on">Repetition</span><span class="chip">Third party</span></div>
+    <p>This is the one entry that is not an institution. It is emergent, unlegislated, running in every group of three or more, and enforced entirely by the two personal mechanisms. It matters here because it is the <em>substrate</em> the formal systems run on: reforms that change a rule without changing the ranking tend to be absorbed, because people optimise for standing and standing is allocated outside your rule. Note also that status is strictly positional &mdash; unlike money, it cannot be created, only reallocated &mdash; which makes it the purest zero-sum currency on the map and the reason status competition is so reliably vicious.</p>
+    <div class="fail"><b>Characteristic failure</b>Hardening into hereditary strata: when status stops tracking anything current and becomes an inherited boundary, it acquires the rigidity of a formal institution without acquiring any of the accountability.</div>
+  </article>
+
+  <article class="card card-el">
+    <h3>Civil society &amp; association</h3>
+    <p><strong>Problem:</strong> voluntary coordination for anything too large for a family and too particular for a state.</p>
+    <div class="defs">
+      <div><span class="k">Boundary</span><span class="v">Voluntary membership, with genuinely cheap exit</span></div>
+      <div><span class="k">Currency</span><span class="v">Standing within the group; shared purpose</span></div>
+      <div><span class="k">Feedback</span><span class="v">People leave &mdash; fast, unambiguous and impossible to ignore</span></div>
+      <div><span class="k">Memory</span><span class="v">Charter, minutes, rotating office</span></div>
+      <div><span class="k">Legitimacy</span><span class="v">Consent, renewed continuously by the option to walk away</span></div>
+    </div>
+    <div class="chips"><span class="chip lead-mech">Repetition</span><span class="chip on">Reputation</span><span class="chip on">Internalisation</span><span class="chip">Third party</span></div>
+    <p>Cheap exit is the defining structural fact, and it cuts both ways. It means legitimacy must be re-earned constantly, so these bodies cannot coast the way a state or a family can. It also makes them the cheapest place in a society to <em>prototype institutional forms</em>: a failed association costs almost nothing, so unusual arrangements get tried here first and are adopted upward once they work. Unions, mutual insurance, credit cooperatives and standards bodies all entered the world this way.</p>
+    <div class="fail"><b>Characteristic failure</b>Oligarchy by attrition &mdash; the few who stay accumulate control while cheap exit removes anyone who would contest it. Free-riding on a voluntary common good is the other, and it is the collective-action problem in its purest form.</div>
+  </article>
+
+  <article class="card card-el">
+    <h3>Language &amp; culture</h3>
+    <p><strong>Problem:</strong> having a shared protocol at all &mdash; the precondition for every other system on this list.</p>
+    <div class="defs">
+      <div><span class="k">Boundary</span><span class="v">Intelligibility; no register, no gate</span></div>
+      <div><span class="k">Currency</span><span class="v">Being understood</span></div>
+      <div><span class="k">Feedback</span><span class="v">Immediate and total &mdash; deviate and you simply fail to communicate</span></div>
+      <div><span class="k">Memory</span><span class="v">Distributed across every speaker; no copy is authoritative</span></div>
+      <div><span class="k">Legitimacy</span><span class="v">None is required, and none is offered</span></div>
+    </div>
+    <div class="chips"><span class="chip lead-mech">Repetition</span><span class="chip on">Internalisation</span><span class="chip">Reputation</span><span class="chip">Third party</span></div>
+    <p>Language is the limiting case and worth sitting with. It has no boundary, no enforcement arm, no written memory, no legitimating story and no one in charge &mdash; and it is nonetheless the most reliably obeyed system humans have. The reason is pure coordination value: defection has no payoff at all. There is no advantage to using your own word for &ldquo;water&rdquo;. It shows that where interests do <em>not</em> diverge (where A3 is absent), coordination needs no institution whatsoever &mdash; which tells you that institutions are, precisely, the machinery that A3 makes necessary.</p>
+    <div class="fail"><b>Characteristic failure</b>Drift and fragmentation over distance and time &mdash; failure of a shared protocol rather than of an enforcement mechanism, because there was never an enforcement mechanism to fail.</div>
+  </article>
+
+  </div>
+
+  <div style="height:34px"></div>
+  <h3>Enforcement mix at a glance</h3>
+  <p class="muted" style="margin-top:8px;max-width:64ch">The same table read down a column instead of across a row is more interesting: it shows which systems compete for the same mechanism, and therefore which ones weaken together when that mechanism erodes.</p>
+  <div style="height:14px"></div>
+  <div class="scroller">
+    <table>
+      <thead><tr><th scope="col">System</th><th scope="col" style="text-align:center">Repetition</th><th scope="col" style="text-align:center">Reputation</th><th scope="col" style="text-align:center">Third party</th><th scope="col" style="text-align:center">Internalised</th><th scope="col">Runs out at</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Kinship</th><td class="num"><span class="dot d2"></span></td><td class="num"><span class="dot"></span></td><td class="num"><span class="dot"></span></td><td class="num"><span class="dot d3"></span></td><td>a household</td></tr>
+        <tr><th scope="row">Market</th><td class="num"><span class="dot d2"></span></td><td class="num"><span class="dot d2"></span></td><td class="num"><span class="dot d3"></span></td><td class="num"><span class="dot"></span></td><td>no ceiling</td></tr>
+        <tr><th scope="row">State</th><td class="num"><span class="dot"></span></td><td class="num"><span class="dot"></span></td><td class="num"><span class="dot d3"></span></td><td class="num"><span class="dot d2"></span></td><td>no ceiling</td></tr>
+        <tr><th scope="row">Law</th><td class="num"><span class="dot"></span></td><td class="num"><span class="dot"></span></td><td class="num"><span class="dot d3"></span></td><td class="num"><span class="dot d2"></span></td><td>a jurisdiction</td></tr>
+        <tr><th scope="row">Religion</th><td class="num"><span class="dot d2"></span></td><td class="num"><span class="dot d2"></span></td><td class="num"><span class="dot"></span></td><td class="num"><span class="dot d3"></span></td><td>no ceiling</td></tr>
+        <tr><th scope="row">Education</th><td class="num"><span class="dot"></span></td><td class="num"><span class="dot d2"></span></td><td class="num"><span class="dot d2"></span></td><td class="num"><span class="dot d3"></span></td><td>no ceiling</td></tr>
+        <tr><th scope="row">Media</th><td class="num"><span class="dot"></span></td><td class="num"><span class="dot d3"></span></td><td class="num"><span class="dot"></span></td><td class="num"><span class="dot d2"></span></td><td>a shared audience</td></tr>
+        <tr><th scope="row">Science</th><td class="num"><span class="dot"></span></td><td class="num"><span class="dot d2"></span></td><td class="num"><span class="dot"></span></td><td class="num"><span class="dot d3"></span></td><td>no ceiling</td></tr>
+        <tr><th scope="row">Health</th><td class="num"><span class="dot"></span></td><td class="num"><span class="dot d2"></span></td><td class="num"><span class="dot d2"></span></td><td class="num"><span class="dot d3"></span></td><td>no ceiling</td></tr>
+        <tr><th scope="row">Status</th><td class="num"><span class="dot d2"></span></td><td class="num"><span class="dot d3"></span></td><td class="num"><span class="dot"></span></td><td class="num"><span class="dot d2"></span></td><td>a few hundred</td></tr>
+        <tr><th scope="row">Association</th><td class="num"><span class="dot d3"></span></td><td class="num"><span class="dot d2"></span></td><td class="num"><span class="dot"></span></td><td class="num"><span class="dot d2"></span></td><td>a few thousand</td></tr>
+        <tr><th scope="row">Language</th><td class="num"><span class="dot d3"></span></td><td class="num"><span class="dot"></span></td><td class="num"><span class="dot"></span></td><td class="num"><span class="dot d2"></span></td><td>no ceiling</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="muted" style="margin-top:12px;font-size:.85rem">Large dot: carries the load. Small dot: supports. Empty: largely absent.</p>
+</section>
+
+<!-- ================= DYNAMICS ================= -->
+<section id="dynamics">
+  <div class="sechead">
+    <p class="eyebrow">Layer 5</p>
+    <h2>Dynamics: stocks, loops, delays</h2>
+    <p class="intro">Everything so far describes structure. This is behaviour &mdash; what the structure <em>does</em> over time. Three things carry almost all of it: what accumulates, which loops are running, and how long the loops take to close.</p>
+  </div>
+
+  <h3>The stocks nobody counts</h3>
+  <p class="muted" style="margin-top:8px;max-width:64ch">Social systems run on stocks that are invisible, slow to build, and absent from every ledger: <strong>trust, legitimacy, social capital, institutional memory, state capacity, professional norms</strong>. Because they are unmeasured, they can be spent without anyone recording an expense.</p>
+  <div style="height:14px"></div>
+  <div class="grid2">
+    <div class="card"><h4>The asymmetry</h4><p class="muted">Inflow is rate-limited by interaction: trust accumulates only as fast as people repeatedly deal with each other and are not betrayed. Outflow has no such limit &mdash; a single visible betrayal can drain years of it, because it re-prices every past interaction at once.</p></div>
+    <div class="card"><h4>The characteristic death</h4><p class="muted">Institutions rarely die of the thing that killed them. They post good numbers for years while quietly financing that performance out of a legitimacy stock nobody is counting &mdash; then fail suddenly, at which point everyone looks for a recent cause. The cause was the drawdown.</p></div>
+  </div>
+
+  <div style="height:34px"></div>
+  <h3>The loop that decides whether a system is cheap or expensive to run</h3>
+  <p class="muted" style="margin-top:8px;max-width:64ch">Of the many loops running in any institution, this one deserves its own diagram, because it determines the cost of everything else. Every link is positive, so the whole loop is reinforcing &mdash; which means it runs in both directions with equal force.</p>
+  <div style="height:14px"></div>
+
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 680 372" role="img" aria-label="A reinforcing causal loop: legitimacy increases voluntary compliance, which lowers enforcement cost, which frees capacity for delivered performance, which increases legitimacy.">
+      <defs>
+        <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--primary)"/>
+        </marker>
+      </defs>
+      <g fill="none" stroke="var(--primary)" stroke-width="2" marker-end="url(#ah)">
+        <path d="M 432,78 C 482,94 505,122 513,152"/>
+        <path d="M 515,216 C 508,246 484,274 436,289"/>
+        <path d="M 248,290 C 198,274 174,246 166,216"/>
+        <path d="M 166,156 C 174,126 198,98 246,83"/>
+      </g>
+      <g font-family="Roboto Mono, monospace" font-size="14" fill="var(--tertiary)" text-anchor="middle">
+        <text x="486" y="116">+</text><text x="486" y="268">+</text>
+        <text x="196" y="268">+</text><text x="196" y="116">+</text>
+      </g>
+      <circle cx="341" cy="186" r="37" fill="none" stroke="var(--primary)" stroke-width="1.5" stroke-dasharray="4 5"/>
+      <text x="341" y="184" text-anchor="middle" font-family="Roboto Flex, Roboto, sans-serif" font-size="21" font-weight="700" fill="var(--primary)">R</text>
+      <text x="341" y="202" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="9.5" letter-spacing="0.8" fill="var(--on-surface-variant)">REINFORCING</text>
+      <g>
+        <rect x="250" y="38" width="180" height="48" rx="12" fill="var(--primary-container)"/>
+        <rect x="460" y="162" width="180" height="48" rx="12" fill="var(--s-highest)"/>
+        <rect x="250" y="286" width="180" height="48" rx="12" fill="var(--s-highest)"/>
+        <rect x="40" y="162" width="180" height="48" rx="12" fill="var(--s-highest)"/>
+      </g>
+      <g font-family="Roboto, sans-serif" font-size="14" text-anchor="middle">
+        <text x="340" y="67" fill="var(--on-primary-container)" font-weight="500">Legitimacy</text>
+        <text x="550" y="191" fill="var(--on-surface)">Voluntary compliance</text>
+        <text x="340" y="315" fill="var(--on-surface)">Low enforcement cost</text>
+        <text x="130" y="191" fill="var(--on-surface)">Delivered performance</text>
+      </g>
+    </svg>
+    </div>
+    <figcaption>Run it clockwise and you get a state that governs almost for free. Run it backwards &mdash; doubt, then evasion, then rising enforcement cost, then worse delivery, then more doubt &mdash; and you get the same loop as a death spiral. Reinforcing loops have no preferred direction; they amplify whichever way they are pointed.</figcaption>
+  </figure>
+
+  <div style="height:26px"></div>
+  <div class="grid2">
+    <div class="card card-out"><h4>R1 &middot; Success to the successful</h4><p class="muted">Resources buy advantage, advantage returns more resources. Runs in wealth, incumbency, elite admissions, citations, followers, land. Unopposed, it terminates in concentration &mdash; in <em>every</em> domain, not just money.</p><p class="muted">Every durable society installs some balancing loop against it: progressive taxation, inheritance limits, antitrust, term limits, debt jubilees, levelling norms. Which one it chooses is most of what &ldquo;politics&rdquo; means.</p></div>
+    <div class="card card-out"><h4>R3 &middot; Credential escalation</h4><p class="muted">More people get the signal &rarr; the signal is worth less &rarr; everyone needs more of it. Also: arms races, litigation, security theatre, house price bidding. Structurally identical, and no participant is behaving foolishly.</p></div>
+    <div class="card card-out"><h4>B1 &middot; Correction</h4><p class="muted">Deviation &rarr; detected &rarr; someone with power acts &rarr; deviation shrinks. Elections, courts, audits, the press, markets clearing, immune-like institutional responses. These are the system's immune system.</p></div>
+    <div class="card card-out"><h4>B2 &middot; Norm enforcement</h4><p class="muted">Deviance &rarr; sanction &rarr; conformity. The cheapest balancing loop in existence because it is run by everyone at once, and the first to fail when a group gets too large for people to be seen.</p></div>
+  </div>
+
+  <div style="height:26px"></div>
+  <div class="card card-tint">
+    <h3>Balancing loops break in exactly three places</h3>
+    <p>This is the single most useful diagnostic in the whole framework. A corrective loop has three parts in series, and each fails independently &mdash; so &ldquo;the oversight isn't working&rdquo; is never a complete diagnosis until you say which one.</p>
+    <div class="grid3">
+      <div class="card card-out"><h4>Sensor</h4><p class="muted">Does anyone detect the problem? Unmeasured harms, unreported crimes, unlogged failures. Fix: instrumentation, disclosure, whistleblower protection.</p></div>
+      <div class="card card-out"><h4>Channel</h4><p class="muted">Does the signal reach someone who can act? Detected and buried, or reported to a body with no authority. Fix: standing, routing, an independent recipient.</p></div>
+      <div class="card card-out"><h4>Actuator</h4><p class="muted">Can that person actually do anything? Regulators without penalties, courts without enforcement, managers without budget. Fix: real powers, real consequences.</p></div>
+    </div>
+    <p class="muted">Most reform effort goes to the sensor because it is the cheapest and most visible &mdash; more reporting, more dashboards &mdash; and most failures are in the actuator.</p>
+  </div>
+
+  <div style="height:34px"></div>
+  <h3>Delays: the most underrated variable in social systems</h3>
+  <p class="muted" style="margin-top:8px;max-width:64ch">A balancing loop with a long delay does not correct smoothly. It overshoots, reverses, overshoots the other way, and oscillates &mdash; and everyone involved experiences the oscillation as a sequence of separate crises with separate causes.</p>
+  <div style="height:14px"></div>
+
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 720 300" role="img" aria-label="Line chart comparing two corrective responses to the same target. With a short feedback delay the response rises smoothly to the target. With a long delay it overshoots to about 1.6 times the target, falls to about 0.66, and oscillates before settling.">
+      <g stroke="var(--outline-variant)" stroke-width="1">
+        <line x1="80" y1="146.7" x2="640" y2="146.7" stroke-dasharray="5 5"/>
+      </g>
+      <line x1="80" y1="280" x2="640" y2="280" stroke="var(--outline)" stroke-width="1.5"/>
+      <line x1="80" y1="36" x2="80" y2="280" stroke="var(--outline)" stroke-width="1.5"/>
+      <g font-family="Roboto Mono, monospace" font-size="11" fill="var(--on-surface-variant)">
+        <text x="72" y="284" text-anchor="end">0</text>
+        <text x="72" y="151" text-anchor="end">1.0</text>
+        <text x="648" y="151">target</text>
+        <text x="80" y="298">time &rarr;</text>
+        <text x="16" y="48">state</text>
+      </g>
+      <path fill="none" stroke="var(--tertiary)" stroke-width="2.4" stroke-dasharray="6 5" d="M 80.0,280.0 L 105.2,243.1 L 130.4,216.4 L 155.6,197.1 L 180.8,183.2 L 206.0,173.1 L 231.2,165.8 L 256.4,160.5 L 281.6,156.6 L 306.8,153.9 L 332.0,151.9 L 357.2,150.4 L 382.4,149.4 L 407.6,148.6 L 432.8,148.1 L 458.0,147.7 L 483.2,147.4 L 508.4,147.2 L 533.6,147.1 L 558.8,146.9 L 584.0,146.9 L 609.2,146.8 L 640.0,146.8"/>
+      <path fill="none" stroke="var(--primary)" stroke-width="2.8" stroke-linejoin="round" d="M 80.0,280.0 L 88.4,266.9 L 96.8,243.8 L 105.2,213.9 L 113.6,180.7 L 122.0,147.8 L 130.4,118.1 L 138.8,94.1 L 147.2,77.5 L 155.6,69.2 L 164.0,69.0 L 172.4,76.1 L 180.8,89.2 L 189.2,106.3 L 197.6,125.5 L 206.0,144.7 L 214.4,162.2 L 222.8,176.4 L 231.2,186.3 L 239.6,191.5 L 248.0,191.9 L 256.4,188.0 L 264.8,180.6 L 273.2,170.8 L 281.6,159.7 L 290.0,148.5 L 298.4,138.3 L 306.8,129.9 L 315.2,124.0 L 323.6,120.8 L 332.0,120.3 L 340.4,122.4 L 348.8,126.6 L 357.2,132.2 L 365.6,138.6 L 374.0,145.1 L 382.4,151.1 L 390.8,156.1 L 399.2,159.7 L 407.6,161.6 L 416.0,162.0 L 424.4,160.9 L 432.8,158.5 L 441.2,155.3 L 449.6,151.6 L 458.0,147.8 L 466.4,144.3 L 474.8,141.4 L 483.2,139.2 L 491.6,138.0 L 500.0,137.8 L 508.4,138.4 L 516.8,139.7 L 525.2,141.5 L 533.6,143.7 L 542.0,145.9 L 550.4,147.9 L 558.8,149.6 L 567.2,150.9 L 575.6,151.6 L 584.0,151.8 L 592.4,151.5 L 600.8,150.8 L 609.2,149.7 L 617.6,148.5 L 626.0,147.2 L 640.0,145.3"/>
+      <g>
+        <circle cx="160" cy="68.5" r="4" fill="var(--primary)"/>
+        <text x="172" y="64" font-family="Roboto Mono, monospace" font-size="11" fill="var(--on-surface-variant)">peak 1.6&times; target</text>
+        <circle cx="248" cy="191.9" r="4" fill="var(--primary)"/>
+        <text x="258" y="207" font-family="Roboto Mono, monospace" font-size="11" fill="var(--on-surface-variant)">then 0.66&times;</text>
+      </g>
+    </svg>
+    </div>
+    <div class="legend">
+      <span><span class="swatch" style="background:var(--primary)"></span> long feedback delay</span>
+      <span><span class="swatch" style="background:var(--tertiary)"></span> short feedback delay</span>
+    </div>
+    <figcaption>Both lines are the same corrective rule chasing the same target; only the delay differs. Nothing about the policy, the people, or the intentions changed &mdash; the oscillation is produced entirely by the lag. Illustrative dynamics, not fitted data.</figcaption>
+  </figure>
+
+  <div style="height:22px"></div>
+  <div class="scroller">
+    <table>
+      <thead><tr><th scope="col">Loop</th><th scope="col">Time to close</th><th scope="col">Judged on a horizon of</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Electoral accountability</th><td>4&ndash;5 years</td><td>the news cycle</td></tr>
+        <tr><th scope="row">Major policy &rarr; measurable effect</th><td>10&ndash;30 years</td><td>one term</td></tr>
+        <tr><th scope="row">Education intake &rarr; output</th><td>~20 years</td><td>this year's test scores</td></tr>
+        <tr><th scope="row">Birth rate &rarr; labour force</th><td>~25 years</td><td>the current budget</td></tr>
+        <tr><th scope="row">Birth rate &rarr; pension burden</th><td>~65 years</td><td>nobody's term</td></tr>
+        <tr><th scope="row">Infrastructure &rarr; settlement pattern</th><td>20&ndash;50 years</td><td>the construction contract</td></tr>
+        <tr><th scope="row">Norm change</th><td>1&ndash;2 generations</td><td>the campaign</td></tr>
+        <tr><th scope="row">Trust, rebuilt after a breach</th><td>years to a generation</td><td>the quarter</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="height:22px"></div>
+  <div class="stack-s">
+    <div class="axiom"><span class="tag">D1</span><div class="body"><h4>Delay produces oscillation</h4><p>Act on current deviation in a system whose response is slow and you will overshoot, then overcorrect. Boom and bust, crackdown and laxity, centralise and decentralise: these cycles need no villain and no stupidity, only lag.</p></div></div>
+    <div class="axiom"><span class="tag">D2</span><div class="body"><h4>Delay breaks causal attribution</h4><p>When cause and effect are decades apart, no participant can link them by observation. The system therefore learns the wrong lesson &mdash; credit and blame land on whoever was present when the effect arrived.</p></div></div>
+    <div class="axiom"><span class="tag">D3</span><div class="body"><h4>Delay rewards symptomatic fixes</h4><p>In any system whose <em>measured</em> feedback is faster than its <em>real</em> dynamics, the fast superficial fix always beats the slow structural one on the evidence available at decision time. This is not a failure of will. It is a failure of the observable record.</p></div></div>
+  </div>
+</section>
+
+<!-- ================= ARCHETYPES ================= -->
+<section id="archetypes">
+  <div class="sechead">
+    <p class="eyebrow">Layer 6</p>
+    <h2>Archetypes: failures that recur across unrelated systems</h2>
+    <p class="intro">These are structures, not subjects. Each appears in institutions that share nothing in content, because what they share is a loop topology. Learning to recognise them by <em>signature</em> &mdash; the tell-tale symptom &mdash; is most of what applied systems thinking amounts to.</p>
+  </div>
+  <div class="stack-s">
+
+    <div class="card"><h4>Tragedy of the commons</h4>
+      <p class="muted">A shared stock, private benefit from taking, socialised cost of depletion. Fisheries, aquifers, antibiotics, road capacity, public discourse, herd immunity, a team's shared attention.</p>
+      <p class="muted"><strong>Signature:</strong> everyone can see the collapse coming and no individual gains by stopping first.</p>
+      <p class="muted"><strong>Exits, and there are only three:</strong> privatise the resource so the cost lands on the taker; regulate access from outside; or build local governance with visible use and graduated sanctions. Ostrom's work matters because it established the third empirically &mdash; commons <em>are</em> governed successfully without state or market, but the condition is that users can observe each other's take.</p>
+    </div>
+
+    <div class="card"><h4>Shifting the burden</h4>
+      <p class="muted">A symptomatic fix works immediately and, as a side effect, atrophies the capacity that would have solved the problem properly &mdash; so dependence on the fix grows.</p>
+      <p class="muted"><strong>Signature:</strong> the fix works every single time, and the problem is bigger every year.</p>
+      <p class="muted">Aid that substitutes for local administrative capacity; consultants who displace internal capability; policing used to absorb problems that are really about housing or care; painkillers standing in for rehabilitation.</p>
+    </div>
+
+    <div class="card"><h4>Success to the successful</h4>
+      <p class="muted">Whoever is ahead gets the next allocation, which puts them further ahead. The R1 loop, seen as a failure mode rather than a diagram.</p>
+      <p class="muted"><strong>Signature:</strong> the gap widens even though the rule is applied identically to everyone &mdash; which is exactly what makes it so hard to argue about.</p>
+    </div>
+
+    <div class="card"><h4>Eroding goals</h4>
+      <p class="muted">Performance drifts down; the standard quietly re-anchors to observed performance rather than to the original goal; the drift continues from the new anchor.</p>
+      <p class="muted"><strong>Signature:</strong> nobody ever decided to lower the bar, and yet it is lower. Grade inflation, &ldquo;acceptable&rdquo; delays, normalised deviance in safety-critical work &mdash; where the tell is that a tolerated anomaly becomes the new baseline precisely <em>because</em> nothing went wrong last time.</p>
+    </div>
+
+    <div class="card"><h4>Fixes that fail</h4>
+      <p class="muted">The fix works, and its side effect regenerates the problem after a delay long enough that nobody connects the two.</p>
+      <p class="muted"><strong>Signature:</strong> the same intervention is applied repeatedly and each round is treated as a fresh problem. Wider roads producing induced demand; harsher sentencing strengthening criminal networks; moderation pushing communities to less visible venues.</p>
+    </div>
+
+    <div class="card"><h4>Escalation</h4>
+      <p class="muted">Each party sets its level relative to the other's, so both rise without limit while the relative position stays put.</p>
+      <p class="muted"><strong>Signature:</strong> everyone is spending more and nobody is better off. Arms races, price wars, credential inflation, litigation, security theatre, campaign spending.</p>
+      <p class="muted"><strong>Exits:</strong> a credible unilateral de-escalation, or a binding external referee. There is no third option, which is why so many of these run for decades.</p>
+    </div>
+
+    <div class="card"><h4>Limits to growth</h4>
+      <p class="muted">A reinforcing loop runs into a balancing loop that was not in anyone's model, usually because it was slack while the stock was small.</p>
+      <p class="muted"><strong>Signature:</strong> a confident extrapolation of a curve that has only ever been observed in its exponential phase.</p>
+    </div>
+
+    <div class="card"><h4>Goodhart &amp; goal displacement</h4>
+      <p class="muted">When a measure becomes a target it ceases to be a good measure. The deep reason is worth stating precisely: <strong>a metric is a lossy compression of a goal</strong>, and optimisation pressure searches exactly the space where the compression lost something.</p>
+      <p class="muted"><strong>Signature:</strong> the number improves and the thing it stood for does not. The corollary is uncomfortable &mdash; the <em>more capable</em> the optimiser, the faster it finds the gap, so better execution makes this worse, not better. Every measurement regime therefore has a shelf life and has to be re-anchored, not perfected.</p>
+    </div>
+
+    <div class="card"><h4>Legibility failure</h4>
+      <p class="muted">Large organisations can only act on what they can see, so they reshape the world to be seeable: standardised units, cadastral maps, surnames, grid settlements, monocrops, KPIs, org charts. James Scott's argument is that the reshaping destroys the unwritten local knowledge that made the original arrangement work.</p>
+      <p class="muted"><strong>Signature:</strong> a rationalisation that is obviously better on paper and performs worse in practice, with no one able to say which discarded detail mattered &mdash; because the whole point of that knowledge was that it was never written down.</p>
+    </div>
+
+    <div class="card"><h4>Principal and agent</h4>
+      <p class="muted">Someone acts on your behalf and you cannot observe their effort. This is A4 institutionalised, and it is present in every system on the map: voters and politicians, shareholders and managers, patients and doctors, citizens and officials, congregations and clergy, users and platforms.</p>
+      <p class="muted"><strong>Signature:</strong> elaborate rules that make no sense as a way of doing the work and perfect sense as a way of proving the work was done. Most bureaucracy is not stupidity; it is monitoring cost made visible.</p>
+    </div>
+
+    <div class="card"><h4>Collective action</h4>
+      <p class="muted">Concentrated benefits organise; diffuse costs do not. A small group with a large per-head stake will reliably out-organise a large group with a small per-head stake, even when the large group's total stake is far bigger.</p>
+      <p class="muted"><strong>Signature:</strong> a policy that is bad for almost everyone, stable for decades, with no conspiracy required to explain it. Olson's asymmetry predicts which lobbies exist before you look.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ================= COUPLING ================= -->
+<section id="coupling">
+  <div class="sechead">
+    <p class="eyebrow">Layer 7</p>
+    <h2>Coupling, emergence and limits</h2>
+    <p class="intro">Systems are load-bearing for each other. Understanding one in isolation will mislead you, because its apparent strength may be someone else's weakness showing up as extra demand.</p>
+  </div>
+
+  <h3>Load transfers when a system weakens</h3>
+  <div style="height:12px"></div>
+  <div class="defs" style="font-size:.95rem">
+    <div><span class="k">Weak state</span><span class="v">Kinship networks, caste and community ties, religious bodies and protection rackets take over contract enforcement, insurance and dispute resolution. The demand does not vanish; only the accountable supplier does.</span></div>
+    <div><span class="k">Weak family</span><span class="v">The state absorbs child care, elder care and income smoothing &mdash; at far higher cost, because it must specify in advance obligations the family never had to enumerate.</span></div>
+    <div><span class="k">Weak trust</span><span class="v">Transaction costs rise everywhere at once: more law, more paperwork, more collateral, smaller markets, shorter contracts, and a preference for dealing only with people you already know.</span></div>
+    <div><span class="k">Weak information</span><span class="v">Every other system's coordination cost rises simultaneously, because each silently assumed a shared factual baseline it did not have to provide for itself.</span></div>
+    <div><span class="k">Weak legitimacy</span><span class="v">Enforcement cost rises; the system pays it in coercion, or fails to pay it and gets non-compliance. There is no third state.</span></div>
+  </div>
+
+  <div style="height:22px"></div>
+  <div class="principle"><svg class="ic" aria-hidden="true"><use href="#i-swap"/></svg><p><strong>The relocation rule.</strong> You cannot delete a function, only relocate it. Abolishing an institution does not remove the coordination problem it was a cached answer to &mdash; something else picks the problem up, usually less efficiently and almost always less accountably. This is the single best predictor of reform failure.</p></div>
+
+  <div style="height:34px"></div>
+  <div class="grid2">
+    <div class="card card-out">
+      <h4>Emergence: you cannot read intentions off outcomes</h4>
+      <p class="muted">Schelling's segregation model is the cleanest demonstration: give each household a mild preference against being a very small local minority &mdash; a preference almost nobody would call extreme &mdash; and the simulation produces near-total separation. No participant wanted the outcome, and the outcome is not a sum of the preferences.</p>
+      <p class="muted">The practical consequence: a macro pattern can be bad without anyone intending it, and you must intervene at the level where the <em>mechanism</em> lives, not the level where the pattern is visible.</p>
+    </div>
+    <div class="card card-out">
+      <h4>Requisite variety: the rules-versus-discretion dial</h4>
+      <p class="muted">Ashby's law says only variety absorbs variety &mdash; a controller needs at least as many distinct responses as the system has distinct states. So a rule simple enough to enforce uniformly will be wrong in many real cases, and a rule rich enough to be right everywhere cannot be enforced or audited.</p>
+      <p class="muted">Every institution sits somewhere on that dial, and the correct position moves with one variable only: how well you can monitor discretion. Improve monitoring and you can afford judgement; lose it and you are forced back onto rigid rules.</p>
+    </div>
+    <div class="card card-out">
+      <h4>Resilience is structurally underprovided</h4>
+      <p class="muted">Slack, redundancy and diversity look like waste in every audit, and they are the entire reason systems survive shocks. Optimisation removes them by default, so systems drift toward fragility, break, then over-build &mdash; and drift again once the memory fades.</p>
+      <p class="muted">The deeper problem is epistemic: resilience can only be observed by paying for it in advance and then never seeing the disaster. It is structurally impossible to get credit for it, which is why no amount of good intentions fixes the underprovision &mdash; only a rule that removes the choice.</p>
+    </div>
+    <div class="card card-out">
+      <h4>Path dependence: when beats how well</h4>
+      <p class="muted">Institutions stick because of coordination value, not quality. Being on the better standard <em>alone</em> is worse than being on the worse standard <em>with everyone else</em>, so early accidents lock in: keyboard layouts, rail gauges, inherited legal codes, the shape of the working week, metric versus imperial.</p>
+      <p class="muted">The implication for analysis is sharp: for many institutions, <em>when</em> the problem happened to get solved explains more than how well it was solved. Asking &ldquo;why is it like this?&rdquo; often has a historical answer and no functional one.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= LEVERAGE ================= -->
+<section id="leverage">
+  <div class="sechead">
+    <p class="eyebrow">Layer 8</p>
+    <h2>Leverage: where intervention actually moves a system</h2>
+    <p class="intro">Donella Meadows' hierarchy, ordered weakest to strongest and read against the institutions above. Two things make it useful rather than merely tidy: effort and effect run in opposite directions &mdash; the easy interventions are the weak ones &mdash; and most reform fails because it aims a level-12 instrument at a level-5 problem.</p>
+  </div>
+  <div class="card">
+    <div class="ladder-key"><span>Weakest &mdash; easiest to do</span><span>Strongest &mdash; hardest</span></div>
+    <div>
+      <div class="lever"><span class="n">12</span><span><span class="t">Parameters</span><span class="d">Tax rates, budgets, subsidies, headcounts, penalty amounts. Where the overwhelming majority of political and managerial effort goes, and the least effect per unit of effort. Changing a number rarely changes a structure.</span></span></div>
+      <div class="lever"><span class="n">11</span><span><span class="t">Buffers</span><span class="d">The size of stabilising stocks &mdash; reserves, granaries, strategic inventory, savings, staffing slack. Powerful but usually expensive and slow to change.</span></span></div>
+      <div class="lever"><span class="n">10</span><span><span class="t">Structure of material flows</span><span class="d">Roads, grids, pipes, supply chains, the physical layout of a city. Enormous long-run effect; almost impossible to revise once built, so the leverage is mostly available once.</span></span></div>
+      <div class="lever"><span class="n">9</span><span><span class="t">Delays</span><span class="d">Shortening the time for a loop to close. Rare, underused, and powerful &mdash; faster courts, real-time measurement, shorter review cycles. Note the asymmetry: shortening a delay usually helps, lengthening one almost always destabilises.</span></span></div>
+      <div class="lever"><span class="n">8</span><span><span class="t">Strength of balancing loops</span><span class="d">Courts, audit bodies, a free press, term limits, inspectorates. When one of these is failing, ask first which of sensor, channel or actuator broke &mdash; the answer determines the entire remedy.</span></span></div>
+      <div class="lever"><span class="n">7</span><span><span class="t">Strength of reinforcing loops</span><span class="d">Usually the intervention is to <em>weaken</em> these: antitrust, inheritance rules, caps on cumulative advantage. Slowing an R loop is normally a better move than strengthening the B loop chasing it.</span></span></div>
+      <div class="lever"><span class="n">6</span><span><span class="t">Information flows</span><span class="d">Who gets to know what, and when. Adding a missing feedback link &mdash; connecting the actor who causes an effect to the effect itself &mdash; is the highest-return cheap intervention available. Meadows' example is exact: put the electricity meter where the household can see it and consumption falls, with no change to price, rule or incentive.</span></span></div>
+      <div class="lever hi"><span class="n">5</span><span><span class="t">Rules</span><span class="d">Constitutions, property rights, incentives, who has standing to sue, who counts as a member. The level at which most genuine institutional change happens, and the highest level most reformers can actually reach.</span></span></div>
+      <div class="lever hi"><span class="n">4</span><span><span class="t">Self-organisation</span><span class="d">The power to add, change or evolve the structure itself &mdash; federalism, free entry, permitted experimentation, the right to form new bodies. Giving a system the ability to redesign itself beats any specific redesign you could impose, because it survives your being wrong.</span></span></div>
+      <div class="lever hi"><span class="n">3</span><span><span class="t">Goals</span><span class="d">What the system is actually for, as opposed to what it says. Change the goal and everything from 12 down reorganises around it &mdash; which also means a reform at any lower level is silently overruled by an unchanged goal.</span></span></div>
+      <div class="lever hi"><span class="n">2</span><span><span class="t">Paradigm</span><span class="d">The shared, unexamined model the goals are drawn from: what counts as property, what growth is for, who is a person. Paradigms change rarely, and when they do, everything below moves at once.</span></span></div>
+      <div class="lever hi"><span class="n">1</span><span><span class="t">The power to transcend paradigms</span><span class="d">Holding every model, including this one, as a tool rather than a truth. Not an intervention you can schedule &mdash; but the reason to keep the diagnostic below provisional.</span></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= DIAGNOSTIC ================= -->
+<section id="diagnostic">
+  <div class="sechead">
+    <p class="eyebrow">Layer 9</p>
+    <h2>The diagnostic</h2>
+    <p class="intro">The whole framework, compressed into a procedure. Run it in order on any institution &mdash; a regulator, a school, a religion, a company, a village council &mdash; and the ordering matters: each answer constrains the next.</p>
+  </div>
+  <div class="card">
+    <div class="q"><span class="n">1</span><div><p>What recurring coordination problem is this a cached answer to?</p><p class="why">If you cannot name one, you are looking at something vestigial, or at a system whose real function is not its stated one.</p></div></div>
+    <div class="q"><span class="n">2</span><div><p>What are its five invariants &mdash; boundary, currency, feedback, memory, legitimacy?</p><p class="why">Any one you cannot fill in is either the thing that is broken or the thing you have not understood yet.</p></div></div>
+    <div class="q"><span class="n">3</span><div><p>Which enforcement mechanism is carrying the load, and at what size does it break?</p><p class="why">This predicts the maximum scale, the running cost, and the failure mode in one answer.</p></div></div>
+    <div class="q"><span class="n">4</span><div><p>Where does the currency diverge from the real goal?</p><p class="why">That gap is the Goodhart surface. Optimisation pressure will find it, and the more capable the participants, the faster.</p></div></div>
+    <div class="q"><span class="n">5</span><div><p>What reinforcing loops are running, and what balancing loop is supposed to hold each one?</p><p class="why">Then, for each balancing loop: is the sensor, the channel, or the actuator broken?</p></div></div>
+    <div class="q"><span class="n">6</span><div><p>How long are the delays, and is anyone being judged on a horizon shorter than the effects?</p><p class="why">If so, expect oscillation, misattributed causes, and a structural preference for symptomatic fixes &mdash; regardless of who is in charge.</p></div></div>
+    <div class="q"><span class="n">7</span><div><p>Who are the principals, who are the agents, and what cannot be observed?</p><p class="why">Most rules that look irrational make sense as monitoring devices once you answer this.</p></div></div>
+    <div class="q"><span class="n">8</span><div><p>What is this system load-bearing for elsewhere, and where would that load go if it failed?</p><p class="why">The relocation rule. The answer is never &ldquo;nowhere&rdquo;.</p></div></div>
+    <div class="q"><span class="n">9</span><div><p>What slack does it hold that looks like waste, and who is currently trying to remove it?</p><p class="why">This is the shock resilience, and it is being spent by someone who will be rewarded for spending it.</p></div></div>
+  </div>
+
+  <div style="height:26px"></div>
+  <div class="card card-tint">
+    <h3>The two errors this framework is meant to sit between</h3>
+    <p><strong>Over-design.</strong> Assuming you can see enough of a system to specify it &mdash; the legibility failure. It produces schemes that are obviously correct on paper, destroy the unwritten knowledge that made the old arrangement work, and fail in ways nobody can diagnose afterwards because the relevant detail was never written down.</p>
+    <p><strong>Under-design.</strong> Assuming spontaneous order handles it &mdash; that markets, norms and communities will simply arise. They will not arise from nothing: a market needs property rights, contract enforcement, and information; a norm needs a group small enough to see itself. Spontaneous order is not the absence of institutions, it is a particular institution with preconditions, and where the preconditions are missing the order does not appear.</p>
+    <p class="muted">The stance in between is not moderation. It is mechanical: find the mechanism, find the loop, find the delay, name which of the five invariants is broken, and intervene at the highest leverage point you can actually reach &mdash; then watch for the relocation.</p>
+  </div>
+
+  <footer>
+    <p>Threads drawn on here, if you want to go deeper into any one of them: Ronald Coase on why firms exist; Elinor Ostrom on governed commons; Mancur Olson on collective action; Donella Meadows on leverage points and stocks; W. Ross Ashby on requisite variety; Thomas Schelling on emergence from mild preferences; James C. Scott on legibility; Max Weber on the grounds of legitimacy; Robin Dunbar on group size; Charles Goodhart on measures becoming targets.</p>
+    <p>The axioms, the four-mechanism enumeration, the five invariants and the nine-question diagnostic are a synthesis assembled here, not a canonical scheme &mdash; use them as a lens, and drop any part that stops earning its place.</p>
+  </footer>
+
+</section>
+
+</div>
+</main>
+</div>
+
+<script>
+(function(){
+  var dests = Array.prototype.slice.call(document.querySelectorAll('.dest'));
+  var sections = dests.map(function(d){ return document.querySelector(d.getAttribute('href')); });
+  function setActive(i){
+    dests.forEach(function(d,j){ d.classList.toggle('active', i===j); });
+  }
+  setActive(0);
+  function sync(){
+    var chosen = 0;
+    for (var i=0;i<sections.length;i++){
+      if (!sections[i]) continue;
+      if (sections[i].getBoundingClientRect().top <= 140) chosen = i;
+    }
+    setActive(chosen);
+  }
+  window.addEventListener('scroll', sync, { passive:true });
+  window.addEventListener('resize', sync, { passive:true });
+  sync();
+})();
+</script>
+
+</body></html>

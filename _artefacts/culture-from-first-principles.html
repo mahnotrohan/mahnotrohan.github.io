@@ -1,0 +1,1462 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Culture From First Principles</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,300..800&family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Roboto+Mono:wght@400;500&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap">
+
+<style>
+/* ============================================================
+   Material Design 3 — tonal palette seeded from Google Blue
+   Light palette is declared in full on bare :root.
+   ============================================================ */
+:root{
+  --primary:#0b57d0;
+  --on-primary:#ffffff;
+  --primary-container:#d3e3fd;
+  --on-primary-container:#041e49;
+  --secondary:#3c4858;
+  --secondary-container:#dce3ee;
+  --on-secondary-container:#1a222e;
+  --surface:#fbfcfe;
+  --surface-container-lowest:#ffffff;
+  --surface-container-low:#f4f7fc;
+  --surface-container:#eef2f8;
+  --surface-container-high:#e6ebf3;
+  --surface-container-highest:#dfe5ee;
+  --on-surface:#1b1c1e;
+  --on-surface-variant:#44474e;
+  --outline:#74777f;
+  --outline-variant:#c7cbd4;
+  --inverse-surface:#2f3033;
+  --inverse-on-surface:#f1f0f4;
+
+  /* categorical accents — Google's four, used only where a category is real */
+  --acc-blue:#1a73e8;
+  --acc-red:#c5221f;
+  --acc-yellow:#a36000;
+  --acc-green:#146c2e;
+  --acc-blue-bg:#e8f0fe;
+  --acc-red-bg:#fce8e6;
+  --acc-yellow-bg:#fef7e0;
+  --acc-green-bg:#e6f4ea;
+
+  --shadow-1:0 1px 2px rgba(11,23,48,.18), 0 1px 3px 1px rgba(11,23,48,.08);
+  --shadow-2:0 1px 2px rgba(11,23,48,.18), 0 2px 6px 2px rgba(11,23,48,.09);
+
+  --rail-w:232px;
+  --measure:68ch;
+
+  color-scheme:light;
+}
+
+/* Single-theme by design: this page commits to the Material 3 light palette
+   above and paints every surface and text color explicitly, so it holds
+   its own regardless of the viewer's system or app theme. */
+
+*{box-sizing:border-box;}
+
+body{
+  margin:0;
+  background:var(--surface);
+  color:var(--on-surface);
+  font-family:"Roboto","Helvetica Neue",Arial,sans-serif;
+  font-size:16px;
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ---------- M3 type scale ---------- */
+.display{
+  font-family:"Roboto Flex","Roboto",sans-serif;
+  font-variation-settings:"opsz" 96,"wght" 500;
+  font-size:clamp(2.1rem,1.3rem + 3.4vw,3.4rem);
+  line-height:1.1;
+  letter-spacing:-.025em;
+  text-wrap:balance;
+  margin:0;
+}
+h2.headline{
+  font-family:"Roboto Flex","Roboto",sans-serif;
+  font-variation-settings:"opsz" 40,"wght" 500;
+  font-size:clamp(1.55rem,1.2rem + 1.3vw,2.05rem);
+  line-height:1.2;
+  letter-spacing:-.014em;
+  text-wrap:balance;
+  margin:0;
+}
+h3.title{
+  font-family:"Roboto Flex","Roboto",sans-serif;
+  font-variation-settings:"opsz" 24,"wght" 600;
+  font-size:1.16rem;
+  line-height:1.35;
+  letter-spacing:-.004em;
+  text-wrap:balance;
+  margin:0;
+}
+h4.subtitle{
+  font-family:"Roboto",sans-serif;
+  font-weight:500;
+  font-size:.98rem;
+  line-height:1.4;
+  margin:0;
+}
+.eyebrow{
+  font-family:"Roboto Mono",ui-monospace,monospace;
+  font-size:.7rem;
+  font-weight:500;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--on-surface-variant);
+  margin:0;
+}
+p{margin:0;}
+strong{font-weight:500;color:var(--on-surface);}
+em{font-style:italic;}
+a{color:var(--primary);text-underline-offset:2px;}
+a:focus-visible,button:focus-visible,summary:focus-visible{
+  outline:3px solid var(--primary);
+  outline-offset:2px;
+  border-radius:4px;
+}
+
+.mono{font-family:"Roboto Mono",ui-monospace,monospace;font-size:.86em;}
+
+.msym{
+  font-family:"Material Symbols Outlined";
+  font-weight:normal;font-style:normal;
+  line-height:1;letter-spacing:normal;text-transform:none;
+  display:inline-block;white-space:nowrap;direction:ltr;
+  -webkit-font-feature-settings:"liga";font-feature-settings:"liga";
+  -webkit-font-smoothing:antialiased;
+  font-size:22px;
+}
+
+/* ---------- shell ---------- */
+.shell{display:flex;align-items:flex-start;gap:0;}
+
+/* Navigation rail (M3) */
+.rail{
+  position:sticky;top:0;
+  flex:0 0 var(--rail-w);
+  width:var(--rail-w);
+  height:100vh;
+  overflow-y:auto;
+  background:var(--surface-container-low);
+  border-right:1px solid var(--outline-variant);
+  padding:20px 12px 32px;
+  display:flex;flex-direction:column;gap:4px;
+}
+.rail-brand{
+  display:flex;align-items:center;gap:10px;
+  padding:6px 10px 18px;
+}
+.rail-brand .dot{
+  width:26px;height:26px;border-radius:50%;
+  background:conic-gradient(from 0deg,var(--acc-blue) 0 25%,var(--acc-red) 25% 50%,var(--acc-yellow) 50% 75%,var(--acc-green) 75% 100%);
+  flex:0 0 auto;
+}
+.rail-brand span{
+  font-family:"Roboto Flex",sans-serif;
+  font-variation-settings:"wght" 600;
+  font-size:.92rem;letter-spacing:-.01em;
+}
+.rail a{
+  display:flex;align-items:center;gap:12px;
+  padding:9px 14px;border-radius:100px;
+  color:var(--on-surface-variant);
+  text-decoration:none;
+  font-size:.86rem;font-weight:500;
+  line-height:1.3;
+  transition:background .15s ease,color .15s ease;
+}
+.rail a .msym{font-size:20px;flex:0 0 20px;}
+.rail a:hover{background:var(--surface-container-high);color:var(--on-surface);}
+.rail a.active{background:var(--primary-container);color:var(--on-primary-container);}
+
+/* Mobile tab bar */
+.tabbar{
+  display:none;
+  position:sticky;top:0;z-index:20;
+  background:var(--surface-container-low);
+  border-bottom:1px solid var(--outline-variant);
+}
+.tabbar-scroll{
+  display:flex;gap:8px;overflow-x:auto;
+  padding:10px 16px;
+  scrollbar-width:none;
+}
+.tabbar-scroll::-webkit-scrollbar{display:none;}
+.tabbar a{
+  flex:0 0 auto;
+  padding:6px 14px;border-radius:100px;
+  border:1px solid var(--outline-variant);
+  color:var(--on-surface-variant);
+  text-decoration:none;font-size:.82rem;font-weight:500;
+  white-space:nowrap;
+}
+.tabbar a.active{background:var(--primary-container);color:var(--on-primary-container);border-color:transparent;}
+
+main{
+  flex:1 1 auto;
+  min-width:0;
+  padding-inline:clamp(16px,4vw,56px);
+  padding-block:0 96px;
+}
+.col{max-width:var(--measure);}
+.col-wide{max-width:min(1040px,100%);}
+
+section{
+  padding-block:clamp(48px,6vw,80px);
+  border-top:1px solid var(--outline-variant);
+  display:flex;flex-direction:column;gap:28px;
+}
+section:first-of-type{border-top:none;}
+.sec-head{display:flex;flex-direction:column;gap:10px;max-width:var(--measure);}
+.stack{display:flex;flex-direction:column;gap:16px;}
+.stack-lg{display:flex;flex-direction:column;gap:26px;}
+
+/* ---------- hero ---------- */
+.hero{
+  padding-block:clamp(44px,7vw,88px) clamp(36px,5vw,56px);
+  display:flex;flex-direction:column;gap:26px;
+  border-top:none;
+}
+.hero .lede{
+  font-size:clamp(1.02rem,.96rem + .3vw,1.16rem);
+  color:var(--on-surface-variant);
+  max-width:62ch;
+}
+.hero-meta{
+  display:flex;flex-wrap:wrap;gap:8px;
+}
+.chip{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:6px 14px;border-radius:8px;
+  border:1px solid var(--outline-variant);
+  background:var(--surface-container-low);
+  font-size:.8rem;font-weight:500;color:var(--on-surface-variant);
+}
+.chip .msym{font-size:17px;}
+
+/* ---------- cards: spent by role, not stamped everywhere ---------- */
+.card{
+  background:var(--surface-container-low);
+  border-radius:16px;
+  padding:22px 24px;
+  display:flex;flex-direction:column;gap:12px;
+}
+.card-outlined{
+  background:transparent;
+  border:1px solid var(--outline-variant);
+  border-radius:16px;
+  padding:22px 24px;
+  display:flex;flex-direction:column;gap:12px;
+}
+.card-elevated{
+  background:var(--surface-container-lowest);
+  box-shadow:var(--shadow-1);
+  border-radius:16px;
+  padding:24px 26px;
+  display:flex;flex-direction:column;gap:14px;
+}
+.card-key{
+  background:var(--primary-container);
+  color:var(--on-primary-container);
+  border-radius:16px;
+  padding:22px 24px;
+  display:flex;flex-direction:column;gap:10px;
+}
+.card-key .eyebrow{color:var(--on-primary-container);opacity:.8;}
+.card-key strong{color:inherit;}
+
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;}
+.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(232px,1fr));gap:16px;}
+
+/* ---------- axioms (a real sequence → numbering earns its place) ---------- */
+.axioms{display:flex;flex-direction:column;gap:0;}
+.axiom{
+  display:grid;
+  grid-template-columns:56px 1fr;
+  gap:0 20px;
+  padding:22px 0;
+  border-bottom:1px solid var(--outline-variant);
+}
+.axiom:first-child{border-top:1px solid var(--outline-variant);}
+.axiom-n{
+  font-family:"Roboto Mono",monospace;
+  font-size:.78rem;font-weight:500;
+  color:var(--primary);
+  padding-top:4px;
+  letter-spacing:.06em;
+}
+.axiom-body{display:flex;flex-direction:column;gap:9px;min-width:0;}
+.axiom-body .because{
+  font-size:.9rem;
+  color:var(--on-surface-variant);
+  padding-left:14px;
+  border-left:2px solid var(--outline-variant);
+}
+.arrow-line{
+  font-family:"Roboto Mono",monospace;
+  font-size:.8rem;color:var(--primary);
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+}
+
+/* ---------- pace layers ---------- */
+.layers{display:flex;flex-direction:column;gap:6px;}
+.layer{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  align-items:center;gap:16px;
+  padding:14px 18px;
+  border-radius:10px;
+  background:var(--surface-container);
+}
+.layer .lname{display:flex;flex-direction:column;gap:3px;min-width:0;}
+.layer .lname b{font-weight:500;font-size:.97rem;}
+.layer .lname span{font-size:.85rem;color:var(--on-surface-variant);}
+.layer .rate{
+  font-family:"Roboto Mono",monospace;font-size:.74rem;
+  white-space:nowrap;padding:4px 10px;border-radius:6px;
+  background:var(--surface-container-highest);
+  color:var(--on-surface-variant);
+  font-variant-numeric:tabular-nums;
+}
+.layer.l0{background:var(--acc-blue-bg);}
+.layer.l1{background:var(--acc-green-bg);}
+.layer.l2{background:var(--acc-yellow-bg);}
+.layer.l3{background:var(--acc-red-bg);}
+.layer.l4{background:var(--surface-container-high);}
+
+/* ---------- loops ---------- */
+.loops{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:16px;}
+.loop{
+  border:1px solid var(--outline-variant);
+  border-radius:16px;padding:18px 20px 14px;
+  display:flex;flex-direction:column;gap:12px;
+}
+.loop-head{display:flex;align-items:center;gap:10px;}
+.badge{
+  width:30px;height:30px;border-radius:50%;
+  display:grid;place-items:center;
+  font-family:"Roboto Mono",monospace;font-size:.78rem;font-weight:500;
+  flex:0 0 auto;
+}
+.badge.r{background:var(--acc-red-bg);color:var(--acc-red);}
+.badge.b{background:var(--acc-blue-bg);color:var(--acc-blue);}
+.loop svg{width:100%;height:auto;display:block;}
+.loop p{font-size:.9rem;color:var(--on-surface-variant);}
+
+figure{margin:0;display:flex;flex-direction:column;gap:10px;}
+figure svg{width:100%;height:auto;display:block;}
+figcaption{font-size:.84rem;color:var(--on-surface-variant);}
+.figframe{
+  border:1px solid var(--outline-variant);
+  border-radius:16px;
+  padding:20px;
+  background:var(--surface-container-lowest);
+  overflow-x:auto;
+}
+
+/* ---------- domain list ---------- */
+.domains{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:14px;}
+.domain{
+  border:1px solid var(--outline-variant);
+  border-radius:16px;
+  padding:18px 20px;
+  display:flex;flex-direction:column;gap:12px;
+}
+.domain-head{display:flex;align-items:center;gap:11px;}
+.domain-head .msym{color:var(--primary);font-size:21px;}
+.domain-head b{font-weight:500;font-size:1rem;}
+.dl{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:.87rem;}
+.dl dt{
+  font-family:"Roboto Mono",monospace;font-size:.67rem;
+  letter-spacing:.08em;text-transform:uppercase;
+  color:var(--on-surface-variant);padding-top:4px;white-space:nowrap;
+}
+.dl dd{margin:0;color:var(--on-surface);}
+.dl dd.fail{color:var(--acc-red);}
+
+/* ---------- table ---------- */
+.tablewrap{overflow-x:auto;border:1px solid var(--outline-variant);border-radius:16px;}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:.88rem;}
+th,td{text-align:left;padding:13px 18px;border-bottom:1px solid var(--outline-variant);vertical-align:top;}
+thead th{
+  font-family:"Roboto Mono",monospace;font-size:.68rem;
+  letter-spacing:.09em;text-transform:uppercase;
+  color:var(--on-surface-variant);font-weight:500;
+  background:var(--surface-container-low);
+}
+tbody tr:last-child td{border-bottom:none;}
+td b{font-weight:500;}
+
+/* ---------- expansion panels ---------- */
+details{
+  border:1px solid var(--outline-variant);
+  border-radius:12px;
+  background:var(--surface-container-lowest);
+  overflow:hidden;
+}
+details+details{margin-top:8px;}
+summary{
+  cursor:pointer;list-style:none;
+  padding:15px 20px;
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  font-weight:500;font-size:.95rem;
+}
+summary::-webkit-details-marker{display:none;}
+summary::after{
+  content:"expand_more";
+  font-family:"Material Symbols Outlined";font-size:21px;font-weight:normal;
+  color:var(--on-surface-variant);
+  transition:transform .18s ease;flex:0 0 auto;
+}
+details[open] summary::after{transform:rotate(180deg);}
+.details-body{
+  padding:0 20px 18px;
+  display:flex;flex-direction:column;gap:12px;
+  font-size:.92rem;color:var(--on-surface-variant);
+}
+.details-body strong{color:var(--on-surface);}
+
+/* ---------- leverage ladder ---------- */
+.ladder{display:flex;flex-direction:column;gap:0;}
+.rung{
+  display:grid;grid-template-columns:44px 1fr;gap:0 18px;
+  padding:15px 0;border-bottom:1px solid var(--outline-variant);
+  align-items:start;
+}
+.rung:first-child{border-top:1px solid var(--outline-variant);}
+.rung-n{
+  font-family:"Roboto Mono",monospace;font-size:.75rem;
+  color:var(--on-surface-variant);padding-top:3px;
+  font-variant-numeric:tabular-nums;
+}
+.rung-body{display:flex;flex-direction:column;gap:5px;min-width:0;}
+.rung-body b{font-weight:500;}
+.rung-body span{font-size:.88rem;color:var(--on-surface-variant);}
+.rung.high .rung-n{color:var(--acc-green);}
+.rung.high b::after{
+  content:"high leverage";
+  font-family:"Roboto Mono",monospace;font-size:.62rem;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--acc-green);
+  background:var(--acc-green-bg);padding:3px 7px;border-radius:5px;
+  margin-left:10px;white-space:nowrap;
+}
+
+/* ---------- protocol ---------- */
+.qlist{display:flex;flex-direction:column;gap:2px;counter-reset:q;}
+.q{
+  display:grid;grid-template-columns:32px 1fr;gap:0 14px;
+  padding:12px 16px;border-radius:10px;
+  background:var(--surface-container-low);
+  align-items:start;
+}
+.q::before{
+  counter-increment:q;content:counter(q);
+  font-family:"Roboto Mono",monospace;font-size:.75rem;
+  color:var(--primary);padding-top:3px;
+}
+.q div{display:flex;flex-direction:column;gap:4px;min-width:0;}
+.q b{font-weight:500;font-size:.95rem;}
+.q span{font-size:.85rem;color:var(--on-surface-variant);}
+
+/* ---------- caution / contested ---------- */
+.caution{
+  border-left:3px solid var(--acc-yellow);
+  background:var(--acc-yellow-bg);
+  border-radius:0 12px 12px 0;
+  padding:16px 20px;
+  display:flex;flex-direction:column;gap:8px;
+  font-size:.91rem;
+}
+.caution .eyebrow{color:var(--acc-yellow);}
+
+/* ---------- reading ladder ---------- */
+.books{display:flex;flex-direction:column;gap:2px;}
+.book{
+  display:grid;grid-template-columns:1fr auto;gap:6px 16px;
+  padding:13px 16px;border-radius:10px;align-items:baseline;
+  background:var(--surface-container-low);
+}
+.book b{font-weight:500;font-size:.95rem;}
+.book i{font-style:normal;display:block;font-size:.85rem;color:var(--on-surface-variant);}
+.book .for{
+  font-family:"Roboto Mono",monospace;font-size:.68rem;
+  letter-spacing:.07em;text-transform:uppercase;
+  color:var(--on-surface-variant);white-space:nowrap;
+}
+
+footer{
+  padding-block:32px 8px;
+  border-top:1px solid var(--outline-variant);
+  font-size:.82rem;color:var(--on-surface-variant);
+  display:flex;flex-direction:column;gap:6px;
+}
+
+@media (max-width:980px){
+  .rail{display:none;}
+  .tabbar{display:block;}
+  .shell{display:block;}
+  main{padding-inline:clamp(16px,5vw,32px);}
+}
+@media (max-width:520px){
+  .axiom{grid-template-columns:1fr;gap:8px;}
+  .axiom-n{padding-top:0;}
+  .rung{grid-template-columns:36px 1fr;gap:0 12px;}
+  .layer{grid-template-columns:1fr;align-items:start;gap:8px;}
+  .book{grid-template-columns:1fr;}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none !important;transition:none !important;scroll-behavior:auto !important;}
+}
+html{scroll-behavior:smooth;}
+section{scroll-margin-top:72px;}
+</style>
+
+<div class="shell">
+
+  <nav class="rail" aria-label="Sections">
+    <div class="rail-brand"><span class="dot" aria-hidden="true"></span><span>Culture From<br>First Principles</span></div>
+    <a href="#reduction"><span class="msym" aria-hidden="true">target</span>The reduction</a>
+    <a href="#axioms"><span class="msym" aria-hidden="true">function</span>Five axioms</a>
+    <a href="#primitives"><span class="msym" aria-hidden="true">memory</span>The instruction set</a>
+    <a href="#stack"><span class="msym" aria-hidden="true">layers</span>The stack</a>
+    <a href="#dynamics"><span class="msym" aria-hidden="true">sync</span>Loops &amp; dynamics</a>
+    <a href="#domains"><span class="msym" aria-hidden="true">grid_view</span>Domains of society</a>
+    <a href="#variation"><span class="msym" aria-hidden="true">public</span>Why cultures differ</a>
+    <a href="#frameworks"><span class="msym" aria-hidden="true">straighten</span>Measuring culture</a>
+    <a href="#change"><span class="msym" aria-hidden="true">trending_up</span>How culture changes</a>
+    <a href="#leverage"><span class="msym" aria-hidden="true">tune</span>Leverage points</a>
+    <a href="#protocol"><span class="msym" aria-hidden="true">checklist</span>Reading any culture</a>
+    <a href="#limits"><span class="msym" aria-hidden="true">warning</span>Where this misleads</a>
+    <a href="#reading"><span class="msym" aria-hidden="true">menu_book</span>One book per layer</a>
+  </nav>
+
+  <div class="tabbar">
+    <div class="tabbar-scroll">
+      <a href="#reduction">Reduction</a>
+      <a href="#axioms">Axioms</a>
+      <a href="#primitives">Primitives</a>
+      <a href="#stack">Stack</a>
+      <a href="#dynamics">Loops</a>
+      <a href="#domains">Domains</a>
+      <a href="#variation">Variation</a>
+      <a href="#frameworks">Measuring</a>
+      <a href="#change">Change</a>
+      <a href="#leverage">Leverage</a>
+      <a href="#protocol">Protocol</a>
+      <a href="#limits">Limits</a>
+      <a href="#reading">Reading</a>
+    </div>
+  </div>
+
+  <main>
+
+    <!-- ================= HERO ================= -->
+    <section class="hero" id="top">
+      <div class="stack col">
+        <p class="eyebrow">A derivation, then a system</p>
+        <h1 class="display">Culture is not a list of customs. It is a distributed solution to four problems every group of humans must solve.</h1>
+        <p class="lede">Start from nothing but the human condition — short lives, bounded cognition, conflicting interests, the need to cooperate with strangers — and culture falls out as a necessity, not a decoration. This page derives it from five axioms, then re-describes the result as a system with stocks, loops, delays, multiple equilibria and leverage points.</p>
+      </div>
+      <div class="hero-meta">
+        <span class="chip"><span class="msym" aria-hidden="true">function</span>5 axioms</span>
+        <span class="chip"><span class="msym" aria-hidden="true">memory</span>7 primitives</span>
+        <span class="chip"><span class="msym" aria-hidden="true">layers</span>5 layers, 5 clock speeds</span>
+        <span class="chip"><span class="msym" aria-hidden="true">sync</span>4 core feedback loops</span>
+        <span class="chip"><span class="msym" aria-hidden="true">grid_view</span>11 domains</span>
+      </div>
+    </section>
+
+    <!-- ================= REDUCTION ================= -->
+    <section id="reduction">
+      <div class="sec-head">
+        <p class="eyebrow">01 · The reduction</p>
+        <h2 class="headline">What has to exist for "culture" to be a real thing?</h2>
+      </div>
+
+      <div class="stack col">
+        <p>Most explanations of culture start with the output: food, dress, festivals, language, etiquette. That is the phenotype. It tells you nothing about the machine. To get to first principles, strip away everything that could be otherwise and ask what remains.</p>
+        <p>Take a human being alone. They can learn from the world by trial and error. They die, and everything they learned dies with them. Now allow one thing — <strong>the ability to acquire behaviour by observing another human</strong>. That single addition creates an inheritance channel that runs alongside genes, carries acquired information, moves sideways as well as downward, and mutates fast. Everything else follows.</p>
+      </div>
+
+      <div class="card-key col">
+        <p class="eyebrow">Minimal definition</p>
+        <p><strong>Culture is information that lives in a population rather than in a person</strong> — transmitted by social learning, selected by processes other than the fitness of individual carriers, and stabilised by enforcement. A society's culture is the current contents of that population-level memory, plus the machinery that keeps writing to it.</p>
+      </div>
+
+      <div class="stack col">
+        <p>Three consequences drop out of that definition immediately, and they are the ones people usually miss:</p>
+      </div>
+
+      <div class="grid-3 col-wide">
+        <div class="card">
+          <p class="eyebrow">Consequence 1</p>
+          <h3 class="title">Culture is substrate-independent</h3>
+          <p>It does not care whether it is stored in brains, books, buildings, liturgy, law codes or a recommendation algorithm. Whatever medium copies it faithfully enough will do. That is why technology changes culture: it changes the copying medium.</p>
+        </div>
+        <div class="card">
+          <p class="eyebrow">Consequence 2</p>
+          <h3 class="title">Culture can be maladaptive</h3>
+          <p>Traits survive because they are <em>transmissible</em>, not because they are good for their carriers. A practice that is copied readily and harms those who hold it can persist indefinitely. Function is a frequent outcome, never a guarantee.</p>
+        </div>
+        <div class="card">
+          <p class="eyebrow">Consequence 3</p>
+          <h3 class="title">Nobody is holding the whole thing</h3>
+          <p>No individual stores the culture. Each person carries a fragment plus the expectation that others carry compatible fragments. This is why culture is hard to redesign deliberately, and why it can collapse faster than anyone predicted.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= AXIOMS ================= -->
+    <section id="axioms">
+      <div class="sec-head">
+        <p class="eyebrow">02 · Five axioms</p>
+        <h2 class="headline">Derivation: from the human condition to the cultural machinery</h2>
+        <p style="color:var(--on-surface-variant)">Each axiom states a constraint humans cannot escape. Each conclusion is the mechanism that constraint forces into existence. Read the chain in order — every later axiom exists to patch a hole opened by the earlier one.</p>
+      </div>
+
+      <div class="axioms col-wide">
+
+        <div class="axiom">
+          <div class="axiom-n">A1</div>
+          <div class="axiom-body">
+            <h3 class="title">Lives are short and the problem space is not</h3>
+            <p class="because">Constraint: an individual cannot personally discover how to detoxify cassava, navigate by stars, or run a legal system within one lifetime.</p>
+            <p>Therefore <strong>copying must beat solving</strong>. Selection favours cheap, high-fidelity social learning — and, crucially, learning that is <em>not</em> filtered through individual comprehension. People adopt practices whose reasons they cannot state. This is a feature: demanding a reason for every step would destroy multi-generational recipes whose logic is invisible in any single step.</p>
+            <p class="arrow-line"><span class="msym" style="font-size:16px" aria-hidden="true">arrow_forward</span>Yields: <strong>cumulative transmission</strong>, and opaque tradition as a rational default.</p>
+          </div>
+        </div>
+
+        <div class="axiom">
+          <div class="axiom-n">A2</div>
+          <div class="axiom-body">
+            <h3 class="title">Most coordination problems have many equally good answers</h3>
+            <p class="because">Constraint: which side of the road, which language, which unit, which greeting, who inherits, what counts as an insult — the payoff comes from <em>matching others</em>, not from the content of the choice.</p>
+            <p>Therefore a group needs an arbitrary but <strong>shared</strong> selection device. Convention is that device. It is self-enforcing in the pure case: once everyone drives left, no one gains by deviating. This is the cheapest kind of culture — no policing required, only common knowledge.</p>
+            <p class="arrow-line"><span class="msym" style="font-size:16px" aria-hidden="true">arrow_forward</span>Yields: <strong>convention</strong>, arbitrariness, and the first appearance of multiple stable equilibria.</p>
+          </div>
+        </div>
+
+        <div class="axiom">
+          <div class="axiom-n">A3</div>
+          <div class="axiom-body">
+            <h3 class="title">Interests conflict, so not every rule is self-enforcing</h3>
+            <p class="because">Constraint: with public goods, commons, honesty and restraint, the individually optimal move is to defect while others comply. Convention alone cannot hold this.</p>
+            <p>Therefore the group must make defection expensive: <strong>norms plus sanction</strong> — gossip, shame, exclusion, reputation, punishment. And because punishing is itself costly, a second-order problem appears at once: who punishes those who don't punish? Groups answer it with <strong>meta-norms</strong> — it becomes shameful to tolerate the shameless.</p>
+            <p class="arrow-line"><span class="msym" style="font-size:16px" aria-hidden="true">arrow_forward</span>Yields: <strong>norms, sanction, reputation, meta-norms</strong>.</p>
+          </div>
+        </div>
+
+        <div class="axiom">
+          <div class="axiom-n">A4</div>
+          <div class="axiom-body">
+            <h3 class="title">Monitoring is expensive and never complete</h3>
+            <p class="because">Constraint: no group can watch everyone. External enforcement scales badly and fails precisely where it matters — in private, at a distance, among strangers.</p>
+            <p>Therefore enforcement must be moved <em>inside</em> the person. Culture installs emotions that punish the holder directly: guilt, shame, disgust, honour, duty. It marks certain rules as non-negotiable — <strong>sacred values</strong>, resistant to cost-benefit trade — and dramatises them through <strong>ritual</strong>, which synchronises bodies, generates costly proof of commitment, and writes belief into memory far more durably than instruction.</p>
+            <p class="arrow-line"><span class="msym" style="font-size:16px" aria-hidden="true">arrow_forward</span>Yields: <strong>internalised values, the sacred, ritual, taboo, moral emotion</strong>.</p>
+          </div>
+        </div>
+
+        <div class="axiom">
+          <div class="axiom-n">A5</div>
+          <div class="axiom-body">
+            <h3 class="title">Groups with different cultures compete, and members can defect between them</h3>
+            <p class="because">Constraint: a norm only pays if you are dealing with someone who shares it. You must be able to tell who does — and signal that you do, in a way that a free-rider cannot cheaply fake.</p>
+            <p>Therefore cultures grow <strong>boundaries</strong>: markers that are hard to fake and slow to learn (accent, dialect, dress, food rules, body modification, obscure etiquette, long initiation). These double as identity. And because groups whose cultural package produces more cooperation tend to expand, spread, or be imitated, culture becomes subject to selection <em>between</em> groups as well as within them.</p>
+            <p class="arrow-line"><span class="msym" style="font-size:16px" aria-hidden="true">arrow_forward</span>Yields: <strong>ethnic markers, identity, in-group/out-group, cultural group selection</strong>.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="card-outlined col">
+        <p class="eyebrow">The chain, compressed</p>
+        <p class="mono" style="line-height:2.1">short lives → <strong>copy</strong> → many equilibria → <strong>convention</strong> → conflicting interests → <strong>norm + sanction</strong> → costly monitoring → <strong>internalisation + ritual</strong> → group competition → <strong>boundary + identity</strong></p>
+        <p style="font-size:.9rem;color:var(--on-surface-variant)">Every observable cultural system in any society is some configuration of those five mechanisms applied to a particular domain of life. The rest of this page is that claim, worked out.</p>
+      </div>
+    </section>
+
+    <!-- ================= PRIMITIVES ================= -->
+    <section id="primitives">
+      <div class="sec-head">
+        <p class="eyebrow">03 · The instruction set</p>
+        <h2 class="headline">Seven primitives every culture is assembled from</h2>
+        <p style="color:var(--on-surface-variant)">These are the reusable parts. A wedding, a code review, a courtroom and a cricket match are different programs written with the same instructions.</p>
+      </div>
+
+      <div class="tablewrap col-wide">
+        <table>
+          <thead>
+            <tr><th scope="col">Primitive</th><th scope="col">What it is</th><th scope="col">Problem it solves</th><th scope="col">Failure mode</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>Symbol</b></td>
+              <td>An arbitrary form carrying agreed meaning — word, gesture, flag, colour of clothing.</td>
+              <td>Compresses shared reference so coordination needs no re-negotiation.</td>
+              <td>Drift: the form persists after the meaning has moved, and people argue past each other.</td>
+            </tr>
+            <tr>
+              <td><b>Script</b></td>
+              <td>A sequenced expectation for a recurring situation — how a funeral, a haggle, a standup runs.</td>
+              <td>Removes improvisation cost from repeated interactions.</td>
+              <td>Ritualism: the script is executed perfectly while its purpose goes unserved.</td>
+            </tr>
+            <tr>
+              <td><b>Role</b></td>
+              <td>A bundle of rights, duties and expected behaviour attached to a position, not a person.</td>
+              <td>Lets strangers predict each other and lets institutions outlive individuals.</td>
+              <td>Role conflict and role capture — the person is consumed by, or bends, the position.</td>
+            </tr>
+            <tr>
+              <td><b>Norm</b></td>
+              <td>A rule of behaviour plus a shared expectation that deviation draws a response.</td>
+              <td>Holds cooperation where individual incentive points the other way.</td>
+              <td>Pluralistic ignorance: nearly everyone privately rejects it and publicly upholds it.</td>
+            </tr>
+            <tr>
+              <td><b>Ritual</b></td>
+              <td>Costly, formalised, causally opaque action performed together.</td>
+              <td>Proves commitment, synchronises emotion, encodes belief in the body and in memory.</td>
+              <td>Empty formality, or escalation of cost until the ritual outweighs the group it binds.</td>
+            </tr>
+            <tr>
+              <td><b>Narrative</b></td>
+              <td>Myth, history, origin story, morality tale — causal structure laid over events.</td>
+              <td>Makes a complex world explicable, transmissible and morally legible.</td>
+              <td>Explains too much; becomes unfalsifiable and licenses whatever it is used to justify.</td>
+            </tr>
+            <tr>
+              <td><b>Status ladder</b></td>
+              <td>A publicly readable ranking of who is worth imitating and deferring to.</td>
+              <td>Directs the copying channel toward whoever the culture treats as successful.</td>
+              <td>Runaway signalling: the marker of status detaches from what made it worth having.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="col stack">
+        <div class="caution">
+          <p class="eyebrow">A systems note on the status ladder</p>
+          <p>The status ladder is the single highest-leverage primitive, because it is the <em>gain control</em> on the transmission channel. Humans preferentially copy the prestigious, and they copy them indiscriminately — including traits irrelevant to the success that made them prestigious. Change who is admired and you change the copying targets of the whole population without touching a single rule. This is also why prestige is fought over so bitterly.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= STACK ================= -->
+    <section id="stack">
+      <div class="sec-head">
+        <p class="eyebrow">04 · The stack</p>
+        <h2 class="headline">Five layers, each with its own clock speed</h2>
+        <p style="color:var(--on-surface-variant)">The single most useful structural idea here: cultural systems are layered, and the layers change at wildly different rates. Fast layers propose; slow layers dispose. Most confusion about culture comes from mistaking a fast-layer event for a slow-layer change.</p>
+      </div>
+
+      <div class="layers col-wide">
+        <div class="layer l0">
+          <div class="lname"><b>L4 · Fashion &amp; discourse</b><span>Slang, memes, style, what is currently sayable, this year's controversy</span></div>
+          <span class="rate">days – years</span>
+        </div>
+        <div class="layer l1">
+          <div class="lname"><b>L3 · Practice</b><span>How work is actually done, what parenting looks like, everyday etiquette, consumption patterns</span></div>
+          <span class="rate">years – decades</span>
+        </div>
+        <div class="layer l2">
+          <div class="lname"><b>L2 · Institutions</b><span>Family form, law, market, firm, school, religious organisation, state</span></div>
+          <span class="rate">decades – centuries</span>
+        </div>
+        <div class="layer l3">
+          <div class="lname"><b>L1 · Deep values &amp; cosmology</b><span>What is sacred, what a person is, obligation to kin vs strangers, relation to time and authority</span></div>
+          <span class="rate">centuries – millennia</span>
+        </div>
+        <div class="layer l4">
+          <div class="lname"><b>L0 · Human substrate</b><span>Imitation, theory of mind, language capacity, disgust, shame, fairness intuitions, in-group bias</span></div>
+          <span class="rate">evolutionary</span>
+        </div>
+      </div>
+
+      <div class="grid-2 col-wide">
+        <div class="card">
+          <h3 class="title">The coupling rule</h3>
+          <p>Fast layers get the attention; slow layers hold the constraints. A fast layer can only move as far as the layer beneath it tolerates — and when it moves further, it either snaps back or drags the slow layer with it after a long delay. Sustained pressure from above is how deep layers actually shift, but the response time is measured in generations.</p>
+        </div>
+        <div class="card">
+          <h3 class="title">Why this explains most cultural arguments</h3>
+          <p>Two people disputing "whether the culture has changed" are usually reading different layers. Discourse can invert in five years while practice barely moves; practice can transform while cosmology stands still. Neither party is lying. Always ask which layer a claim is about before evaluating it.</p>
+        </div>
+      </div>
+
+      <div class="caution col">
+        <p class="eyebrow">Where the layer model breaks</p>
+        <p>The layers are not cleanly separable and the causality is not one-directional. Institutions reshape values as readily as values shape institutions — mass schooling, contraception and the factory all rewrote deep norms within a century or two. Treat this as a lens for locating rates of change, not as an ontology.</p>
+      </div>
+    </section>
+
+    <!-- ================= DYNAMICS ================= -->
+    <section id="dynamics">
+      <div class="sec-head">
+        <p class="eyebrow">05 · Loops &amp; dynamics</p>
+        <h2 class="headline">The systems layer: what culture does over time</h2>
+        <p style="color:var(--on-surface-variant)">Now re-describe everything above as a system. The primitives are the components; these are the behaviours that emerge once you connect them and let time run.</p>
+      </div>
+
+      <!-- stock and flow -->
+      <figure class="col-wide">
+        <div class="figframe">
+          <svg viewBox="0 0 720 250" role="img" aria-labelledby="sfTitle sfDesc">
+            <title id="sfTitle">Stock and flow diagram of a cultural trait</title>
+            <desc id="sfDesc">A central stock of shared practice, fed by four inflows and drained by four outflows.</desc>
+            <defs>
+              <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/>
+              </marker>
+            </defs>
+            <g style="color:var(--acc-green)">
+              <line x1="30" y1="125" x2="238" y2="125" stroke="currentColor" stroke-width="2.5" marker-end="url(#ah)"/>
+            </g>
+            <g style="color:var(--acc-red)">
+              <line x1="482" y1="125" x2="690" y2="125" stroke="currentColor" stroke-width="2.5" marker-end="url(#ah)"/>
+            </g>
+            <rect x="248" y="82" width="224" height="86" rx="14" fill="var(--primary-container)" stroke="var(--primary)" stroke-width="1.5"/>
+            <text x="360" y="114" text-anchor="middle" font-family="Roboto, sans-serif" font-size="15" font-weight="500" fill="var(--on-primary-container)">STOCK</text>
+            <text x="360" y="139" text-anchor="middle" font-family="Roboto, sans-serif" font-size="13" fill="var(--on-primary-container)">people holding the practice</text>
+            <text x="360" y="157" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="10.5" fill="var(--on-primary-container)">+ its expectation of others</text>
+
+            <text x="30" y="66" font-family="Roboto Mono, monospace" font-size="10" letter-spacing="1" fill="var(--acc-green)">INFLOWS</text>
+            <text x="30" y="88" font-family="Roboto, sans-serif" font-size="12.5" fill="var(--on-surface)">childhood socialisation</text>
+            <text x="30" y="107" font-family="Roboto, sans-serif" font-size="12.5" fill="var(--on-surface)">prestige imitation</text>
+            <text x="30" y="160" font-family="Roboto, sans-serif" font-size="12.5" fill="var(--on-surface)">in-migration, conversion</text>
+            <text x="30" y="179" font-family="Roboto, sans-serif" font-size="12.5" fill="var(--on-surface)">invention, borrowing</text>
+
+            <text x="500" y="66" font-family="Roboto Mono, monospace" font-size="10" letter-spacing="1" fill="var(--acc-red)">OUTFLOWS</text>
+            <text x="500" y="88" font-family="Roboto, sans-serif" font-size="12.5" fill="var(--on-surface)">generational turnover</text>
+            <text x="500" y="107" font-family="Roboto, sans-serif" font-size="12.5" fill="var(--on-surface)">defection, exit</text>
+            <text x="500" y="160" font-family="Roboto, sans-serif" font-size="12.5" fill="var(--on-surface)">transmission error</text>
+            <text x="500" y="179" font-family="Roboto, sans-serif" font-size="12.5" fill="var(--on-surface)">disuse, forgetting</text>
+
+            <text x="360" y="220" text-anchor="middle" font-family="Roboto, sans-serif" font-size="12.5" font-style="italic" fill="var(--on-surface-variant)">The stock is invisible. Only the flows make noise — which is why cultural change is</text>
+            <text x="360" y="238" text-anchor="middle" font-family="Roboto, sans-serif" font-size="12.5" font-style="italic" fill="var(--on-surface-variant)">systematically mis-estimated in both directions.</text>
+          </svg>
+        </div>
+        <figcaption>Any cultural trait is a stock with inflows and outflows. Note what this implies: a practice can be losing support for thirty years while looking untouched, because the outflow is slow and silent. Then it appears to "collapse suddenly" — the stock simply crossed a threshold.</figcaption>
+      </figure>
+
+      <div class="stack col">
+        <h3 class="title">The four loops that run underneath everything</h3>
+        <p style="color:var(--on-surface-variant)">Two reinforcing (R) loops make culture spread and lock in. Two balancing (B) loops make it hold shape and resist. Every cultural conflict you have ever watched is some combination of these four fighting each other at different strengths and delays.</p>
+      </div>
+
+      <div class="loops col-wide">
+
+        <div class="loop">
+          <div class="loop-head"><span class="badge r">R1</span><h4 class="subtitle">Conformity cascade</h4></div>
+          <svg viewBox="0 0 300 168" role="img" aria-label="Reinforcing loop: visible compliance raises perceived consensus, which raises private adoption, which raises visible compliance">
+            <defs>
+              <marker id="ar1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--acc-red)"/>
+              </marker>
+            </defs>
+            <path d="M 150 34 A 62 52 0 0 1 212 112" fill="none" stroke="var(--acc-red)" stroke-width="2" marker-end="url(#ar1)"/>
+            <path d="M 206 128 A 62 52 0 0 1 94 128" fill="none" stroke="var(--acc-red)" stroke-width="2" marker-end="url(#ar1)"/>
+            <path d="M 88 112 A 62 52 0 0 1 144 36" fill="none" stroke="var(--acc-red)" stroke-width="2" marker-end="url(#ar1)"/>
+            <text x="150" y="26" text-anchor="middle" font-family="Roboto, sans-serif" font-size="12" fill="var(--on-surface)">visible compliance</text>
+            <text x="252" y="128" text-anchor="middle" font-family="Roboto, sans-serif" font-size="12" fill="var(--on-surface)">perceived</text>
+            <text x="252" y="144" text-anchor="middle" font-family="Roboto, sans-serif" font-size="12" fill="var(--on-surface)">consensus</text>
+            <text x="50" y="128" text-anchor="middle" font-family="Roboto, sans-serif" font-size="12" fill="var(--on-surface)">private</text>
+            <text x="50" y="144" text-anchor="middle" font-family="Roboto, sans-serif" font-size="12" fill="var(--on-surface)">adoption</text>
+            <text x="150" y="92" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="11" fill="var(--acc-red)">R</text>
+          </svg>
+          <p>People infer what is correct from what is common. Each additional visible adopter raises the estimate of consensus, which recruits the next. Fast, and the engine of both fashion and revolution.</p>
+        </div>
+
+        <div class="loop">
+          <div class="loop-head"><span class="badge b">B1</span><h4 class="subtitle">Sanction</h4></div>
+          <svg viewBox="0 0 300 168" role="img" aria-label="Balancing loop: deviance triggers sanction, which reduces deviance">
+            <defs>
+              <marker id="ab1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--acc-blue)"/>
+              </marker>
+            </defs>
+            <path d="M 150 34 A 62 52 0 0 1 212 112" fill="none" stroke="var(--acc-blue)" stroke-width="2" marker-end="url(#ab1)"/>
+            <path d="M 206 128 A 62 52 0 0 1 94 128" fill="none" stroke="var(--acc-blue)" stroke-width="2" marker-end="url(#ab1)"/>
+            <path d="M 88 112 A 62 52 0 0 1 144 36" fill="none" stroke="var(--acc-blue)" stroke-width="2" marker-end="url(#ab1)"/>
+            <text x="150" y="26" text-anchor="middle" font-family="Roboto, sans-serif" font-size="12" fill="var(--on-surface)">visible deviance</text>
+            <text x="252" y="128" text-anchor="middle" font-family="Roboto, sans-serif" font-size="12" fill="var(--on-surface)">gossip,</text>
+            <text x="252" y="144" text-anchor="middle" font-family="Roboto, sans-serif" font-size="12" fill="var(--on-surface)">shame, exit</text>
+            <text x="50" y="128" text-anchor="middle" font-family="Roboto, sans-serif" font-size="12" fill="var(--on-surface)">expected</text>
+            <text x="50" y="144" text-anchor="middle" font-family="Roboto, sans-serif" font-size="12" fill="var(--on-surface)">cost ↑</text>
+            <text x="150" y="92" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="11" fill="var(--acc-blue)">B</text>
+          </svg>
+          <p>The homeostat. It pulls behaviour back to the norm and gives culture its apparent solidity. Its strength depends entirely on observability — which is why anonymity and scale weaken norms so reliably.</p>
+        </div>
+
+        <div class="loop">
+          <div class="loop-head"><span class="badge r">R2</span><h4 class="subtitle">Prestige</h4></div>
+          <svg viewBox="0 0 300 168" role="img" aria-label="Reinforcing loop: prestige of carriers drives imitation, which raises prevalence, which raises the trait's prestige">
+            <defs>
+              <marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--acc-red)"/>
+              </marker>
+            </defs>
+            <path d="M 150 34 A 62 52 0 0 1 212 112" fill="none" stroke="var(--acc-red)" stroke-width="2" marker-end="url(#ar2)"/>
+            <path d="M 206 128 A 62 52 0 0 1 94 128" fill="none" stroke="var(--acc-red)" stroke-width="2" marker-end="url(#ar2)"/>
+            <path d="M 88 112 A 62 52 0 0 1 144 36" fill="none" stroke="var(--acc-red)" stroke-width="2" marker-end="url(#ar2)"/>
+            <text x="150" y="26" text-anchor="middle" font-family="Roboto, sans-serif" font-size="12" fill="var(--on-surface)">prestige of carriers</text>
+            <text x="252" y="128" text-anchor="middle" font-family="Roboto, sans-serif" font-size="12" fill="var(--on-surface)">selective</text>
+            <text x="252" y="144" text-anchor="middle" font-family="Roboto, sans-serif" font-size="12" fill="var(--on-surface)">imitation</text>
+            <text x="50" y="128" text-anchor="middle" font-family="Roboto, sans-serif" font-size="12" fill="var(--on-surface)">trait becomes</text>
+            <text x="50" y="144" text-anchor="middle" font-family="Roboto, sans-serif" font-size="12" fill="var(--on-surface)">a status marker</text>
+            <text x="150" y="92" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="11" fill="var(--acc-red)">R</text>
+          </svg>
+          <p>Traits ride on the people who carry them. Once a trait marks status, adopting it buys status, which spreads it further — until it saturates, loses distinctiveness, and the elite move on. Fashion's whole cycle.</p>
+        </div>
+
+        <div class="loop">
+          <div class="loop-head"><span class="badge b">B2</span><h4 class="subtitle">Reactance</h4></div>
+          <svg viewBox="0 0 300 168" role="img" aria-label="Balancing loop: enforcement intensity produces identity threat, which produces counter-norm signalling, which undermines compliance">
+            <defs>
+              <marker id="ab2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--acc-blue)"/>
+              </marker>
+            </defs>
+            <path d="M 150 34 A 62 52 0 0 1 212 112" fill="none" stroke="var(--acc-blue)" stroke-width="2" marker-end="url(#ab2)"/>
+            <path d="M 206 128 A 62 52 0 0 1 94 128" fill="none" stroke="var(--acc-blue)" stroke-width="2" marker-end="url(#ab2)"/>
+            <path d="M 88 112 A 62 52 0 0 1 144 36" fill="none" stroke="var(--acc-blue)" stroke-width="2" marker-end="url(#ab2)"/>
+            <text x="150" y="26" text-anchor="middle" font-family="Roboto, sans-serif" font-size="12" fill="var(--on-surface)">enforcement intensity</text>
+            <text x="252" y="128" text-anchor="middle" font-family="Roboto, sans-serif" font-size="12" fill="var(--on-surface)">identity</text>
+            <text x="252" y="144" text-anchor="middle" font-family="Roboto, sans-serif" font-size="12" fill="var(--on-surface)">threat</text>
+            <text x="50" y="128" text-anchor="middle" font-family="Roboto, sans-serif" font-size="12" fill="var(--on-surface)">counter-norm</text>
+            <text x="50" y="144" text-anchor="middle" font-family="Roboto, sans-serif" font-size="12" fill="var(--on-surface)">signalling</text>
+            <text x="150" y="92" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="11" fill="var(--acc-blue)">B</text>
+          </svg>
+          <p>Push hard enough and deviance becomes a badge. Enforcement that reads as an attack on identity converts private indifference into public opposition — and manufactures exactly the coalition it was trying to prevent.</p>
+        </div>
+
+      </div>
+
+      <div class="stack-lg col">
+        <h3 class="title">Seven system behaviours these loops produce</h3>
+      </div>
+
+      <div class="col-wide">
+        <details open>
+          <summary>Multiple equilibria and path dependence</summary>
+          <div class="details-body">
+            <p>Where payoffs come from matching others, several outcomes are equally stable and history picks one. Which side of the road, which script, which measurement system, which language of instruction — and, more consequentially, whether a society sits in a low-corruption or high-corruption equilibrium, since in both cases the rational individual move is to do what everyone else is doing.</p>
+            <p><strong>The systems consequence:</strong> "better" does not win. You cannot move a population to a superior equilibrium by demonstrating its superiority, because no individual can profitably move first. Equilibrium shifts need coordinated, simultaneous, visible change — which is why they are rare and why they tend to arrive abruptly when they do.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>Hysteresis — norms outlive their causes</summary>
+          <div class="details-body">
+            <p>A practice adapted to conditions that have since vanished persists, because the loops maintaining it (R1 conformity, B1 sanction, internalisation) are independent of the original cause. The function that created a norm and the mechanism that sustains it are different systems.</p>
+            <p><strong>Two well-known empirical cases, both contested in their details but useful as illustrations:</strong> Alesina, Giuliano and Nunn's argument that societies historically dependent on plough agriculture — which rewarded upper-body strength — still show more unequal gender-role attitudes today; and the association Nisbett and Cohen documented between herding ancestry and honour-based responses to insult, a norm that made sense where wealth was mobile and stealable, long after most people stopped herding.</p>
+            <p><strong>The design consequence:</strong> before removing a practice whose purpose is invisible, establish whether the purpose has actually gone or merely become unstated. This is Chesterton's fence stated as a systems rule.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>Hidden state and preference falsification</summary>
+          <div class="details-body">
+            <p>The observable variable is public compliance. The variable that drives the system is private belief. Timur Kuran's central point: when sanctions are strong, the gap between the two grows unmeasured, and outside observers — including the regime, the leadership, the survey — read the public signal as the state of the system.</p>
+            <p><strong>The consequence:</strong> a culture can look maximally stable at the exact moment it is most fragile, because the entire stock of private dissent is invisible until a threshold of visible defectors makes speaking safe. Then it releases at once. Nobody predicted 1989; the information required to predict it was, by construction, unobservable.</p>
+            <p>The same mechanism runs in an organisation. Everyone agrees in the meeting, nothing gets implemented, and leadership concludes the problem is execution.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>Delays — the cohort clock</summary>
+          <div class="details-body">
+            <p>Deep values are largely set in the first two or three decades of life and then move slowly. Aggregate change therefore happens substantially through <em>cohort replacement</em> rather than individual conversion. This installs a delay of roughly a generation between a change in conditions and a change in measured population values.</p>
+            <p><strong>The consequence:</strong> the classic control-system pathology — oscillation and overshoot. Policy responds to a cultural state that has already moved; reformers conclude that nothing is working and escalate; the escalation lands just as the delayed response arrives, overshooting. Long delays in a feedback loop are the standard recipe for instability, and culture has among the longest delays of any system you will encounter.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>Tightness and looseness as a control setting</summary>
+          <div class="details-body">
+            <p>Michele Gelfand's finding, with the caveats that attach to any cross-national comparison: societies vary in the strength of their norms and their tolerance of deviation — "tight" versus "loose" — and this tracks historical exposure to threat (conflict, disaster, disease, resource scarcity, density).</p>
+            <p>Read as a system, this is a gain setting on B1, and it has a real trade-off rather than a right answer. <strong>Tight</strong> buys coordination, order and rapid collective response, and pays in innovation, tolerance of difference, and adaptability to novel conditions. <strong>Loose</strong> buys variation, creativity and adaptation, and pays in coordination failure and disorder. Threat turns the gain up; prolonged safety turns it down. Both settings feel self-evidently correct from inside.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>Requisite variety and the limits of a cultural repertoire</summary>
+          <div class="details-body">
+            <p>Ashby's law, applied: a regulator must have at least as much variety as the thing it regulates. A culture's repertoire of roles, scripts and norms is its regulatory variety. When the environment produces situations the repertoire has no script for — new technology, new scale, new kinds of stranger — the culture either improvises new variety or applies an old script badly.</p>
+            <p><strong>The consequence:</strong> rapid technological change is a variety attack on culture. Norms for interacting with a few hundred known people do not extend to a few million anonymous ones, and the resulting failures are not moral decline so much as a regulator running out of states.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>Levels of selection — within-group versus between-group</summary>
+          <div class="details-body">
+            <p>Within a group, selection favours whoever does best <em>relative to their neighbours</em> — which often means defecting. Between groups, selection favours whichever package produces the most cooperative, expansive, imitable group. These two pressures point in opposite directions, and much of the machinery from A3–A5 exists to suppress the first so the second can operate.</p>
+            <p><strong>The consequence:</strong> the same mechanisms that make a group internally cooperative — shared sacred values, hard-to-fake markers, strong in-group loyalty — are the ones that make it capable of hostility toward outsiders. Parochialism and altruism are produced by one system, not two. Any intervention that weakens one tends to weaken the other.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- ================= DOMAINS ================= -->
+    <section id="domains">
+      <div class="sec-head">
+        <p class="eyebrow">06 · Domains of society</p>
+        <h2 class="headline">The same machinery, eleven times over</h2>
+        <p style="color:var(--on-surface-variant)">Each domain is a cultural system in its own right: a coordination problem, a transmission channel that carries the answer, an enforcement mechanism that holds it, and a characteristic way it fails. Read them as instances of one pattern, not as a list of topics.</p>
+      </div>
+
+      <div class="domains col-wide">
+
+        <div class="domain">
+          <div class="domain-head"><span class="msym" aria-hidden="true">diversity_3</span><b>Kinship &amp; family</b></div>
+          <dl class="dl">
+            <dt>Problem</dt><dd>Who owes what to whom; how children, property and obligation pass across generations.</dd>
+            <dt>Channel</dt><dd>Earliest and highest-fidelity of all — daily, embodied, pre-verbal.</dd>
+            <dt>Enforcement</dt><dd>Shame, honour, inheritance, marriage eligibility, family standing.</dd>
+            <dt>Fails as</dt><dd class="fail">Obligation networks that suppress individual exit and crowd out impersonal trust.</dd>
+          </dl>
+        </div>
+
+        <div class="domain">
+          <div class="domain-head"><span class="msym" aria-hidden="true">self_improvement</span><b>Religion &amp; the sacred</b></div>
+          <dl class="dl">
+            <dt>Problem</dt><dd>Making large-scale cooperation credible, and making mortality and misfortune bearable.</dd>
+            <dt>Channel</dt><dd>Ritual, scripture, liturgy, festival — the highest-durability channel humans have built.</dd>
+            <dt>Enforcement</dt><dd>Internalised guilt, supernatural monitoring, congregation, exclusion.</dd>
+            <dt>Fails as</dt><dd class="fail">Sacred values become non-negotiable, so ordinary conflicts lose their settlement mechanism.</dd>
+          </dl>
+        </div>
+
+        <div class="domain">
+          <div class="domain-head"><span class="msym" aria-hidden="true">gavel</span><b>Law &amp; justice</b></div>
+          <dl class="dl">
+            <dt>Problem</dt><dd>Sanction at a scale where gossip and reputation no longer reach.</dd>
+            <dt>Channel</dt><dd>Codification, precedent, professional training, public procedure.</dd>
+            <dt>Enforcement</dt><dd>Delegated and specialised: courts, police, licensed force.</dd>
+            <dt>Fails as</dt><dd class="fail">Formal law drifts from living norms; compliance becomes performance and enforcement selective.</dd>
+          </dl>
+        </div>
+
+        <div class="domain">
+          <div class="domain-head"><span class="msym" aria-hidden="true">storefront</span><b>Economy &amp; exchange</b></div>
+          <dl class="dl">
+            <dt>Problem</dt><dd>Trusting a stranger enough to trade with them without kinship or repeated dealing.</dd>
+            <dt>Channel</dt><dd>Apprenticeship, guild, firm, profession, contract convention.</dd>
+            <dt>Enforcement</dt><dd>Reputation, credit, contract, professional standards, the possibility of exit.</dd>
+            <dt>Fails as</dt><dd class="fail">Market logic migrates into domains that ran on obligation, and corrodes the trust it depends on.</dd>
+          </dl>
+        </div>
+
+        <div class="domain">
+          <div class="domain-head"><span class="msym" aria-hidden="true">how_to_vote</span><b>Political culture</b></div>
+          <dl class="dl">
+            <dt>Problem</dt><dd>Transferring power without violence, and making authority feel legitimate rather than merely imposed.</dd>
+            <dt>Channel</dt><dd>Civic ritual, national narrative, schooling, media, participation itself.</dd>
+            <dt>Enforcement</dt><dd>Legitimacy and its withdrawal; the unwritten conventions that constitutions rely on.</dd>
+            <dt>Fails as</dt><dd class="fail">Rules survive while the conventions beneath them erode — the visible structure outlasts the thing holding it up.</dd>
+          </dl>
+        </div>
+
+        <div class="domain">
+          <div class="domain-head"><span class="msym" aria-hidden="true">school</span><b>Knowledge &amp; education</b></div>
+          <dl class="dl">
+            <dt>Problem</dt><dd>Deciding what counts as a warranted claim, and copying that standard into each new generation.</dd>
+            <dt>Channel</dt><dd>Curriculum, credential, peer review, apprenticeship to a discipline.</dd>
+            <dt>Enforcement</dt><dd>Gatekeeping, citation, replication, professional reputation.</dd>
+            <dt>Fails as</dt><dd class="fail">Credential drifts from competence; the gate is optimised for rather than the thing it guards.</dd>
+          </dl>
+        </div>
+
+        <div class="domain">
+          <div class="domain-head"><span class="msym" aria-hidden="true">forum</span><b>Language &amp; media</b></div>
+          <dl class="dl">
+            <dt>Problem</dt><dd>Building enough common knowledge that coordination is possible at all.</dd>
+            <dt>Channel</dt><dd>The channel itself — speech, print, broadcast, feed. This domain <em>is</em> the transmission layer.</dd>
+            <dt>Enforcement</dt><dd>Intelligibility, register, correction, access to the platform.</dd>
+            <dt>Fails as</dt><dd class="fail">Fragmentation into audiences with no shared common knowledge — coordination fails before disagreement even starts.</dd>
+          </dl>
+        </div>
+
+        <div class="domain">
+          <div class="domain-head"><span class="msym" aria-hidden="true">restaurant</span><b>Food, dress &amp; the body</b></div>
+          <dl class="dl">
+            <dt>Problem</dt><dd>Signalling group membership continuously, cheaply and unfakeably; managing contamination risk.</dd>
+            <dt>Channel</dt><dd>Household practice, learned in childhood and carried as taste and disgust.</dd>
+            <dt>Enforcement</dt><dd>Disgust — the most automatic enforcement mechanism available, requiring no monitor at all.</dd>
+            <dt>Fails as</dt><dd class="fail">Purity rules hardening into exclusion; boundary maintenance turning into hierarchy.</dd>
+          </dl>
+        </div>
+
+        <div class="domain">
+          <div class="domain-head"><span class="msym" aria-hidden="true">stairs</span><b>Status &amp; stratification</b></div>
+          <dl class="dl">
+            <dt>Problem</dt><dd>Ranking people so that deference, imitation and access can be allocated without renegotiation.</dd>
+            <dt>Channel</dt><dd>Taste, manners, accent, schooling, consumption — Bourdieu's cultural capital, transmitted at home.</dd>
+            <dt>Enforcement</dt><dd>Recognition and its withholding; inclusion in networks; who is legible as "one of us".</dd>
+            <dt>Fails as</dt><dd class="fail">Ascribed position (birth, lineage) overrides achievement, and the ladder stops carrying information.</dd>
+          </dl>
+        </div>
+
+        <div class="domain">
+          <div class="domain-head"><span class="msym" aria-hidden="true">corporate_fare</span><b>Organisational culture</b></div>
+          <dl class="dl">
+            <dt>Problem</dt><dd>Coordinating specialists on shared goals where formal rules cannot specify most of what matters.</dd>
+            <dt>Channel</dt><dd>Onboarding, imitation of senior people, war stories, what gets reviewed and what gets ignored.</dd>
+            <dt>Enforcement</dt><dd>Promotion, exclusion from the informal network, who gets listened to in the room.</dd>
+            <dt>Fails as</dt><dd class="fail">Espoused values diverge from operating assumptions; the values on the wall predict nothing about behaviour.</dd>
+          </dl>
+        </div>
+
+        <div class="domain">
+          <div class="domain-head"><span class="msym" aria-hidden="true">hub</span><b>Digital &amp; algorithmic</b></div>
+          <dl class="dl">
+            <dt>Problem</dt><dd>The old ones — at unprecedented speed, scale and anonymity, among people who will never meet.</dd>
+            <dt>Channel</dt><dd>Feed, recommendation, virality. Transmission is now optimised by a system with its own objective.</dd>
+            <dt>Enforcement</dt><dd>Visibility, pile-on, ratio, ban — sanction made instant, global, and permanently searchable.</dd>
+            <dt>Fails as</dt><dd class="fail">Mutation rate exceeds the selection rate: norms form and dissolve faster than anyone can internalise them.</dd>
+          </dl>
+        </div>
+
+      </div>
+
+      <div class="card-elevated col">
+        <p class="eyebrow">The one that matters most for your working life</p>
+        <h3 class="title">Organisational culture is this whole model at a scale you can actually observe</h3>
+        <p>Edgar Schein's three levels map cleanly onto the stack: <strong>artifacts</strong> (visible practices, rituals, office layout, tooling) sit at the fast layer; <strong>espoused values</strong> (what leadership says the culture is) sit in the middle; <strong>basic underlying assumptions</strong> (what people actually believe about how this place works, largely unspoken) sit at the deep layer and are the only level that predicts behaviour.</p>
+        <p>Culture-change programmes almost always operate on layer two, because that is the layer you can write a deck about. The assumptions are learned instead from three signals, and only three: <strong>who gets promoted, what gets tolerated, and what leaders actually spend attention on</strong> — that is R2, B1 and the status ladder, running in a system small enough to watch in real time.</p>
+      </div>
+    </section>
+
+    <!-- ================= VARIATION ================= -->
+    <section id="variation">
+      <div class="sec-head">
+        <p class="eyebrow">07 · Why cultures differ</p>
+        <h2 class="headline">The inputs that push societies to different equilibria</h2>
+        <p style="color:var(--on-surface-variant)">Given identical machinery, variation has to come from the inputs. Six matter most. Treat each as a pressure that shifts probabilities, never as a determinant — the empirical literature here is genuinely contested, and the honest claim is directional rather than deterministic.</p>
+      </div>
+
+      <div class="grid-2 col-wide">
+        <div class="card">
+          <h3 class="title">Ecology and subsistence</h3>
+          <p>How you get food shapes how many people you must coordinate with and how. Talhelm's rice-versus-wheat work argues that paddy rice — demanding shared irrigation and coordinated labour — tracks more interdependent psychology than wheat within a single country, holding language and state constant. Herding, which puts wealth on legs, tracks honour norms and readiness to retaliate.</p>
+        </div>
+        <div class="card">
+          <h3 class="title">Kinship structure</h3>
+          <p>Whether you live among cousins or strangers changes everything downstream. Joseph Henrich's argument is that the medieval Western Church's prohibitions on cousin marriage dissolved dense kin networks, forcing reliance on voluntary associations and impersonal institutions — and producing, over centuries, the unusual psychological profile he labels WEIRD. Influential, actively debated, and worth holding as a strong hypothesis rather than a settled result.</p>
+        </div>
+        <div class="card">
+          <h3 class="title">Threat and scarcity</h3>
+          <p>Sustained exposure to invasion, disaster, density or disease load turns up the enforcement gain — tighter norms, less tolerated deviation. Sustained safety turns it down. A culture's apparent strictness is often a historical threat record still being read out, long after the threat has passed.</p>
+        </div>
+        <div class="card">
+          <h3 class="title">Scale</h3>
+          <p>Group size selects the enforcement technology. Up to roughly the size where everyone knows everyone, reputation is sufficient. Past that, you need writing, law, formal roles, professional enforcers, and moralising narratives that work among strangers. Scale changes are therefore always cultural events, not merely administrative ones.</p>
+        </div>
+        <div class="card">
+          <h3 class="title">Technology of transmission</h3>
+          <p>Each shift in the copying medium redistributes cultural power. Writing made fidelity across generations possible; print broke clerical monopoly on interpretation; broadcast manufactured a national common knowledge; the feed replaced editorial selection with engagement selection. The medium sets what can spread, and therefore what will.</p>
+        </div>
+        <div class="card">
+          <h3 class="title">History and shock</h3>
+          <p>Path dependence means that founding conditions, conquests, migrations, famines and pandemics leave residue in the norms long after the event, precisely because of hysteresis. Two societies in identical present conditions can sit in different equilibria purely because they arrived from different directions.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= FRAMEWORKS ================= -->
+    <section id="frameworks">
+      <div class="sec-head">
+        <p class="eyebrow">08 · Measuring culture</p>
+        <h2 class="headline">The comparison frameworks, and what each one actually buys you</h2>
+        <p style="color:var(--on-surface-variant)">These are the instruments people reach for when they want to compare cultures quantitatively. Each is useful; each has a known failure mode. Knowing both is what separates using them from being used by them.</p>
+      </div>
+
+      <div class="tablewrap col-wide">
+        <table>
+          <thead>
+            <tr><th scope="col">Framework</th><th scope="col">What it claims</th><th scope="col">Best used for</th><th scope="col">Known weakness</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>Hofstede's dimensions</b></td>
+              <td>National cultures vary along a handful of axes — power distance, individualism, uncertainty avoidance, and others added later.</td>
+              <td>A first vocabulary for cross-national difference; widely shared, so it travels in business settings.</td>
+              <td>Derived from one multinational's employees in the 1970s; treats nations as homogeneous units; heavily criticised for ecological-fallacy reasoning. Do not use it to predict an individual.</td>
+            </tr>
+            <tr>
+              <td><b>Schwartz value circumplex</b></td>
+              <td>Ten basic human values arranged in a circle, with adjacent values compatible and opposite ones in tension.</td>
+              <td>Individual-level value measurement with better psychometrics than Hofstede.</td>
+              <td>Self-reported values correlate loosely with behaviour; the structure is more robust than the country scores.</td>
+            </tr>
+            <tr>
+              <td><b>Inglehart–Welzel map</b></td>
+              <td>Societies spread over two axes — traditional↔secular-rational, survival↔self-expression — and shift as economic security rises.</td>
+              <td>Tracking value change over decades; one of the few genuinely longitudinal datasets in the field.</td>
+              <td>Modernisation framing implies a direction of travel that the data support only partially; clusters are as much history as economics.</td>
+            </tr>
+            <tr>
+              <td><b>Hall's high/low context</b></td>
+              <td>Cultures differ in how much meaning sits in explicit words versus shared context.</td>
+              <td>Practical communication read — why the same email lands differently across offices.</td>
+              <td>Largely qualitative and anecdotal in origin; thin empirical base for a concept applied this widely.</td>
+            </tr>
+            <tr>
+              <td><b>Douglas's grid–group</b></td>
+              <td>Two dimensions — how strongly a group binds you, how strongly roles constrain you — yield four ways of life: hierarchy, individualism, egalitarianism, fatalism.</td>
+              <td>The most systems-native framework here. Predicts <em>which risks a group will treat as urgent</em>, which is why it underpins cultural theory of risk.</td>
+              <td>Four types is coarse; people move between them by context rather than sitting in one.</td>
+            </tr>
+            <tr>
+              <td><b>Tightness–looseness</b></td>
+              <td>Societies vary in norm strength and tolerance of deviance, tracking historical threat.</td>
+              <td>A single dimension with a plausible causal story and testable predictions.</td>
+              <td>One dimension cannot carry the weight often placed on it; national aggregates conceal enormous internal variation.</td>
+            </tr>
+            <tr>
+              <td><b>Honour / face / dignity</b></td>
+              <td>Three logics of worth: honour is claimed and defended, face is granted by others and must be maintained, dignity is inherent and internal.</td>
+              <td>Explaining conflict escalation, apology, and what constitutes an unacceptable insult.</td>
+              <td>Presented as regional types, but all three logics operate inside every society across different settings.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="caution col">
+        <p class="eyebrow">The ecological fallacy — the error to actually worry about</p>
+        <p>Every framework above produces country-level averages. The variation <em>within</em> any country vastly exceeds the difference between country means on nearly all of these measures. A country score is a weak prior about a population, and almost no information about the person in front of you. Using it as the latter is the single most common way this entire field gets misapplied.</p>
+      </div>
+    </section>
+
+    <!-- ================= CHANGE ================= -->
+    <section id="change">
+      <div class="sec-head">
+        <p class="eyebrow">09 · How culture changes</p>
+        <h2 class="headline">Five mechanisms, on five different timescales</h2>
+      </div>
+
+      <div class="stack col-wide">
+        <div class="card-outlined">
+          <h3 class="title">1 · Cascade <span class="mono" style="color:var(--on-surface-variant)">— weeks to months</span></h3>
+          <p>R1 running unchecked. A threshold of visible defectors makes deviation safe, private preferences surface all at once, and the apparent consensus inverts far faster than anyone's beliefs actually changed. Requires a hidden stock of private dissent to already exist — cascades reveal state, they do not create it.</p>
+        </div>
+        <div class="card-outlined">
+          <h3 class="title">2 · Prestige shift <span class="mono" style="color:var(--on-surface-variant)">— years</span></h3>
+          <p>R2 redirected. The set of people the population copies changes — new elites, new media gatekeepers, a new occupation becoming aspirational — and the traits attached to them spread without any argument being won. Faster than persuasion, and usually invisible to those being persuaded.</p>
+        </div>
+        <div class="card-outlined">
+          <h3 class="title">3 · Institutional ratchet <span class="mono" style="color:var(--on-surface-variant)">— years to decades</span></h3>
+          <p>A rule changes what is normal to observe, and observation feeds R1. Law is a weak direct enforcer and a strong indirect one: it moves the perceived consensus. This works when the rule is close enough to latent opinion to be observed rather than resisted — too far ahead and it triggers B2 instead.</p>
+        </div>
+        <div class="card-outlined">
+          <h3 class="title">4 · Cohort replacement <span class="mono" style="color:var(--on-surface-variant)">— decades</span></h3>
+          <p>The quiet one, and usually the largest. Values set in youth persist; aggregate change accrues as one cohort replaces another. Little is being converted — the distribution is being replaced. It produces smooth, slow, nearly unstoppable drift that no single actor authored and no campaign can accelerate much.</p>
+        </div>
+        <div class="card-outlined">
+          <h3 class="title">5 · Substrate shock <span class="mono" style="color:var(--on-surface-variant)">— decades to centuries</span></h3>
+          <p>The conditions the culture was solving for change outright: contraception, urbanisation, literacy, antibiotics, the factory, the feed. Deep layers reorganise because the problem they encoded has been redefined. Slowest, least controllable, largest amplitude.</p>
+        </div>
+      </div>
+
+      <div class="card-key col">
+        <p class="eyebrow">The pattern behind all five</p>
+        <p>Cultural change is rarely persuasion. It is a change in <strong>what is observable</strong> (cascade, ratchet), in <strong>who is worth copying</strong> (prestige), in <strong>who is in the population</strong> (cohort), or in <strong>what problem the environment poses</strong> (shock). Arguments matter mostly insofar as they move one of those four.</p>
+      </div>
+    </section>
+
+    <!-- ================= LEVERAGE ================= -->
+    <section id="leverage">
+      <div class="sec-head">
+        <p class="eyebrow">10 · Leverage points</p>
+        <h2 class="headline">Where to intervene in a cultural system</h2>
+        <p style="color:var(--on-surface-variant)">Donella Meadows' ladder, specialised to culture and ordered from weakest to strongest. The ordering is the point: effort concentrates at the bottom, because the bottom is where intervention is legible and measurable. Leverage lives at the top, where it is neither.</p>
+      </div>
+
+      <div class="ladder col-wide">
+        <div class="rung">
+          <div class="rung-n">9</div>
+          <div class="rung-body"><b>Parameters</b><span>Budgets, headcount, penalty amounts, the number of training sessions. Almost always where interventions start, almost always where they have least effect.</span></div>
+        </div>
+        <div class="rung">
+          <div class="rung-n">8</div>
+          <div class="rung-body"><b>Buffer sizes</b><span>Slack in the system — how much deviation is absorbed before response. Larger buffers stabilise and slow change; smaller ones make the system twitchy and reactive.</span></div>
+        </div>
+        <div class="rung">
+          <div class="rung-n">7</div>
+          <div class="rung-body"><b>Delays</b><span>How fast deviation becomes visible and consequence arrives. Shortening the feedback delay changes behaviour more than increasing the penalty does.</span></div>
+        </div>
+        <div class="rung">
+          <div class="rung-n">6</div>
+          <div class="rung-body"><b>Strength of the balancing loop</b><span>Enforcement gain — tightness. Raising it increases compliance up to the point where B2 reactance flips the sign, and then you are manufacturing the opposition.</span></div>
+        </div>
+        <div class="rung">
+          <div class="rung-n">5</div>
+          <div class="rung-body"><b>Gain on the reinforcing loop</b><span>Who is visible, who is celebrated, whose behaviour is treated as the reference. Adjusting the copying targets moves a population without instructing anyone.</span></div>
+        </div>
+        <div class="rung high">
+          <div class="rung-n">4</div>
+          <div class="rung-body"><b>Information flows</b><span>Who can see what. Making private preferences observable can collapse a false consensus overnight; concealing them preserves one indefinitely. This is the cheapest high-leverage move available, and the most underused.</span></div>
+        </div>
+        <div class="rung high">
+          <div class="rung-n">3</div>
+          <div class="rung-body"><b>Rules and incentives</b><span>Not for their direct force — for what they make normal to observe, and for which behaviours they make survivable. Rules reshape the selection environment.</span></div>
+        </div>
+        <div class="rung high">
+          <div class="rung-n">2</div>
+          <div class="rung-body"><b>Who gets to set the rules</b><span>Self-organisation: who has standing to propose, enforce, and revise norms. Changing the composition of that group outlasts every specific rule they write.</span></div>
+        </div>
+        <div class="rung high">
+          <div class="rung-n">1</div>
+          <div class="rung-body"><b>Goals and paradigm</b><span>What the system is understood to be <em>for</em> — what counts as success, what is sacred, what is unthinkable. Hardest to move, and everything else reconfigures around it when it does.</span></div>
+        </div>
+      </div>
+
+      <div class="caution col">
+        <p class="eyebrow">Meadows' own warning, and it applies with force here</p>
+        <p>High-leverage points are frequently pushed in the wrong direction. Deliberate cultural engineering has a poor track record, and the reason is structural rather than moral: the designer cannot see the local knowledge the existing practice encodes. James Scott's term for the practical, unwritten, situated knowledge that high-modernist schemes flatten is <em>metis</em>. Where you can, prefer interventions that change the selection environment and let variation search it, over interventions that specify the answer.</p>
+      </div>
+    </section>
+
+    <!-- ================= PROTOCOL ================= -->
+    <section id="protocol">
+      <div class="sec-head">
+        <p class="eyebrow">11 · Field protocol</p>
+        <h2 class="headline">Nine questions that decode any cultural system</h2>
+        <p style="color:var(--on-surface-variant)">Point these at a country, a company, a team, a profession, a forum, a family. They operationalise everything above, in order.</p>
+      </div>
+
+      <div class="qlist col-wide">
+        <div class="q"><div><b>What coordination problem is this solving?</b><span>Every stable practice sits on a problem. Find it before judging the practice. If you cannot find one, ask whether the problem has gone — and whether the practice has simply outlived it.</span></div></div>
+        <div class="q"><div><b>Who transmits it, and when?</b><span>Childhood, apprenticeship, onboarding, feed. The channel determines the fidelity, the speed, and who is able to change it.</span></div></div>
+        <div class="q"><div><b>What is the sanction, and how visible is deviation?</b><span>No sanction plus low observability means the stated norm is decorative. Look for what is actually punished, not what is declared.</span></div></div>
+        <div class="q"><div><b>Who is copied here?</b><span>Trace the prestige ladder. Whoever gets promoted, quoted and deferred to <em>is</em> the culture's stated direction, whatever the stated direction says.</span></div></div>
+        <div class="q"><div><b>What is sacred — what cannot be traded off?</b><span>Find the thing that produces moral outrage rather than counter-argument when questioned. That marks the boundary of the negotiable, and locates the deep layer.</span></div></div>
+        <div class="q"><div><b>What marks an insider, and how expensive is the marker?</b><span>Cheap markers mean a porous, low-commitment boundary. Expensive ones — long initiation, hard-to-fake taste, years of tacit learning — mean high trust inside and high walls outside.</span></div></div>
+        <div class="q"><div><b>How wide is the gap between public compliance and private belief?</b><span>The hidden state. Measure it by what people say in private, in exit interviews, anonymously, or when a first defector goes unpunished.</span></div></div>
+        <div class="q"><div><b>Which layer is actually moving?</b><span>Discourse, practice, institution or cosmology. Most claims of dramatic change are layer-four events, and most claims of no change ignore layer-three drift.</span></div></div>
+        <div class="q"><div><b>What would this system do under threat?</b><span>Threat raises enforcement gain and narrows the boundary. A culture's behaviour under stress reveals its structure better than its behaviour at rest.</span></div></div>
+      </div>
+    </section>
+
+    <!-- ================= LIMITS ================= -->
+    <section id="limits">
+      <div class="sec-head">
+        <p class="eyebrow">12 · Where this misleads</p>
+        <h2 class="headline">Four failure modes of the model you have just read</h2>
+        <p style="color:var(--on-surface-variant)">A systems framing is powerful and therefore dangerous. These are the errors it makes, and the traditions that exist specifically to correct them.</p>
+      </div>
+
+      <div class="grid-2 col-wide">
+        <div class="card">
+          <h3 class="title">The functionalist trap</h3>
+          <p>Asking "what problem does this solve?" invites the assumption that everything solves something. Much of culture is drift, accident, or the residue of a solved problem — and some of it persists because it serves a narrow interest at everyone else's expense, which is a different kind of "function" entirely. Always keep "nothing, any more" and "someone specific, not the group" as live answers.</p>
+        </div>
+        <div class="card">
+          <h3 class="title">Reification</h3>
+          <p>"The culture" is not an agent. It has no intentions, does not decide, and is not a thing people possess in uniform doses. Internal variation, contestation and dissent are not noise around a true cultural value — they are the system's actual state. Whenever a sentence starts "Indian culture believes…" or "our company culture wants…", something has been smuggled in.</p>
+        </div>
+        <div class="card">
+          <h3 class="title">Power is doing more work than the model shows</h3>
+          <p>Norms are not neutral solutions arrived at by a group; they distribute advantage, and those they advantage defend them. The conflict traditions — Marx's attention to material interest, Bourdieu's to the reproduction of advantage through taste — supply what an equilibrium-and-loops framing systematically under-weights. "Whose interest does this norm serve?" is not the same question as "what problem does it solve?", and both need asking.</p>
+        </div>
+        <div class="card">
+          <h3 class="title">Meaning is lost in the compression</h3>
+          <p>This entire page treats culture from outside, as mechanism. Clifford Geertz's objection stands: a wink and a twitch are physically identical and socially nothing alike, and no amount of loop diagrams recovers the difference. Interpretive work — what a practice <em>means</em> to the people inside it — is not a softer version of this analysis. It is the part this analysis cannot reach, and you need both.</p>
+        </div>
+      </div>
+
+      <div class="card-outlined col">
+        <p class="eyebrow">The honest summary</p>
+        <p>The framing here — culture as transmitted information under selection, stabilised by feedback — is one of several live research programmes, strongest on <em>why</em> cultural systems have the shape they do and on their dynamics over time. It is weakest on meaning, on power, and on the individual case. Hold it as a lens you pick up, not a theory you have adopted.</p>
+      </div>
+    </section>
+
+    <!-- ================= READING ================= -->
+    <section id="reading">
+      <div class="sec-head">
+        <p class="eyebrow">13 · One book per layer</p>
+        <h2 class="headline">If you read five, read these five</h2>
+        <p style="color:var(--on-surface-variant)">Chosen so that each occupies a different layer of the stack and a different intellectual tradition — including the two that disagree with most of this page. Read in this order and each one reframes the last.</p>
+      </div>
+
+      <div class="books col-wide">
+        <div class="book">
+          <div><b>The Secret of Our Success</b><i>Joseph Henrich</i></div>
+          <span class="for">L0 · the mechanism</span>
+        </div>
+        <div class="book">
+          <div><b>Thinking in Systems</b><i>Donella Meadows</i></div>
+          <span class="for">the systems grammar</span>
+        </div>
+        <div class="book">
+          <div><b>Private Truths, Public Lies</b><i>Timur Kuran</i></div>
+          <span class="for">hidden state · cascades</span>
+        </div>
+        <div class="book">
+          <div><b>Seeing Like a State</b><i>James C. Scott</i></div>
+          <span class="for">why redesign fails</span>
+        </div>
+        <div class="book">
+          <div><b>The Interpretation of Cultures</b><i>Clifford Geertz</i></div>
+          <span class="for">the counter-case · meaning</span>
+        </div>
+      </div>
+
+      <div class="caution col">
+        <p class="eyebrow">On reading them</p>
+        <p>If long texts are slow going, read each one for its single load-bearing argument rather than cover to cover: Henrich for cumulative culture and the copying biases, Meadows for stocks, loops and delays, Kuran for the gap between public and private, Scott for metis and legibility, Geertz for thick description. Each argument is stated in the first two chapters; the remainder is evidence. Then return to this page and re-read the section it corresponds to — the second pass is where the structure sticks.</p>
+      </div>
+
+      <footer>
+        <p>Built as a derivation, not a survey. Contested findings are marked as contested throughout; named empirical results are attributed to their authors so you can check them yourself.</p>
+        <p class="mono">5 axioms · 7 primitives · 5 layers · 4 loops · 11 domains · 9 leverage points · 9 diagnostic questions</p>
+      </footer>
+
+    </section>
+
+  </main>
+</div>
+
+<script>
+(function(){
+  var links = Array.prototype.slice.call(document.querySelectorAll('.rail a, .tabbar a'));
+  var map = {};
+  links.forEach(function(a){
+    var id = a.getAttribute('href').slice(1);
+    (map[id] = map[id] || []).push(a);
+  });
+  var ids = Object.keys(map);
+  var sections = ids.map(function(id){ return document.getElementById(id); }).filter(Boolean);
+  if (!sections.length || !('IntersectionObserver' in window)) return;
+
+  var visible = {};
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ visible[e.target.id] = e.isIntersecting ? e.intersectionRatio : 0; });
+    var best = null, bestVal = 0;
+    ids.forEach(function(id){
+      if ((visible[id] || 0) > bestVal){ bestVal = visible[id]; best = id; }
+    });
+    links.forEach(function(a){ a.classList.remove('active'); });
+    if (best && map[best]) {
+      map[best].forEach(function(a){
+        a.classList.add('active');
+        if (a.closest('.tabbar-scroll')) {
+          var bar = a.parentNode;
+          var left = a.offsetLeft - bar.clientWidth / 2 + a.clientWidth / 2;
+          bar.scrollTo({ left: left, behavior: 'smooth' });
+        }
+      });
+    }
+  }, { rootMargin: '-15% 0px -55% 0px', threshold: [0, 0.15, 0.4, 0.75, 1] });
+
+  sections.forEach(function(s){ obs.observe(s); });
+})();
+</script>
+
+</body></html>

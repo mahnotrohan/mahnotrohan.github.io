@@ -1,0 +1,1365 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>The Machinery of Power</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,300..800&family=Roboto:ital,wght@0,400;0,500;0,700;1,400&family=Roboto+Mono:wght@400;500&display=swap">
+<style>
+/* ============================================================
+   Material 3 token layer — seeded from an institutional blue.
+   Light palette is the bare :root; dark redefines tokens only.
+   ============================================================ */
+:root{
+  color-scheme:light;   /* pin the viewer's UI chrome to light as well */
+  --primary:#38608f;            --on-primary:#ffffff;
+  --primary-container:#d2e4ff;  --on-primary-container:#001d36;
+  --secondary:#535f70;          --on-secondary:#ffffff;
+  --secondary-container:#d7e3f7;--on-secondary-container:#101c2b;
+  --tertiary:#6b5778;           --on-tertiary:#ffffff;
+  --tertiary-container:#f2daff; --on-tertiary-container:#251431;
+  --error:#ba1a1a;              --on-error:#ffffff;
+  --error-container:#ffdad6;    --on-error-container:#410002;
+  --ok:#256c35;                 --ok-container:#c4eeca;  --on-ok-container:#04210c;
+  --warn:#7d5800;               --warn-container:#ffdf95; --on-warn-container:#271900;
+
+  --surface:#f9f9fd;            --on-surface:#191c20;
+  --surface-dim:#d9dade;        --surface-bright:#f9f9fd;
+  --s-lowest:#ffffff;           --s-low:#f3f3fa;
+  --s-container:#edeef4;        --s-high:#e7e8ee;  --s-highest:#e1e2e9;
+  --surface-variant:#dfe2eb;    --on-surface-variant:#43474e;
+  --outline:#73777f;            --outline-variant:#c3c7cf;
+  --inverse-surface:#2e3135;    --inverse-on-surface:#eff0f7;
+
+  --shadow-1:0 1px 2px rgba(0,0,0,.30), 0 1px 3px 1px rgba(0,0,0,.12);
+  --shadow-2:0 1px 2px rgba(0,0,0,.30), 0 2px 6px 2px rgba(0,0,0,.12);
+
+  --r-xs:4px; --r-s:8px; --r-m:12px; --r-l:16px; --r-xl:28px;
+  --gutter:clamp(16px,4vw,40px);
+  --measure:70ch;
+
+  --font-display:"Roboto Flex","Roboto","Helvetica Neue",Arial,sans-serif;
+  --font-body:"Roboto","Helvetica Neue",Arial,sans-serif;
+  --font-mono:"Roboto Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+/* Single-theme by design: the light palette above applies in every viewer
+   theme. Every colour on the page is drawn from those tokens, and body
+   paints an explicit background, so the page holds on any host ground. */
+
+/* ============================ base ============================ */
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--surface); color:var(--on-surface);
+  font-family:var(--font-body); font-size:16px; line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:var(--font-display); text-wrap:balance; margin:0; font-variation-settings:"opsz" 40;}
+p{margin:0}
+a{color:var(--primary)}
+:focus-visible{outline:3px solid var(--primary); outline-offset:2px; border-radius:var(--r-xs)}
+@media (prefers-reduced-motion: reduce){*{animation:none !important; transition:none !important; scroll-behavior:auto !important}}
+html{scroll-behavior:smooth}
+
+/* ============================ shell ============================ */
+.shell{display:grid; grid-template-columns:288px minmax(0,1fr);}
+@media (max-width:1080px){ .shell{grid-template-columns:minmax(0,1fr)} }
+
+/* --- navigation drawer (M3 standard drawer) --- */
+.drawer{
+  position:sticky; top:0; height:100vh; overflow-y:auto;
+  background:var(--s-low); border-right:1px solid var(--outline-variant);
+  padding:20px 12px 40px; display:flex; flex-direction:column; gap:2px;
+}
+.drawer-brand{display:flex; align-items:center; gap:12px; padding:8px 16px 18px}
+.brand-mark{
+  width:36px; height:36px; border-radius:10px; flex:none;
+  background:var(--primary-container); color:var(--on-primary-container);
+  display:grid; place-items:center; font-family:var(--font-mono); font-size:15px; font-weight:500;
+}
+.brand-text{font-family:var(--font-display); font-size:15px; font-weight:600; line-height:1.25; letter-spacing:.1px}
+.brand-sub{font-family:var(--font-mono); font-size:10.5px; letter-spacing:.09em; text-transform:uppercase; color:var(--on-surface-variant)}
+.nav-group{font-family:var(--font-mono); font-size:10.5px; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--on-surface-variant); padding:18px 16px 6px}
+.nav-item{
+  display:flex; align-items:center; gap:12px; min-height:48px; padding:0 16px;
+  border-radius:var(--r-xl); color:var(--on-surface-variant); text-decoration:none;
+  font-size:14px; font-weight:500; letter-spacing:.1px; transition:background .15s ease,color .15s ease;
+}
+.nav-item:hover{background:color-mix(in srgb, var(--on-surface) 8%, transparent); color:var(--on-surface)}
+.nav-item[aria-current="true"]{background:var(--secondary-container); color:var(--on-secondary-container)}
+.nav-num{font-family:var(--font-mono); font-size:11px; opacity:.75; width:16px; flex:none; text-align:right}
+
+/* --- mobile: chip rail instead of drawer --- */
+.rail{display:none}
+@media (max-width:1080px){
+  .drawer{display:none}
+  .rail{
+    display:block; position:sticky; top:0; z-index:20;
+    background:color-mix(in srgb, var(--surface) 92%, transparent);
+    backdrop-filter:blur(12px); border-bottom:1px solid var(--outline-variant);
+  }
+  .rail-inner{display:flex; gap:8px; overflow-x:auto; padding:10px var(--gutter); scrollbar-width:none}
+  .rail-inner::-webkit-scrollbar{display:none}
+  .rail a{
+    flex:none; font-size:13px; font-weight:500; text-decoration:none; white-space:nowrap;
+    padding:6px 14px; border-radius:var(--r-s); border:1px solid var(--outline-variant);
+    color:var(--on-surface-variant); background:var(--s-low);
+  }
+  .rail a[aria-current="true"]{background:var(--secondary-container); color:var(--on-secondary-container); border-color:transparent}
+}
+
+/* ============================ main ============================ */
+main{padding:0 var(--gutter) 120px; min-width:0}
+.wrap{max-width:var(--measure); margin:0 auto}
+.wide{max-width:960px; margin:0 auto}
+
+/* --- hero --- */
+.hero{padding-block:clamp(48px,8vw,96px) clamp(28px,5vw,48px)}
+.eyebrow{font-family:var(--font-mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--primary); display:block; margin-bottom:18px}
+h1{
+  font-size:clamp(36px,6.2vw,60px); line-height:1.04; font-weight:700;
+  letter-spacing:-.02em; font-variation-settings:"opsz" 120;
+}
+.standfirst{font-size:clamp(17px,2.1vw,20px); line-height:1.55; color:var(--on-surface-variant); margin-top:22px; max-width:60ch}
+.thesis{
+  margin-top:32px; padding:22px 24px; border-radius:var(--r-l);
+  background:var(--primary-container); color:var(--on-primary-container);
+  font-size:17px; line-height:1.55;
+}
+.thesis strong{font-weight:700}
+
+/* --- sections --- */
+section{padding-block:clamp(44px,6vw,72px); scroll-margin-top:80px}
+section + section{border-top:1px solid var(--outline-variant)}
+.sec-no{font-family:var(--font-mono); font-size:11px; letter-spacing:.14em; color:var(--primary); display:block; margin-bottom:10px}
+h2{font-size:clamp(26px,3.6vw,36px); font-weight:700; letter-spacing:-.01em; line-height:1.15}
+h3{font-size:20px; font-weight:600; letter-spacing:0; margin-top:36px; line-height:1.3}
+h4{font-size:15px; font-weight:600; letter-spacing:.1px}
+.lede{font-size:17.5px; color:var(--on-surface-variant); margin-top:14px; line-height:1.6}
+p + p, .lede + p, p + .note, h3 + p, h4 + p{margin-top:16px}
+.stack > * + *{margin-top:16px}
+
+/* --- inline emphasis --- */
+.term{font-weight:600; color:var(--on-surface)}
+.mono{font-family:var(--font-mono); font-size:.92em}
+.pill{
+  display:inline-block; font-family:var(--font-mono); font-size:11px; letter-spacing:.06em;
+  padding:2px 9px; border-radius:var(--r-xs); background:var(--s-high); color:var(--on-surface-variant);
+  text-transform:uppercase; vertical-align:2px;
+}
+
+/* --- cards --- */
+.card{background:var(--s-low); border:1px solid var(--outline-variant); border-radius:var(--r-m); padding:22px}
+.card-filled{background:var(--s-container); border:none; border-radius:var(--r-m); padding:22px}
+.card-elev{background:var(--s-lowest); border-radius:var(--r-m); padding:22px; box-shadow:var(--shadow-1)}
+.grid{display:grid; gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+
+/* --- the "four functions" numbered list --- */
+.steps{display:grid; gap:12px; margin-top:24px; counter-reset:s}
+.step{
+  display:grid; grid-template-columns:44px minmax(0,1fr); gap:16px; align-items:start;
+  background:var(--s-low); border:1px solid var(--outline-variant); border-radius:var(--r-m); padding:18px 20px;
+}
+.step-n{
+  counter-increment:s; width:32px; height:32px; border-radius:50%; display:grid; place-items:center;
+  background:var(--secondary-container); color:var(--on-secondary-container);
+  font-family:var(--font-mono); font-size:13px; font-weight:500;
+}
+.step-n::before{content:counter(s)}
+.step h4{margin-bottom:4px}
+.step p{font-size:15px; color:var(--on-surface-variant)}
+
+/* --- spectrum (design-space dimensions) --- */
+.spectrum{border:1px solid var(--outline-variant); border-radius:var(--r-m); overflow:hidden; margin-top:16px}
+.spec-head{padding:16px 20px; background:var(--s-low); border-bottom:1px solid var(--outline-variant)}
+.spec-name{display:block; font-family:var(--font-display); font-weight:600; font-size:16px}
+.spec-q{display:block; font-size:14px; color:var(--on-surface-variant); margin-top:2px}
+.spec-zones{display:grid; grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:640px){.spec-zones{grid-template-columns:minmax(0,1fr)}}
+.zone{padding:14px 18px; border-right:1px solid var(--outline-variant)}
+.zone:last-child{border-right:none}
+@media (max-width:640px){.zone{border-right:none; border-bottom:1px solid var(--outline-variant)} .zone:last-child{border-bottom:none}}
+.zone-label{font-family:var(--font-mono); font-size:10.5px; letter-spacing:.09em; text-transform:uppercase; color:var(--on-surface-variant); display:block; margin-bottom:10px}
+.zone-bar{height:4px; border-radius:2px; margin-bottom:12px}
+.z1 .zone-bar{background:var(--error)} .z2 .zone-bar{background:var(--warn)} .z3 .zone-bar{background:var(--ok)}
+.chips{display:flex; flex-wrap:wrap; gap:6px}
+.chip{font-size:12.5px; padding:4px 10px; border-radius:var(--r-s); background:var(--s-container); color:var(--on-surface-variant); border:1px solid transparent}
+
+/* --- regime cards --- */
+.regime{background:var(--s-low); border:1px solid var(--outline-variant); border-radius:var(--r-m); padding:20px; display:flex; flex-direction:column; gap:10px}
+.regime-top{display:flex; align-items:flex-start; justify-content:space-between; gap:10px}
+.regime h4{font-size:16.5px; font-family:var(--font-display)}
+.w-badge{font-family:var(--font-mono); font-size:10.5px; letter-spacing:.05em; padding:3px 8px; border-radius:var(--r-xs); flex:none}
+.w-tiny{background:var(--error-container); color:var(--on-error-container)}
+.w-mid{background:var(--warn-container); color:var(--on-warn-container)}
+.w-wide{background:var(--ok-container); color:var(--on-ok-container)}
+.regime p{font-size:14.5px; color:var(--on-surface-variant)}
+.regime dl{margin:0; display:grid; gap:6px; font-size:13.5px}
+.regime dt{font-family:var(--font-mono); font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--on-surface-variant)}
+.regime dd{margin:0 0 4px; color:var(--on-surface)}
+
+/* --- tables --- */
+.table-scroll{overflow-x:auto; border:1px solid var(--outline-variant); border-radius:var(--r-m); margin-top:20px}
+table{border-collapse:collapse; width:100%; font-size:14.5px; min-width:520px}
+th,td{text-align:left; padding:13px 18px; border-bottom:1px solid var(--outline-variant); vertical-align:top}
+thead th{
+  background:var(--s-low); font-family:var(--font-mono); font-size:10.5px; letter-spacing:.09em;
+  text-transform:uppercase; color:var(--on-surface-variant); font-weight:500; white-space:nowrap;
+}
+tbody tr:last-child td{border-bottom:none}
+tbody th{font-weight:600; color:var(--on-surface); white-space:nowrap}
+td .mono{color:var(--on-surface-variant)}
+
+/* --- figures --- */
+figure{margin:32px 0 0}
+.fig-scroll{overflow-x:auto; background:var(--s-low); border:1px solid var(--outline-variant); border-radius:var(--r-m); padding:20px}
+figure svg{display:block; max-width:100%; height:auto; min-width:520px; margin:0 auto; color:var(--on-surface)}
+figcaption{font-size:13.5px; color:var(--on-surface-variant); margin-top:12px; line-height:1.5}
+figcaption b{color:var(--on-surface); font-weight:600}
+
+/* svg semantic classes */
+.d-box{fill:var(--s-container); stroke:var(--outline-variant); stroke-width:1}
+.d-box-p{fill:var(--primary-container); stroke:none}
+.d-box-t{fill:var(--tertiary-container); stroke:none}
+.d-txt{fill:var(--on-surface); font-family:var(--font-body); font-size:13px}
+.d-txt-p{fill:var(--on-primary-container); font-family:var(--font-body); font-size:13px}
+.d-txt-t{fill:var(--on-tertiary-container); font-family:var(--font-body); font-size:13px}
+.d-lbl{fill:var(--on-surface-variant); font-family:var(--font-mono); font-size:10.5px; letter-spacing:.04em}
+.d-mut{fill:var(--on-surface-variant); font-family:var(--font-body); font-size:12.5px; font-style:italic}
+.d-line{stroke:var(--on-surface-variant); stroke-width:1.5; fill:none}
+.d-dash{stroke:var(--outline); stroke-width:1.3; fill:none; stroke-dasharray:5 5}
+.d-bal{stroke:var(--ok); stroke-width:2; fill:none}
+.d-rein{stroke:var(--error); stroke-width:2; fill:none}
+.d-head{fill:var(--on-surface-variant)}
+.d-head-bal{fill:var(--ok)} .d-head-rein{fill:var(--error)}
+.d-badge-bal{fill:var(--ok-container); stroke:var(--ok); stroke-width:1.5}
+.d-badge-rein{fill:var(--error-container); stroke:var(--error); stroke-width:1.5}
+.d-badge-txt-bal{fill:var(--on-ok-container); font-family:var(--font-mono); font-size:16px; font-weight:700}
+.d-badge-txt-rein{fill:var(--on-error-container); font-family:var(--font-mono); font-size:16px; font-weight:700}
+.d-rule{stroke:var(--outline-variant); stroke-width:1}
+.d-panel{fill:var(--s-lowest); stroke:var(--outline-variant); stroke-width:1}
+
+/* --- callouts --- */
+.note{
+  border-left:3px solid var(--primary); background:var(--s-low);
+  padding:16px 20px; border-radius:0 var(--r-s) var(--r-s) 0; font-size:15px; margin-top:24px;
+}
+.note .tag{font-family:var(--font-mono); font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--primary); display:block; margin-bottom:6px}
+.note-warn{border-left-color:var(--error)}
+.note-warn .tag{color:var(--error)}
+
+/* --- key-insight strip --- */
+.insight{
+  margin-top:28px; background:var(--tertiary-container); color:var(--on-tertiary-container);
+  border-radius:var(--r-l); padding:20px 24px; font-size:16px; line-height:1.55;
+}
+.insight .tag{font-family:var(--font-mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; opacity:.8; display:block; margin-bottom:8px}
+
+/* --- definition list for primitives --- */
+.defs{display:grid; gap:0; margin-top:24px; border-top:1px solid var(--outline-variant)}
+.def{display:grid; grid-template-columns:200px minmax(0,1fr); gap:24px; padding:16px 0; border-bottom:1px solid var(--outline-variant)}
+@media (max-width:640px){.def{grid-template-columns:minmax(0,1fr); gap:6px}}
+.def dt{font-weight:600; font-family:var(--font-display); font-size:15.5px}
+.def dd{margin:0; font-size:15px; color:var(--on-surface-variant)}
+
+/* --- reading list --- */
+.reads{display:grid; gap:10px; margin-top:20px}
+.read{display:grid; grid-template-columns:minmax(0,1fr) auto; gap:16px; align-items:baseline;
+  padding:12px 16px; background:var(--s-low); border-radius:var(--r-s); font-size:14.5px}
+.read .who{font-family:var(--font-mono); font-size:11.5px; color:var(--on-surface-variant); white-space:nowrap}
+@media (max-width:520px){.read{grid-template-columns:minmax(0,1fr)}}
+
+footer{border-top:1px solid var(--outline-variant); padding:32px 0 0; font-size:13.5px; color:var(--on-surface-variant)}
+</style>
+
+<div class="shell">
+
+<!-- ==================== navigation drawer ==================== -->
+<nav class="drawer" aria-label="Sections">
+  <div class="drawer-brand">
+    <div class="brand-mark">&#8644;</div>
+    <div>
+      <div class="brand-text">The Machinery of Power</div>
+      <div class="brand-sub">First principles &middot; systems view</div>
+    </div>
+  </div>
+
+  <div class="nav-group">Foundations</div>
+  <a class="nav-item" href="#why"><span class="nav-num">01</span>Why politics exists</a>
+  <a class="nav-item" href="#functions"><span class="nav-num">02</span>The five functions</a>
+  <a class="nav-item" href="#problems"><span class="nav-num">03</span>Three kinds of problem</a>
+  <a class="nav-item" href="#limits"><span class="nav-num">04</span>The hard limits</a>
+
+  <div class="nav-group">The map</div>
+  <a class="nav-item" href="#space"><span class="nav-num">05</span>The design space</a>
+  <a class="nav-item" href="#atlas"><span class="nav-num">06</span>Atlas of regimes</a>
+  <a class="nav-item" href="#beyond"><span class="nav-num">07</span>Beyond the state</a>
+
+  <div class="nav-group">Systems</div>
+  <a class="nav-item" href="#stocks"><span class="nav-num">08</span>Stocks, flows, delays</a>
+  <a class="nav-item" href="#loops"><span class="nav-num">09</span>The governing loops</a>
+  <a class="nav-item" href="#failure"><span class="nav-num">10</span>Failure modes</a>
+  <a class="nav-item" href="#leverage"><span class="nav-num">11</span>Leverage points</a>
+
+  <div class="nav-group">Applied</div>
+  <a class="nav-item" href="#org"><span class="nav-num">12</span>The same machine at work</a>
+  <a class="nav-item" href="#limits2"><span class="nav-num">13</span>What this doesn't settle</a>
+  <a class="nav-item" href="#reading"><span class="nav-num">14</span>Where this comes from</a>
+</nav>
+
+<!-- ==================== mobile rail ==================== -->
+<div class="rail">
+  <div class="rail-inner">
+    <a href="#why">Why politics</a>
+    <a href="#functions">Five functions</a>
+    <a href="#problems">Three problems</a>
+    <a href="#limits">Hard limits</a>
+    <a href="#space">Design space</a>
+    <a href="#atlas">Atlas</a>
+    <a href="#beyond">Beyond the state</a>
+    <a href="#stocks">Stocks &amp; delays</a>
+    <a href="#loops">Loops</a>
+    <a href="#failure">Failure modes</a>
+    <a href="#leverage">Leverage</a>
+    <a href="#org">At work</a>
+    <a href="#limits2">Caveats</a>
+    <a href="#reading">Reading</a>
+  </div>
+</div>
+
+<main>
+
+<!-- ==================== hero ==================== -->
+<header class="hero wrap">
+  <span class="eyebrow">A derivation, not a survey</span>
+  <h1>The machinery of power</h1>
+  <p class="standfirst">Every political system &mdash; a republic, a junta, a board of directors, a housing society, a Slack channel with moderators, a family at dinner &mdash; is solving the same problem with different hardware. This builds the problem up from nothing, then shows you the machines people have built to solve it, then shows you the loops that make those machines drift, ossify and collapse.</p>
+  <div class="thesis">
+    <strong>The one-sentence version.</strong> Politics is what happens when people who want different things cannot cheaply get away from each other. Everything else &mdash; constitutions, coups, coalitions, promotion committees &mdash; is engineering downstream of that.
+  </div>
+</header>
+
+<!-- ==================== 01 why ==================== -->
+<section id="why" class="wrap">
+  <span class="sec-no">01 &mdash; Foundations</span>
+  <h2>Why politics exists at all</h2>
+  <p class="lede">Don't start from governments. Start from the conditions that make governing necessary. There are four, and they are load-bearing: knock any one out and politics dissolves.</p>
+
+  <figure>
+    <div class="fig-scroll">
+      <svg viewBox="0 0 800 340" role="img" aria-label="Four conditions — scarcity, interdependence, divergent preferences, imperfect information — jointly produce the need for binding collective decisions; removing any one dissolves the need.">
+        <defs>
+          <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" class="d-head"/>
+          </marker>
+          <marker id="ard" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" class="d-head"/>
+          </marker>
+        </defs>
+
+        <text x="18" y="16" class="d-lbl">IF REMOVED, YOU GET&hellip;</text>
+        <text x="300" y="16" class="d-lbl">THE FOUR CONDITIONS</text>
+        <text x="560" y="16" class="d-lbl">WHAT THEY PRODUCE</text>
+
+        <!-- row 1 -->
+        <text x="228" y="56" text-anchor="end" class="d-mut">no rivalry, nothing to allocate</text>
+        <rect x="250" y="32" width="200" height="46" rx="10" class="d-box"/>
+        <text x="350" y="60" text-anchor="middle" class="d-txt">Scarcity</text>
+        <path d="M246,55 L236,55" class="d-dash" marker-end="url(#ard)"/>
+
+        <!-- row 2 -->
+        <text x="228" y="126" text-anchor="end" class="d-mut">exit is free &mdash; just walk away</text>
+        <rect x="250" y="102" width="200" height="46" rx="10" class="d-box"/>
+        <text x="350" y="130" text-anchor="middle" class="d-txt">Interdependence</text>
+        <path d="M246,125 L236,125" class="d-dash" marker-end="url(#ard)"/>
+
+        <!-- row 3 -->
+        <text x="228" y="196" text-anchor="end" class="d-mut">deciding becomes arithmetic</text>
+        <rect x="250" y="172" width="200" height="46" rx="10" class="d-box"/>
+        <text x="350" y="200" text-anchor="middle" class="d-txt">Divergent preferences</text>
+        <path d="M246,195 L236,195" class="d-dash" marker-end="url(#ard)"/>
+
+        <!-- row 4 -->
+        <text x="228" y="266" text-anchor="end" class="d-mut">contracts alone would suffice</text>
+        <rect x="250" y="242" width="200" height="46" rx="10" class="d-box"/>
+        <text x="350" y="264" text-anchor="middle" class="d-txt">Imperfect information</text>
+        <text x="350" y="280" text-anchor="middle" class="d-lbl">AND COSTLY ENFORCEMENT</text>
+        <path d="M246,265 L236,265" class="d-dash" marker-end="url(#ard)"/>
+
+        <!-- converge -->
+        <path d="M454,55 C500,55 500,130 536,150" class="d-line" marker-end="url(#ar)"/>
+        <path d="M454,125 C500,125 500,145 536,157" class="d-line" marker-end="url(#ar)"/>
+        <path d="M454,195 C500,195 500,180 536,168" class="d-line" marker-end="url(#ar)"/>
+        <path d="M454,265 C500,265 500,195 536,176" class="d-line" marker-end="url(#ar)"/>
+        <text x="496" y="105" class="d-lbl">ALL FOUR</text>
+
+        <rect x="540" y="110" width="244" height="110" rx="14" class="d-box-p"/>
+        <text x="662" y="142" text-anchor="middle" class="d-txt-p" style="font-weight:600">Binding decisions</text>
+        <text x="662" y="164" text-anchor="middle" class="d-txt-p">for people who disagree</text>
+        <text x="662" y="184" text-anchor="middle" class="d-txt-p">and cannot cheaply leave</text>
+        <text x="662" y="206" text-anchor="middle" class="d-lbl">= THE POLITICAL PROBLEM</text>
+      </svg>
+    </div>
+    <figcaption><b>The load-bearing conditions.</b> Politics is not a thing groups have; it is what remains once you notice that these four facts hold at the same time. Remove any single one and the dashed path shows where the need goes.</figcaption>
+  </figure>
+
+  <h3>The definition this gives you</h3>
+  <p><span class="term">A political system is any arrangement that produces decisions binding on members who disagree, and that survives the disagreement.</span></p>
+  <p>Notice what is <em>not</em> in that definition: no states, no elections, no ideology, no scale. That is deliberate. The definition is substrate-independent, which is why the same analysis will run on a nation of 1.4 billion and on a five-person team, and why the failure modes rhyme across both.</p>
+
+  <div class="insight">
+    <span class="tag">The move that does all the work</span>
+    Two variables decide how elaborate a political system has to be: <strong>the cost of exit</strong> and <strong>the stakes of the decision</strong>. Cheap exit and low stakes produce almost no politics &mdash; people simply leave. Expensive exit and high stakes produce constitutions, courts, armies and centuries of argument. Everything in this page is a function of those two numbers.
+  </div>
+
+  <h3>The primitives</h3>
+  <p>Six terms, defined tightly, do most of the explanatory work from here on. Get these exact and the rest assembles itself.</p>
+  <dl class="defs">
+    <div class="def"><dt>Power</dt><dd>The capacity to change what someone else does. Comes in three flavours: <span class="mono">coercion</span> (do it or suffer), <span class="mono">exchange</span> (do it and be paid), <span class="mono">authority</span> (do it because it's the rule). Only the third is cheap at scale.</dd></div>
+    <div class="def"><dt>Authority</dt><dd>Power that is recognised as rightful, so it does not have to be re-imposed each time. The whole game is converting coercion into authority, because coercion is metered and authority is flat-rate.</dd></div>
+    <div class="def"><dt>Legitimacy</dt><dd>The stock of belief that makes authority hold. Max Weber's three sources: <span class="mono">tradition</span> (it has always been so), <span class="mono">charisma</span> (this person is extraordinary), <span class="mono">legal-rational</span> (the procedure was followed). Modern systems mostly run on the third and quietly top up with the other two.</dd></div>
+    <div class="def"><dt>Institution</dt><dd>A rule that persists beyond the people currently inside it. Institutions are memory: they let a group keep a commitment its present members would rather break.</dd></div>
+    <div class="def"><dt>The state</dt><dd>Weber again: the organisation that successfully claims a <em>monopoly on legitimate violence</em> within a territory. "Successfully" and "legitimate" are the load-bearing words &mdash; where either fails, you get warlords, mafias or militias, which are not the absence of political order but a competing supplier of it.</dd></div>
+    <div class="def"><dt>Sovereignty</dt><dd>The claim that no higher authority can overrule you. It is a claim, not a fact; it holds exactly as long as others behave as though it does.</dd></div>
+  </dl>
+</section>
+
+<!-- ==================== 02 functions ==================== -->
+<section id="functions" class="wrap">
+  <span class="sec-no">02 &mdash; Foundations</span>
+  <h2>The five functions every system must perform</h2>
+  <p class="lede">Whatever the constitution says, a political system is a machine with five jobs. If you want to understand an unfamiliar system quickly, find where each job is done and who does it. Everything else is detail.</p>
+
+  <div class="steps">
+    <div class="step"><div class="step-n"></div><div>
+      <h4>Aggregation &mdash; turn many preferences into one decision</h4>
+      <p>Voting, hierarchy, markets, consensus, lottery, seniority, or a fight. There is no neutral method; the method changes the answer.</p>
+    </div></div>
+    <div class="step"><div class="step-n"></div><div>
+      <h4>Execution &mdash; actually do the thing</h4>
+      <p>Administration, bureaucracy, delegated agents. The moment you delegate, you have a principal&ndash;agent problem, and it never goes away.</p>
+    </div></div>
+    <div class="step"><div class="step-n"></div><div>
+      <h4>Enforcement &mdash; make the decision bind the unwilling</h4>
+      <p>Police, courts, sanctions, fines, exclusion, shunning, a bad performance rating. Note that enforcement capacity is always a tiny fraction of the population.</p>
+    </div></div>
+    <div class="step"><div class="step-n"></div><div>
+      <h4>Revision &mdash; change the decision, and the deciders, without killing the group</h4>
+      <p>Elections, amendment, succession, impeachment, reorg, fork, coup, revolution. This is the function most systems get wrong, and the one that kills them.</p>
+    </div></div>
+    <div class="step"><div class="step-n"></div><div>
+      <h4>Legitimation &mdash; make compliance mostly voluntary</h4>
+      <p>The story that explains why the other four are rightful. Not decoration: it is the cost-reduction layer that makes the whole machine affordable.</p>
+    </div></div>
+  </div>
+
+  <figure>
+    <div class="fig-scroll">
+      <svg viewBox="0 0 800 400" role="img" aria-label="A cycle: aggregation produces a decision, execution carries it out, enforcement demands compliance, revision changes deciders and rules and feeds back to aggregation; legitimation sits at the centre reducing the cost of each step.">
+        <defs>
+          <marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" class="d-head"/>
+          </marker>
+        </defs>
+
+        <rect x="90" y="30" width="210" height="58" rx="12" class="d-box"/>
+        <text x="195" y="56" text-anchor="middle" class="d-txt" style="font-weight:600">Aggregation</text>
+        <text x="195" y="74" text-anchor="middle" class="d-lbl">MANY WANTS &rarr; ONE CHOICE</text>
+
+        <rect x="500" y="30" width="210" height="58" rx="12" class="d-box"/>
+        <text x="605" y="56" text-anchor="middle" class="d-txt" style="font-weight:600">Execution</text>
+        <text x="605" y="74" text-anchor="middle" class="d-lbl">AGENTS ACT</text>
+
+        <rect x="500" y="300" width="210" height="58" rx="12" class="d-box"/>
+        <text x="605" y="326" text-anchor="middle" class="d-txt" style="font-weight:600">Enforcement</text>
+        <text x="605" y="344" text-anchor="middle" class="d-lbl">THE UNWILLING COMPLY</text>
+
+        <rect x="90" y="300" width="210" height="58" rx="12" class="d-box"/>
+        <text x="195" y="326" text-anchor="middle" class="d-txt" style="font-weight:600">Revision</text>
+        <text x="195" y="344" text-anchor="middle" class="d-lbl">RULES &amp; RULERS CHANGE</text>
+
+        <path d="M304,59 L494,59" class="d-line" marker-end="url(#ar2)"/>
+        <text x="399" y="48" text-anchor="middle" class="d-lbl">A DECISION</text>
+
+        <path d="M605,92 L605,294" class="d-line" marker-end="url(#ar2)"/>
+        <text x="616" y="196" class="d-lbl">DEMANDS OF PEOPLE</text>
+
+        <path d="M494,329 L306,329" class="d-line" marker-end="url(#ar2)"/>
+        <text x="399" y="350" text-anchor="middle" class="d-lbl">CONSENT OR GRIEVANCE</text>
+
+        <path d="M195,296 L195,94" class="d-line" marker-end="url(#ar2)"/>
+        <text x="96" y="196" class="d-lbl">NEW DECIDERS</text>
+
+        <rect x="285" y="155" width="230" height="88" rx="14" class="d-box-t"/>
+        <text x="400" y="186" text-anchor="middle" class="d-txt-t" style="font-weight:600">Legitimation</text>
+        <text x="400" y="207" text-anchor="middle" class="d-txt-t">why all of this is rightful</text>
+        <text x="400" y="228" text-anchor="middle" class="d-lbl">LOWERS THE COST OF EVERY STEP</text>
+
+        <path d="M290,164 L250,100" class="d-dash"/>
+        <path d="M510,164 L552,100" class="d-dash"/>
+        <path d="M510,234 L552,296" class="d-dash"/>
+        <path d="M290,234 L250,296" class="d-dash"/>
+      </svg>
+    </div>
+    <figcaption><b>The machine.</b> The outer ring is the cycle every system runs. The centre is the reason it is affordable: no state can police everyone, so most compliance has to be given rather than extracted. When the centre empties, the ring has to be held together by force &mdash; which costs more than the system usually earns.</figcaption>
+  </figure>
+
+  <div class="note">
+    <span class="tag">The enforcement arithmetic</span>
+    Police forces run on the order of a few hundred officers per 100,000 people. If even a small fraction of a population decides simultaneously to stop complying, enforcement cannot physically cope. This is the single most important structural fact about political order, and it is why <em>every</em> regime, including the most brutal, spends enormous effort on being believed in.
+  </div>
+</section>
+
+<!-- ==================== 03 problems ==================== -->
+<section id="problems" class="wrap">
+  <span class="sec-no">03 &mdash; Foundations</span>
+  <h2>Three kinds of problem, three different solutions</h2>
+  <p class="lede">People lump all group difficulties together. They are not the same shape, and confusing them is the most common analytic error in both politics and management. Diagnose the shape first; the right instrument follows.</p>
+
+  <div class="grid g3" style="margin-top:24px">
+    <div class="card">
+      <span class="pill">Type 1</span>
+      <h4 style="margin-top:12px">Coordination</h4>
+      <p style="font-size:14.5px; color:var(--on-surface-variant); margin-top:8px">Everyone is fine with any rule, but there must be <em>a</em> rule. Which side of the road. Which time zone. Which file format.</p>
+      <p style="font-size:14.5px; margin-top:12px"><span class="term">Solved by:</span> convention, a focal point, or anyone credible simply announcing it. <strong>Self-enforcing once set</strong> &mdash; nobody gains by defecting alone.</p>
+      <p style="font-size:14.5px; margin-top:12px"><span class="term">Cost:</span> near zero. If your problem is really this, stop building governance.</p>
+    </div>
+    <div class="card">
+      <span class="pill">Type 2</span>
+      <h4 style="margin-top:12px">Collective action</h4>
+      <p style="font-size:14.5px; color:var(--on-surface-variant); margin-top:8px">Everyone benefits if it's done, nobody individually gains by doing it. Defence, clean air, roads, code review, writing the runbook.</p>
+      <p style="font-size:14.5px; margin-top:12px"><span class="term">Solved by:</span> coercion (taxes), selective incentives (perks for contributors), or small-group mutual monitoring. Mancur Olson's result: <strong>large groups under-organise</strong>, small ones over-organise.</p>
+      <p style="font-size:14.5px; margin-top:12px"><span class="term">Cost:</span> real, ongoing enforcement.</p>
+    </div>
+    <div class="card">
+      <span class="pill">Type 3</span>
+      <h4 style="margin-top:12px">Distribution</h4>
+      <p style="font-size:14.5px; color:var(--on-surface-variant); margin-top:8px">Who gets what. Roughly zero-sum. Land, budget, headcount, status, the corner office, the disputed province.</p>
+      <p style="font-size:14.5px; margin-top:12px"><span class="term">Solved by:</span> nothing cleanly. Only power, procedure, or a legitimacy story that makes the losers accept the loss. <strong>More information does not help</strong> &mdash; often it sharpens the fight.</p>
+      <p style="font-size:14.5px; margin-top:12px"><span class="term">Cost:</span> this is where political systems earn their keep.</p>
+    </div>
+  </div>
+
+  <div class="insight">
+    <span class="tag">Diagnostic</span>
+    Most arguments that feel unsolvable are Type 3 problems being addressed with Type 1 tools. If someone responds to a budget fight by circulating more data, they have misdiagnosed the shape. Data settles coordination; it does not settle distribution.
+  </div>
+
+  <h3>Why the three are hard in different ways</h3>
+  <p>Olson's free-rider logic explains why the beneficiaries of broad goods &mdash; consumers, taxpayers, the general public &mdash; organise badly, while narrow interests organise brilliantly. A policy that costs 300 million people one rupee each and gives 300 people a crore each will be lobbied for ferociously and opposed by nobody. <span class="term">Concentrated benefits and diffuse costs</span> is the single most reliable predictor of bad policy in any system, democratic or not, national or corporate.</p>
+  <p>Elinor Ostrom's contribution was to show that Type 2 is not a binary between "privatise it" and "have the state run it". Communities have governed shared forests, fisheries and irrigation for centuries using a third path &mdash; and she extracted the conditions under which it works. They are listed in <a href="#beyond">&sect;07</a>, and they transfer directly to shared engineering platforms.</p>
+</section>
+
+<!-- ==================== 04 limits ==================== -->
+<section id="limits" class="wrap">
+  <span class="sec-no">04 &mdash; Foundations</span>
+  <h2>The hard limits: what aggregation cannot do</h2>
+  <p class="lede">This is the part most political education skips, and the part a systems thinker most needs. There are proved impossibility results about turning many preferences into one choice. They are not practical difficulties to be engineered away. They are theorems.</p>
+
+  <div class="grid g2" style="margin-top:24px">
+    <div class="card-filled">
+      <h4>Arrow's impossibility theorem <span class="pill">1951</span></h4>
+      <p style="font-size:14.5px; margin-top:10px">No ranked voting rule over three or more options can simultaneously satisfy unanimity, independence of irrelevant alternatives, transitivity, and non-dictatorship. Something always has to give.</p>
+      <p style="font-size:14.5px; margin-top:10px"><span class="term">What it means:</span> there is no uniquely correct way to add up what a group wants. "The will of the people" is not a well-defined object waiting to be measured.</p>
+    </div>
+    <div class="card-filled">
+      <h4>Gibbard&ndash;Satterthwaite <span class="pill">1973&ndash;75</span></h4>
+      <p style="font-size:14.5px; margin-top:10px">Any non-dictatorial deterministic rule choosing among three or more outcomes can be manipulated &mdash; some voter can sometimes do better by misrepresenting their preference.</p>
+      <p style="font-size:14.5px; margin-top:10px"><span class="term">What it means:</span> strategic voting is not corruption of the system, it is a structural feature of it. Designing it out is impossible; you can only choose which manipulations you prefer.</p>
+    </div>
+    <div class="card-filled">
+      <h4>McKelvey's chaos theorem <span class="pill">1976</span></h4>
+      <p style="font-size:14.5px; margin-top:10px">When choices sit in two or more dimensions, majority rule has no stable winner: a clever agenda-setter can walk the group, one majority-approved step at a time, to almost <em>any</em> outcome.</p>
+      <p style="font-size:14.5px; margin-top:10px"><span class="term">What it means:</span> <strong>whoever controls the agenda controls the result.</strong> The order of the questions matters as much as the preferences. This is the single most useful thing on this page.</p>
+    </div>
+    <div class="card-filled">
+      <h4>The median voter result <span class="pill">Black, Downs</span></h4>
+      <p style="font-size:14.5px; margin-top:10px">In one dimension with single-peaked preferences, the median voter's choice wins. Two competitors converge toward the middle.</p>
+      <p style="font-size:14.5px; margin-top:10px"><span class="term">What it means:</span> the pull to the centre in two-party systems is structural, not cowardice &mdash; and it evaporates the moment politics becomes genuinely multidimensional, which is when chaos returns.</p>
+    </div>
+  </div>
+
+  <div class="note note-warn">
+    <span class="tag">The consequence to carry forward</span>
+    Because no aggregation rule is neutral, <strong>procedure is substance</strong>. Choosing first-past-the-post over proportional representation, or deciding whether the committee votes on amendments before or after the main motion, is not administrative housekeeping &mdash; it selects outcomes. Anyone who tells you a process choice is "just process" is either naive or winning.
+  </div>
+
+  <h3>Two more structural facts</h3>
+  <div class="stack" style="margin-top:16px">
+    <p><span class="term">The principal&ndash;agent problem.</span> The moment you delegate, your agent has their own interests and better information than you about what they actually did. Every institution &mdash; audits, elections, term limits, reporting lines, boards, inspectors general &mdash; is a partial and expensive patch on this one hole. It is never closed, only narrowed.</p>
+    <p><span class="term">Exit, voice and loyalty.</span> Albert Hirschman: when something you belong to deteriorates, you have three responses &mdash; leave, complain, or stay quiet. The crucial insight is that these <em>trade off</em>. Where exit is cheap, voice institutions stay thin, because the dissatisfied leave rather than organise. Where exit is expensive, voice machinery becomes elaborate. This alone explains why nation-states have constitutions and companies have exit interviews.</p>
+  </div>
+</section>
+
+<!-- ==================== 05 design space ==================== -->
+<section id="space" class="wide">
+  <span class="sec-no">05 &mdash; The map</span>
+  <h2>The design space</h2>
+  <p class="lede" style="max-width:70ch">Regime <em>types</em> are a bad primary tool: they are boxes drawn around clusters, and real systems sit between the boxes. Dimensions are better. Every political system, at any scale, is a point in the space below. Read a system by locating it on each axis, and its behaviour becomes predictable in a way the label never makes it.</p>
+
+  <div class="spectrum">
+    <div class="spec-head">
+      <span class="spec-name">1. Size of the winning coalition &nbsp;<span class="mono">(W)</span></span>
+      <span class="spec-q">How many people must a leader keep satisfied to stay in power? The most predictive single number in comparative politics.</span>
+    </div>
+    <div class="spec-zones">
+      <div class="zone z1"><div class="zone-bar"></div><span class="zone-label">Tiny &mdash; a handful</span><div class="chips"><span class="chip">Junta</span><span class="chip">Personalist regime</span><span class="chip">Mafia</span><span class="chip">Founder-controlled firm</span></div></div>
+      <div class="zone z2"><div class="zone-bar"></div><span class="zone-label">Narrow &mdash; hundreds to thousands</span><div class="chips"><span class="chip">Dominant-party state</span><span class="chip">Oligarchy</span><span class="chip">Absolute monarchy</span><span class="chip">Board-run company</span></div></div>
+      <div class="zone z3"><div class="zone-bar"></div><span class="zone-label">Wide &mdash; millions</span><div class="chips"><span class="chip">Mass democracy</span><span class="chip">Member cooperative</span><span class="chip">Union with real elections</span></div></div>
+    </div>
+  </div>
+
+  <figure>
+    <div class="fig-scroll">
+      <svg viewBox="0 0 820 400" role="img" aria-label="Two loops compared. With a wide coalition, a leader buys loyalty with public goods, prosperity is broad, and the coalition re-selects the leader — a self-correcting balancing loop. With a narrow coalition, a leader buys loyalty with private goods, public goods and surplus decline, and the coalition must shrink further — a self-reinforcing loop.">
+        <defs>
+          <marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="d-head-bal"/></marker>
+          <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="d-head-rein"/></marker>
+        </defs>
+
+        <rect x="8" y="8" width="392" height="384" rx="14" class="d-panel"/>
+        <text x="28" y="34" class="d-lbl">WIDE COALITION</text>
+        <rect x="8" y="8" width="392" height="384" rx="14" fill="none" class="d-rule"/>
+
+        <rect x="110" y="52" width="190" height="44" rx="10" class="d-box"/>
+        <text x="205" y="79" text-anchor="middle" class="d-txt">Leader wants to survive</text>
+        <rect x="40" y="140" width="330" height="44" rx="10" class="d-box"/>
+        <text x="205" y="167" text-anchor="middle" class="d-txt">Cheapest loyalty: <tspan style="font-weight:600">public goods</tspan></text>
+        <rect x="90" y="228" width="230" height="44" rx="10" class="d-box"/>
+        <text x="205" y="255" text-anchor="middle" class="d-txt">Growth, health, schooling</text>
+        <rect x="40" y="316" width="330" height="44" rx="10" class="d-box"/>
+        <text x="205" y="343" text-anchor="middle" class="d-txt">Coalition renews the leader</text>
+
+        <path d="M205,100 L205,134" class="d-bal" marker-end="url(#arb)"/>
+        <path d="M205,188 L205,222" class="d-bal" marker-end="url(#arb)"/>
+        <path d="M205,276 L205,310" class="d-bal" marker-end="url(#arb)"/>
+        <path d="M36,338 C18,338 18,74 104,74" class="d-bal" marker-end="url(#arb)"/>
+        <circle cx="326" cy="200" r="17" class="d-badge-bal"/>
+        <text x="326" y="206" text-anchor="middle" class="d-badge-txt-bal">B</text>
+        <text x="326" y="238" text-anchor="middle" class="d-lbl">SELF-CORRECTING</text>
+
+        <rect x="420" y="8" width="392" height="384" rx="14" class="d-panel"/>
+        <text x="440" y="34" class="d-lbl">NARROW COALITION</text>
+
+        <rect x="522" y="52" width="190" height="44" rx="10" class="d-box"/>
+        <text x="617" y="79" text-anchor="middle" class="d-txt">Leader wants to survive</text>
+        <rect x="452" y="140" width="330" height="44" rx="10" class="d-box"/>
+        <text x="617" y="167" text-anchor="middle" class="d-txt">Cheapest loyalty: <tspan style="font-weight:600">private goods</tspan></text>
+        <rect x="452" y="228" width="330" height="44" rx="10" class="d-box"/>
+        <text x="617" y="255" text-anchor="middle" class="d-txt">Public goods and surplus decline</text>
+        <rect x="452" y="316" width="330" height="44" rx="10" class="d-box"/>
+        <text x="617" y="343" text-anchor="middle" class="d-txt">Coalition must shrink to stay affordable</text>
+
+        <path d="M617,100 L617,134" class="d-rein" marker-end="url(#arr)"/>
+        <path d="M617,188 L617,222" class="d-rein" marker-end="url(#arr)"/>
+        <path d="M617,276 L617,310" class="d-rein" marker-end="url(#arr)"/>
+        <path d="M448,338 C430,338 430,74 516,74" class="d-rein" marker-end="url(#arr)"/>
+        <circle cx="738" cy="200" r="17" class="d-badge-rein"/>
+        <text x="738" y="206" text-anchor="middle" class="d-badge-txt-rein">R</text>
+        <text x="738" y="238" text-anchor="middle" class="d-lbl">SELF-AMPLIFYING</text>
+      </svg>
+    </div>
+    <figcaption><b>Same leader, opposite behaviour.</b> The only difference between these two panels is coalition size. Nothing about the leader's character changes &mdash; both are equally self-interested. When you must please millions, the cheapest way to buy loyalty is things that help everyone; when you must please thirty, it is cash and jobs for thirty. This is the core of Bueno de Mesquita's selectorate theory, and it is the clearest example on this page of <b>structure producing behaviour</b>.</figcaption>
+  </figure>
+
+  <div class="spectrum">
+    <div class="spec-head">
+      <span class="spec-name">2. Number of veto players</span>
+      <span class="spec-q">How many independent actors must agree before the status quo can change? Governs the trade-off between stability and adaptability.</span>
+    </div>
+    <div class="spec-zones">
+      <div class="zone z3"><div class="zone-bar"></div><span class="zone-label">Few &mdash; fast, volatile</span><div class="chips"><span class="chip">Westminster majority</span><span class="chip">Personalist rule</span><span class="chip">Startup</span></div></div>
+      <div class="zone z2"><div class="zone-bar"></div><span class="zone-label">Several</span><div class="chips"><span class="chip">Coalition government</span><span class="chip">Federal system</span><span class="chip">Bicameral legislature</span></div></div>
+      <div class="zone z1"><div class="zone-bar"></div><span class="zone-label">Many &mdash; stable, immobile</span><div class="chips"><span class="chip">US separation of powers</span><span class="chip">EU Council + Parliament</span><span class="chip">Swiss referendum system</span><span class="chip">Large matrixed company</span></div></div>
+    </div>
+  </div>
+  <p style="margin-top:14px; font-size:15px; color:var(--on-surface-variant)">George Tsebelis's result: policy stability rises with the number of veto players and with the ideological distance between them. That stability is a feature when you want credible commitment &mdash; investors, treaties, property rights &mdash; and a defect when the environment shifts. Systems that cannot change through the front door change through the back one: emergency powers, executive orders, judicial reinterpretation, or a workaround built by whoever needed it most.</p>
+
+  <div class="spectrum">
+    <div class="spec-head">
+      <span class="spec-name">3. Rule-boundedness</span>
+      <span class="spec-q">Do the rules bind the people at the top, or only everyone else? The difference between rule <em>of</em> law and rule <em>by</em> law.</span>
+    </div>
+    <div class="spec-zones">
+      <div class="zone z1"><div class="zone-bar"></div><span class="zone-label">Rule by decree</span><div class="chips"><span class="chip">Personalist autocracy</span><span class="chip">Revolutionary regime</span><span class="chip">Emergency rule</span></div></div>
+      <div class="zone z2"><div class="zone-bar"></div><span class="zone-label">Rule <em>by</em> law</span><div class="chips"><span class="chip">Elaborate legal codes, courts that never rule against the ruler</span></div></div>
+      <div class="zone z3"><div class="zone-bar"></div><span class="zone-label">Rule <em>of</em> law</span><div class="chips"><span class="chip">Independent courts</span><span class="chip">Constitutional review</span><span class="chip">Leaders lose cases</span></div></div>
+    </div>
+  </div>
+
+  <div class="spectrum">
+    <div class="spec-head">
+      <span class="spec-name">4. Succession mechanism</span>
+      <span class="spec-q">How does power transfer? The deepest stress test any system faces, and the one most often left undesigned.</span>
+    </div>
+    <div class="spec-zones">
+      <div class="zone z1"><div class="zone-bar"></div><span class="zone-label">Undefined or contested</span><div class="chips"><span class="chip">Personalist rule</span><span class="chip">Warlord order</span><span class="chip">Founder with no plan</span></div></div>
+      <div class="zone z2"><div class="zone-bar"></div><span class="zone-label">Defined but closed</span><div class="chips"><span class="chip">Hereditary monarchy</span><span class="chip">Party politburo</span><span class="chip">Board appointment</span></div></div>
+      <div class="zone z3"><div class="zone-bar"></div><span class="zone-label">Defined, open, repeated</span><div class="chips"><span class="chip">Scheduled elections</span><span class="chip">Term limits</span><span class="chip">Fixed tenure with review</span></div></div>
+    </div>
+  </div>
+  <div class="note">
+    <span class="tag">Why succession is the real test</span>
+    Hereditary monarchy is often mocked, but it solved a genuine engineering problem: it made succession <em>predictable</em>, which removes the incentive to fight over it. The price is a competence lottery. Elections solve it differently &mdash; they make losing survivable, so the loser walks away instead of reaching for a weapon. Both are answers to the same question: <strong>how do we change who rules without destroying the thing being ruled?</strong> A system with no credible answer is not stable, it is merely young.
+  </div>
+
+  <div class="spectrum">
+    <div class="spec-head">
+      <span class="spec-name">5. Cost of exit</span>
+      <span class="spec-q">How expensive is it to leave? Sets how much voice machinery the system needs &mdash; and how much abuse it can sustain.</span>
+    </div>
+    <div class="spec-zones">
+      <div class="zone z3"><div class="zone-bar"></div><span class="zone-label">Near zero</span><div class="chips"><span class="chip">Open-source fork</span><span class="chip">Online community</span><span class="chip">Competitive job market</span></div></div>
+      <div class="zone z2"><div class="zone-bar"></div><span class="zone-label">Moderate</span><div class="chips"><span class="chip">Moving states in a federation</span><span class="chip">Switching employer</span><span class="chip">Leaving a housing society</span></div></div>
+      <div class="zone z1"><div class="zone-bar"></div><span class="zone-label">Very high</span><div class="chips"><span class="chip">Citizenship</span><span class="chip">Caste-like closed groups</span><span class="chip">Family</span><span class="chip">Prison</span></div></div>
+    </div>
+  </div>
+
+  <h3>Four more axes, in brief</h3>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Dimension</th><th>One end</th><th>Other end</th><th>What it predicts</th></tr></thead>
+      <tbody>
+        <tr><th>Concentration</th><td>Unitary &mdash; one centre decides everything</td><td>Federal / polycentric &mdash; nested autonomous units</td><td>Federalism buys local fit, policy experimentation and an exit valve; it costs coordination and permits local capture.</td></tr>
+        <tr><th>Scope</th><td>Bounded &mdash; large private sphere the state cannot touch</td><td>Total &mdash; nothing is outside politics</td><td>Where the public/private line falls is itself the most contested political question in any system, including companies.</td></tr>
+        <tr><th>Information openness</th><td>Transparent &mdash; budgets, votes, minutes public</td><td>Opaque &mdash; decisions made and recorded privately</td><td>Opacity protects incumbents from accountability loops and simultaneously blinds them. It is never free.</td></tr>
+        <tr><th>Fusion of powers</th><td>Fused &mdash; executive drawn from and removable by legislature (parliamentary)</td><td>Separated &mdash; independently selected, fixed terms (presidential)</td><td>Fusion avoids deadlock but concentrates power; separation constrains power but can deadlock with no constitutional exit &mdash; Juan Linz's argument against presidentialism.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ==================== 06 atlas ==================== -->
+<section id="atlas" class="wide">
+  <span class="sec-no">06 &mdash; The map</span>
+  <h2>Atlas of regimes</h2>
+  <p class="lede" style="max-width:70ch">Now the familiar names &mdash; but read each as a <em>region</em> in the space above, not a box. The badge gives the typical coalition width; the fields give the loop that dominates and the way this design usually dies. Roughly a third of the world's states are electoral or competitive authoritarian rather than cleanly democratic or cleanly autocratic; the hybrids are the norm, not the exception.</p>
+
+  <div class="grid g2" style="margin-top:28px">
+
+    <div class="regime">
+      <div class="regime-top"><h4>Liberal democracy</h4><span class="w-badge w-wide">W: wide</span></div>
+      <p>Competitive elections plus rights that bind the majority itself. The second half is what makes it <em>liberal</em>; elections alone do not.</p>
+      <dl>
+        <dt>Dominant loop</dt><dd>Accountability &mdash; poor performance removes leaders, which corrects policy.</dd>
+        <dt>Characteristic failure</dt><dd>Capture by organised interests; polarisation eroding the guardrails; short-termism from cycle/payoff mismatch.</dd>
+        <dt>Key variants</dt><dd>Parliamentary vs presidential; majoritarian (Westminster) vs consensus/proportional (Lijphart's consociational model for divided societies).</dd>
+      </dl>
+    </div>
+
+    <div class="regime">
+      <div class="regime-top"><h4>Electoral / competitive authoritarian</h4><span class="w-badge w-mid">W: narrow</span></div>
+      <p>Elections are real and contested, but the field is tilted: state media, selective prosecution, funding asymmetry, tame courts. The modal non-democracy of the present era.</p>
+      <dl>
+        <dt>Dominant loop</dt><dd>Tilt reinforces incumbency, which funds more tilt.</dd>
+        <dt>Characteristic failure</dt><dd>Either tips to full autocracy, or loses an election it miscalculated and unravels fast.</dd>
+        <dt>Tell</dt><dd>Opposition is allowed to run but not allowed to win. Levitsky and Way's diagnostic.</dd>
+      </dl>
+    </div>
+
+    <div class="regime">
+      <div class="regime-top"><h4>Dominant-party state</h4><span class="w-badge w-mid">W: narrow</span></div>
+      <p>One party monopolises power, but real institutions exist <em>inside</em> it &mdash; factions, promotion ladders, term norms, internal bargaining. Politics moves from between parties to within one.</p>
+      <dl>
+        <dt>Dominant loop</dt><dd>Party performance legitimacy: deliver growth, retain mandate, fund more delivery.</dd>
+        <dt>Characteristic failure</dt><dd>Performance legitimacy is a treadmill &mdash; a downturn attacks the only story available. Succession is the perennial danger.</dd>
+        <dt>Strength</dt><dd>Can plan on horizons elected governments cannot, and can pivot fast.</dd>
+      </dl>
+    </div>
+
+    <div class="regime">
+      <div class="regime-top"><h4>Personalist autocracy</h4><span class="w-badge w-tiny">W: tiny</span></div>
+      <p>Power attaches to an individual rather than an office. Institutions persist on paper but are hollowed; loyalty outranks competence in every appointment.</p>
+      <dl>
+        <dt>Dominant loop</dt><dd>Information trap plus repression trap, both running simultaneously.</dd>
+        <dt>Characteristic failure</dt><dd>Highest outcome variance of any regime type &mdash; and a guaranteed succession crisis, because the system is the person.</dd>
+        <dt>Tell</dt><dd>No one around the leader can deliver bad news and keep their job.</dd>
+      </dl>
+    </div>
+
+    <div class="regime">
+      <div class="regime-top"><h4>Military regime / junta</h4><span class="w-badge w-tiny">W: tiny</span></div>
+      <p>The enforcement arm becomes the decider. Usually justified as a temporary corrective to disorder.</p>
+      <dl>
+        <dt>Dominant loop</dt><dd>Coup-proofing: the ruler must now defend against the institution that made him.</dd>
+        <dt>Characteristic failure</dt><dd>Shortest average lifespan of the autocracies &mdash; internal splits, since the people who can remove you are in the room.</dd>
+      </dl>
+    </div>
+
+    <div class="regime">
+      <div class="regime-top"><h4>Monarchy</h4><span class="w-badge w-tiny">W: tiny to narrow</span></div>
+      <p>Hereditary succession, traditional legitimation. Absolute monarchies rule; constitutional ones reign while others rule, converting the crown into a legitimacy reservoir rather than a decision-maker.</p>
+      <dl>
+        <dt>Dominant loop</dt><dd>Tradition compounds: the longer it has lasted, the more rightful it seems.</dd>
+        <dt>Characteristic failure</dt><dd>Competence lottery; and legitimacy that cannot be rebuilt once broken, because its whole basis was continuity.</dd>
+      </dl>
+    </div>
+
+    <div class="regime">
+      <div class="regime-top"><h4>Theocracy</h4><span class="w-badge w-tiny">W: narrow</span></div>
+      <p>Legitimation derived from divine authority, with clerical bodies holding veto or interpretive power over ordinary legislation. Often layered over an elected apparatus, producing two competing sources of mandate.</p>
+      <dl>
+        <dt>Dominant loop</dt><dd>Doctrinal authority validates rulers; rulers protect doctrinal authority.</dd>
+        <dt>Characteristic failure</dt><dd>Tying governance outcomes to sacred legitimacy means governance failures become theological crises.</dd>
+      </dl>
+    </div>
+
+    <div class="regime">
+      <div class="regime-top"><h4>Hybrid / anocracy</h4><span class="w-badge w-mid">W: mixed</span></div>
+      <p>Partly open, partly closed; competing institutions with no settled hierarchy. Not a way-station so much as its own stable-unstable condition.</p>
+      <dl>
+        <dt>Dominant loop</dt><dd>Contested rules invite each faction to change the rules rather than play by them.</dd>
+        <dt>Characteristic failure</dt><dd>Empirically the highest risk of internal armed conflict &mdash; higher than either consolidated democracies or consolidated autocracies.</dd>
+      </dl>
+    </div>
+
+    <div class="regime">
+      <div class="regime-top"><h4>Stateless and pre-state orders</h4><span class="w-badge w-mid">W: varies</span></div>
+      <p>Segmentary lineage societies, clan and tribal confederations, feudal webs of personal obligation: order without a monopoly on violence. Disputes settled by kin liability, feud, elders, or reciprocal obligation rather than courts.</p>
+      <dl>
+        <dt>Dominant loop</dt><dd>Reciprocity and reputation; deterrence through credible retaliation.</dd>
+        <dt>Characteristic failure</dt><dd>Scales badly beyond face-to-face monitoring; vulnerable to any neighbour that has centralised.</dd>
+        <dt>Why it matters</dt><dd>Shows the state is one solution to the political problem, not the problem's definition.</dd>
+      </dl>
+    </div>
+
+    <div class="regime">
+      <div class="regime-top"><h4>Empire</h4><span class="w-badge w-tiny">W: tiny at the core</span></div>
+      <p>Indirect rule over heterogeneous units that keep their own local systems, bound to a centre by tribute, garrisons and elite co-option rather than uniform citizenship.</p>
+      <dl>
+        <dt>Dominant loop</dt><dd>Co-opt local elites cheaply; they enforce on your behalf.</dd>
+        <dt>Characteristic failure</dt><dd>Overextension &mdash; the cost of holding the periphery outruns what the periphery yields.</dd>
+      </dl>
+    </div>
+
+    <div class="regime">
+      <div class="regime-top"><h4>Direct democracy &amp; sortition</h4><span class="w-badge w-wide">W: wide</span></div>
+      <p>Citizens decide themselves rather than through representatives. Classical Athens filled most offices <em>by lottery</em>, not election &mdash; on the view that elections select for wealth and rhetoric while lottery selects a genuine cross-section. Survives today in Swiss referendums and modern citizens' assemblies.</p>
+      <dl>
+        <dt>Dominant loop</dt><dd>Participation builds competence, which sustains participation.</dd>
+        <dt>Characteristic failure</dt><dd>Agenda control and attention scarcity; expertise gaps; majority decisions with no rights floor.</dd>
+      </dl>
+    </div>
+
+    <div class="regime">
+      <div class="regime-top"><h4>Supranational pooling</h4><span class="w-badge w-mid">W: indirect</span></div>
+      <p>States delegate specific powers upward to a shared body while keeping sovereignty formally. The EU is the deep case; the WTO, and treaty regimes generally, are thinner ones.</p>
+      <dl>
+        <dt>Dominant loop</dt><dd>Integration creates interdependence, which raises the cost of leaving, which deepens integration.</dd>
+        <dt>Characteristic failure</dt><dd>Deliberately many veto players &rarr; immobility; and a legitimacy gap, since citizens elect national governments but are governed by the pooled body.</dd>
+      </dl>
+    </div>
+
+  </div>
+
+  <div class="note note-warn" style="margin-top:28px">
+    <span class="tag">Read the labels with suspicion</span>
+    Regime names describe <em>formal</em> structure; the dimensions describe how power actually moves. Many systems that share a label behave nothing alike, and many that carry opposite labels behave identically. When the label and the dimensions disagree, trust the dimensions.
+  </div>
+</section>
+
+<!-- ==================== 07 beyond the state ==================== -->
+<section id="beyond" class="wide">
+  <span class="sec-no">07 &mdash; The map</span>
+  <h2>Beyond the state: the same machine, smaller</h2>
+  <p class="lede" style="max-width:70ch">This is where the substrate-independence pays off. Every row below is a real political system with a selectorate, an enforcement mechanism, a legitimacy story and a succession problem. Read across the row and the analogy stops being an analogy.</p>
+
+  <div class="table-scroll">
+    <table style="min-width:880px">
+      <thead><tr><th>System</th><th>Who selects the leadership</th><th>Enforcement</th><th>Exit cost</th><th>The characteristic pathology</th></tr></thead>
+      <tbody>
+        <tr><th>Nation-state</th><td>Citizens, party, army, or dynasty</td><td>Police, courts, prison, taxation</td><td class="mono">Very high</td><td>Capture, ossification, legitimacy collapse</td></tr>
+        <tr><th>Firm</th><td>Shareholders &rarr; board &rarr; CEO. Employees select nobody.</td><td>Pay, promotion, budget, headcount, dismissal</td><td class="mono">Low&ndash;moderate</td><td>Agency problems; thin voice because exit is cheap</td></tr>
+        <tr><th>Cooperative / mutual</th><td>Members, one member one vote</td><td>Membership rules, expulsion</td><td class="mono">Moderate</td><td>Under-capitalisation; drift toward a professional managerial class</td></tr>
+        <tr><th>Trade union</th><td>Members, in principle</td><td>Dues, solidarity, strike discipline</td><td class="mono">Moderate</td><td><em>Michels' iron law of oligarchy</em> &mdash; see below</td></tr>
+        <tr><th>Open-source project</th><td>Maintainers, foundation, or a benevolent dictator</td><td>Commit rights, code review, release control</td><td class="mono">Near zero &mdash; fork</td><td>Maintainer burnout; capture by a corporate sponsor</td></tr>
+        <tr><th>Religious institution</th><td>Episcopal (hierarchy), presbyterian (elected elders), or congregational (the assembly)</td><td>Doctrine, sacraments, community standing, expulsion</td><td class="mono">High (social)</td><td>Schism when doctrinal authority and lived practice diverge</td></tr>
+        <tr><th>University</th><td>Faculty, trustees, ministry &mdash; usually all three, in tension</td><td>Tenure, funding, accreditation</td><td class="mono">High (career)</td><td>Collegial deadlock; administrative growth outpacing the academic core</td></tr>
+        <tr><th>Housing society / HOA</th><td>Resident members</td><td>Maintenance dues, fines, liens</td><td class="mono">Very high</td><td>Tiny active minority governs a passive majority</td></tr>
+        <tr><th>Online community</th><td>Owner, or moderators chosen by moderators</td><td>Ban, mute, shadowban, algorithmic demotion</td><td class="mono">Near zero</td><td>Unaccountable moderation; migration cascades</td></tr>
+        <tr><th>Family</th><td>Custom, age, earning power, or negotiation</td><td>Affection, money, obligation, withdrawal</td><td class="mono">Very high</td><td>Unwritten constitution, so every conflict is also a constitutional crisis</td></tr>
+        <tr><th>Criminal organisation</th><td>Force, kinship, seniority</td><td>Violence and reputation</td><td class="mono">Prohibitive</td><td>No succession rule &rarr; each transition is a war</td></tr>
+        <tr><th>The international system</th><td>Nobody &mdash; formal anarchy</td><td>Self-help, alliances, sanctions, reciprocity</td><td class="mono">n/a</td><td>Commitment problems; order rests on balance, hegemony or regimes</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Four results that only show up at this scale</h3>
+  <div class="grid g2" style="margin-top:20px">
+    <div class="card">
+      <h4>Michels' iron law of oligarchy</h4>
+      <p style="font-size:14.5px; color:var(--on-surface-variant); margin-top:8px">Robert Michels studied socialist parties &mdash; organisations explicitly committed to internal democracy &mdash; and found they became oligarchic anyway. Not from bad faith: from specialisation. A few people accumulate expertise, contacts, files and time. Everyone else has a day job. <span class="term">"Who says organisation, says oligarchy."</span></p>
+      <p style="font-size:14.5px; margin-top:10px">The claim is contested as a <em>law</em>, but the mechanism is real, and it is the strongest argument for deliberately cheap information and rotating roles.</p>
+    </div>
+    <div class="card">
+      <h4>Forking makes dictatorship survivable</h4>
+      <p style="font-size:14.5px; color:var(--on-surface-variant); margin-top:8px">Open-source projects tolerate benevolent dictators that no nation would accept. Why? Because <span class="term">exit costs almost nothing</span>: fork the repo and take the community. The constraint on the dictator is not voice, it is the permanent credible threat of exit.</p>
+      <p style="font-size:14.5px; margin-top:10px">Generalise it: <strong>the cheaper exit is, the less voice machinery you need</strong> &mdash; and the more dangerous it is to make exit expensive without building voice to replace it.</p>
+    </div>
+    <div class="card">
+      <h4>Mafias as private states</h4>
+      <p style="font-size:14.5px; color:var(--on-surface-variant); margin-top:8px">Diego Gambetta's account of the Sicilian mafia treats it as an industry supplying <em>protection</em> where the state's supply was absent or untrusted. Contracts need enforcement; if no public enforcer is credible, a private one gets paid.</p>
+      <p style="font-size:14.5px; margin-top:10px">The lesson is not about crime. It is that <strong>governance gaps get filled</strong> &mdash; by someone, on their terms. The same is true of undefined ownership inside an organisation.</p>
+    </div>
+    <div class="card">
+      <h4>Anarchy is a structure, not a vacuum</h4>
+      <p style="font-size:14.5px; color:var(--on-surface-variant); margin-top:8px">In international relations "anarchy" means only that there is no higher authority. Order still emerges &mdash; from balance of power, from one dominant actor providing public goods, or from institutions states build to make their own promises credible.</p>
+      <p style="font-size:14.5px; margin-top:10px">The recurring difficulty is the <span class="term">commitment problem</span>: I would sign, but I cannot be sure you will still comply once circumstances shift and nobody can make you.</p>
+    </div>
+  </div>
+
+  <h3>Ostrom's eight conditions &mdash; what actually works for shared resources</h3>
+  <p>Elinor Ostrom won the Nobel for showing that communities do successfully govern shared resources without either privatisation or central control &mdash; and for extracting the conditions under which they manage it. These are the most directly reusable rules on this page.</p>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th style="width:44px">#</th><th>Condition</th><th>What it buys you</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">1</td><th>Clear boundaries</th><td>Who is in, and what exactly is being governed. Ambiguity here poisons everything downstream.</td></tr>
+        <tr><td class="mono">2</td><th>Rules fit local conditions</th><td>Imported rules that ignore local reality get ignored back.</td></tr>
+        <tr><td class="mono">3</td><th>Those affected can change the rules</th><td>Converts rule-following from compliance into ownership. The cheapest legitimacy there is.</td></tr>
+        <tr><td class="mono">4</td><th>Monitoring, by people accountable to users</th><td>Not an external inspector with their own agenda &mdash; a monitor the users can themselves remove.</td></tr>
+        <tr><td class="mono">5</td><th>Graduated sanctions</th><td>First offence gets a word, not a ban. Harsh first sanctions make everyone reluctant to report anything.</td></tr>
+        <tr><td class="mono">6</td><th>Cheap, fast conflict resolution</th><td>If resolving a dispute costs more than the dispute, people stop raising disputes and start defecting.</td></tr>
+        <tr><td class="mono">7</td><th>Recognised right to organise</th><td>The higher authority must not casually override local rules, or nobody will invest in making them.</td></tr>
+        <tr><td class="mono">8</td><th>Nested, polycentric governance</th><td>Small units for local matters, larger ones for what spans them. Matches decision scope to impact scope.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ==================== 08 stocks ==================== -->
+<section id="stocks" class="wrap">
+  <span class="sec-no">08 &mdash; Systems</span>
+  <h2>Stocks, flows and the delays that do the damage</h2>
+  <p class="lede">Here is where the systems frame earns its place. Stop looking at events &mdash; an election, a protest, a resignation &mdash; and look at the accumulations underneath them. Events are the surface; stocks explain the surface.</p>
+
+  <h3>The stocks</h3>
+  <div class="grid g2" style="margin-top:18px">
+    <div class="card-filled">
+      <h4>Legitimacy</h4>
+      <p style="font-size:14.5px; margin-top:8px">Fills slowly, over years of delivered promises and kept procedures. Drains fast, and non-linearly. Cannot be bought with a campaign; can be destroyed with one broken rule at the wrong moment.</p>
+    </div>
+    <div class="card-filled">
+      <h4>State capacity</h4>
+      <p style="font-size:14.5px; margin-top:8px">Three sub-stocks: <span class="mono">fiscal</span> (can it tax?), <span class="mono">administrative</span> (can it deliver?), <span class="mono">coercive</span> (can it enforce?). Built over decades; degraded in a few years of neglect or purges. Many regimes have plenty of the third and almost none of the second.</p>
+    </div>
+    <div class="card-filled">
+      <h4>Social trust</h4>
+      <p style="font-size:14.5px; margin-top:8px">Whether strangers expect cooperation. Determines how much enforcement any given rule needs. It is the reason identical laws produce different outcomes in different societies.</p>
+    </div>
+    <div class="card-filled">
+      <h4>Accumulated grievance</h4>
+      <p style="font-size:14.5px; margin-top:8px">Doesn't dissipate on its own; it waits. This is why an apparently trivial trigger can produce an enormous response &mdash; the trigger released a stock, it didn't create one.</p>
+    </div>
+    <div class="card-filled">
+      <h4>Institutional memory</h4>
+      <p style="font-size:14.5px; margin-top:8px">The rule stock plus the people who know why the rules exist. Purges, high turnover and reorganisation drain it invisibly &mdash; you only discover it is gone when you need it.</p>
+    </div>
+    <div class="card-filled">
+      <h4>Economic surplus</h4>
+      <p style="font-size:14.5px; margin-top:8px">What is available to distribute. Growing surplus makes distribution problems feel like coordination problems. Shrinking surplus turns every ordinary decision back into a fight.</p>
+    </div>
+  </div>
+
+  <div class="insight">
+    <span class="tag">Why stocks matter more than events</span>
+    A regime's apparent stability tells you about the <em>flows</em> &mdash; today's compliance, this week's calm. Its actual fragility lives in the stocks. This is why collapses look sudden: the stock had been draining for years while every observable flow looked normal, right up until it crossed a threshold.
+  </div>
+
+  <h3>The delay that explains "short-termism"</h3>
+  <p>The most consequential structural fact about democratic governance is not corruption or incompetence. It is a <span class="term">mismatch between two clocks</span>: the payoff period of institutional investment, and the period over which decision-makers are judged.</p>
+
+  <figure>
+    <div class="fig-scroll">
+      <svg viewBox="0 0 800 280" role="img" aria-label="Two timelines over twenty years. The accountability cycle has judgement points every four to five years. The payoff from institutional investment stays near zero for a decade and only rises afterwards, so the decision-maker faces judgement long before the payoff arrives.">
+        <defs>
+          <marker id="ar3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="d-head"/></marker>
+        </defs>
+
+        <text x="20" y="26" class="d-lbl">CLOCK 1 &mdash; WHEN DECISION-MAKERS ARE JUDGED</text>
+        <line x1="20" y1="70" x2="770" y2="70" class="d-line"/>
+        <g class="d-head">
+          <circle cx="20"  cy="70" r="5"/><circle cx="207" cy="70" r="5"/>
+          <circle cx="395" cy="70" r="5"/><circle cx="582" cy="70" r="5"/><circle cx="770" cy="70" r="5"/>
+        </g>
+        <text x="20"  y="94" text-anchor="middle" class="d-lbl">YR 0</text>
+        <text x="207" y="94" text-anchor="middle" class="d-lbl">YR 5</text>
+        <text x="395" y="94" text-anchor="middle" class="d-lbl">YR 10</text>
+        <text x="582" y="94" text-anchor="middle" class="d-lbl">YR 15</text>
+        <text x="770" y="94" text-anchor="middle" class="d-lbl">YR 20</text>
+        <text x="113" y="58" text-anchor="middle" class="d-mut">election</text>
+        <text x="301" y="58" text-anchor="middle" class="d-mut">election</text>
+        <text x="489" y="58" text-anchor="middle" class="d-mut">election</text>
+        <text x="676" y="58" text-anchor="middle" class="d-mut">election</text>
+
+        <line x1="20" y1="118" x2="770" y2="118" class="d-rule"/>
+
+        <text x="20" y="148" class="d-lbl">CLOCK 2 &mdash; WHEN THE INVESTMENT PAYS OFF</text>
+        <line x1="20" y1="250" x2="770" y2="250" class="d-line"/>
+        <line x1="20" y1="250" x2="20" y2="165" class="d-line"/>
+        <text x="30" y="172" class="d-lbl">RETURN</text>
+        <path d="M20,248 C150,246 250,242 340,232 C450,218 560,190 770,172" class="d-bal"/>
+        <circle cx="770" cy="172" r="5" class="d-head-bal"/>
+
+        <path d="M207,258 L207,236" class="d-dash"/>
+        <text x="213" y="272" class="d-mut">judged here&hellip;</text>
+        <path d="M700,196 L700,176" class="d-dash"/>
+        <text x="762" y="212" text-anchor="end" class="d-mut">&hellip;rewarded here</text>
+
+        <rect x="20" y="165" width="187" height="85" fill="currentColor" opacity="0.06"/>
+        <text x="113" y="222" text-anchor="middle" class="d-lbl">ALL COST,</text>
+        <text x="113" y="238" text-anchor="middle" class="d-lbl">NO VISIBLE RETURN</text>
+      </svg>
+    </div>
+    <figcaption><b>Two clocks that don't line up.</b> Courts, schools, civil services, public health systems and core platforms all pay off over ten to twenty years. Decision-makers are judged every four or five. Anyone rational in that structure prefers visible short-payoff projects &mdash; and this is a property of the structure, not of the people in it. Autocracies escape this particular delay and pay for it elsewhere: nobody is judged at all, so nothing corrects.</figcaption>
+  </figure>
+
+  <div class="note">
+    <span class="tag">The standard fix</span>
+    Every system that has partly solved this used the same move: <strong>split the fast institution from the slow one</strong>. Independent central banks, career civil services, constitutional courts, ring-fenced infrastructure funds, statutory auditors. Each removes a slow-payoff decision from the fast clock and gives it its own tenure. Every one of them buys long-horizon capability at the price of democratic responsiveness &mdash; that trade is the argument, and it is a real one, not a settled one.
+  </div>
+</section>
+
+<!-- ==================== 09 loops ==================== -->
+<section id="loops" class="wide">
+  <span class="sec-no">09 &mdash; Systems</span>
+  <h2>The governing loops</h2>
+  <p class="lede" style="max-width:70ch">Six loops explain most political dynamics anywhere. One is balancing &mdash; it corrects error. Five are reinforcing &mdash; they amplify whatever they start with. A system's trajectory is decided by which loops are dominant and what limits them.</p>
+
+  <div class="grid g2" style="margin-top:26px">
+    <div class="card" style="border-left:4px solid var(--ok)">
+      <span class="pill" style="background:var(--ok-container); color:var(--on-ok-container)">B1 &middot; balancing</span>
+      <h4 style="margin-top:12px">The accountability loop</h4>
+      <p style="font-size:14.5px; color:var(--on-surface-variant); margin-top:8px">Poor outcomes &rarr; visible dissatisfaction &rarr; leaders replaced &rarr; policy corrected &rarr; outcomes improve.</p>
+      <p style="font-size:14.5px; margin-top:10px">This is the only error-correcting loop in the set, and it is fragile. It needs three things at once: <strong>information</strong> people can act on, <strong>real alternatives</strong> to switch to, and a <strong>safe transfer</strong> of power so losing is survivable. Break any one and the loop opens.</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--ok)">
+      <span class="pill" style="background:var(--ok-container); color:var(--on-ok-container)">B2 &middot; balancing</span>
+      <h4 style="margin-top:12px">The guardrail loop</h4>
+      <p style="font-size:14.5px; color:var(--on-surface-variant); margin-top:8px">Overreach &rarr; independent court, press, auditor or federal unit pushes back &rarr; overreach checked.</p>
+      <p style="font-size:14.5px; margin-top:10px">Constitutional guardrails are, mechanically, <strong>negative feedback devices</strong>. Their strength is what decides whether the reinforcing loops below run away. Which is why the first move of anyone intending to run away with a system is to weaken them &mdash; usually through appointments and budgets rather than abolition.</p>
+    </div>
+  </div>
+
+  <div class="grid g2" style="margin-top:16px">
+    <div class="card" style="border-left:4px solid var(--error)">
+      <span class="pill" style="background:var(--error-container); color:var(--on-error-container)">R1 &middot; reinforcing</span>
+      <h4 style="margin-top:12px">The patronage trap</h4>
+      <p style="font-size:14.5px; color:var(--on-surface-variant); margin-top:8px">Narrow coalition &rarr; loyalty bought with private goods &rarr; public goods and growth decline &rarr; less surplus &rarr; coalition must narrow further to stay affordable.</p>
+      <p style="font-size:14.5px; margin-top:10px">Drawn in full in <a href="#space">&sect;05</a>. A poverty trap with a political engine.</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--error)">
+      <span class="pill" style="background:var(--error-container); color:var(--on-error-container)">R2 &middot; reinforcing</span>
+      <h4 style="margin-top:12px">The repression trap</h4>
+      <p style="font-size:14.5px; color:var(--on-surface-variant); margin-top:8px">Dissent &rarr; repression &rarr; grievance rises and legitimacy falls &rarr; more dissent &rarr; more repression.</p>
+      <p style="font-size:14.5px; margin-top:10px">With a vicious second arc: each round raises the <strong>cost of losing power</strong> for the ruler, since anyone who has done enough cannot safely step down. The system loses its own exit. Escalation is then the only remaining strategy, regardless of preference.</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--error)">
+      <span class="pill" style="background:var(--error-container); color:var(--on-error-container)">R3 &middot; reinforcing</span>
+      <h4 style="margin-top:12px">The capture loop</h4>
+      <p style="font-size:14.5px; color:var(--on-surface-variant); margin-top:8px">Concentrated benefits, diffuse costs &rarr; lobbying pays &rarr; policy favours incumbents &rarr; incumbents grow richer &rarr; more lobbying capacity.</p>
+      <p style="font-size:14.5px; margin-top:10px">Mancur Olson's later argument: stable, undisturbed societies gradually accumulate distributional coalitions that make them rigid. Long stability is not free &mdash; it silts up.</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--error)">
+      <span class="pill" style="background:var(--error-container); color:var(--on-error-container)">R4 &middot; reinforcing</span>
+      <h4 style="margin-top:12px">The polarisation loop</h4>
+      <p style="font-size:14.5px; color:var(--on-surface-variant); margin-top:8px">Competition plus attention incentives &rarr; identities sort onto one axis &rarr; the other side reads as a threat &rarr; norm-breaking by your own side becomes acceptable &rarr; the other side reciprocates.</p>
+      <p style="font-size:14.5px; margin-top:10px">Once losing an election feels existential rather than inconvenient, the guardrail loop stops being defended by anyone &mdash; each side sees the guardrail as an obstacle to stopping the other.</p>
+    </div>
+  </div>
+
+  <h3>R5 &mdash; the information trap, and why it is the most transferable</h3>
+  <p>This loop runs in autocracies, in armies, in large companies, and in any team whose leader flinches at bad news. It is the one worth internalising, because unlike the others you can be inside it without anything looking wrong.</p>
+
+  <figure>
+    <div class="fig-scroll">
+      <svg viewBox="0 0 740 430" role="img" aria-label="A reinforcing five-step ring: punishing bad news causes reports to be filtered, which degrades the leader's picture of reality, which produces decisions aimed at the wrong problem, which worsens outcomes, which increases the punishment of messengers.">
+        <defs>
+          <marker id="ar4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="d-head-rein"/></marker>
+        </defs>
+
+        <rect x="255" y="16" width="230" height="52" rx="12" class="d-box"/>
+        <text x="370" y="40" text-anchor="middle" class="d-txt">Bad news is punished</text>
+        <text x="370" y="58" text-anchor="middle" class="d-lbl">EVEN MILDLY &mdash; A SIGH IS ENOUGH</text>
+
+        <rect x="500" y="132" width="230" height="52" rx="12" class="d-box"/>
+        <text x="615" y="156" text-anchor="middle" class="d-txt">Reports flow up filtered</text>
+        <text x="615" y="174" text-anchor="middle" class="d-lbl">NOBODY LIES; THEY JUST ROUND UP</text>
+
+        <rect x="420" y="300" width="290" height="52" rx="12" class="d-box"/>
+        <text x="565" y="324" text-anchor="middle" class="d-txt">The leader's picture of reality</text>
+        <text x="565" y="343" text-anchor="middle" class="d-txt">quietly stops matching it</text>
+
+        <rect x="30" y="300" width="290" height="52" rx="12" class="d-box"/>
+        <text x="175" y="324" text-anchor="middle" class="d-txt">Decisions aim at</text>
+        <text x="175" y="343" text-anchor="middle" class="d-txt">the wrong problem</text>
+
+        <rect x="10" y="132" width="230" height="52" rx="12" class="d-box"/>
+        <text x="125" y="164" text-anchor="middle" class="d-txt">Outcomes get worse</text>
+
+        <path d="M489,50 C560,58 600,92 612,126" class="d-rein" marker-end="url(#ar4)"/>
+        <path d="M612,188 C610,225 595,270 578,294" class="d-rein" marker-end="url(#ar4)"/>
+        <path d="M416,326 L326,326" class="d-rein" marker-end="url(#ar4)"/>
+        <path d="M160,296 C142,262 132,224 127,190" class="d-rein" marker-end="url(#ar4)"/>
+        <path d="M132,128 C148,90 190,58 249,48" class="d-rein" marker-end="url(#ar4)"/>
+
+        <circle cx="370" cy="192" r="20" class="d-badge-rein"/>
+        <text x="370" y="199" text-anchor="middle" class="d-badge-txt-rein">R</text>
+        <text x="370" y="234" text-anchor="middle" class="d-lbl">EACH LAP TIGHTENS THE LOOP</text>
+        <text x="370" y="252" text-anchor="middle" class="d-mut">and nobody in it is acting irrationally</text>
+      </svg>
+    </div>
+    <figcaption><b>The dictator's dilemma, at any scale.</b> A leader who punishes bad news is not being protected by the silence that follows &mdash; they are being blinded by it. The tragedy of the loop is that every individual step is locally rational: it really is safer to round the number up. <b>Only the person at the top can break it</b>, and only by making the delivery of bad news visibly, repeatedly rewarded.</figcaption>
+  </figure>
+
+  <div class="insight">
+    <span class="tag">The companion effect</span>
+    Timur Kuran's <strong>preference falsification</strong>: when saying what you think is costly, people publicly state a preference they privately reject. Everyone may oppose the arrangement while each believes they are alone. Support looks total right until some small event reveals that others feel the same &mdash; and then a <em>cascade</em> flips the public position of an entire population in weeks. This is why revolutions blindside even the intelligence services that were watching for them: they were measuring stated preferences, and the real variable was <em>common knowledge</em>, which is unobservable until the moment it isn't. The same mechanism runs in any meeting where disagreement is expensive.
+  </div>
+</section>
+
+<!-- ==================== 10 failure ==================== -->
+<section id="failure" class="wide">
+  <span class="sec-no">10 &mdash; Systems</span>
+  <h2>Failure modes</h2>
+  <p class="lede" style="max-width:70ch">Systems don't fail generically; they fail in characteristic ways determined by their design. Here is the diagnostic table &mdash; symptom, mechanism, and what the design was trading away when it accepted the risk.</p>
+
+  <div class="table-scroll">
+    <table style="min-width:820px">
+      <thead><tr><th>Failure</th><th>What you observe</th><th>Mechanism</th><th>Usual counter</th></tr></thead>
+      <tbody>
+        <tr><th>Deadlock</th><td>Nothing passes; obvious problems go unaddressed for years</td><td>Too many veto players, or too much distance between them</td><td>Reduce veto points, or delegate to an insulated body &mdash; both cost accountability</td></tr>
+        <tr><th>Capture</th><td>Rules intact, outputs consistently serve a narrow group</td><td>Concentrated benefits vs diffuse costs (R3)</td><td>Transparency, rotation, conflict-of-interest rules, sunset clauses</td></tr>
+        <tr><th>Ossification</th><td>Rules unchanged while the world moved; everyone works around them</td><td>Rule stock accumulates; nobody is authorised to delete</td><td>Sunset clauses, periodic constitutional review, an explicit repeal function</td></tr>
+        <tr><th>Personalisation</th><td>Offices matter less than proximity to one individual</td><td>Loyalty outbids competence in appointments; institutions hollow</td><td>Term limits, independent appointment panels &mdash; both need enforcing before they're needed</td></tr>
+        <tr><th>Legitimacy collapse</th><td>Sudden mass non-compliance after apparent calm</td><td>Stock drained slowly; preference cascade crosses a threshold</td><td>Cannot be fixed at the moment of collapse &mdash; only by not draining the stock</td></tr>
+        <tr><th>Capacity collapse</th><td>Laws exist, nothing is delivered or enforced</td><td>Fiscal or administrative stock exhausted; expertise gone</td><td>Slow rebuilding; in the meantime order privatises to whoever can supply it</td></tr>
+        <tr><th>Polarisation spiral</th><td>Procedural norms abandoned by both sides, each citing the other</td><td>R4; losing becomes existential</td><td>Institutions that make losing survivable; de-linking identities from a single axis</td></tr>
+        <tr><th>Praetorianism</th><td>The enforcement arm becomes a political actor</td><td>Whoever holds coercion can use it; civilian control is a norm, not a physical constraint</td><td>Professionalisation, divided security services, budgetary control &mdash; all fragile</td></tr>
+        <tr><th>Succession crisis</th><td>Transition triggers a fight, purge or collapse</td><td>No credible rule for who comes next, or the rule was never tested</td><td>Test the rule while it's cheap; an untested succession rule is a rumour</td></tr>
+        <tr><th>Scale mismatch</th><td>Decisions made at the wrong level; local fit lost or coordination lost</td><td>Decision scope doesn't match impact scope</td><td>Ostrom's nesting: push each decision to the smallest unit that internalises its effects</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note note-warn">
+    <span class="tag">The pattern under the table</span>
+    Note how often the counter-measure has to be installed <em>before</em> it is needed and costs something in the meantime. That is the structural tragedy of institutional design: the guardrails look like pure overhead for exactly as long as they are working.
+  </div>
+</section>
+
+<!-- ==================== 11 leverage ==================== -->
+<section id="leverage" class="wrap">
+  <span class="sec-no">11 &mdash; Systems</span>
+  <h2>Where the leverage is</h2>
+  <p class="lede">Donella Meadows ranked intervention points by how much change they produce per unit of effort. Applied to political systems, the ranking is uncomfortable: the interventions people argue about most are near the bottom, and the ones near the top are rarely on the agenda at all.</p>
+
+  <figure>
+    <div class="fig-scroll">
+      <svg viewBox="0 0 900 420" role="img" aria-label="A ladder of six intervention points from lowest to highest leverage: parameters, buffers and delays, feedback loop strength, information flows, rules, and goals and paradigm. Each rung is wider than the one below.">
+        <defs>
+          <marker id="ar5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="d-head"/></marker>
+        </defs>
+
+        <line x1="26" y1="392" x2="26" y2="26" class="d-line" marker-end="url(#ar5)"/>
+        <text x="16" y="210" class="d-lbl" transform="rotate(-90 16 210)" text-anchor="middle">LEVERAGE</text>
+
+        <rect x="46" y="352" width="200" height="52" rx="10" class="d-box"/>
+        <text x="62" y="374" class="d-txt">Parameters</text>
+        <text x="62" y="392" class="d-lbl">TAX RATES, TERM LENGTHS</text>
+        <text x="520" y="384" class="d-mut">Where most public argument happens.</text>
+
+        <rect x="46" y="286" width="250" height="52" rx="10" class="d-box"/>
+        <text x="62" y="308" class="d-txt">Buffers and delays</text>
+        <text x="62" y="326" class="d-lbl">RESERVES, REVIEW CADENCE</text>
+        <text x="520" y="318" class="d-mut">Changing a delay often beats a rate.</text>
+
+        <rect x="46" y="220" width="300" height="52" rx="10" class="d-box"/>
+        <text x="62" y="242" class="d-txt">Strength of feedback loops</text>
+        <text x="62" y="260" class="d-lbl">AUDIT INDEPENDENCE, PRESS FREEDOM</text>
+        <text x="520" y="252" class="d-mut">Decides whether errors correct at all.</text>
+
+        <rect x="46" y="154" width="350" height="52" rx="10" class="d-box-p"/>
+        <text x="62" y="176" class="d-txt-p" style="font-weight:600">Information flows</text>
+        <text x="62" y="194" class="d-lbl">PUBLISHED BUDGETS, RECORDED VOTES</text>
+        <text x="520" y="186" class="d-mut">The cheapest high-leverage move there is.</text>
+
+        <rect x="46" y="88" width="400" height="52" rx="10" class="d-box"/>
+        <text x="62" y="110" class="d-txt">The rules themselves</text>
+        <text x="62" y="128" class="d-lbl">CONSTITUTION, ELECTORAL RULES, W SIZE</text>
+        <text x="520" y="120" class="d-mut">Above all: the rule for changing rules.</text>
+
+        <rect x="46" y="22" width="450" height="52" rx="10" class="d-box-t"/>
+        <text x="62" y="44" class="d-txt-t" style="font-weight:600">Goals and paradigm</text>
+        <text x="62" y="62" class="d-lbl">WHAT MAKES AUTHORITY RIGHTFUL</text>
+        <text x="520" y="54" class="d-mut">Slowest to shift, largest effect.</text>
+      </svg>
+    </div>
+    <figcaption><b>The ladder, applied.</b> The highest rung is not a policy but a belief: that rulers should be chosen, that women should vote, that a leader who loses must leave. Every one of those was once unthinkable and is now unremarkable, and each shift did more than any hundred parameter changes. The practical rung is the highlighted one &mdash; <b>information flows change behaviour without changing any rule</b>, which is why publishing something is so often more powerful than legislating it, and why opacity is defended so fiercely.</figcaption>
+  </figure>
+
+  <div class="note">
+    <span class="tag">The meta-rule is the real prize</span>
+    In any system, the rule that governs how rules change &mdash; the amendment clause, the reorg authority, who may rewrite the process document &mdash; sits above every ordinary rule. Fights over it look procedural and are not. If you can only watch one thing in a system you are trying to understand, watch who can change the rules and how hard it is for them.
+  </div>
+</section>
+
+<!-- ==================== 12 org ==================== -->
+<section id="org" class="wide">
+  <span class="sec-no">12 &mdash; Applied</span>
+  <h2>The same machine, at work</h2>
+  <p class="lede" style="max-width:70ch">An organisation is a political system that has agreed not to call itself one. It has a selectorate, veto players, a legitimacy story, an enforcement apparatus, a succession problem and a constitution &mdash; all of them unnamed, which makes them harder to see and no less real. Here is the dictionary.</p>
+
+  <div class="table-scroll">
+    <table style="min-width:760px">
+      <thead><tr><th>Political primitive</th><th>What it is in an organisation</th></tr></thead>
+      <tbody>
+        <tr><th>Selectorate</th><td>Everyone whose opinion is consulted when roles, scope and promotions are decided</td></tr>
+        <tr><th>Winning coalition (W)</th><td>The three to six people a leader actually needs on side. Usually far smaller than the selectorate, and knowing which is which explains most behaviour</td></tr>
+        <tr><th>Legitimacy</th><td>Why people do what your document says without anyone escalating. If a decision needs escalation to hold, it was never legitimate &mdash; it was imposed</td></tr>
+        <tr><th>Enforcement</th><td>Ratings, budget, headcount, roadmap slots, access to the review forum</td></tr>
+        <tr><th>Veto players</th><td>Legal, security, infra, finance, the platform team, the skip-level. Count them before you count supporters</td></tr>
+        <tr><th>Agenda control</th><td>Who writes the doc, who owns the template, who sets the review agenda, what the first slide asks</td></tr>
+        <tr><th>Information asymmetry</th><td>Who owns the dashboard &mdash; and, more powerfully, who owns the <em>definition</em> of the metric</td></tr>
+        <tr><th>Constitution</th><td>The planning process, the goal-setting cadence, the RFC or design-review process, the decision log</td></tr>
+        <tr><th>Amendment clause</th><td>Who can change the planning process itself. Almost never written down. Enormous</td></tr>
+        <tr><th>Federalism</th><td>Business-unit autonomy vs central platform mandate &mdash; the perennial fight, and genuinely a fight about scale matching</td></tr>
+        <tr><th>Coup</th><td>The reorg</td></tr>
+        <tr><th>Exit / voice / loyalty</th><td>Attrition / escalation and dissent / quiet compliance. Watch which one your best people are choosing</td></tr>
+        <tr><th>Rule of law vs rule by law</th><td>Does the process bind the leader who wrote it, or only everyone below them? This is the single sharpest test of an organisation's health</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Seven consequences that actually change what you do</h3>
+  <div class="steps" style="margin-top:20px">
+    <div class="step"><div class="step-n"></div><div>
+      <h4>Writing the document beats arguing in the meeting</h4>
+      <p>McKelvey's chaos theorem in its office form: when a decision has several dimensions &mdash; cost, speed, risk, morale &mdash; the person who sets the order of questions can steer the group to nearly any outcome, one reasonable-looking step at a time. Whoever frames the options has already made most of the decision. If you are only ever responding to someone else's document, you are playing a weaker position than you think.</p>
+    </div></div>
+    <div class="step"><div class="step-n"></div><div>
+      <h4>Count veto players, not supporters</h4>
+      <p>Change does not require a majority; it requires clearing every actor who can independently block. Six enthusiastic supporters and one unconsulted security reviewer is a dead proposal. Map the veto set at the start, and spend your effort on the blockers rather than on deepening the enthusiasm of people who already agree.</p>
+    </div></div>
+    <div class="step"><div class="step-n"></div><div>
+      <h4>A shrinking coalition produces favour-trading, predictably</h4>
+      <p>When only one person's opinion decides outcomes, the rational strategy for everyone else becomes pleasing that person rather than improving results &mdash; exactly the private-goods dynamic from <a href="#space">&sect;05</a>. It is not a character failing in the people involved; it is what the structure pays for. The fix is structural too: widen who has a real say in the judgement, and make the criteria legible in advance.</p>
+    </div></div>
+    <div class="step"><div class="step-n"></div><div>
+      <h4>If bad news is expensive, your data becomes decoration</h4>
+      <p>The information trap does not need a tyrant &mdash; a visible flicker of irritation at a red metric is enough to start it. Two counters: reward the person who brought the bad number <em>visibly and in the room</em>, and build at least one channel where the number arrives without passing through anyone whose performance it reflects.</p>
+    </div></div>
+    <div class="step"><div class="step-n"></div><div>
+      <h4>Silence in a meeting is not agreement</h4>
+      <p>Preference falsification runs hardest where disagreement is costly and everyone can see everyone. If you need to know what the room actually thinks, do not ask the room &mdash; collect positions privately first, then publish the distribution. The cascade dynamic also means a team can look entirely aligned right up to the week three people resign together.</p>
+    </div></div>
+    <div class="step"><div class="step-n"></div><div>
+      <h4>Your review cadence is an electoral cycle, with the same pathology</h4>
+      <p>Quarterly judgement plus multi-year payoffs produces short-termism for structural reasons, not because anyone is lazy. Use the standard fix: split the slow institution from the fast one. Protected long-horizon budget, an architecture or platform commitment that survives a quarter's noise, a separate review track judged on leading indicators rather than outcomes that cannot yet exist.</p>
+    </div></div>
+    <div class="step"><div class="step-n"></div><div>
+      <h4>Use Ostrom for anything shared</h4>
+      <p>A shared platform, a common codebase, a joint metric, an on-call rota &mdash; these are commons, and the eight conditions in <a href="#beyond">&sect;07</a> apply directly. Clear boundaries on who owns what. Graduated sanctions rather than a policy nobody dares invoke. Conflict resolution cheap enough that people use it instead of routing around. Rules changeable by the people bound by them &mdash; which is where most internal platform governance quietly fails.</p>
+    </div></div>
+  </div>
+
+  <div class="insight">
+    <span class="tag">Reading an unfamiliar organisation in twenty minutes</span>
+    Five questions, in order. <strong>1.</strong> Who is actually in the winning coalition for the decision you care about? <strong>2.</strong> Who can block, and on what grounds? <strong>3.</strong> What is the legitimacy story &mdash; is it the data, the process, the seniority, or the founder? <strong>4.</strong> What happens to the person who brings bad news? <strong>5.</strong> Who can change the process itself? Those five answers predict more of what will happen than any org chart will.
+  </div>
+
+  <div class="note">
+    <span class="tag">One honest caution</span>
+    This frame is diagnostic, and it is easy to misuse. Seeing an organisation as a power system explains why sensible proposals die and why identical people behave differently under different structures &mdash; that is real, and worth having. But treating every interaction as positional is both exhausting and usually wrong: most colleagues most of the time are trying to do the work. Use the frame when something structural is happening and the ordinary explanation has already failed.
+  </div>
+</section>
+
+<!-- ==================== 13 caveats ==================== -->
+<section id="limits2" class="wrap">
+  <span class="sec-no">13 &mdash; Applied</span>
+  <h2>What this frame does not settle</h2>
+  <p class="lede">A systems account tells you how the machinery behaves. It does not tell you what the machinery should be for, and it is worth being precise about the gap rather than letting the analysis quietly pose as an answer.</p>
+
+  <div class="stack" style="margin-top:22px">
+    <p><span class="term">It does not rank the values.</span> Liberty, equality, order, community, national self-determination and material prosperity genuinely conflict, and no amount of loop analysis adjudicates between them. Two people can agree on every mechanism here and still disagree completely about which trade-off to make &mdash; and that disagreement is not a failure of reasoning on either side.</p>
+    <p><span class="term">It under-weights ideas.</span> The account above treats legitimacy as a stock, which is useful and incomplete. People have died for constitutional ideas they could have abandoned at no personal cost. Nationalism, religion, rights, dignity &mdash; these are causal forces in their own right, not just fuel for a loop, and the model is thinner where they matter most.</p>
+    <p><span class="term">It is quiet about who counts.</span> "Preferences get aggregated" hides the prior question of whose preferences enter at all. The most consequential political changes in modern history were expansions of the selectorate, and the frame describes those as parameter changes when they were something far larger.</p>
+    <p><span class="term">Structure is not destiny.</span> Identical institutional designs produce wildly different results in different places, because history, geography, sequencing and sheer contingency all bite. The dimensions predict tendencies, not outcomes. Anyone offering you a clean causal law about regimes is selling something.</p>
+    <p><span class="term">And the empirical questions are genuinely open.</span> Whether democracy causes growth or growth causes democracy; whether presidential systems really are more failure-prone or merely appeared in harder places; whether polarisation is driven by media, inequality or party structure &mdash; these are live, contested research questions with serious people on both sides. Where this page states a mechanism confidently, treat the mechanism as well-evidenced and the magnitude as arguable.</p>
+  </div>
+</section>
+
+<!-- ==================== 14 reading ==================== -->
+<section id="reading" class="wrap">
+  <span class="sec-no">14 &mdash; Applied</span>
+  <h2>Where this comes from</h2>
+  <p class="lede">This page is a synthesis; the ideas belong to other people. If you want depth on a specific mechanism, go to its source &mdash; each of these is the primary statement of one thing above.</p>
+
+  <div class="reads">
+    <div class="read"><div><b>The Logic of Collective Action</b> &mdash; why large groups under-organise and small ones dominate</div><div class="who">Mancur Olson, 1965</div></div>
+    <div class="read"><div><b>Exit, Voice, and Loyalty</b> &mdash; the three responses to decline, and how they trade off</div><div class="who">Albert Hirschman, 1970</div></div>
+    <div class="read"><div><b>Governing the Commons</b> &mdash; the eight conditions, and the case against the privatise-or-nationalise binary</div><div class="who">Elinor Ostrom, 1990</div></div>
+    <div class="read"><div><b>The Dictator's Handbook</b> / <em>The Logic of Political Survival</em> &mdash; selectorate theory, coalition size, and why leaders behave as they do</div><div class="who">Bueno de Mesquita &amp; Smith</div></div>
+    <div class="read"><div><b>Veto Players</b> &mdash; how the number and distance of blockers determines policy stability</div><div class="who">George Tsebelis, 2002</div></div>
+    <div class="read"><div><b>Competitive Authoritarianism</b> &mdash; the diagnostic for regimes that hold real but unfair elections</div><div class="who">Levitsky &amp; Way, 2010</div></div>
+    <div class="read"><div><b>Private Truths, Public Lies</b> &mdash; preference falsification and why revolutions surprise everyone</div><div class="who">Timur Kuran, 1995</div></div>
+    <div class="read"><div><b>Seeing Like a State</b> &mdash; why schemes to make society legible from the centre fail</div><div class="who">James C. Scott, 1998</div></div>
+    <div class="read"><div><b>Why Nations Fail</b> &mdash; extractive vs inclusive institutions as the engine of divergence</div><div class="who">Acemoglu &amp; Robinson, 2012</div></div>
+    <div class="read"><div><b>Patterns of Democracy</b> &mdash; majoritarian vs consensus democracy, measured across dozens of countries</div><div class="who">Arend Lijphart, 1999</div></div>
+    <div class="read"><div><b>The Perils of Presidentialism</b> &mdash; the case that fixed-term separated executives lack a constitutional exit from deadlock</div><div class="who">Juan Linz, 1990</div></div>
+    <div class="read"><div><b>Thinking in Systems</b> &mdash; stocks, flows, delays, and the leverage-point ladder used in &sect;11</div><div class="who">Donella Meadows, 2008</div></div>
+    <div class="read"><div><b>Politics as a Vocation</b> &mdash; the state as monopoly on legitimate violence; the three sources of authority</div><div class="who">Max Weber, 1919</div></div>
+    <div class="read"><div><b>Social Choice and Individual Values</b> &mdash; the impossibility theorem itself</div><div class="who">Kenneth Arrow, 1951</div></div>
+  </div>
+
+  <footer class="stack">
+    <p>Built as a derivation rather than a survey: the sections are ordered so each one depends only on the ones before it. If a claim here surprises you, the fastest test is to try running it on a system you know from the inside &mdash; that is where the frame either earns its keep or visibly fails.</p>
+  </footer>
+</section>
+
+</main>
+</div>
+
+<script>
+(function(){
+  var links = Array.prototype.slice.call(document.querySelectorAll('.nav-item, .rail a'));
+  var map = {};
+  links.forEach(function(a){
+    var id = a.getAttribute('href').slice(1);
+    (map[id] = map[id] || []).push(a);
+  });
+  var ids = Object.keys(map);
+  var sections = ids.map(function(id){ return document.getElementById(id); }).filter(Boolean);
+  if (!sections.length) return;
+
+  var current = null;
+  function setCurrent(id){
+    if (id === current) return;
+    current = id;
+    links.forEach(function(a){ a.removeAttribute('aria-current'); });
+    (map[id] || []).forEach(function(a){ a.setAttribute('aria-current','true'); });
+  }
+
+  function onScroll(){
+    var best = null, bestTop = -Infinity;
+    var probe = window.innerHeight * 0.28;
+    sections.forEach(function(s){
+      var top = s.getBoundingClientRect().top;
+      if (top <= probe && top > bestTop){ bestTop = top; best = s.id; }
+    });
+    if (!best) best = sections[0].id;
+    setCurrent(best);
+  }
+
+  var ticking = false;
+  window.addEventListener('scroll', function(){
+    if (ticking) return;
+    ticking = true;
+    window.requestAnimationFrame(function(){ onScroll(); ticking = false; });
+  }, {passive:true});
+  onScroll();
+})();
+</script>
+
+</body></html>

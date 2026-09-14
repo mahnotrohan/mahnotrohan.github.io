@@ -1,0 +1,1283 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>The Six Economies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,300..700&family=Roboto+Mono:wght@400;500&family=Roboto+Serif:opsz,wght@8..144,400..800&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  --md-primary:#0B57D0;
+  --md-on-primary:#FFFFFF;
+  --md-primary-container:#D3E3FD;
+  --md-on-primary-container:#041E49;
+  --md-surface:#FAFAFD;
+  --md-surface-dim:#F0F1F6;
+  --md-sc-lowest:#FFFFFF;
+  --md-sc-low:#F4F5FA;
+  --md-sc:#EDEFF5;
+  --md-sc-high:#E6E9F1;
+  --md-sc-highest:#DFE3ED;
+  --md-on-surface:#1A1B20;
+  --md-on-surface-var:#44464E;
+  --md-outline:#757780;
+  --md-outline-var:#C5C6D0;
+  --md-inverse-surface:#2F3036;
+  --md-inverse-on-surface:#F1F0F6;
+
+  --m-market:#1A6FE0;
+  --m-command:#C5221F;
+  --m-recip:#B06000;
+  --m-redist:#7B2FBF;
+  --m-commons:#146C2E;
+  --m-house:#00696E;
+
+  --shadow-1:0 1px 2px rgba(14,18,32,.18), 0 1px 3px 1px rgba(14,18,32,.08);
+  --shadow-2:0 1px 2px rgba(14,18,32,.18), 0 2px 6px 2px rgba(14,18,32,.08);
+
+  --step--1:.8125rem;
+  --step-0:1rem;
+  --step-1:1.1875rem;
+  --step-2:1.5rem;
+  --step-3:2rem;
+  --step-4:clamp(2.25rem,1.6rem + 2.4vw,3.25rem);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--md-surface);
+  color:var(--md-on-surface);
+  font-family:"Roboto Flex","Roboto","Helvetica Neue",Arial,sans-serif;
+  font-size:var(--step-0);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:"Roboto Serif","Roboto Slab",Georgia,serif;text-wrap:balance;margin:0;letter-spacing:-.01em}
+p{margin:0}
+a{color:var(--md-primary)}
+:focus-visible{outline:3px solid var(--md-primary);outline-offset:2px;border-radius:4px}
+
+/* ---------- shell ---------- */
+.shell{display:grid;grid-template-columns:minmax(0,1fr);}
+@media (min-width:1060px){.shell{grid-template-columns:236px minmax(0,1fr)}}
+
+/* ---------- nav ---------- */
+.rail{
+  position:sticky;top:0;z-index:20;
+  background:var(--md-sc-low);
+  border-bottom:1px solid var(--md-outline-var);
+}
+.rail-brand{display:none}
+.rail-list{
+  display:flex;gap:8px;overflow-x:auto;padding:10px 16px;margin:0;list-style:none;
+  scrollbar-width:thin;
+}
+.rail-list a{
+  display:block;white-space:nowrap;text-decoration:none;
+  font-size:var(--step--1);font-weight:500;letter-spacing:.01em;
+  color:var(--md-on-surface-var);
+  padding:7px 14px;border-radius:999px;
+  border:1px solid var(--md-outline-var);
+  background:transparent;transition:background .15s,color .15s;
+}
+.rail-list a:hover{background:var(--md-sc-high)}
+.rail-list a[aria-current="true"]{
+  background:var(--md-primary-container);color:var(--md-on-primary-container);
+  border-color:transparent;
+}
+@media (min-width:1060px){
+  .rail{
+    height:100dvh;align-self:start;border-bottom:none;
+    border-right:1px solid var(--md-outline-var);
+    overflow-y:auto;padding:24px 12px 32px;
+  }
+  .rail-brand{
+    display:block;padding:0 14px 18px;
+    font-family:"Roboto Serif",Georgia,serif;font-weight:700;font-size:var(--step-0);
+    letter-spacing:-.01em;
+  }
+  .rail-brand span{
+    display:block;font-family:"Roboto Mono",monospace;font-weight:400;
+    font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--md-on-surface-var);margin-top:4px;
+  }
+  .rail-list{display:flex;flex-direction:column;gap:2px;overflow:visible;padding:0}
+  .rail-list a{
+    white-space:normal;border:none;border-radius:999px;padding:9px 16px;
+    display:flex;gap:10px;align-items:baseline;
+  }
+  .rail-list .n{
+    font-family:"Roboto Mono",monospace;font-size:11px;opacity:.65;
+    font-variant-numeric:tabular-nums;
+  }
+}
+
+/* ---------- content ---------- */
+main{min-width:0}
+.wrap{padding:0 20px 96px;max-width:960px;margin:0 auto}
+@media (min-width:700px){.wrap{padding:0 40px 120px}}
+
+section{padding-block:56px;scroll-margin-top:80px;border-top:1px solid var(--md-outline-var)}
+section:first-of-type{border-top:none}
+.eyebrow{
+  font-family:"Roboto Mono",monospace;font-size:11px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--md-primary);margin-bottom:10px;display:block;
+}
+h2{font-size:var(--step-3);font-weight:700;line-height:1.15;margin-bottom:14px}
+h3{font-size:var(--step-1);font-weight:600;line-height:1.3}
+.lede{font-size:var(--step-1);color:var(--md-on-surface-var);max-width:64ch;line-height:1.55}
+.prose{max-width:68ch;display:flex;flex-direction:column;gap:18px;margin-top:26px}
+.prose p{font-size:var(--step-0)}
+strong{font-weight:600}
+em.term{font-style:normal;font-weight:600;color:var(--md-on-surface);border-bottom:2px solid var(--md-primary-container);padding-bottom:1px}
+
+/* ---------- hero ---------- */
+.appbar{
+  padding:44px 0 0;
+}
+.hero{padding-block:8px 60px}
+.hero h1{
+  font-size:var(--step-4);font-weight:800;line-height:1.04;letter-spacing:-.025em;
+  max-width:16ch;
+}
+.hero .sub{margin-top:22px;max-width:62ch;font-size:var(--step-1);color:var(--md-on-surface-var);line-height:1.55}
+.hero .thesis{
+  margin-top:32px;padding:22px 24px;border-radius:20px;
+  background:var(--md-primary-container);color:var(--md-on-primary-container);
+  max-width:64ch;font-size:var(--step-1);line-height:1.5;
+}
+.hero .thesis b{font-weight:700}
+.chipstrip{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px}
+.chip{
+  font-family:"Roboto Mono",monospace;font-size:11.5px;letter-spacing:.04em;
+  padding:6px 12px;border-radius:8px;border:1px solid currentColor;
+  display:inline-flex;align-items:center;gap:7px;
+}
+.chip .dot{width:8px;height:8px;border-radius:50%;background:currentColor;flex:none}
+.c-market{color:var(--m-market)}.c-command{color:var(--m-command)}.c-recip{color:var(--m-recip)}
+.c-redist{color:var(--m-redist)}.c-commons{color:var(--m-commons)}.c-house{color:var(--m-house)}
+
+/* ---------- generic surfaces ---------- */
+.panel{
+  background:var(--md-sc-low);border-radius:20px;padding:24px;margin-top:26px;
+  border:1px solid var(--md-outline-var);
+}
+.panel.flat{background:transparent;border-style:dashed}
+.panel h3{margin-bottom:10px}
+.panel p{color:var(--md-on-surface-var)}
+.callout{
+  margin-top:26px;padding:20px 22px;border-radius:16px;
+  background:var(--md-sc);border-left:4px solid var(--md-primary);
+  max-width:70ch;
+}
+.callout p{font-size:var(--step-0);line-height:1.55}
+.callout .tag{
+  display:block;font-family:"Roboto Mono",monospace;font-size:10.5px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--md-primary);margin-bottom:8px;
+}
+
+/* ---------- numbered constraint list ---------- */
+.constraints{display:grid;gap:14px;margin-top:28px}
+@media (min-width:760px){.constraints{grid-template-columns:repeat(3,1fr)}}
+.constraint{
+  background:var(--md-sc-low);border-radius:16px;padding:20px;
+  border:1px solid var(--md-outline-var);display:flex;flex-direction:column;gap:8px;
+}
+.constraint .q{
+  font-family:"Roboto Mono",monospace;font-size:11px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--md-primary);
+}
+.constraint h3{font-size:var(--step-1)}
+.constraint p{font-size:var(--step--1);color:var(--md-on-surface-var);line-height:1.55}
+
+/* ---------- goods matrix ---------- */
+.matrix-scroll{overflow-x:auto;margin-top:26px;padding-bottom:4px}
+.matrix{
+  display:grid;grid-template-columns:auto 1fr 1fr;gap:10px;min-width:620px;
+}
+.matrix .mh{
+  font-family:"Roboto Mono",monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--md-on-surface-var);align-self:end;padding-bottom:6px;
+}
+.matrix .rh{
+  font-family:"Roboto Mono",monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--md-on-surface-var);display:flex;align-items:center;max-width:9ch;line-height:1.35;
+}
+.cell{
+  background:var(--md-sc-low);border:1px solid var(--md-outline-var);
+  border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:7px;
+}
+.cell b{font-size:var(--step-0);font-weight:600}
+.cell .ex{font-size:var(--step--1);color:var(--md-on-surface-var);line-height:1.5}
+.cell .fit{
+  margin-top:4px;font-family:"Roboto Mono",monospace;font-size:11px;letter-spacing:.03em;
+  padding:5px 10px;border-radius:8px;align-self:flex-start;
+  background:var(--md-sc-high);color:var(--md-on-surface);
+}
+
+/* ---------- mechanism cards ---------- */
+.mechs{display:flex;flex-direction:column;gap:20px;margin-top:30px}
+.mech{
+  border-radius:24px;padding:24px;
+  background:var(--md-sc-lowest);
+  border:1px solid var(--md-outline-var);
+  box-shadow:var(--shadow-1);
+  border-top:5px solid var(--accent);
+}
+.mech-head{display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap}
+.mech-head svg{flex:none}
+.mech-head .ht{flex:1;min-width:240px}
+.mech h3{font-size:var(--step-2);font-weight:700;color:var(--accent);line-height:1.15}
+.mech .rule{margin-top:8px;font-size:var(--step-0);color:var(--md-on-surface);max-width:62ch;line-height:1.55}
+.mech .greek{
+  font-family:"Roboto Mono",monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--md-on-surface-var);display:block;margin-bottom:6px;
+}
+.specs{
+  display:grid;gap:0;margin-top:22px;border-top:1px solid var(--md-outline-var);
+}
+@media (min-width:820px){.specs{grid-template-columns:1fr 1fr;column-gap:28px}}
+.spec{
+  display:grid;grid-template-columns:88px minmax(0,1fr);gap:14px;
+  padding:11px 0;border-bottom:1px solid var(--md-outline-var);align-items:baseline;
+}
+.spec dt{
+  font-family:"Roboto Mono",monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--md-on-surface-var);
+}
+.spec dd{margin:0;font-size:var(--step--1);line-height:1.55}
+.mech .loops{
+  margin-top:20px;display:grid;gap:12px;
+}
+@media (min-width:820px){.mech .loops{grid-template-columns:1fr 1fr}}
+.loop{
+  padding:14px 16px;border-radius:14px;background:var(--md-sc);font-size:var(--step--1);line-height:1.55;
+}
+.loop b{
+  display:block;font-family:"Roboto Mono",monospace;font-size:10.5px;letter-spacing:.1em;
+  text-transform:uppercase;margin-bottom:6px;color:var(--md-on-surface-var);
+}
+.loop.r{box-shadow:inset 3px 0 0 var(--accent)}
+.loop.b{box-shadow:inset 3px 0 0 var(--md-outline)}
+.breaks{
+  margin-top:18px;padding:16px 18px;border-radius:14px;
+  background:var(--md-sc-high);font-size:var(--step--1);line-height:1.6;
+}
+.breaks b{font-weight:600}
+.meet{margin-top:16px;font-size:var(--step--1);color:var(--md-on-surface-var);line-height:1.6}
+.meet b{color:var(--md-on-surface);font-weight:600}
+
+/* ---------- tables ---------- */
+.tbl-scroll{overflow-x:auto;margin-top:26px;border-radius:16px;border:1px solid var(--md-outline-var)}
+table{border-collapse:collapse;width:100%;min-width:720px;font-size:var(--step--1)}
+caption{text-align:left;padding:16px 18px 0;font-size:var(--step--1);color:var(--md-on-surface-var);caption-side:bottom}
+th,td{text-align:left;padding:13px 16px;border-bottom:1px solid var(--md-outline-var);vertical-align:top;line-height:1.5}
+thead th{
+  font-family:"Roboto Mono",monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--md-on-surface-var);background:var(--md-sc);font-weight:500;
+}
+tbody tr:last-child td{border-bottom:none}
+tbody th{font-weight:600;color:var(--md-on-surface);white-space:nowrap}
+td.num{font-family:"Roboto Mono",monospace;font-variant-numeric:tabular-nums}
+
+/* ---------- mix matrix ---------- */
+.mixkey{display:flex;flex-wrap:wrap;gap:16px;margin-top:20px;font-size:var(--step--1);color:var(--md-on-surface-var)}
+.mixkey span{display:inline-flex;align-items:center;gap:7px}
+.sw{width:20px;height:14px;border-radius:4px;border:1px solid var(--md-outline-var)}
+.sw.d{background:var(--md-on-surface-var)}
+.sw.s{background:color-mix(in srgb,var(--md-on-surface-var) 42%,var(--md-sc-lowest))}
+.sw.p{background:color-mix(in srgb,var(--md-on-surface-var) 15%,var(--md-sc-lowest))}
+.sw.a{background:var(--md-sc-lowest)}
+table.mix{min-width:860px}
+table.mix td.m{
+  width:64px;padding:6px 4px;text-align:center;vertical-align:middle;
+  border-right:2px solid var(--md-surface);
+}
+table.mix td.m span{
+  font-family:"Roboto Mono",monospace;font-size:10px;letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.lv3{background:var(--h);color:var(--md-sc-lowest)}
+.lv2{background:color-mix(in srgb,var(--h) 40%,var(--md-sc-lowest));color:var(--md-on-surface)}
+.lv1{background:color-mix(in srgb,var(--h) 14%,var(--md-sc-lowest));color:var(--md-on-surface-var)}
+.lv0{background:transparent;color:var(--md-outline)}
+
+/* ---------- figures ---------- */
+figure{margin:30px 0 0;padding:22px;background:var(--md-sc-low);border-radius:20px;border:1px solid var(--md-outline-var)}
+figure svg{display:block;max-width:100%;height:auto;margin:0 auto}
+figcaption{margin-top:16px;font-size:var(--step--1);color:var(--md-on-surface-var);line-height:1.6;max-width:70ch}
+figcaption b{color:var(--md-on-surface);font-weight:600}
+.fig-svg-text{font-family:"Roboto Mono",monospace}
+
+/* ---------- systems detail ---------- */
+.syscards{display:grid;gap:16px;margin-top:28px}
+@media (min-width:860px){.syscards{grid-template-columns:1fr 1fr}}
+.sys{
+  background:var(--md-sc-low);border:1px solid var(--md-outline-var);
+  border-radius:20px;padding:22px;display:flex;flex-direction:column;gap:10px;
+}
+.sys .era{font-family:"Roboto Mono",monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--md-on-surface-var)}
+.sys h3{font-size:var(--step-1);font-weight:700}
+.sys p{font-size:var(--step--1);line-height:1.6;color:var(--md-on-surface-var)}
+.sys .patho{
+  margin-top:auto;padding-top:12px;border-top:1px solid var(--md-outline-var);
+  font-size:var(--step--1);line-height:1.55;
+}
+.sys .patho b{
+  display:block;font-family:"Roboto Mono",monospace;font-size:10px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--md-primary);margin-bottom:5px;
+}
+
+/* ---------- dynamics ---------- */
+.dyn{display:flex;flex-direction:column;gap:18px;margin-top:28px}
+.dynitem{
+  display:grid;gap:14px;grid-template-columns:minmax(0,1fr);
+  padding:22px;background:var(--md-sc-low);border-radius:20px;border:1px solid var(--md-outline-var);
+}
+@media (min-width:820px){.dynitem{grid-template-columns:200px minmax(0,1fr);column-gap:28px}}
+.dynitem h3{font-size:var(--step-1);font-weight:700;line-height:1.25}
+.dynitem .body{display:flex;flex-direction:column;gap:14px}
+.dynitem p{font-size:var(--step--1);line-height:1.65;color:var(--md-on-surface-var)}
+.dynitem p strong{color:var(--md-on-surface)}
+
+/* ---------- leverage ---------- */
+.lev{margin-top:26px;display:flex;flex-direction:column;gap:2px;counter-reset:lv}
+.levrow{
+  display:grid;grid-template-columns:40px minmax(0,1fr);gap:16px;align-items:start;
+  padding:15px 18px;background:var(--md-sc-low);border:1px solid var(--md-outline-var);
+}
+.levrow:first-child{border-radius:16px 16px 4px 4px}
+.levrow:last-child{border-radius:4px 4px 16px 16px}
+.levrow .rank{
+  font-family:"Roboto Mono",monospace;font-size:var(--step-1);font-weight:500;
+  font-variant-numeric:tabular-nums;color:var(--md-primary);line-height:1.4;
+}
+.levrow b{font-weight:600;display:block;margin-bottom:4px}
+.levrow p{font-size:var(--step--1);line-height:1.55;color:var(--md-on-surface-var)}
+.levrow .power{
+  grid-column:1/-1;height:5px;border-radius:3px;background:var(--md-sc-highest);overflow:hidden;margin-top:6px;
+}
+.levrow .power i{display:block;height:100%;background:var(--md-primary);border-radius:3px}
+
+/* ---------- day strip ---------- */
+.day{display:flex;flex-direction:column;gap:2px;margin-top:28px}
+.dayrow{
+  display:grid;grid-template-columns:74px minmax(0,1fr);gap:16px;
+  padding:15px 18px;border:1px solid var(--md-outline-var);background:var(--md-sc-lowest);
+  align-items:baseline;border-left:5px solid var(--accent);
+}
+.dayrow:first-child{border-radius:16px 16px 4px 4px}
+.dayrow:last-child{border-radius:4px 4px 16px 16px}
+.dayrow time{font-family:"Roboto Mono",monospace;font-size:var(--step--1);font-variant-numeric:tabular-nums;color:var(--md-on-surface-var)}
+.dayrow b{font-weight:600;color:var(--accent)}
+.dayrow p{font-size:var(--step--1);line-height:1.55;color:var(--md-on-surface-var);margin-top:3px}
+
+/* ---------- diagnostic ---------- */
+.diag{display:grid;gap:14px;margin-top:28px}
+@media (min-width:760px){.diag{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}}
+.dq{
+  background:var(--md-primary-container);color:var(--md-on-primary-container);
+  border-radius:20px;padding:22px;display:flex;flex-direction:column;gap:10px;
+}
+.dq .n{font-family:"Roboto Mono",monospace;font-size:11px;letter-spacing:.1em;opacity:.75}
+.dq h3{font-size:var(--step-1);font-weight:700;line-height:1.3}
+.dq p{font-size:var(--step--1);line-height:1.55;opacity:.9}
+
+/* ---------- confusions ---------- */
+.conf{display:grid;gap:14px;margin-top:26px}
+@media (min-width:800px){.conf{grid-template-columns:1fr 1fr}}
+.cf{background:var(--md-sc-low);border:1px solid var(--md-outline-var);border-radius:16px;padding:20px}
+.cf h3{font-size:var(--step-0);font-weight:700;margin-bottom:8px}
+.cf p{font-size:var(--step--1);line-height:1.6;color:var(--md-on-surface-var)}
+.cf .vs{font-family:"Roboto Mono",monospace;font-size:11px;letter-spacing:.06em;color:var(--md-primary);display:block;margin-bottom:6px}
+
+/* ---------- reading ---------- */
+.reads{display:grid;gap:12px;margin-top:26px}
+@media (min-width:800px){.reads{grid-template-columns:1fr 1fr}}
+.read{
+  padding:16px 18px;background:var(--md-sc-low);border:1px solid var(--md-outline-var);
+  border-radius:14px;font-size:var(--step--1);line-height:1.55;
+}
+.read b{display:block;font-weight:600;color:var(--md-on-surface)}
+.read span{color:var(--md-on-surface-var)}
+
+footer{
+  border-top:1px solid var(--md-outline-var);padding-block:30px;
+  font-size:var(--step--1);color:var(--md-on-surface-var);line-height:1.6;max-width:70ch;
+}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation:none !important;transition:none !important;scroll-behavior:auto !important}
+}
+html{scroll-behavior:smooth}
+</style>
+
+<div class="shell">
+<nav class="rail" aria-label="Sections">
+  <div class="rail-brand">The Six Economies<span>First principles</span></div>
+  <ul class="rail-list">
+    <li><a href="#primitives"><span class="n">01</span>Primitives</a></li>
+    <li><a href="#bets"><span class="n">02</span>The three bets</a></li>
+    <li><a href="#goods"><span class="n">03</span>What kind of thing</a></li>
+    <li><a href="#mechanisms"><span class="n">04</span>The six mechanisms</a></li>
+    <li><a href="#sensors"><span class="n">05</span>Sensors &amp; blind spots</a></li>
+    <li><a href="#systems"><span class="n">06</span>Named systems</a></li>
+    <li><a href="#dynamics"><span class="n">07</span>Cross-cutting dynamics</a></li>
+    <li><a href="#leverage"><span class="n">08</span>Leverage points</a></li>
+    <li><a href="#today"><span class="n">09</span>Your ordinary day</a></li>
+    <li><a href="#diagnostic"><span class="n">10</span>The diagnostic</a></li>
+    <li><a href="#words"><span class="n">11</span>Words people confuse</a></li>
+  </ul>
+</nav>
+
+<main>
+<div class="wrap">
+
+<header class="appbar hero">
+  <span class="eyebrow">Economic systems from first principles</span>
+  <h1>Every economy is a bet about information.</h1>
+  <p class="sub">There is no such thing as <em>the</em> economy. There are six ways humans have ever found to answer the question <span style="white-space:nowrap">&ldquo;who gets what, and who decides&rdquo;</span> &mdash; and every society, firm, family and platform you have ever been inside is a particular blend of them.</p>
+  <div class="thesis">Strip away the ideology and an economic system is a <b>coordination technology</b>. It needs a way to sense what people need, a way to make them act, and a way to make the arrangement stick. Each of the six mechanisms solves those three differently &mdash; and each one&rsquo;s characteristic failure is a direct consequence of what its sensor cannot see.</div>
+  <div class="chipstrip">
+    <span class="chip c-market"><i class="dot"></i>Market</span>
+    <span class="chip c-command"><i class="dot"></i>Command</span>
+    <span class="chip c-recip"><i class="dot"></i>Reciprocity</span>
+    <span class="chip c-redist"><i class="dot"></i>Redistribution</span>
+    <span class="chip c-commons"><i class="dot"></i>Commons</span>
+    <span class="chip c-house"><i class="dot"></i>Householding</span>
+  </div>
+</header>
+
+<section id="primitives">
+  <span class="eyebrow">01 &mdash; Before any economics</span>
+  <h2>What has to be true before an economy can exist at all</h2>
+  <p class="lede">Four facts. Everything else in this page is downstream of them.</p>
+
+  <div class="prose">
+    <p><strong>1. Scarcity is about rivalry, not quantity.</strong> The constraint that creates economics is not that things are few &mdash; it is that my using a thing can stop you using it. A loaf is <em class="term">rival</em>; a proof of the Pythagorean theorem is not. Time is the hardest rival good there is: it cannot be manufactured, stored or transferred. Any arrangement that allocates something non-rival as if it were rival (patents on ideas, paywalls on research) is making a choice, not obeying a law.</p>
+
+    <p><strong>2. Specialisation produces surplus, and surplus produces politics.</strong> One person doing one thing well produces more than the same person doing everything badly &mdash; but only if the output can be pooled and redivided. The moment there is <em class="term">surplus</em> (output beyond what the producer needs to survive and reproduce), a second question appears that no forager band had to answer: <em>who controls it?</em> Almost every political conflict in recorded history is an argument about the answer.</p>
+
+    <p><strong>3. Specialisation creates a coordination problem it cannot solve itself.</strong> Once you make only shoes, your survival depends on thousands of strangers whose names you will never learn. Nobody is in a position to know the whole. So the real question of economics is not &ldquo;how do we produce&rdquo; but <strong>how does a society that no one comprehends nevertheless get fed tomorrow morning?</strong></p>
+
+    <p><strong>4. Every arrangement must answer four questions.</strong> Paul Samuelson named three; a systems view needs the fourth, because the first three describe a snapshot and economies are not snapshots.</p>
+  </div>
+
+  <div class="constraints" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">
+    <div class="constraint"><span class="q">Question 1</span><h3>What gets produced?</h3><p>Out of everything possible, which bundle? Rice or rockets, care or condominiums.</p></div>
+    <div class="constraint"><span class="q">Question 2</span><h3>How?</h3><p>Which technique, which labour, at what cost to whom and to what.</p></div>
+    <div class="constraint"><span class="q">Question 3</span><h3>For whom?</h3><p>By what rule is the output divided &mdash; need, effort, birth, contract, force?</p></div>
+    <div class="constraint"><span class="q">Question 4</span><h3>And then what?</h3><p>How much of today&rsquo;s output becomes tomorrow&rsquo;s capacity, and who owns that capacity? This is the question that makes an economy a <em>system</em> rather than a transaction.</p></div>
+  </div>
+
+  <div class="callout">
+    <span class="tag">Property is not one thing</span>
+    <p>&ldquo;Who owns it&rdquo; is a bundle of separable rights, and different systems unbundle them differently: the right to <strong>use</strong>, to <strong>exclude</strong> others, to <strong>sell</strong>, to <strong>take the income</strong>, and to <strong>claim the residual</strong> &mdash; whatever is left after everyone else is paid. That last one is the quiet centre of gravity. Whoever holds the residual claim has the strongest reason to care how the whole thing runs, and will accumulate power accordingly, whatever the system calls itself.</p>
+  </div>
+</section>
+
+<section id="bets">
+  <span class="eyebrow">02 &mdash; The master key</span>
+  <h2>Three constraints, and every system is a bet on them</h2>
+  <p class="lede">Any mechanism for coordinating strangers has to solve the same three problems. The differences between capitalism, central planning, a village irrigation council and your own family are entirely differences in how they place these three bets.</p>
+
+  <div class="constraints">
+    <div class="constraint">
+      <span class="q">Constraint I</span>
+      <h3>Information</h3>
+      <p>Who knows what people need and what things cost? Friedrich Hayek&rsquo;s central observation (1945) was that this knowledge is not merely large &mdash; it is <em>dispersed, local, and often tacit</em>. The person who knows a machine is about to fail cannot articulate why; the knowledge exists only in their hands. No survey retrieves it.</p>
+    </div>
+    <div class="constraint">
+      <span class="q">Constraint II</span>
+      <h3>Incentive</h3>
+      <p>Why would anyone act on what they know? Humans respond to gain, but also to obligation, status, belonging, fear and love &mdash; and these are not interchangeable. Systems differ in which motive they conscript, and each motive has a different range and a different decay curve.</p>
+    </div>
+    <div class="constraint">
+      <span class="q">Constraint III</span>
+      <h3>Enforcement</h3>
+      <p>What makes the arrangement hold when someone defects? Violence, law, reputation, shame, or the ability to walk away. Every economic system rests on a coercion or exit structure it usually prefers not to discuss.</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    <span class="tag">Why this is the master key</span>
+    <p>Read the six mechanisms below with these three columns in mind and the whole field collapses into something you can hold in your head. A market&rsquo;s genius is its information bet (price) and its weakness is its enforcement bet (it needs a state it doesn&rsquo;t contain). Central planning&rsquo;s genius is directing a whole society at one goal and its fatal weakness is its information bet. A commons has the best enforcement bet available &mdash; people who see each other daily &mdash; and it fails precisely when that visibility fails.</p>
+  </div>
+</section>
+
+<section id="goods">
+  <span class="eyebrow">03 &mdash; The prior question</span>
+  <h2>Before asking which system: what kind of thing is it?</h2>
+  <p class="lede">Two independent properties of a good decide which mechanisms can even work on it. Getting this wrong is the source of more bad economic argument than any ideological disagreement.</p>
+
+  <div class="prose">
+    <p><strong>Rival</strong> &mdash; does my consuming it reduce what is left for you? <strong>Excludable</strong> &mdash; can I practically stop you from consuming it? The two questions are orthogonal, so there are four kinds of thing, and each one has mechanisms that fit and mechanisms that are structurally incapable.</p>
+  </div>
+
+  <div class="matrix-scroll">
+    <div class="matrix">
+      <div></div>
+      <div class="mh">Excludable &mdash; you can be kept out</div>
+      <div class="mh">Non-excludable &mdash; you cannot</div>
+
+      <div class="rh">Rival</div>
+      <div class="cell">
+        <b>Private goods</b>
+        <span class="ex">A kilo of rice, a haircut, a seat on a flight, an hour of a surgeon&rsquo;s attention.</span>
+        <span class="fit">Markets work well here</span>
+      </div>
+      <div class="cell">
+        <b>Common-pool resources</b>
+        <span class="ex">Groundwater under a district, a fishery, a shared road at rush hour, the atmosphere&rsquo;s capacity to absorb carbon.</span>
+        <span class="fit">Needs commons governance</span>
+      </div>
+
+      <div class="rh">Non-rival</div>
+      <div class="cell">
+        <b>Club goods</b>
+        <span class="ex">A streaming library, a gym, a toll bridge below capacity, a patented molecule.</span>
+        <span class="fit">Market or commons; exclusion is a choice</span>
+      </div>
+      <div class="cell">
+        <b>Public goods</b>
+        <span class="ex">National defence, clean air, a mathematical result, herd immunity, a lighthouse.</span>
+        <span class="fit">Needs redistribution or command</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <span class="tag">The practical payoff</span>
+    <p>Most policy fights that look ideological are actually <strong>mechanism&ndash;good mismatches</strong>. Trying to run a common-pool resource through a market produces depletion, because the market&rsquo;s price signal arrives only after the stock is gone. Trying to run private goods through central command produces shortage, because no reporting chain carries enough detail. Trying to fund a public good through voluntary exchange produces free-riding, because exclusion is impossible by definition. When you next hear an economic argument, ask which box the thing is in before you ask who is right.</p>
+  </div>
+</section>
+
+<section id="mechanisms">
+  <span class="eyebrow">04 &mdash; The atoms</span>
+  <h2>The six mechanisms every economy is built from</h2>
+  <p class="lede">Karl Polanyi identified reciprocity, redistribution and exchange as the ways societies integrate economic life, with householding alongside. For a systems reading I separate out two more &mdash; hierarchical command and self-governed commons &mdash; because their loops behave differently enough to deserve their own treatment. These six are the atoms. Every named system in the next section is a molecule.</p>
+
+  <div class="mechs">
+
+  <article class="mech" style="--accent:var(--m-market)">
+    <div class="mech-head">
+      <svg role="img" aria-label="Two parties exchanging in both directions" viewBox="0 0 76 60" width="76" height="60" style="color:var(--m-market)">
+        <defs><marker id="ar-mk" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4.5" markerHeight="4.5" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" fill="currentColor"/></marker></defs>
+        <circle cx="13" cy="30" r="9" fill="none" stroke="currentColor" stroke-width="2"/>
+        <circle cx="63" cy="30" r="9" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M23,24 Q38,11 53,24" fill="none" stroke="currentColor" stroke-width="2" marker-end="url(#ar-mk)"/>
+        <path d="M53,36 Q38,49 23,36" fill="none" stroke="currentColor" stroke-width="2" marker-end="url(#ar-mk)"/>
+      </svg>
+      <div class="ht">
+        <span class="greek">Mechanism 01</span>
+        <h3>Market &mdash; exchange at a price</h3>
+        <p class="rule">Two parties who each want what the other has agree a rate and swap. Nobody consults anyone else. The rate is the only message sent.</p>
+      </div>
+    </div>
+    <dl class="specs">
+      <div class="spec"><dt>Sensor</dt><dd>Price. An extraordinary compression: everything anyone knows about scarcity, desire and cost collapses into one number that strangers can act on without understanding why it moved.</dd></div>
+      <div class="spec"><dt>Motive</dt><dd>Gain from trade, plus the residual claim on profit.</dd></div>
+      <div class="spec"><dt>Enforced by</dt><dd>Contract and property law &mdash; which means a state. Markets do not bootstrap themselves.</dd></div>
+      <div class="spec"><dt>Scales to</dt><dd>Billions of anonymous strangers. No other mechanism comes close.</dd></div>
+    </dl>
+    <div class="loops">
+      <div class="loop r"><b>Reinforcing loop</b>Profit &rarr; reinvestment &rarr; more capacity and lower cost &rarr; more profit. This is the growth engine of the modern world, and also why capital concentrates: the loop&rsquo;s output is its own input.</div>
+      <div class="loop b"><b>Balancing loop</b>High price &rarr; buyers withdraw and sellers enter &rarr; price falls. Elegant &mdash; but it runs through a <em>delay</em>, and a balancing loop with a long delay does not settle. It oscillates.</div>
+    </div>
+    <div class="breaks">
+      <b>Breaks when:</b> costs land on people outside the transaction (externalities); the good is non-excludable (public goods); one side knows much more than the other (George Akerlof&rsquo;s market for lemons, 1970); one seller can set the price (market power); or &mdash; the deepest one &mdash; whenever the question is about <em>need</em>. A market&rsquo;s sensor reads willingness-and-ability to pay. A starving man with no money emits no signal at all.
+    </div>
+    <p class="meet"><b>You meet it in:</b> everything you buy; every price you have ever complained about; the labour market you sold your time into this morning.</p>
+  </article>
+
+  <article class="mech" style="--accent:var(--m-command)">
+    <div class="mech-head">
+      <svg role="img" aria-label="One authority directing three subordinates" viewBox="0 0 76 60" width="76" height="60" style="color:var(--m-command)">
+        <defs><marker id="ar-cm" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4.5" markerHeight="4.5" orient="auto"><path d="M0,1 L9,5 L0,9 z" fill="currentColor"/></marker></defs>
+        <circle cx="38" cy="11" r="8" fill="currentColor"/>
+        <line x1="35" y1="19" x2="16" y2="40" stroke="currentColor" stroke-width="2" marker-end="url(#ar-cm)"/>
+        <line x1="38" y1="20" x2="38" y2="40" stroke="currentColor" stroke-width="2" marker-end="url(#ar-cm)"/>
+        <line x1="41" y1="19" x2="60" y2="40" stroke="currentColor" stroke-width="2" marker-end="url(#ar-cm)"/>
+        <circle cx="14" cy="49" r="6" fill="none" stroke="currentColor" stroke-width="2"/>
+        <circle cx="38" cy="49" r="6" fill="none" stroke="currentColor" stroke-width="2"/>
+        <circle cx="62" cy="49" r="6" fill="none" stroke="currentColor" stroke-width="2"/>
+      </svg>
+      <div class="ht">
+        <span class="greek">Mechanism 02</span>
+        <h3>Command &mdash; allocation by authority</h3>
+        <p class="rule">Someone with the standing to be obeyed decides what is produced and where it goes. Information travels up, instructions travel down.</p>
+      </div>
+    </div>
+    <dl class="specs">
+      <div class="spec"><dt>Sensor</dt><dd>Deliberate reporting up a hierarchy. Rich in intent, lossy in transmission, and systematically distorted by everyone whose evaluation depends on the report.</dd></div>
+      <div class="spec"><dt>Motive</dt><dd>Sanction and promotion. Duty, where legitimacy is real.</dd></div>
+      <div class="spec"><dt>Enforced by</dt><dd>Authority, and the cost of exit.</dd></div>
+      <div class="spec"><dt>Scales to</dt><dd>Very large but not unbounded &mdash; the reporting chain lengthens faster than the reality it describes.</dd></div>
+    </dl>
+    <div class="loops">
+      <div class="loop r"><b>Reinforcing loop</b>Target set &rarr; people optimise the measured proxy &rarr; the measure detaches from reality &rarr; the centre sets more targets to compensate. Goodhart&rsquo;s law as a runaway loop: Soviet nail plants measured in tonnes made a few enormous nails; measured in units, they made millions of tiny ones.</div>
+      <div class="loop b"><b>Balancing loop</b>Visible failure &rarr; correction from above. Slow, and it depends on the failure being reportable &mdash; which is exactly what the reinforcing loop above destroys.</div>
+    </div>
+    <div class="breaks">
+      <b>Breaks when:</b> the calculation problem bites. Ludwig von Mises (1920) and Hayek argued a planner cannot compute an efficient allocation without prices, because the necessary knowledge is tacit and dispersed. In practice the failures were also organisational: J&aacute;nos Kornai&rsquo;s <em>shortage economy</em>, where firms face a <b>soft budget constraint</b> &mdash; they cannot fail, so they hoard inputs, so everything is scarce, forever. Command is superb at <em>direction</em> (a war, a moonshot, an electrification programme) and poor at <em>discovery</em>.
+    </div>
+    <p class="meet"><b>You meet it in:</b> the inside of every company. Ronald Coase&rsquo;s answer (1937) to &ldquo;why do firms exist at all, if markets are so good?&rdquo; is that using the market has costs &mdash; searching, negotiating, enforcing &mdash; and a firm is a bubble of command economy blown inside a market wherever those costs exceed the cost of simply telling someone what to do. <b>The boundary of your firm is exactly the line where command becomes cheaper than buying.</b></p>
+  </article>
+
+  <article class="mech" style="--accent:var(--m-recip)">
+    <div class="mech-head">
+      <svg role="img" aria-label="A gift given and a counter-gift returned after a delay" viewBox="0 0 76 60" width="76" height="60" style="color:var(--m-recip)">
+        <defs><marker id="ar-rc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4.5" markerHeight="4.5" orient="auto"><path d="M0,1 L9,5 L0,9 z" fill="currentColor"/></marker></defs>
+        <circle cx="14" cy="30" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/>
+        <circle cx="62" cy="30" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M23,24 Q38,9 53,24" fill="none" stroke="currentColor" stroke-width="2" marker-end="url(#ar-rc)"/>
+        <path d="M53,37 Q38,51 23,37" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="4 4" marker-end="url(#ar-rc)"/>
+      </svg>
+      <div class="ht">
+        <span class="greek">Mechanism 03</span>
+        <h3>Reciprocity &mdash; the gift that obliges</h3>
+        <p class="rule">Something is given with no price named and no return specified &mdash; which creates a debt that is social rather than numerical, and is repaid later, in a different currency, at a rate nobody states.</p>
+      </div>
+    </div>
+    <dl class="specs">
+      <div class="spec"><dt>Sensor</dt><dd>Relational memory. Who helped, who didn&rsquo;t, who is good for it. Enormously detailed, and completely non-transferable.</dd></div>
+      <div class="spec"><dt>Motive</dt><dd>Obligation, status, belonging &mdash; and the fact that being owed is itself a form of wealth.</dd></div>
+      <div class="spec"><dt>Enforced by</dt><dd>Reputation, shame, and the threat of exclusion. No courts.</dd></div>
+      <div class="spec"><dt>Scales to</dt><dd>Networks where people can still keep track of each other &mdash; villages, guilds, teams, open-source projects.</dd></div>
+    </dl>
+    <div class="loops">
+      <div class="loop r"><b>Reinforcing loop</b>Gift &rarr; obligation &rarr; counter-gift &rarr; a thicker relationship, which makes the next gift safer to give. Trust compounds, and the compounding <em>is</em> the product. Bronis&#322;aw Malinowski&rsquo;s kula ring in the Trobriands moved valuables in circles for years; the objects were the medium, the alliances were the point.</div>
+      <div class="loop b"><b>Balancing loop</b>Non-reciprocation &rarr; loss of standing &rarr; exclusion from future exchange. The sanction is cheap to apply and devastating to receive, which is why it works without any enforcement apparatus at all.</div>
+    </div>
+    <div class="breaks">
+      <b>Breaks when:</b> the parties are strangers, or the network grows past the point where reputations circulate. It also turns coercive when the imbalance becomes permanent &mdash; an unrepayable debt of obligation is how patronage and bondage begin. And it is corrosive to mix with the market script: offer your mother money for dinner and you have not paid a debt, you have insulted her. Dan Ariely&rsquo;s work on social versus market norms shows the switch is one-directional &mdash; once a price is named, the gift relation rarely comes back.
+    </div>
+    <p class="meet"><b>You meet it in:</b> covering someone&rsquo;s on-call shift; academic citation; code review in open source; every favour you are quietly keeping count of. David Graeber called the underlying disposition &ldquo;baseline communism&rdquo; &mdash; if the need is great and the cost is small, we simply help, and this is the substrate on which all other economies sit.</p>
+  </article>
+
+  <article class="mech" style="--accent:var(--m-redist)">
+    <div class="mech-head">
+      <svg role="img" aria-label="Contributions pooled at a centre and disbursed outward by rule" viewBox="0 0 76 60" width="76" height="60" style="color:var(--m-redist)">
+        <defs><marker id="ar-rd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4.5" markerHeight="4.5" orient="auto"><path d="M0,1 L9,5 L0,9 z" fill="currentColor"/></marker></defs>
+        <circle cx="7" cy="10" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <circle cx="7" cy="30" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <circle cx="7" cy="50" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <line x1="12" y1="12" x2="26" y2="25" stroke="currentColor" stroke-width="1.8" marker-end="url(#ar-rd)"/>
+        <line x1="13" y1="30" x2="26" y2="30" stroke="currentColor" stroke-width="1.8" marker-end="url(#ar-rd)"/>
+        <line x1="12" y1="48" x2="26" y2="35" stroke="currentColor" stroke-width="1.8" marker-end="url(#ar-rd)"/>
+        <rect x="28" y="20" width="20" height="20" rx="5" fill="currentColor"/>
+        <line x1="50" y1="25" x2="63" y2="13" stroke="currentColor" stroke-width="1.8" marker-end="url(#ar-rd)"/>
+        <line x1="50" y1="30" x2="63" y2="30" stroke="currentColor" stroke-width="1.8" marker-end="url(#ar-rd)"/>
+        <line x1="50" y1="35" x2="63" y2="47" stroke="currentColor" stroke-width="1.8" marker-end="url(#ar-rd)"/>
+        <circle cx="69" cy="10" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <circle cx="69" cy="30" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <circle cx="69" cy="50" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      </svg>
+      <div class="ht">
+        <span class="greek">Mechanism 04</span>
+        <h3>Redistribution &mdash; pool, then disburse by rule</h3>
+        <p class="rule">Everyone contributes to a centre; the centre gives back according to a stated rule that is not &ldquo;in proportion to what you put in&rdquo;. No quid pro quo at the point of use.</p>
+      </div>
+    </div>
+    <dl class="specs">
+      <div class="spec"><dt>Sensor</dt><dd>Legibility &mdash; census, income records, land registries, identity systems. The centre can only serve what it can see, and it can only see what it has made countable.</dd></div>
+      <div class="spec"><dt>Motive</dt><dd>Entitlement and right on the receiving side; legitimacy and obligation on the paying side.</dd></div>
+      <div class="spec"><dt>Enforced by</dt><dd>The power to tax &mdash; which is to say, ultimately, the state&rsquo;s monopoly on legitimate force.</dd></div>
+      <div class="spec"><dt>Scales to</dt><dd>Whole nations. It is the only mechanism that reliably reaches strangers on the basis of need rather than payment.</dd></div>
+    </dl>
+    <div class="loops">
+      <div class="loop r"><b>Reinforcing loop</b>Pooling &rarr; risk is shared &rarr; people can take risks they couldn&rsquo;t bear alone &rarr; more is produced &rarr; a bigger pool. This is the case for social insurance stated as a loop rather than as a moral claim: it is productive, not merely kind.</div>
+      <div class="loop b"><b>Balancing loop</b>Contributions feel unfair &rarr; consent for the pool erodes &rarr; the pool shrinks. The loop runs on <em>perceived</em> fairness, not measured fairness, which is why the politics of redistribution are mostly about visibility and framing.</div>
+    </div>
+    <div class="breaks">
+      <b>Breaks when:</b> the legibility gap widens. James C. Scott&rsquo;s <em>Seeing Like a State</em> is the systems text here: to administer a population you must first simplify it into categories, and the simplification erases exactly the local, informal, unregistered detail that people actually live inside. What the register cannot see, the scheme cannot serve &mdash; informal workers, undocumented tenants, unpaid carers. It also fails through capture: whoever controls the centre eventually shapes the rule.
+    </div>
+    <p class="meet"><b>You meet it in:</b> tax and public services; health and pension insurance; your company&rsquo;s central budget funding a cost centre that earns no revenue. The Bronze Age temple economies of Mesopotamia ran this way millennia before coinage existed &mdash; redistribution is older than markets, not a modern correction to them.</p>
+  </article>
+
+  <article class="mech" style="--accent:var(--m-commons)">
+    <div class="mech-head">
+      <svg role="img" aria-label="A bounded group of users jointly governing a shared pool" viewBox="0 0 76 64" width="76" height="64" style="color:var(--m-commons)">
+        <circle cx="38" cy="32" r="29" fill="none" stroke="currentColor" stroke-width="1.6" stroke-dasharray="5 5" opacity=".75"/>
+        <circle cx="38" cy="32" r="9.5" fill="currentColor"/>
+        <circle cx="38" cy="7" r="5" fill="none" stroke="currentColor" stroke-width="2"/>
+        <circle cx="63" cy="32" r="5" fill="none" stroke="currentColor" stroke-width="2"/>
+        <circle cx="38" cy="57" r="5" fill="none" stroke="currentColor" stroke-width="2"/>
+        <circle cx="13" cy="32" r="5" fill="none" stroke="currentColor" stroke-width="2"/>
+        <line x1="38" y1="12" x2="38" y2="22" stroke="currentColor" stroke-width="1.8"/>
+        <line x1="58" y1="32" x2="48" y2="32" stroke="currentColor" stroke-width="1.8"/>
+        <line x1="38" y1="52" x2="38" y2="42" stroke="currentColor" stroke-width="1.8"/>
+        <line x1="18" y1="32" x2="28" y2="32" stroke="currentColor" stroke-width="1.8"/>
+      </svg>
+      <div class="ht">
+        <span class="greek">Mechanism 05</span>
+        <h3>Commons &mdash; a bounded group governing a shared pool</h3>
+        <p class="rule">A defined set of people with a long-term stake in the same resource write their own rules for using it, monitor each other, and sanction their own defectors. Neither market nor state.</p>
+      </div>
+    </div>
+    <dl class="specs">
+      <div class="spec"><dt>Sensor</dt><dd>Mutual observation. The fisher sees the other boats; the farmer sees who opened the sluice. Information is coarse but honest, because it is not mediated by anyone with an incentive to shade it.</dd></div>
+      <div class="spec"><dt>Motive</dt><dd>The long shadow of the future &mdash; you will still be here next season, and so will they.</dd></div>
+      <div class="spec"><dt>Enforced by</dt><dd>Graduated sanctions applied by peers, starting almost trivially, escalating slowly.</dd></div>
+      <div class="spec"><dt>Scales to</dt><dd>Hundreds, occasionally thousands, and further only by nesting small commons inside larger ones.</dd></div>
+    </dl>
+    <div class="loops">
+      <div class="loop r"><b>Reinforcing loop</b>Rules are followed &rarr; the resource holds up &rarr; the rules visibly work &rarr; compliance becomes the norm rather than the sacrifice. Elinor Ostrom won the 2009 Nobel for documenting that this loop closes successfully all over the world &mdash; Swiss alpine pastures, Japanese forests, Spanish <em>huertas</em>, south Indian irrigation tanks.</div>
+      <div class="loop b"><b>Balancing loop</b>Overuse &rarr; visible depletion &rarr; sanction &rarr; restraint. The whole mechanism depends on this loop being <em>fast and visible</em>. That is its entire secret and its entire vulnerability.</div>
+    </div>
+    <div class="breaks">
+      <b>Breaks when:</b> the balancing loop is slow, invisible or unbounded. Garrett Hardin&rsquo;s 1968 &ldquo;tragedy of the commons&rdquo; was not a law of nature &mdash; Ostrom&rsquo;s field evidence refuted it as a general claim &mdash; but it describes accurately what happens to an <em>ungoverned open-access resource</em>. Groundwater fails where a commons succeeds because the depletion is underground and the boundary is porous. The atmosphere is the hardest case in existence: no boundary, eight billion users, and a feedback delay measured in decades.
+    </div>
+    <p class="meet"><b>You meet it in:</b> Wikipedia; the maintainership of a Linux subsystem; your apartment association&rsquo;s water tank; the aquifer under your city. Ostrom&rsquo;s eight design principles &mdash; clear boundaries, rules fitted to local conditions, those affected participate in making them, monitoring by accountable monitors, graduated sanctions, cheap conflict resolution, the right to self-organise recognised from outside, and nesting &mdash; are the closest thing economics has to an engineering spec.</p>
+  </article>
+
+  <article class="mech" style="--accent:var(--m-house)">
+    <div class="mech-head">
+      <svg role="img" aria-label="A household producing for its own use in a closed cycle" viewBox="0 0 76 60" width="76" height="60" style="color:var(--m-house)">
+        <defs><marker id="ar-hh" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4.5" markerHeight="4.5" orient="auto"><path d="M0,1 L9,5 L0,9 z" fill="currentColor"/></marker></defs>
+        <rect x="6" y="8" width="64" height="44" rx="11" fill="none" stroke="currentColor" stroke-width="2"/>
+        <circle cx="38" cy="30" r="7" fill="currentColor"/>
+        <path d="M38,15 A15,15 0 1,1 25.5,37.5" fill="none" stroke="currentColor" stroke-width="2" marker-end="url(#ar-hh)"/>
+      </svg>
+      <div class="ht">
+        <span class="greek">Mechanism 06</span>
+        <h3>Householding &mdash; producing for your own unit</h3>
+        <p class="rule">A group produces to satisfy its own needs directly. Nothing is priced, nothing is traded, nothing is counted.</p>
+      </div>
+    </div>
+    <dl class="specs">
+      <div class="spec"><dt>Sensor</dt><dd>Direct knowledge of need. The finest-grained sensor of the six &mdash; you know who is hungry, tired, ill &mdash; and the only one with no transmission loss at all.</dd></div>
+      <div class="spec"><dt>Motive</dt><dd>Survival, love, duty, habit.</dd></div>
+      <div class="spec"><dt>Enforced by</dt><dd>Kinship and, historically and often still, patriarchal authority. This mechanism&rsquo;s enforcement problem is the one it is least honest about.</dd></div>
+      <div class="spec"><dt>Scales to</dt><dd>A household. That is the whole point and the whole limit.</dd></div>
+    </dl>
+    <div class="loops">
+      <div class="loop r"><b>Reinforcing loop</b>Care produces capable people &rarr; capable people produce more care and more output &rarr; the unit reproduces itself. Every other economy on this page runs on labour this loop supplies for free.</div>
+      <div class="loop b"><b>Balancing loop</b>Need is directly observed and directly met, so there is no accumulation and no oscillation. Stable, and stably small.</div>
+    </div>
+    <div class="breaks">
+      <b>Breaks when:</b> you want any of the gains from specialisation &mdash; there is no surplus, no scale, no technical advance. Its more serious modern failure is that it is <em>invisible</em>: unpaid domestic and care work is excluded from GDP by definition, so it appears in no statistic, attracts no investment, and is distributed with no accountability. The same meal moves from zero to a positive contribution to national output the moment it is cooked by someone who is paid.
+    </div>
+    <p class="meet"><b>You meet it in:</b> your own home, today, several times. Aristotle&rsquo;s <em>oikonomia</em> &mdash; household management &mdash; is the word we got &ldquo;economy&rdquo; from. He distinguished it sharply from <em>chrematistike</em>, acquisition pursued for its own sake, which he thought had no natural stopping point. That distinction is the oldest surviving critique of unbounded accumulation, and it predates every system named below.</p>
+  </article>
+
+  </div>
+</section>
+
+<section id="sensors">
+  <span class="eyebrow">05 &mdash; The unifying idea</span>
+  <h2>Every mechanism is a sensor. Its blind spot is its failure mode.</h2>
+  <p class="lede">This is the single most useful compression on this page. You do not have to memorise six lists of failure modes. Each mechanism senses the world through exactly one channel, and everything that channel cannot detect is what that mechanism will predictably destroy.</p>
+
+  <div class="tbl-scroll">
+    <table>
+      <thead>
+        <tr><th scope="col">Mechanism</th><th scope="col">What it senses</th><th scope="col">What it cannot see</th><th scope="col">So it reliably produces</th></tr>
+      </thead>
+      <tbody>
+        <tr><th scope="row" style="color:var(--m-market)">Market</th><td>Willingness and ability to pay</td><td>Need without money; costs borne by non-parties; the long run</td><td>Unmet need beside unsold surplus; pollution; short-termism</td></tr>
+        <tr><th scope="row" style="color:var(--m-command)">Command</th><td>What subordinates report upward</td><td>Tacit knowledge; anything embarrassing to report; local variation</td><td>Shortage, hoarding, falsified numbers, brittle uniformity</td></tr>
+        <tr><th scope="row" style="color:var(--m-recip)">Reciprocity</th><td>Relationships and standing</td><td>Strangers; anyone outside the network</td><td>Warm insiders, excluded outsiders, nepotism</td></tr>
+        <tr><th scope="row" style="color:var(--m-redist)">Redistribution</th><td>Registered, countable categories</td><td>The informal, the undocumented, the uncategorised</td><td>Schemes that miss precisely the poorest; administrative capture</td></tr>
+        <tr><th scope="row" style="color:var(--m-commons)">Commons</th><td>What members can directly observe</td><td>Slow, diffuse or distant harms; free-riders outside the boundary</td><td>Well-kept local resources inside a degrading global one</td></tr>
+        <tr><th scope="row" style="color:var(--m-house)">Householding</th><td>Need, directly and completely</td><td>Anything beyond the household&rsquo;s walls; its own internal fairness</td><td>Invisible labour, no surplus, unaccountable internal power</td></tr>
+      </tbody>
+      <caption>Read a policy argument by asking which sensor is being relied on, and whether the thing under discussion is something that sensor can detect.</caption>
+    </table>
+  </div>
+
+  <div class="callout">
+    <span class="tag">Why mixed economies exist</span>
+    <p>This table is the argument for pluralism, made structurally rather than politically. No mechanism has a complete sensor, so no single mechanism can run a whole society without generating a characteristic catastrophe. Real societies survive by covering each mechanism&rsquo;s blind spot with another one &mdash; and the interesting design question is never &ldquo;market or state&rdquo; but <strong>which mechanism should hold which domain, and what covers its blind spot</strong>.</p>
+  </div>
+</section>
+
+<section id="systems">
+  <span class="eyebrow">06 &mdash; The molecules</span>
+  <h2>Named systems are mixing ratios, not separate species</h2>
+  <p class="lede">Nothing in history has ever run on one mechanism. &ldquo;Feudalism&rdquo;, &ldquo;capitalism&rdquo;, &ldquo;socialism&rdquo; name particular <em>blends</em>, plus an answer to the question that actually divides them: <strong>who controls the surplus?</strong> Read the matrix by row.</p>
+
+  <div class="tbl-scroll">
+    <table class="mix">
+      <thead>
+        <tr>
+          <th scope="col">System</th>
+          <th scope="col">Market</th><th scope="col">Command</th><th scope="col">Recipr.</th>
+          <th scope="col">Redistr.</th><th scope="col">Commons</th><th scope="col">House.</th>
+          <th scope="col">Surplus controlled by</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><th scope="row">Foraging band</th>
+          <td class="m lv0" style="--h:var(--m-market)"><span>&mdash;</span></td>
+          <td class="m lv1" style="--h:var(--m-command)"><span>some</span></td>
+          <td class="m lv3" style="--h:var(--m-recip)"><span>dom</span></td>
+          <td class="m lv1" style="--h:var(--m-redist)"><span>some</span></td>
+          <td class="m lv2" style="--h:var(--m-commons)"><span>sig</span></td>
+          <td class="m lv3" style="--h:var(--m-house)"><span>dom</span></td>
+          <td>Nobody &mdash; there is barely a surplus to control</td></tr>
+        <tr><th scope="row">Tributary / feudal</th>
+          <td class="m lv1" style="--h:var(--m-market)"><span>some</span></td>
+          <td class="m lv3" style="--h:var(--m-command)"><span>dom</span></td>
+          <td class="m lv2" style="--h:var(--m-recip)"><span>sig</span></td>
+          <td class="m lv2" style="--h:var(--m-redist)"><span>sig</span></td>
+          <td class="m lv2" style="--h:var(--m-commons)"><span>sig</span></td>
+          <td class="m lv3" style="--h:var(--m-house)"><span>dom</span></td>
+          <td>Lords and temples, by coercion attached to land</td></tr>
+        <tr><th scope="row">Mercantile empire</th>
+          <td class="m lv2" style="--h:var(--m-market)"><span>sig</span></td>
+          <td class="m lv3" style="--h:var(--m-command)"><span>dom</span></td>
+          <td class="m lv1" style="--h:var(--m-recip)"><span>some</span></td>
+          <td class="m lv1" style="--h:var(--m-redist)"><span>some</span></td>
+          <td class="m lv0" style="--h:var(--m-commons)"><span>&mdash;</span></td>
+          <td class="m lv2" style="--h:var(--m-house)"><span>sig</span></td>
+          <td>The crown and its chartered monopolies</td></tr>
+        <tr><th scope="row">Market capitalism</th>
+          <td class="m lv3" style="--h:var(--m-market)"><span>dom</span></td>
+          <td class="m lv2" style="--h:var(--m-command)"><span>sig</span></td>
+          <td class="m lv1" style="--h:var(--m-recip)"><span>some</span></td>
+          <td class="m lv1" style="--h:var(--m-redist)"><span>some</span></td>
+          <td class="m lv1" style="--h:var(--m-commons)"><span>some</span></td>
+          <td class="m lv2" style="--h:var(--m-house)"><span>sig</span></td>
+          <td>Private owners of capital, as residual claimants</td></tr>
+        <tr><th scope="row">Central planning</th>
+          <td class="m lv0" style="--h:var(--m-market)"><span>&mdash;</span></td>
+          <td class="m lv3" style="--h:var(--m-command)"><span>dom</span></td>
+          <td class="m lv1" style="--h:var(--m-recip)"><span>some</span></td>
+          <td class="m lv3" style="--h:var(--m-redist)"><span>dom</span></td>
+          <td class="m lv0" style="--h:var(--m-commons)"><span>&mdash;</span></td>
+          <td class="m lv2" style="--h:var(--m-house)"><span>sig</span></td>
+          <td>The party-state apparatus</td></tr>
+        <tr><th scope="row">Social democracy</th>
+          <td class="m lv3" style="--h:var(--m-market)"><span>dom</span></td>
+          <td class="m lv1" style="--h:var(--m-command)"><span>some</span></td>
+          <td class="m lv1" style="--h:var(--m-recip)"><span>some</span></td>
+          <td class="m lv3" style="--h:var(--m-redist)"><span>dom</span></td>
+          <td class="m lv1" style="--h:var(--m-commons)"><span>some</span></td>
+          <td class="m lv2" style="--h:var(--m-house)"><span>sig</span></td>
+          <td>Private owners, with a large slice routed through the state</td></tr>
+        <tr><th scope="row">Developmental state</th>
+          <td class="m lv2" style="--h:var(--m-market)"><span>sig</span></td>
+          <td class="m lv3" style="--h:var(--m-command)"><span>dom</span></td>
+          <td class="m lv2" style="--h:var(--m-recip)"><span>sig</span></td>
+          <td class="m lv2" style="--h:var(--m-redist)"><span>sig</span></td>
+          <td class="m lv0" style="--h:var(--m-commons)"><span>&mdash;</span></td>
+          <td class="m lv2" style="--h:var(--m-house)"><span>sig</span></td>
+          <td>Private firms, but the state directs where it is reinvested</td></tr>
+        <tr><th scope="row">Co-operative / market socialism</th>
+          <td class="m lv3" style="--h:var(--m-market)"><span>dom</span></td>
+          <td class="m lv1" style="--h:var(--m-command)"><span>some</span></td>
+          <td class="m lv2" style="--h:var(--m-recip)"><span>sig</span></td>
+          <td class="m lv2" style="--h:var(--m-redist)"><span>sig</span></td>
+          <td class="m lv2" style="--h:var(--m-commons)"><span>sig</span></td>
+          <td class="m lv2" style="--h:var(--m-house)"><span>sig</span></td>
+          <td>The workers or members who are also the residual claimants</td></tr>
+        <tr><th scope="row">Platform economy</th>
+          <td class="m lv3" style="--h:var(--m-market)"><span>dom</span></td>
+          <td class="m lv3" style="--h:var(--m-command)"><span>dom</span></td>
+          <td class="m lv1" style="--h:var(--m-recip)"><span>some</span></td>
+          <td class="m lv1" style="--h:var(--m-redist)"><span>some</span></td>
+          <td class="m lv1" style="--h:var(--m-commons)"><span>some</span></td>
+          <td class="m lv2" style="--h:var(--m-house)"><span>sig</span></td>
+          <td>The owner of the marketplace, who also writes its rules</td></tr>
+        <tr><th scope="row">Peer production</th>
+          <td class="m lv0" style="--h:var(--m-market)"><span>&mdash;</span></td>
+          <td class="m lv1" style="--h:var(--m-command)"><span>some</span></td>
+          <td class="m lv3" style="--h:var(--m-recip)"><span>dom</span></td>
+          <td class="m lv0" style="--h:var(--m-redist)"><span>&mdash;</span></td>
+          <td class="m lv3" style="--h:var(--m-commons)"><span>dom</span></td>
+          <td class="m lv1" style="--h:var(--m-house)"><span>some</span></td>
+          <td>Nobody &mdash; the licence gives the output away irrevocably</td></tr>
+      </tbody>
+      <caption>Intensities are qualitative judgements about which mechanisms carry the weight of coordination, not measured shares.</caption>
+    </table>
+  </div>
+
+  <div class="mixkey">
+    <span><i class="sw d"></i>dominant</span>
+    <span><i class="sw s"></i>significant</span>
+    <span><i class="sw p"></i>present</span>
+    <span><i class="sw a"></i>marginal or absent</span>
+  </div>
+
+  <div class="syscards">
+    <div class="sys">
+      <span class="era">Until ~10,000 BCE, and still at the margins</span>
+      <h3>Foraging and subsistence</h3>
+      <p>Sharing in a foraging band is not sentiment, it is variance reduction. A hunter&rsquo;s success is wildly unpredictable day to day; pooling the kill converts a high-variance individual income into a low-variance group one. It is insurance implemented as a norm, thousands of years before the word existed.</p>
+      <div class="patho"><b>Characteristic limit</b>No surplus means no specialisation, no accumulation &mdash; and nothing much to fight over.</div>
+    </div>
+
+    <div class="sys">
+      <span class="era">Bronze Age to early modern</span>
+      <h3>Tributary and feudal orders</h3>
+      <p>Peasant households produce; a warrior or priestly class extracts a share by right of force, custom or divine sanction, and the claim is attached to <em>land</em> rather than to capital. Because surplus comes from extraction rather than productivity, the rational investment is in more coercion, not better ploughs.</p>
+      <div class="patho"><b>Pathology</b>A reinforcing loop of coercion &rarr; extraction &rarr; military power &rarr; more coercion, running until it hits a Malthusian ceiling and collapses.</div>
+    </div>
+
+    <div class="sys">
+      <span class="era">16th&ndash;18th century</span>
+      <h3>Mercantilism</h3>
+      <p>Markets used as an instrument of state power, on the assumption that world trade is zero-sum and national wealth is bullion in the treasury. The chartered monopoly &mdash; the East India Company holding trading rights, an army and courts &mdash; is the pure form: a private firm granted sovereign powers.</p>
+      <div class="patho"><b>Pathology</b>A false stock. Treating gold as wealth rather than productive capacity misdirects an empire&rsquo;s entire investment loop.</div>
+    </div>
+
+    <div class="sys">
+      <span class="era">18th century onward</span>
+      <h3>Market capitalism</h3>
+      <p>Two things had to become commodities for this to exist: <em>land</em> and <em>labour</em>. Markets are ancient; what is recent is a society where most people live by selling their time, and where capital &mdash; a stock that produces a flow that can be added back to the stock &mdash; is privately held and compounds. Polanyi called the treatment of land, labour and money as ordinary commodities a &ldquo;fictitious&rdquo; move, and argued societies always push back against it.</p>
+      <div class="patho"><b>Pathology</b>The reinforcing loop is the engine and the disease. Returns accrue to whoever already holds the stock, so ownership concentrates unless something actively counteracts it.</div>
+    </div>
+
+    <div class="sys">
+      <span class="era">1928&ndash;1991, and variants</span>
+      <h3>Central planning</h3>
+      <p>An extraordinary instrument for <em>direction</em>: the USSR industrialised and won a continental war from an agrarian base within a generation. But direction is not discovery. With no prices, the planner has no way to compare two allocations; with reporting as the only sensor, every number is shaped by whoever is graded on it.</p>
+      <div class="patho"><b>Pathology</b>Kornai&rsquo;s shortage economy. A firm that cannot go bankrupt hoards inputs against uncertainty, which makes inputs scarce, which justifies more hoarding.</div>
+    </div>
+
+    <div class="sys">
+      <span class="era">Post-1945, Western Europe</span>
+      <h3>Social democracy and the mixed economy</h3>
+      <p>The most successful design compromise yet found, and it is a systems compromise: <strong>keep the market&rsquo;s information system, and cut the wire between market outcome and life outcome.</strong> Prices still allocate; health, education, pensions and income floors are moved into redistribution so that losing in the market does not mean losing everything.</p>
+      <div class="patho"><b>Pathology</b>The damper is itself a political object. Once capital is mobile and concentrated, it can lobby to weaken the very loop that balances it.</div>
+    </div>
+
+    <div class="sys">
+      <span class="era">Japan, Korea, Taiwan, Singapore, China post-1978</span>
+      <h3>The developmental state</h3>
+      <p>Command sets the <em>direction</em> &mdash; which sectors, which technologies, which export targets &mdash; while markets handle the detail, and crucially the state disciplines the firms it subsidises against a hard external test: can you export at world prices? The subsidy is conditional, and withdrawn from failures.</p>
+      <div class="patho"><b>Pathology</b>The whole model rests on that discipline loop staying intact. Sever it and identical-looking state support becomes ordinary cronyism.</div>
+    </div>
+
+    <div class="sys">
+      <span class="era">Yugoslavia, Mondrag&oacute;n, Kerala, Emilia-Romagna</span>
+      <h3>Co-operatives and market socialism</h3>
+      <p>Markets for allocation, but the residual claim sits with the people doing the work. Mondrag&oacute;n in the Basque Country has run this at the scale of tens of thousands of worker-owners for over sixty years, with internally capped pay ratios and losses absorbed by shared wage cuts rather than layoffs.</p>
+      <div class="patho"><b>Pathology</b>Raising outside capital is structurally hard, because investors are being asked to fund an asset they will not control.</div>
+    </div>
+
+    <div class="sys">
+      <span class="era">2000s onward &mdash; the live frontier</span>
+      <h3>The platform economy</h3>
+      <p>Worth dwelling on, because it is genuinely new as a <em>structure</em>: a privately owned marketplace whose owner also writes and enforces its rules. Sellers face what looks like a market, but ranking, fees, visibility and eligibility are set by command from the owner. Network effects give the reinforcing loop unusual power &mdash; more buyers make the venue more valuable to sellers, and vice versa &mdash; so the equilibrium is concentration, and the owner&rsquo;s income comes increasingly from <em>position</em> rather than production. Economists call that rent.</p>
+      <div class="patho"><b>Pathology</b>Market and command fuse. The participants get the market&rsquo;s uncertainty with none of its exit, and the command structure&rsquo;s authority with none of its accountability.</div>
+    </div>
+
+    <div class="sys">
+      <span class="era">1991 onward</span>
+      <h3>Commons-based peer production</h3>
+      <p>Linux, Wikipedia, open science. The arithmetic changes completely because the output is <em>non-rival</em>: my copy costs you nothing, so there is nothing to ration. Contribution runs on reciprocity and reputation; governance runs as a commons with maintainers, forks and graduated sanctions; the licence permanently forecloses anyone capturing the surplus.</p>
+      <div class="patho"><b>Pathology</b>The maintenance problem. Reputation rewards new features, not unglamorous upkeep, so critical infrastructure ends up maintained by a handful of exhausted volunteers.</div>
+    </div>
+  </div>
+</section>
+
+<section id="dynamics">
+  <span class="eyebrow">07 &mdash; The systems layer</span>
+  <h2>Six dynamics that show up in all of them</h2>
+  <p class="lede">These are the behaviours that recur regardless of which mechanism is running. Learn these and you stop having to learn each system separately &mdash; you start recognising structures.</p>
+
+  <div class="dyn">
+
+    <div class="dynitem">
+      <h3>1. Stocks accumulate; flows are what we measure</h3>
+      <div class="body">
+        <p>A <strong>stock</strong> is a quantity that exists at a moment &mdash; wealth, capital, housing, skills, trust, groundwater. A <strong>flow</strong> is a rate &mdash; income, output, savings per month. Almost all public argument is about flows, because flows are what get reported, while almost all power comes from stocks.</p>
+        <p>The reason this matters: a flow can be equalised while the stock keeps diverging. Thomas Piketty&rsquo;s <em>r &gt; g</em> is exactly this claim as a stock dynamic &mdash; if the return on accumulated capital exceeds the growth rate of the economy, then inherited stock outgrows earned flow, and the distribution keeps tilting even when nobody does anything unusual. Whether the inequality is <em>morally</em> acceptable is a separate argument; that it is <em>structurally</em> generated is what the stock-flow view shows.</p>
+      </div>
+    </div>
+
+    <div class="dynitem">
+      <h3>2. Delay is what turns balance into oscillation</h3>
+      <div class="body">
+        <p>A balancing loop with no delay settles. A balancing loop with a long delay <em>overshoots, corrects, and overshoots the other way</em> &mdash; permanently. This one structural fact explains commodity cycles, property booms and busts, the semiconductor cycle, and why your team is always hiring for the skill it needed eighteen months ago.</p>
+        <figure>
+          <svg role="img" aria-label="A four-step causal loop in which high prices trigger investment that only arrives years later, producing a glut and oscillation" viewBox="0 0 760 300" style="font-family:'Roboto Mono',monospace;color:var(--md-on-surface-var)">
+            <defs><marker id="d1a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L9,5 L0,9 z" fill="currentColor"/></marker></defs>
+            <rect x="20" y="28" width="200" height="52" rx="12" fill="none" stroke="currentColor" stroke-width="1.6"/>
+            <text x="120" y="59" text-anchor="middle" font-size="13" fill="currentColor">Price is high</text>
+            <rect x="360" y="28" width="200" height="52" rx="12" fill="none" stroke="currentColor" stroke-width="1.6"/>
+            <text x="460" y="59" text-anchor="middle" font-size="13" fill="currentColor">Everyone invests</text>
+            <rect x="360" y="200" width="200" height="52" rx="12" fill="none" stroke="currentColor" stroke-width="1.6"/>
+            <text x="460" y="231" text-anchor="middle" font-size="13" fill="currentColor">Capacity finally arrives</text>
+            <rect x="20" y="200" width="200" height="52" rx="12" fill="none" stroke="currentColor" stroke-width="1.6"/>
+            <text x="120" y="224" text-anchor="middle" font-size="13" fill="currentColor">Glut: price crashes</text>
+            <text x="120" y="242" text-anchor="middle" font-size="13" fill="currentColor">below cost</text>
+
+            <line x1="224" y1="54" x2="354" y2="54" stroke="currentColor" stroke-width="1.6" marker-end="url(#d1a)"/>
+            <text x="289" y="42" text-anchor="middle" font-size="11" fill="currentColor">+ signals profit</text>
+
+            <line x1="460" y1="84" x2="460" y2="195" stroke="currentColor" stroke-width="1.6" marker-end="url(#d1a)"/>
+            <line x1="446" y1="132" x2="474" y2="124" stroke="currentColor" stroke-width="2.4" style="stroke:var(--md-primary)"/>
+            <line x1="446" y1="146" x2="474" y2="138" stroke="currentColor" stroke-width="2.4" style="stroke:var(--md-primary)"/>
+            <text x="484" y="132" font-size="11" style="fill:var(--md-primary)">DELAY</text>
+            <text x="484" y="148" font-size="11" style="fill:var(--md-primary)">2&ndash;5 years</text>
+
+            <line x1="354" y1="226" x2="226" y2="226" stroke="currentColor" stroke-width="1.6" marker-end="url(#d1a)"/>
+            <text x="290" y="215" text-anchor="middle" font-size="11" fill="currentColor">&minus; supply floods in</text>
+
+            <line x1="120" y1="195" x2="120" y2="86" stroke="currentColor" stroke-width="1.6" marker-end="url(#d1a)"/>
+            <text x="108" y="132" text-anchor="end" font-size="11" fill="currentColor">&minus; investment</text>
+            <text x="108" y="148" text-anchor="end" font-size="11" fill="currentColor">stops entirely</text>
+
+            <text x="290" y="145" text-anchor="middle" font-size="26" fill="currentColor" opacity=".45">&#8635;</text>
+            <text x="290" y="168" text-anchor="middle" font-size="11" fill="currentColor" opacity=".7">BALANCING</text>
+
+            <polyline points="600,140 618,96 636,184 654,104 672,172 690,116 708,160 726,128 740,146"
+              fill="none" stroke-width="2.2" style="stroke:var(--md-primary)"/>
+            <line x1="600" y1="140" x2="740" y2="140" stroke="currentColor" stroke-width="1" stroke-dasharray="3 4" opacity=".6"/>
+            <text x="670" y="216" text-anchor="middle" font-size="11" fill="currentColor">what the loop</text>
+            <text x="670" y="232" text-anchor="middle" font-size="11" fill="currentColor">actually produces</text>
+            <text x="670" y="78" text-anchor="middle" font-size="11" fill="currentColor" opacity=".7">price over time</text>
+          </svg>
+          <figcaption><b>The loop is correct and the outcome is still a cycle.</b> Every arrow here points the right way &mdash; high prices really do attract supply, and supply really does bring prices down. The pathology is entirely in the delay on the right-hand arrow: decisions are made against a price that will no longer exist by the time the capacity is built. No participant is irrational; the oscillation is a property of the structure.</figcaption>
+        </figure>
+        <p>The systems lesson is uncomfortable for anyone who fixes things for a living: <strong>you cannot remove an oscillation by trying harder within the loop.</strong> You shorten the delay, damp the response, or add a buffer stock. Anything else amplifies it.</p>
+      </div>
+    </div>
+
+    <div class="dynitem">
+      <h3>3. Every mechanism, left alone, produces a ruling class</h3>
+      <div class="body">
+        <p>This is the most general claim on the page, and it holds across all six. Wherever an advantage helps you acquire the means of acquiring more advantage, you have a reinforcing loop drawing from a finite pool &mdash; Donella Meadows called the archetype <em>success to the successful</em>. The mechanism only changes what the currency is.</p>
+        <figure>
+          <svg role="img" aria-label="Two competitors drawing from one finite pool, where the leader's growing share directly shrinks the other's" viewBox="0 0 760 280" style="font-family:'Roboto Mono',monospace;color:var(--md-on-surface-var)">
+            <defs><marker id="d2a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L9,5 L0,9 z" fill="currentColor"/></marker></defs>
+            <rect x="24" y="26" width="184" height="48" rx="12" fill="none" stroke-width="1.8" style="stroke:var(--md-primary)"/>
+            <text x="116" y="55" text-anchor="middle" font-size="13" style="fill:var(--md-primary)">A is ahead</text>
+            <rect x="24" y="196" width="184" height="48" rx="12" fill="none" stroke-width="1.8" style="stroke:var(--md-primary)"/>
+            <text x="116" y="218" text-anchor="middle" font-size="13" style="fill:var(--md-primary)">A gets more of</text>
+            <text x="116" y="234" text-anchor="middle" font-size="13" style="fill:var(--md-primary)">the pool</text>
+            <path d="M36,80 Q6,135 36,192" fill="none" stroke-width="1.8" style="stroke:var(--md-primary)" marker-end="url(#d2a)"/>
+            <path d="M196,192 Q226,135 196,80" fill="none" stroke-width="1.8" style="stroke:var(--md-primary)" marker-end="url(#d2a)"/>
+            <text x="116" y="130" text-anchor="middle" font-size="24" style="fill:var(--md-primary)" opacity=".55">&#8635;</text>
+            <text x="116" y="152" text-anchor="middle" font-size="11" style="fill:var(--md-primary)">REINFORCING</text>
+
+            <rect x="300" y="98" width="160" height="74" rx="14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-dasharray="6 5"/>
+            <text x="380" y="128" text-anchor="middle" font-size="13" fill="currentColor">one finite pool</text>
+            <text x="380" y="148" text-anchor="middle" font-size="11" fill="currentColor" opacity=".8">capital &middot; customers</text>
+            <text x="380" y="163" text-anchor="middle" font-size="11" fill="currentColor" opacity=".8">land &middot; attention &middot; favour</text>
+
+            <line x1="212" y1="210" x2="296" y2="166" stroke="currentColor" stroke-width="1.6" marker-end="url(#d2a)"/>
+            <line x1="464" y1="166" x2="548" y2="210" stroke="currentColor" stroke-width="1.6" marker-end="url(#d2a)"/>
+            <text x="380" y="196" text-anchor="middle" font-size="12" fill="currentColor">what A takes, B cannot have &nbsp;&minus;</text>
+
+            <rect x="552" y="26" width="184" height="48" rx="12" fill="none" stroke="currentColor" stroke-width="1.6"/>
+            <text x="644" y="55" text-anchor="middle" font-size="13" fill="currentColor">B falls behind</text>
+            <rect x="552" y="196" width="184" height="48" rx="12" fill="none" stroke="currentColor" stroke-width="1.6"/>
+            <text x="644" y="218" text-anchor="middle" font-size="13" fill="currentColor">B gets less of</text>
+            <text x="644" y="234" text-anchor="middle" font-size="13" fill="currentColor">the pool</text>
+            <path d="M564,192 Q534,135 564,80" fill="none" stroke="currentColor" stroke-width="1.6" marker-end="url(#d2a)"/>
+            <path d="M724,80 Q754,135 724,192" fill="none" stroke="currentColor" stroke-width="1.6" marker-end="url(#d2a)"/>
+            <text x="644" y="130" text-anchor="middle" font-size="24" fill="currentColor" opacity=".45">&#8635;</text>
+            <text x="644" y="152" text-anchor="middle" font-size="11" fill="currentColor" opacity=".7">REINFORCING</text>
+          </svg>
+          <figcaption><b>Two identical loops and one shared pool are enough.</b> Nothing here requires anyone to cheat, and A need not even be better &mdash; only slightly ahead at the start. The structure does the rest. Swap the pool&rsquo;s contents and you get the same shape in every system: capital under capitalism, positions in the nomenklatura under central planning, land under feudalism, elite capture of a commons, and big-man hierarchies inside gift economies.</figcaption>
+        </figure>
+        <p>Which leads to the practical corollary. <strong>Every durable system contains a damper</strong> &mdash; antitrust, progressive taxation, inheritance tax, term limits, unions, rotation of office, the right to fork a codebase, the right to leave. And every damper has the same weakness: it must be immune to capture by the loop it is damping. When you see a system degrading, look first at whether the damper has been quietly acquired by the thing it exists to restrain.</p>
+      </div>
+    </div>
+
+    <div class="dynitem">
+      <h3>4. An externality is a missing wire, not a moral failure</h3>
+      <div class="body">
+        <p>The most useful reframe systems thinking offers economics. Pollution is not evidence that people are bad; it is evidence that a feedback path which physically exists in the world was never built into the decision structure. The harm happens, and no signal about it ever reaches the party causing it.</p>
+        <figure>
+          <svg role="img" aria-label="Left: a firm's profit loop closed while harm to neighbours has no return path. Right: the same system with the return path connected." viewBox="0 0 760 300" style="font-family:'Roboto Mono',monospace;color:var(--md-on-surface-var)">
+            <defs><marker id="d3a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L9,5 L0,9 z" fill="currentColor"/></marker></defs>
+            <text x="20" y="20" font-size="11" fill="currentColor" opacity=".75">AS BUILT</text>
+            <rect x="20" y="36" width="150" height="48" rx="12" fill="none" stroke="currentColor" stroke-width="1.6"/>
+            <text x="95" y="65" text-anchor="middle" font-size="13" fill="currentColor">Firm produces</text>
+            <rect x="20" y="140" width="150" height="48" rx="12" fill="none" stroke="currentColor" stroke-width="1.6"/>
+            <text x="95" y="169" text-anchor="middle" font-size="13" fill="currentColor">Profit</text>
+            <line x1="95" y1="88" x2="95" y2="135" stroke="currentColor" stroke-width="1.6" marker-end="url(#d3a)"/>
+            <path d="M174,164 Q216,112 174,60" fill="none" stroke="currentColor" stroke-width="1.6" marker-end="url(#d3a)"/>
+            <text x="228" y="116" font-size="11" fill="currentColor">reinvest</text>
+            <line x1="95" y1="192" x2="95" y2="238" stroke="currentColor" stroke-width="1.6" marker-end="url(#d3a)"/>
+            <text x="106" y="218" font-size="11" fill="currentColor">harm</text>
+            <rect x="20" y="242" width="150" height="46" rx="12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-dasharray="6 5"/>
+            <text x="95" y="270" text-anchor="middle" font-size="13" fill="currentColor">River, neighbours</text>
+            <path d="M196,265 L262,265" fill="none" stroke-width="2.2" stroke-dasharray="7 6" style="stroke:var(--m-command)"/>
+            <path d="M268,258 L282,272 M282,258 L268,272" stroke-width="2.6" style="stroke:var(--m-command)"/>
+            <text x="300" y="256" font-size="11" style="fill:var(--m-command)">no return path exists,</text>
+            <text x="300" y="272" font-size="11" style="fill:var(--m-command)">so the cost never</text>
+            <text x="300" y="288" font-size="11" style="fill:var(--m-command)">reaches the decision</text>
+
+            <line x1="420" y1="10" x2="420" y2="290" stroke="currentColor" stroke-width="1" opacity=".3"/>
+
+            <text x="452" y="20" font-size="11" style="fill:var(--md-primary)">WITH THE WIRE CONNECTED</text>
+            <rect x="452" y="36" width="150" height="48" rx="12" fill="none" stroke="currentColor" stroke-width="1.6"/>
+            <text x="527" y="65" text-anchor="middle" font-size="13" fill="currentColor">Firm produces</text>
+            <rect x="452" y="140" width="150" height="48" rx="12" fill="none" stroke="currentColor" stroke-width="1.6"/>
+            <text x="527" y="169" text-anchor="middle" font-size="13" fill="currentColor">Profit</text>
+            <line x1="527" y1="88" x2="527" y2="135" stroke="currentColor" stroke-width="1.6" marker-end="url(#d3a)"/>
+            <line x1="527" y1="192" x2="527" y2="238" stroke="currentColor" stroke-width="1.6" marker-end="url(#d3a)"/>
+            <text x="538" y="218" font-size="11" fill="currentColor">harm</text>
+            <rect x="452" y="242" width="150" height="46" rx="12" fill="none" stroke="currentColor" stroke-width="1.6"/>
+            <text x="527" y="270" text-anchor="middle" font-size="13" fill="currentColor">River, neighbours</text>
+            <path d="M606,265 Q706,265 706,60 Q706,46 612,60" fill="none" stroke-width="2.4" style="stroke:var(--md-primary)" marker-end="url(#d3a)"/>
+            <text x="720" y="150" font-size="11" style="fill:var(--md-primary)">carbon price</text>
+            <text x="720" y="166" font-size="11" style="fill:var(--md-primary)">liability</text>
+            <text x="720" y="182" font-size="11" style="fill:var(--md-primary)">permit cap</text>
+            <text x="720" y="198" font-size="11" style="fill:var(--md-primary)">disclosure</text>
+          </svg>
+          <figcaption><b>The only structural difference between the two panels is one arrow.</b> Every named remedy &mdash; a carbon price, a liability rule, a tradable permit, a mandatory disclosure &mdash; is a different physical implementation of that same missing wire. This also explains why remedies fail in a predictable way: if the wire is too thin, too slow, or routes around the decision-maker, the loop stays open no matter how strongly worded the policy is.</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <div class="dynitem">
+      <h3>5. Any measure used for control stops measuring</h3>
+      <div class="body">
+        <p>Goodhart&rsquo;s law, and it is not a quirk of bureaucracies &mdash; it is what happens whenever you place a sensor inside a loop with the thing it is sensing. Soviet plants hit tonnage targets with useless heavy goods. GDP rises when a forest is felled and does not fall when it stops existing. An engagement target produces engagement, which is not the same as value. A GMV target produces GMV, which is not the same as a healthy marketplace.</p>
+        <p>The systems response is not to abandon measurement but to recognise that <strong>a metric is a proxy with a shelf life</strong>. Use several that fail in different directions, keep some sensors outside the control loop entirely, and treat a metric that has stopped moving as suspicious rather than solved.</p>
+      </div>
+    </div>
+
+    <div class="dynitem">
+      <h3>6. Legibility buys reach and costs resolution</h3>
+      <div class="body">
+        <p>To coordinate at scale you must simplify: standard weights, surnames, cadastral maps, postal addresses, identity numbers, a chart of accounts. Each simplification genuinely enables something that was impossible before &mdash; you cannot run a pension system for a hundred million people without first making them countable.</p>
+        <p>But the simplification is not free, and the cost is paid by whatever did not fit the categories. James C. Scott&rsquo;s argument is that high-modernist schemes fail specifically when they mistake the map for the territory and then destroy the informal, local practices &mdash; what he calls <em>m&#275;tis</em> &mdash; that were quietly holding the real system together. <strong>Every act of scaling an economy trades resolution for reach; the question is always what fell out of the frame.</strong></p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section id="leverage">
+  <span class="eyebrow">08 &mdash; Where to push</span>
+  <h2>Leverage points, weakest to strongest</h2>
+  <p class="lede">Donella Meadows&rsquo; ranking of places to intervene in a system, compressed to eight and read through an economic lens. Her central finding was counter-intuitive and holds up: the places everyone fights over are the ones that change least, and the places that change most are the ones nobody is arguing about.</p>
+
+  <div class="lev">
+    <div class="levrow"><span class="rank">1</span><div><b>Parameters &mdash; numbers on existing dials</b><p>Tax rates, interest rates, subsidy levels, minimum wages, tariff percentages. Almost all political energy goes here, and it is the weakest lever on the list: you are adjusting a system, not changing it.</p></div><div class="power"><i style="width:12%"></i></div></div>
+    <div class="levrow"><span class="rank">2</span><div><b>Buffers &mdash; the size of stabilising stocks</b><p>Strategic grain reserves, foreign exchange reserves, bank capital requirements, an individual&rsquo;s savings. Bigger buffers absorb shocks, but they are expensive to hold and slow to change.</p></div><div class="power"><i style="width:22%"></i></div></div>
+    <div class="levrow"><span class="rank">3</span><div><b>Delays &mdash; how long feedback takes to arrive</b><p>How fast a price moves, how long a plant takes to build, how long before an environmental harm becomes visible. Shortening a delay often does more than any amount of adjusting the response, and lengthening one quietly destabilises everything downstream.</p></div><div class="power"><i style="width:33%"></i></div></div>
+    <div class="levrow"><span class="rank">4</span><div><b>Loop strength &mdash; how hard the dampers push back</b><p>Antitrust enforcement, progressive taxation, inheritance tax, union power, the practical ability to exit. This is where the &ldquo;every mechanism produces a ruling class&rdquo; problem is actually fought, and it is several rungs above arguing about rates.</p></div><div class="power"><i style="width:46%"></i></div></div>
+    <div class="levrow"><span class="rank">5</span><div><b>Information flows &mdash; who gets to see what</b><p>Giving a signal to someone who previously could not see it is one of the cheapest high-leverage interventions that exists: disclosure requirements, open budgets, published inspection results, a household meter that displays consumption. Nothing else about the system needs to change.</p></div><div class="power"><i style="width:60%"></i></div></div>
+    <div class="levrow"><span class="rank">6</span><div><b>Rules &mdash; what is permitted, required, owned</b><p>Property law, contract enforceability, limited liability, what may be patented, who has standing to sue, who sits on a board. Rules decide which mechanism can operate on what. Constitutions are rules about rules, which is why they are fought over so bitterly.</p></div><div class="power"><i style="width:76%"></i></div></div>
+    <div class="levrow"><span class="rank">7</span><div><b>Goals &mdash; what the system is trying to maximise</b><p>Change the objective and every loop below reorganises itself to serve it. Maximise GDP and you get one civilisation; maximise measured wellbeing, or carbon budget compliance, or shareholder return, and you get quite different ones from the same underlying machinery.</p></div><div class="power"><i style="width:90%"></i></div></div>
+    <div class="levrow"><span class="rank">8</span><div><b>Paradigm &mdash; the assumption nobody states</b><p>That land can be owned. That growth is self-evidently good. That an hour of a person&rsquo;s life is a tradeable commodity. Each was once unthinkable and is now invisible. Paradigms are the highest leverage point and the hardest to move &mdash; but they do move, usually when a generation that held them dies.</p></div><div class="power"><i style="width:100%"></i></div></div>
+  </div>
+</section>
+
+<section id="today">
+  <span class="eyebrow">09 &mdash; Where you actually stand</span>
+  <h2>You move through five or six of these before lunch</h2>
+  <p class="lede">The reason &ldquo;what economic system do you live under?&rdquo; is a badly formed question. You do not live under one. You move between them continuously, switching behavioural scripts as you go, almost always without noticing.</p>
+
+  <div class="day">
+    <div class="dayrow" style="--accent:var(--m-house)"><time>06:40</time><div><b>Householding</b><p>Breakfast is produced and consumed inside the unit. No price is set, no account is kept, and none of it appears in any national statistic.</p></div></div>
+    <div class="dayrow" style="--accent:var(--m-redist)"><time>08:15</time><div><b>Redistribution</b><p>The road, the traffic signals, the air quality you are breathing. You paid for none of these at the point of use and cannot be excluded from them.</p></div></div>
+    <div class="dayrow" style="--accent:var(--m-command)"><time>09:30</time><div><b>Command</b><p>You arrive at work and enter a small planned economy. Nobody bids for the sprint&rsquo;s scope; someone with authority allocates it. Coase&rsquo;s whole point: this is more efficient than negotiating a contract for every task.</p></div></div>
+    <div class="dayrow" style="--accent:var(--m-market)"><time>11:00</time><div><b>Market</b><p>That same organisation faces the outside world entirely through prices &mdash; what it can charge, what it must pay, who it can hire. Command inside, market outside, and the boundary between them is a real economic decision made every time you choose to build rather than buy.</p></div></div>
+    <div class="dayrow" style="--accent:var(--m-recip)"><time>13:20</time><div><b>Reciprocity</b><p>Someone covers for you while you step out. No price is named, no record is written, and you both know the obligation is now real.</p></div></div>
+    <div class="dayrow" style="--accent:var(--m-commons)"><time>19:00</time><div><b>Commons</b><p>The building&rsquo;s water tank, governed by an association with its own rules and sanctions &mdash; and beneath it the aquifer, which usually has none.</p></div></div>
+    <div class="dayrow" style="--accent:var(--m-market)"><time>21:30</time><div><b>Market inside command</b><p>You order something on a platform. It looks like a market, and for you it mostly is &mdash; but what you were shown, in what order, at what price, was decided by the marketplace&rsquo;s owner. The seller on the other side experiences that decision as an instruction.</p></div></div>
+  </div>
+
+  <div class="callout">
+    <span class="tag">The part that feels like etiquette but is economics</span>
+    <p>Each of these has its own script, and running the wrong one is what we experience as rudeness. Offering your mother cash for dinner, haggling over a gift, asking a colleague to invoice you for a favour, or telling a supplier you expect them to help out because you are friends &mdash; in every case the transaction is fine and the <em>mechanism</em> is wrong. Much of what passes for social intuition is an unconscious ability to detect which of the six you are standing in.</p>
+  </div>
+</section>
+
+<section id="diagnostic">
+  <span class="eyebrow">10 &mdash; The portable version</span>
+  <h2>Five questions to run on anything</h2>
+  <p class="lede">If you keep one thing from this page, keep these. They work on a national policy, a marketplace design, a compensation structure, a housing society dispute, or an argument on the internet.</p>
+
+  <div class="diag">
+    <div class="dq"><span class="n">Q1</span><h3>What kind of thing is it?</h3><p>Rival or not? Excludable or not? A great many arguments dissolve the moment both sides notice they are talking about different boxes in that grid.</p></div>
+    <div class="dq"><span class="n">Q2</span><h3>Which mechanism is actually running?</h3><p>Not which one it is called. A market with one buyer is command wearing a costume. A &ldquo;community&rdquo; with no sanctions is not a commons.</p></div>
+    <div class="dq"><span class="n">Q3</span><h3>What is the sensor, and what can&rsquo;t it see?</h3><p>Whatever the sensor misses is what this arrangement will damage. You can usually name the future scandal from this question alone.</p></div>
+    <div class="dq"><span class="n">Q4</span><h3>Where is the reinforcing loop, and what damps it?</h3><p>Find what compounds. Then find what is supposed to hold it in check &mdash; and ask whether that damper can be bought by the thing it restrains.</p></div>
+    <div class="dq"><span class="n">Q5</span><h3>Who holds the residual, and how long is the delay?</h3><p>Whoever claims what is left over will shape the system towards themselves. The only question is how many years pass before it becomes visible.</p></div>
+  </div>
+
+  <div class="callout">
+    <span class="tag">And the question underneath all of them</span>
+    <p>Economics can tell you which mechanism will allocate a thing efficiently. It cannot tell you what the allocation is <em>for</em> &mdash; that is smuggled in from outside, and every system on this page carries an unstated answer. Aristotle drew the line between <em>oikonomia</em>, provisioning a household so its members can live well, and <em>chrematistike</em>, accumulation pursued as an end, which he noted has no natural stopping point. Twenty-three centuries later Amartya Sen made the same move in modern terms: measure an economy not by what it produces but by the range of lives it actually enables people to lead. Both are arguing that output is an instrument. <strong>A system that optimises perfectly for the wrong goal is not a well-run economy; it is a fast machine pointed somewhere nobody chose.</strong></p>
+  </div>
+</section>
+
+<section id="words">
+  <span class="eyebrow">11 &mdash; Precision</span>
+  <h2>Six pairs of words that get treated as synonyms</h2>
+  <p class="lede">Most economic arguments that go nowhere are running on a collision between these.</p>
+
+  <div class="conf">
+    <div class="cf"><span class="vs">Markets &nbsp;&ne;&nbsp; capitalism</span><h3>Markets are about four thousand years older</h3><p>Marketplaces, prices and merchants long predate capitalism. What is distinctively capitalist is not that things are traded but that <em>capital</em> and <em>labour</em> are: most people live by selling their time, and privately held productive assets compound. You can have markets without capitalism &mdash; a co-operative economy is exactly that.</p></div>
+    <div class="cf"><span class="vs">Planning &nbsp;&ne;&nbsp; socialism</span><h3>Every large firm is a planned economy</h3><p>Your company does not hold internal auctions for headcount. It forecasts, budgets and directs &mdash; and the bigger it gets, the more of the world it plans. The question was never whether to plan; it is at what scale planning beats prices, and where the boundary sits.</p></div>
+    <div class="cf"><span class="vs">Socialism &nbsp;&ne;&nbsp; communism &nbsp;&ne;&nbsp; social democracy</span><h3>Three different claims entirely</h3><p><strong>Socialism</strong>: social ownership of the means of production. <strong>Communism</strong>: in Marx&rsquo;s usage, a further stage with no state and no class. <strong>Social democracy</strong>: private ownership left in place, with heavy redistribution layered on top. A Nordic country is the third, not the first.</p></div>
+    <div class="cf"><span class="vs">Redistribution &nbsp;&ne;&nbsp; command</span><h3>One shares output, the other directs production</h3><p>A government that taxes and transfers is not thereby deciding what factories make. Conflating the two turns every argument about a safety net into an argument about central planning, which is why so many of those arguments are unproductive.</p></div>
+    <div class="cf"><span class="vs">Money &nbsp;&ne;&nbsp; wealth</span><h3>Money is a claim; wealth is capacity</h3><p>Money is a transferable claim on other people&rsquo;s output. Wealth is the productive capacity, skills, infrastructure and functioning institutions that output actually comes from. Mercantilism&rsquo;s central error was mistaking the first for the second &mdash; and it is still the most common error in economic reasoning.</p></div>
+    <div class="cf"><span class="vs">Growth &nbsp;&ne;&nbsp; development</span><h3>One is a rate, the other is a change in kind</h3><p>Growth is more of the same flow. Development is a change in what a society is capable of &mdash; and GDP, which counts the flow, registers a felled forest and an oil spill&rsquo;s cleanup as gains while recording nothing at all for the care work that produced every worker in the economy.</p></div>
+  </div>
+</section>
+
+<section id="reading">
+  <span class="eyebrow">Sources</span>
+  <h2>Where these arguments come from</h2>
+  <p class="lede">Everything above is a compression of other people&rsquo;s work. If one section landed, this is where to go deeper on it.</p>
+  <div class="reads">
+    <div class="read"><b>Friedrich Hayek &mdash; &ldquo;The Use of Knowledge in Society&rdquo; (1945)</b><span>Twelve pages, and the clearest statement of the information argument for prices ever written. Start here.</span></div>
+    <div class="read"><b>Karl Polanyi &mdash; <em>The Great Transformation</em> (1944)</b><span>Reciprocity, redistribution, exchange and householding as forms of integration &mdash; and why treating land and labour as commodities provokes a reaction.</span></div>
+    <div class="read"><b>Elinor Ostrom &mdash; <em>Governing the Commons</em> (1990)</b><span>The empirical refutation of the tragedy of the commons, and the eight design principles. Nobel, 2009.</span></div>
+    <div class="read"><b>Ronald Coase &mdash; &ldquo;The Nature of the Firm&rdquo; (1937)</b><span>Why command economies exist inside market ones, and where their boundary falls.</span></div>
+    <div class="read"><b>J&aacute;nos Kornai &mdash; <em>Economics of Shortage</em> (1980)</b><span>The soft budget constraint. The most honest account of why planned economies produced queues.</span></div>
+    <div class="read"><b>Donella Meadows &mdash; <em>Thinking in Systems</em> (2008)</b><span>Stocks, flows, delays, archetypes, leverage points. The vocabulary this whole page borrows.</span></div>
+    <div class="read"><b>James C. Scott &mdash; <em>Seeing Like a State</em> (1998)</b><span>Legibility, its uses and its costs. Reads like a thriller about land registries, which is not a sentence written often.</span></div>
+    <div class="read"><b>David Graeber &mdash; <em>Debt: The First 5,000 Years</em> (2011)</b><span>Credit and obligation as older than coinage, and the anthropology of reciprocity. Contested by economic historians on specifics; valuable for the frame.</span></div>
+    <div class="read"><b>Amartya Sen &mdash; <em>Development as Freedom</em> (1999)</b><span>The argument that the right measure of an economy is the set of lives it lets people actually lead.</span></div>
+    <div class="read"><b>Ha-Joon Chang &mdash; <em>Kicking Away the Ladder</em> (2002)</b><span>How the developmental state actually worked, and what rich countries did before recommending otherwise.</span></div>
+  </div>
+</section>
+
+<footer>
+  <p>Compiled as a first-principles map rather than a survey. The six-mechanism framing extends Polanyi&rsquo;s forms of integration; the loop vocabulary is Meadows&rsquo;. Intensities in the systems matrix are qualitative judgements, and reasonable people place several of those cells differently.</p>
+</footer>
+
+</div>
+</main>
+</div>
+
+<script>
+(function(){
+  var links = Array.prototype.slice.call(document.querySelectorAll('.rail-list a'));
+  var map = {};
+  var targets = [];
+  links.forEach(function(a){
+    var id = a.getAttribute('href').slice(1);
+    var el = document.getElementById(id);
+    if(el){ map[id] = a; targets.push(el); }
+  });
+  if(!targets.length) return;
+
+  function setActive(id){
+    links.forEach(function(a){ a.removeAttribute('aria-current'); });
+    if(map[id]) map[id].setAttribute('aria-current','true');
+  }
+  setActive(targets[0].id);
+
+  if('IntersectionObserver' in window){
+    var visible = {};
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ visible[e.target.id] = e.isIntersecting ? e.intersectionRatio : 0; });
+      var best = null, bestTop = Infinity;
+      targets.forEach(function(t){
+        if(visible[t.id] > 0){
+          var top = t.getBoundingClientRect().top;
+          if(top < bestTop){ bestTop = top; best = t.id; }
+        }
+      });
+      if(best) setActive(best);
+    }, { rootMargin: '-72px 0px -55% 0px', threshold: [0, 0.05, 0.5] });
+    targets.forEach(function(t){ io.observe(t); });
+  }
+})();
+</script>
+
+</body></html>
