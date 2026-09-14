@@ -11,7 +11,7 @@ description: Artefacts I've made, for extended thinking and learning
 <div class="writing-archive">
   <header>
     <h1>Artefacts</h1>
-    <p class="page-deck">Things I've made, collected, or left lying around.</p>
+    <p class="page-deck">Artefacts I've made, for extended thinking and learning</p>
   </header>
   {%- for note in artefacts -%}
     {%- assign note_year = note.date | date: "%Y" -%}
