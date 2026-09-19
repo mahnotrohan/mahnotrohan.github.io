@@ -86,7 +86,7 @@ description: Product manager at Meesho, writing about attention, learning, peopl
   </section>
 
   <section class="home-section home-projects" aria-labelledby="projects-title">
-    <b><h2 id="projects-title">Projects</h2></b>
+    <h1 id="projects-title">Projects</h1>
     <div class="home-content-grid">
       <div class="home-content-item">
         <a class="text-link" href="{{ '/orrery' | relative_url }}">Orrery</a>
