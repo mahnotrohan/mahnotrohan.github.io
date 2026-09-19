@@ -3,11 +3,6 @@ layout: notes
 title: A Letter to the Operator
 date: 2026-09-19
 ---
-
-*From myself, to myself.*
-
----
-
 I have been scribbling a lot of anecdotes. Some of them have been useful for making sense of myself and the world. But like any artist, I am prone to becoming a monomaniac, so lost in the details that I forget about the whole picture.
 
 So after a long time deliberating what to write and how, I sat down to finish the painting. 
