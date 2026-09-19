@@ -9,9 +9,7 @@ description: Product manager at Meesho, writing about attention, learning, peopl
 <div class="home-grid">
   <header class="home-intro">
     <h1>Hi, I&rsquo;m Rohan!</h1>
-    <p class="home-lead">This is the space where I put forth my writing, share some of my projects, and a curation of things that I enjoy </p>
-    <p class="home-lead">By day, I’m a product manager at Meesho. </p>
-    <p class="home-lead"> Off the clock, I brew coffee, cook, read memoirs, write, and love to go down rabbit holes chasing my curiosity.</p>
+    <p class="home-lead">I write here, mostly about things I'm thinking about. There's also a bookshelf, some notes on coffee, and a few side projects. Poke around!</p>
     <a class="quiet-link" href="{{ '/about' | relative_url }}">More about me</a>
   </header>
 
