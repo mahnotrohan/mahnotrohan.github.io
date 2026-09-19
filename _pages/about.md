@@ -8,6 +8,7 @@ description: "About Rohan Mahnot."
 
 # About
 
+
 I was born in Bikaner, raised in Delhi, and studied at IIT Kanpur. These days I live in Bangalore and work as a Product Manager at Meesho. Before that, I was a Data Scientist at Microsoft.
 
 Outside work, I cook a lot, brew coffee, read memoirs, and run. I've been running regularly for about five years, though I'm currently taking a pause.
@@ -15,6 +16,7 @@ Outside work, I cook a lot, brew coffee, read memoirs, and run. I've been runnin
 This website is my digital garden.
 
 ## Say hello
+
 
 I'd love to hear from you—about something I wrote, a suggestion you enjoyed, or just to say hi.
 
