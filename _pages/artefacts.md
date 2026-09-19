@@ -2,7 +2,7 @@
 layout: page
 title: Artefacts
 permalink: /artefacts
-description: Artefacts I've made, for extended thinking and learning
+description: Artefacts
 ---
  
 {%- assign artefacts = site.artefacts | sort: "date" | reverse -%}
@@ -11,7 +11,7 @@ description: Artefacts I've made, for extended thinking and learning
 <div class="writing-archive">
   <header>
     <h1>Artefacts</h1>
-    <p class="page-deck">Artefacts I've made, for extended thinking and learning</p>
+    <p class="page-deck">Artefacts I've asked claude to make, that are worth revisting</p>
   </header>
   {%- for note in artefacts -%}
     {%- assign note_year = note.date | date: "%Y" -%}
