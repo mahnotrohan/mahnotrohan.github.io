@@ -11,7 +11,7 @@ description: "About Rohan Mahnot."
     <h1>About</h1>
   </header>
 
-  <section class="about-section" aria-labelledby="about-title">
+  <section class="about-section about-intro">
     <p>I was born in Bikaner, raised in Delhi, and studied at IIT Kanpur. These days I live in Bangalore and work as a Product Manager at Meesho. Before that, I was a Data Scientist at Microsoft.</p>
     <p>Outside work, I cook a lot, brew coffee, read memoirs, and run. I&rsquo;ve been running regularly for about five years, though I&rsquo;m currently taking a pause.</p>
     <p>This website is my digital garden.</p>
