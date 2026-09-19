@@ -28,6 +28,8 @@ Books I've read recently. I tend to gravitate toward memoirs, decision-making, a
 - The Dark Forest - Cixin Liu
 - Death's End - Cixin Liu
 - The Fellowship of the Ring - John Ronald Reuel Tolkien
+- The Two Towers - JRR Tolkien
+- Only Dull People Are Brilliant at Breakfast - Oscar Wilde
 
 ## 2025
 
