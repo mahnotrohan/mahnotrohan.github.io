@@ -24,7 +24,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&display=swap">
 
-  {%- assign meta_description = page.description | default: page.excerpt | default: "Notes on attention, learning, people, and work by Rohan Mahnot." -%}
+  {%- assign meta_description = page.excerpt | default: "Notes on attention, learning, people, and work by Rohan Mahnot." -%}
   <meta name="description" content="{{ meta_description | strip_html | strip_newlines | truncate: 160 | escape }}">
 
   <meta property="og:site_name" content="{{ site.title }}">

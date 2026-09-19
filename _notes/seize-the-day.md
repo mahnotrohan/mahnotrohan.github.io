@@ -2,8 +2,6 @@
 layout: notes
 title: Seize the day (1/3)
 date: 2026-05-11
-tags: [time, attention]
-description: "Is life a long game or a short one? Most of us toggle between the two, and pay for the toggling."
 series: Time & Attention
 ---
 Is life a long game or a short one? A lot of us toggle between "life is short, live it now" and "play the long game, let it compound." Both are useful. Neither, by itself, is enough.

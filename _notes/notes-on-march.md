@@ -2,8 +2,6 @@
 layout: notes
 title: Notes on March
 date: 2026-03-29
-tags: [time]
-description: "A month of love, commitment, moving forward, and getting back up. Notes from March."
 ---
 It’s March already
 

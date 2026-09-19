@@ -2,8 +2,6 @@
 layout: notes
 title: Cost of Autonomy
 date: 2026-04-18
-tags: [discipline, time]
-description: "To be an adult is to live inside a continuum of decisions. Each one costs something."
 ---
 To be an adult is to live inside a continuum of decisions; small, large, and a few that quietly compound over the years.
 

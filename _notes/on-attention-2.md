@@ -2,8 +2,6 @@
 layout: notes
 title: On Attention (2/3)
 date: 2026-05-18
-tags: [attention, time]
-description: "Time isn't the scarce thing. Attention is - and it gets rationed whether you choose to or not."
 series: Time & Attention
 ---
 We all want to spend our time well, especially on the things that keep asking for it
