@@ -7,20 +7,23 @@ description: "About Rohan Mahnot."
 ---
 
 <div class="about-page">
-  <header>
+  <header class="about-header">
     <h1>About</h1>
-    <div class="about-story">
-      <p>I was born in Bikaner, raised in Delhi, and studied at IIT Kanpur. These days I live in Bangalore and work as a Product Manager at Meesho. Before that, I was a Data Scientist at Microsoft.</p>
-      <p>Outside work, I cook a lot, brew coffee, read memoirs, and run. I&rsquo;ve been running regularly for about five years, though I&rsquo;m currently taking a pause.</p>
-      <p>This website is my digital garden.</p>
-    </div>
   </header>
-  <h1>Now</h1>
-  <i>Last updated on 19th September</i>
-  <br>
-  <p>I took a month long break from work in August, to get my ACL reconstruction surgery.</p>
-  I've been reading a lot of fiction, and my latest favorite is the three body problem. 
-  I've also been playing a lot of chess, and poker. These games are very fun, and to my amusement, there's a lot to learn about strategy and risk from both the games.
+
+  <section class="about-section" aria-labelledby="about-title">
+    <p>I was born in Bikaner, raised in Delhi, and studied at IIT Kanpur. These days I live in Bangalore and work as a Product Manager at Meesho. Before that, I was a Data Scientist at Microsoft.</p>
+    <p>Outside work, I cook a lot, brew coffee, read memoirs, and run. I&rsquo;ve been running regularly for about five years, though I&rsquo;m currently taking a pause.</p>
+    <p>This website is my digital garden.</p>
+  </section>
+
+  <section class="about-section" aria-labelledby="now-title">
+    <h2 id="now-title">Now</h2>
+    <p class="about-updated">Last updated on {{ page.updated | date: "%-d %B %Y" }}</p>
+    <p>I took a month-long break from work in August, to get my ACL reconstruction surgery.</p>
+    <p>I&rsquo;ve been reading a lot of fiction, and my latest favourite is <em>The Three-Body Problem</em>.</p>
+    <p>I&rsquo;ve also been playing a lot of chess and poker. These games are very fun, and to my amusement, there&rsquo;s a lot to learn about strategy and risk from both.</p>
+  </section>
 
   <section class="about-section" aria-labelledby="say-hello-title">
     <h2 id="say-hello-title">Say hello</h2>
@@ -33,6 +36,3 @@ description: "About Rohan Mahnot."
     </div>
   </section>
 </div>
-
-
-Can you convert this into markdown syntax
