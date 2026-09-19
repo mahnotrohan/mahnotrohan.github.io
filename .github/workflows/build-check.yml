@@ -66,8 +66,6 @@ jobs:
           assert len(d) > 25, 'search index looks too small'
           leaked = [x['url'] for x in d if 'notes-in-transit' in x['url'] or '/letters/' in x['url']]
           assert not leaked, 'unlisted pages leaked into search: %s' % leaked
-          untagged = [x['title'] for x in d if x['kind'] == 'writing' and not x['tags']]
-          assert not untagged, 'writing without tags: %s' % untagged
           print('search index OK, no unlisted pages leaked')
           "
 

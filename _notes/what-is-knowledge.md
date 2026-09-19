@@ -3,8 +3,6 @@ layout: notes
 title: What does it mean to be Knowledgable
 date: 2026-02-23
 permalink: /what-is-knowledge/
-tags: [learning, thinking]
-description: "I used to think the path to great outcomes was a straight line. On what knowing something actually means."
 ---
 I used to think that the path to great outcomes looked like this 
 

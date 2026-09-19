@@ -3,7 +3,6 @@ layout: page
 title: About
 permalink: /about
 updated: 2026-09-19
-description: "About Rohan Mahnot."
 ---
 
 <div class="about-page">

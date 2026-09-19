@@ -3,7 +3,6 @@ layout: page
 title: Home
 id: home
 permalink: /
-description: Product manager at Meesho, writing about attention, learning, people, and work.
 ---
 
 <div class="home-grid">

@@ -2,7 +2,6 @@
 layout: page
 title: Writing
 permalink: /blog
-description: Notes on attention, systems, work, and the ordinary things that teach me.
 ---
 
 {%- assign notes = site.notes | sort: "date" | reverse -%}

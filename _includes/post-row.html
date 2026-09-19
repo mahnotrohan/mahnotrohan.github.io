@@ -5,7 +5,6 @@
   <span class="writing-marker" aria-hidden="true"></span>
   <span class="writing-copy">
     <span class="writing-title">{{ n.title }}</span>
-    {%- if n.description %}<span class="writing-description">{{ n.description }}</span>{% endif -%}
   </span>
   <span class="writing-meta"><time datetime="{{ n.date | date_to_xmlschema }}">{{ n.date | date: "%d %b" }}</time> &middot; {{ rt }} min</span>
 </a>

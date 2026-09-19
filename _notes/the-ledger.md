@@ -2,8 +2,6 @@
 layout: notes
 title: The Ledger
 date: 2026-07-30
-tags: [people]
-description: "A conflict you suppress translates into resentment, it doesn't differentiate disagreement and dismissal."
 ---
 A conflict you suppress (or repress) has inertia, and it there stays until you process it. Over time it turns into resentment, a sense of unfair treatment.
 Resentment blurs the difference between disagreement and dismissal. Someone disagrees with your plan, and you read it as: I don't matter to them.

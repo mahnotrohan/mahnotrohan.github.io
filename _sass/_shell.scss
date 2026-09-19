@@ -459,15 +459,6 @@
   letter-spacing: -0.01em;
 }
 
-.writing-description {
-  display: block;
-  max-width: 63ch;
-  margin-top: 5px;
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.58;
-}
-
 .writing-meta {
   padding-top: 2px;
   color: var(--muted);
@@ -514,14 +505,6 @@
   font-size: 37px;
   line-height: 1.12;
   letter-spacing: -0.04em;
-}
-
-.note-hook {
-  max-width: 55ch;
-  margin: 17px 0 0;
-  color: var(--muted);
-  font-size: 15px;
-  line-height: 1.62;
 }
 
 .p-meta,

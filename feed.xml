@@ -19,8 +19,6 @@ sitemap: false
       <link>{{ site.url }}{{ note.url }}</link>
       <guid isPermaLink="true">{{ site.url }}{{ note.url }}</guid>
       <pubDate>{{ note.date | date_to_rfc822 }}</pubDate>
-      {%- if note.description %}<description>{{ note.description | xml_escape }}</description>{% endif -%}
-      {%- for t in note.tags %}<category>{{ t | xml_escape }}</category>{% endfor -%}
     </item>
     {%- endunless -%}
     {%- endfor -%}

@@ -2,8 +2,6 @@
 layout: notes
 title: Thoughts On Forever
 date: 2025-02-19
-tags: [time]
-description: "Not in a dramatic way. Just noticing how little of anything is actually permanent."
 ---
 
 Lately, I’ve been thinking about forever - not in some big, dramatic way, just noticing how things come and go, like clouds drifting across the sky.

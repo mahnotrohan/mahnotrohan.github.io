@@ -2,7 +2,6 @@
 layout: page
 title: Orrery
 permalink: /orrery
-description: An orrery is a model that shows how planets move. This one shows how ideas connect.
 ---
 
 {%- assign first_constellation = site.data.orrery | where: "thread", "uncertainty" | first -%}
