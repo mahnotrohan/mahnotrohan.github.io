@@ -16,27 +16,6 @@ description: "About Rohan Mahnot."
     </div>
   </header>
 
-<!-- <section class="about-section" aria-labelledby="right-now-title"> -->
-    <!-- <div class="section-heading-row"> -->
-      <!-- <h2 id="right-now-title">Right now</h2> -->
-      <!-- <span class="small-meta">Updated 04 Aug 2026</span> -->
-    <!-- </div> -->
-    <!-- <div class="now-line">
-      <time datetime="2026-08-04">August 2026</time>
-      <p>Product work at Meesho, learning to dial in espresso, reading memoirs, and taking a break from running.</p>
-    </div> -->
-  <!-- </section> -->
-
-  <!-- <section class="about-section" aria-labelledby="outside-work-title">
-    <h2 id="outside-work-title">Outside work</h2>
-    <div class="outside-work-grid">
-      <div class="outside-work-item"><h3>Coffee</h3><p>Learning espresso and logging recipes in Bloom.</p></div>
-      <div class="outside-work-item"><h3>Cooking</h3><p>I love to cook, more than I love to eat.</p></div>
-      <div class="outside-work-item"><h3>Reading</h3><p>Mostly memoirs, with everything else on the shelf.</p></div>
-      <div class="outside-work-item"><h3>Running</h3><p>Five years of running, currently paused.</p></div>
-    </div>
-  </section> -->
-
   <section class="about-section" aria-labelledby="say-hello-title">
     <h2 id="say-hello-title">Say hello</h2>
     <p class="hello-copy">I&rsquo;d love to hear from you&mdash;about something I wrote, a suggestion you enjoyed, or just to say hi.</p>
