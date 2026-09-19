@@ -68,7 +68,7 @@ description: Product manager at Meesho, writing about attention, learning, peopl
   </section>
 
   <section class="home-section home-interests" id="interests" aria-labelledby="interests-title">
-    <h2 id="interests-title">Interests</h2>
+    <h1 id="interests-title">Interests</h1>
     <div class="home-content-grid">
       <div class="home-content-item">
         <a class="text-link" href="{{ '/thoughts/on-coffee' | relative_url }}">Coffee</a>
@@ -86,7 +86,7 @@ description: Product manager at Meesho, writing about attention, learning, peopl
   </section>
 
   <section class="home-section home-projects" aria-labelledby="projects-title">
-    <h2 id="projects-title">Projects</h2>
+    <b><h2 id="projects-title">Projects</h2></b>
     <div class="home-content-grid">
       <div class="home-content-item">
         <a class="text-link" href="{{ '/orrery' | relative_url }}">Orrery</a>
