@@ -8,9 +8,9 @@ description: Product manager at Meesho, writing about attention, learning, peopl
 
 <div class="home-grid">
   <header class="home-intro">
-    <h1>Hello, I&rsquo;m Rohan.</h1>
-    <p class="home-lead">Product manager at Meesho, previously a data scientist at Microsoft. I live in Bangalore.</p>
-    <p class="home-personal">Off the clock, I brew coffee, cook, read memoirs, write, and often go down rabbit holes.</p>
+    <h1>Hi, I&rsquo;m Rohan!</h1>
+    <p class="home-lead">I'm a Product manager at Meesho. I live in Bangalore.</p>
+    <p class="home-personal">Off the clock, I brew coffee, cook, read memoirs, write, and love to go down rabbit holes chasing my curiosity.</p>
     <a class="quiet-link" href="{{ '/about' | relative_url }}">More about me</a>
   </header>
 
@@ -45,7 +45,7 @@ description: Product manager at Meesho, writing about attention, learning, peopl
     <div class="thread-options" role="group" aria-label="Choose a recurring question">
       <button class="thread-option" type="button" data-home-thread="control" aria-pressed="true">
         <span class="thread-knot" aria-hidden="true"></span>
-        <span class="thread-label">Flukes</span>
+        <span class="thread-label">Meaning Making</span>
       </button>
       <button class="thread-option" type="button" data-home-thread="identity" aria-pressed="false">
         <span class="thread-knot" aria-hidden="true"></span>
@@ -53,18 +53,18 @@ description: Product manager at Meesho, writing about attention, learning, peopl
       </button>
       <button class="thread-option" type="button" data-home-thread="meaning" aria-pressed="false">
         <span class="thread-knot" aria-hidden="true"></span>
-        <span class="thread-label">Meaning Making</span>
+        <span class="thread-label">Systems Thinking</span>
       </button>
       <button class="thread-option" type="button" data-home-thread="tools" aria-pressed="false">
         <span class="thread-knot" aria-hidden="true"></span>
-        <span class="thread-label">Systems and tools</span>
+        <span class="thread-label">Risk Taking</span>
       </button>
       <button class="thread-option" type="button" data-home-thread="making" aria-pressed="false">
         <span class="thread-knot" aria-hidden="true"></span>
-        <span class="thread-label">Building & Tending</span>
+        <span class="thread-label">Relationships</span>
       </button>
     </div>
-    <p class="thread-question" aria-live="polite">How much of what happens to us is within our control&mdash;and how much is chance?</p>
+    <!-- <p class="thread-question" aria-live="polite">How much of what happens to us is within our control&mdash;and how much is chance?</p> -->
   </section>
 
   <section class="home-section home-interests" id="interests" aria-labelledby="interests-title">
@@ -75,12 +75,12 @@ description: Product manager at Meesho, writing about attention, learning, peopl
         <p>Brewing, learning and drinking lots of coffee.</p>
       </div>
       <div class="home-content-item">
-        <a class="text-link" href="{{ '/bookshelf' | relative_url }}">Shelf</a>
-        <p>Memoirs, decision-making, and fiction that shifts the frame.</p>
+        <a class="text-link" href="{{ '/bookshelf' | relative_url }}">Bookshelf</a>
+        <p>Lots of Memoirs, fiction, and business books. </p>
       </div>
       <div class="home-content-item">
         <a class="text-link" href="{{ '/thoughts/on-food' | relative_url }}">Food</a>
-        <p>Cooking, meals, and what ends up on the plate.</p>
+        <p>Joy of eating, and craft of cooking</p>
       </div>
     </div>
   </section>
@@ -90,19 +90,19 @@ description: Product manager at Meesho, writing about attention, learning, peopl
     <div class="home-content-grid">
       <div class="home-content-item">
         <a class="text-link" href="{{ '/orrery' | relative_url }}">Orrery</a>
-        <p>Constellations of connected and unfinished ideas.</p>
+        <p>Constellations of concepts and ideas.</p>
       </div>
       <div class="home-content-item">
         <a class="text-link" href="https://bloom.rohanmahnot.space">Bloom</a>
-        <p>A coffee recipe builder and shared brewing library.</p>
+        <p>A coffee brewing library.</p>
       </div>
       <div class="home-content-item">
         <a class="text-link" href="https://poker-dojo-xi.vercel.app">Poker Dojo</a>
-        <p>Learn poker, with the math behind it</p>
+        <p>A game I made to play poker</p>
       </div>
       <div class="home-content-item">
         <a class="text-link" href="https://vitals-app-v2.vercel.app">Vitals App</a>
-        <p>An extension of health tracking, using long term data, providing more insights</p>
+        <p>An exploration of a different kind of health tracking software.</p>
       </div>
     </div>
   </section>
