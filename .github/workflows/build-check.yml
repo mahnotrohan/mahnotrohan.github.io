@@ -36,7 +36,6 @@ jobs:
           for f in \
             _site/index.html \
             _site/blog.html \
-            _site/now.html \
             _site/thoughts.html \
             _site/about.html \
             _site/uses-this.html \
