@@ -37,10 +37,14 @@ defaults:
       path: "_notes/*.md"
     values:
       layout: "notes"
+  # Artefacts are self-contained HTML documents: they ship their own
+  # <!doctype>, <head> and styles, so they get no site layout at all.
+  # `none` (not `null`) is what actually disables it - a nil value reads as
+  # "unset" during the defaults merge and the **/* default wins instead.
   - scope:
       path: "_artefacts/*.html"
     values:
-      layout: null
+      layout: none
   # Notes In Transit and the letters behind it stay unlisted: reachable by
   # direct URL only, never crawled, indexed, or included in search/RSS.
   - scope:
