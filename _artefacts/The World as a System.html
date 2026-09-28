@@ -1,0 +1,509 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>The World as a System</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..600&family=Hanken+Grotesk:ital,wght@0,300..600;1,300..600&display=swap">
+<style>
+  :root{
+    --ink:#0f0d14;          /* the shadow */
+    --dusk:#2a2438;         /* first grey of morning */
+    --dawn:#f1e8da;         /* the light */
+    --dawn-deep:#e4d7c2;
+    --ember:#e0a458;        /* the self, a small warm light */
+    --ember-deep:#b8742a;
+    --violet:#7a6797;       /* flows */
+    --fg:#ece6da;           /* driven by JS as light rises */
+    --fg-dim:#a9a1a3;
+    --bg:#0f0d14;
+    --light:0;
+    --display:"Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+    --body:"Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;
+    --mono:"Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;   /* utility labels: letterspaced caps */
+    color-scheme: light;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} }
+  body{
+    margin:0; background:var(--bg); color:var(--fg);
+    font-family:var(--body); font-size:1.0625rem; line-height:1.6;
+        padding-inline:clamp(16px, 5vw, 48px);
+    transition:background-color .2s linear, color .2s linear;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit}
+  ::selection{background:var(--ember);color:var(--ink)}
+
+  /* ---------- ambient canvas ---------- */
+  #sky{position:fixed; inset:0; width:100%; height:100%; z-index:0; pointer-events:none; opacity:1; transition:opacity .4s}
+  .narrative{position:relative; z-index:1}
+
+  /* ---------- dawn gauge ---------- */
+  .gauge{position:fixed; left:max(10px, calc(5vw - 30px)); top:50%; transform:translateY(-50%); width:2px; height:34vh; background:rgba(255,255,255,.12); z-index:2; border-radius:2px; overflow:hidden}
+  .gauge i{position:absolute; left:0; right:0; bottom:0; height:calc(var(--light)*100%); background:linear-gradient(to top, var(--ember-deep), var(--ember)); display:block}
+  .gauge span{position:absolute; left:10px; bottom:-1.6em; font:500 .62rem var(--mono); letter-spacing:.14em; text-transform:uppercase; color:var(--fg-dim); white-space:nowrap}
+  @media (max-width:720px){ .gauge{display:none} }
+
+  /* ---------- typography ---------- */
+  .eyebrow{font:500 .7rem var(--mono); letter-spacing:.12em; text-transform:uppercase; color:var(--fg-dim); margin:0 0 1.25rem}
+  h1,h2,h3{font-family:var(--display); font-weight:500; text-wrap:balance; margin:0}
+  h1{font-size:clamp(2.6rem, 7vw, 5.4rem); line-height:1; letter-spacing:-.02em;}
+  h1 em{font-style:normal; font-weight:300; color:var(--ember)}
+  h2{font-size:clamp(1.9rem, 4vw, 2.9rem); line-height:1.1; letter-spacing:-.012em;}
+  h3{font-size:1.35rem; line-height:1.25}
+  p{margin:0}
+  .measure{max-width:34rem}
+  .lede{font-size:clamp(1.15rem, 1.6vw, 1.35rem); line-height:1.5; font-family:var(--display); font-weight:300}
+
+  /* ---------- hero ---------- */
+  .hero{min-height:82vh; display:flex; flex-direction:column; justify-content:center; padding-block:12vh 6vh; gap:2rem}
+  .hero .who{font-family:var(--body); font-style:italic; font-weight:300; font-size:1.15rem; color:var(--fg-dim); max-width:36rem; text-wrap:balance}
+
+  /* ---------- chapters ---------- */
+  .chapter{padding-block:clamp(5rem, 16vh, 11rem); display:grid; gap:1.4rem}
+  .chapter p + p{margin-top:.6rem}
+  .chapter .aside{font-size:.95rem; color:var(--fg-dim); font-style:italic; font-family:var(--body)}
+
+  .axioms{display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:1.5rem; max-width:60rem; margin-top:1rem}
+  .axiom{border-top:1px solid color-mix(in oklab, var(--fg) 30%, transparent); padding-top:1.25rem; display:grid; gap:.75rem; align-content:start}
+  .axiom .tag{font:500 .66rem var(--mono); letter-spacing:.14em; text-transform:uppercase; color:var(--ember)}
+  .axiom svg{width:100%; max-width:220px; height:auto; display:block; color:var(--fg)}
+  .axiom p{font-size:.98rem; color:var(--fg)}
+  .axiom .depth{font:500 .66rem var(--mono); letter-spacing:.1em; text-transform:uppercase; color:var(--fg-dim)}
+
+  .threshold{padding-block:clamp(5rem, 16vh, 11rem) 4rem}
+  .threshold h2{margin-bottom:1.25rem}
+  .threshold .seven{display:flex; flex-wrap:wrap; gap:.4rem .9rem; margin-top:1.5rem; font:500 .7rem var(--mono); letter-spacing:.1em; text-transform:uppercase; color:var(--fg-dim)}
+  .threshold .seven b{font-weight:500; color:var(--ember)}
+
+  /* ---------- the map ---------- */
+  .self{position:relative; z-index:1; background:var(--dawn); color:#1f1a22; margin-inline:calc(-1 * clamp(16px, 5vw, 48px)); padding-inline:clamp(16px, 5vw, 48px); padding-block:5rem 6rem; --fg:#1f1a22; --fg-dim:#6f6572}
+  .self .head{display:flex; flex-wrap:wrap; justify-content:space-between; align-items:end; gap:1rem 3rem; margin-bottom:2.5rem}
+  .self .head p{max-width:28rem; color:var(--fg-dim); font-size:.98rem}
+  .map-grid{display:grid; grid-template-columns:minmax(0, 1.25fr) minmax(300px, 400px); gap:2.5rem; align-items:start}
+  @media (max-width:900px){ .map-grid{grid-template-columns:1fr} }
+  .map-wrap{position:sticky; top:1rem}
+  @media (max-width:900px){ .map-wrap{position:static} }
+  svg.map{width:100%; height:auto; display:block; max-width:760px; margin-inline:auto}
+  .map .flow{fill:none; stroke:var(--violet); stroke-opacity:.35; stroke-width:1.2; stroke-dasharray:3 9; animation:flow 6s linear infinite; transition:stroke-opacity .25s, stroke-width .25s}
+  .map .flow.cross{stroke-dasharray:2 12; animation-duration:11s}
+  .map .flow.lit{stroke-opacity:.95; stroke-width:1.8}
+  .map .flow.dimmed{stroke-opacity:.08}
+  @keyframes flow{to{stroke-dashoffset:-120}}
+  @media (prefers-reduced-motion:reduce){ .map .flow{animation:none} }
+  .node{cursor:pointer; transition:transform .25s}
+  .node:focus{outline:none}
+  .node:focus-visible .ring{stroke:var(--ember-deep); stroke-width:3}
+  .node .disc{fill:#faf4ea; stroke:#c9b99f; stroke-width:1.2; transition:fill .25s, stroke .25s}
+  .node .ring{fill:none; stroke:transparent; stroke-width:2; transition:stroke .25s}
+  .node .num{font:500 11px var(--mono); fill:#8b7f6a; letter-spacing:.1em}
+  .node .name{font-family:var(--display); font-size:15px; font-weight:500; fill:#1f1a22}
+  .node .sub{font-family:var(--body); font-size:11px; fill:#6f6572; font-style:italic}
+  .node:hover .disc{fill:#fff8ec; stroke:var(--ember-deep)}
+  .node.on .disc{fill:#fff3dc; stroke:var(--ember-deep)}
+  .node.on .ring{stroke:var(--ember)}
+  .node.on .num{fill:var(--ember-deep)}
+  .core .glow{fill:url(#emberGlow)}
+  .core .disc{fill:url(#emberFill); stroke:var(--ember-deep); stroke-width:1}
+  .core text{font-family:var(--display); fill:#2a1b0a; text-anchor:middle}
+  .core .t1{font-size:26px; font-weight:300; letter-spacing:-.01em}
+  .core .t2{font:500 9px var(--mono); letter-spacing:.16em; text-transform:uppercase; fill:#6b4a1e}
+  .core{cursor:pointer}
+  .boundary{fill:none; stroke:#c9b99f; stroke-width:1; stroke-dasharray:1 6}
+  .legend{font:500 10px var(--mono); fill:#8b7f6a; letter-spacing:.12em; text-transform:uppercase}
+
+  /* ---------- pillar panel ---------- */
+  .panel{background:#faf4ea; border:1px solid #dccfb9; padding:1.75rem 1.75rem 1.5rem; display:grid; gap:1.1rem; min-height:420px; box-shadow:0 30px 60px -40px rgba(60,40,10,.35)}
+  .panel .eyebrow{color:var(--ember-deep); margin:0}
+  .panel h3{font-size:1.7rem; line-height:1.15; letter-spacing:-.01em;}
+  .panel .body{display:grid; gap:.75rem; font-size:.98rem; max-width:32rem}
+  .panel .body p{color:#2b2430}
+  .panel .body p.q{font-family:var(--body); font-style:italic; font-size:1.12rem; color:#5a3a12; border-left:2px solid var(--ember); padding-left:.9rem}
+  .panel .notes{margin:0; padding:0; list-style:none; display:grid; gap:.45rem; border-top:1px solid #e6dac6; padding-top:1rem}
+  .panel .notes li{font-size:.9rem; color:#3d3540; padding-left:1.1rem; position:relative}
+  .panel .notes li::before{content:""; position:absolute; left:0; top:.65em; width:.45rem; height:1px; background:var(--ember-deep)}
+  .panel .notes .k{font:500 .64rem var(--mono); letter-spacing:.14em; text-transform:uppercase; color:#8b7f6a; padding-left:0; margin-bottom:.15rem}
+  .panel .notes .k::before{display:none}
+  .panel .links{font:500 .66rem var(--mono); letter-spacing:.1em; text-transform:uppercase; color:#8b7f6a}
+  .panel .links button{all:unset; cursor:pointer; color:var(--ember-deep); border-bottom:1px solid currentColor; margin-inline:.15rem}
+  .panel .links button:focus-visible{outline:2px solid var(--ember-deep); outline-offset:2px}
+  .nav{display:flex; justify-content:space-between; gap:1rem; border-top:1px solid #e6dac6; padding-top:1rem}
+  .nav button{all:unset; cursor:pointer; font:500 .7rem var(--mono); letter-spacing:.12em; text-transform:uppercase; color:#5a4a30; padding:.4rem 0}
+  .nav button:hover{color:var(--ember-deep)}
+  .nav button:focus-visible{outline:2px solid var(--ember-deep); outline-offset:3px}
+  .fade{animation:fade .35s ease}
+  @keyframes fade{from{opacity:0; transform:translateY(4px)} to{opacity:1; transform:none}}
+  @media (prefers-reduced-motion:reduce){ .fade{animation:none} }
+
+  /* ---------- close ---------- */
+  .close{position:relative; z-index:1; background:var(--dawn); color:#1f1a22; margin-inline:calc(-1 * clamp(16px, 5vw, 48px)); padding-inline:clamp(16px, 5vw, 48px); padding-block:2rem 7rem; --fg:#1f1a22; --fg-dim:#6f6572}
+  .close .inner{border-top:1px solid #d5c7ad; padding-top:3.5rem; display:grid; gap:1.5rem; max-width:44rem}
+  .close h2{font-weight:300}
+  .close h2 b{font-weight:500; color:var(--ember-deep)}
+  .close p{max-width:34rem; color:#3d3540}
+  .close .sign{font:500 .66rem var(--mono); letter-spacing:.14em; text-transform:uppercase; color:#8b7f6a}
+</style>
+
+<canvas id="sky" aria-hidden="true"></canvas>
+<div class="gauge" aria-hidden="true"><i></i><span>dawn</span></div>
+
+<main class="narrative">
+  <header class="hero">
+    <p class="eyebrow">A worldview, written on the way out of the dark</p>
+    <h1>The world is a huge, <em>spectacularly</em> huge system.</h1>
+    <p class="lede measure">Like any system, it has its stocks and flows. This is what it looks like to someone who spent a long time in the shadows, can finally think, is scared, and has decided to step out anyway.</p>
+    <p class="who">Scroll. The light comes up as you go. Everything here was true in the dark, too. It was just harder to see.</p>
+  </header>
+
+  <section class="chapter measure" data-stage="1">
+    <p class="eyebrow">Boundary</p>
+    <h2>You have to draw a boundary.</h2>
+    <p>The universe is unimaginatively big. A system only becomes something you can think about once you decide what is inside it and what is out. Nothing in the world hands you that line. You draw it.</p>
+    <p class="aside">The circle forming behind these words is not the world. It is the part you chose to look at.</p>
+  </section>
+
+  <section class="chapter measure" data-stage="2">
+    <p class="eyebrow">Influence</p>
+    <h2>Everything in this world influences everything.</h2>
+    <p>Which is why the notion of future speculation, and of control, is an illusion. The threads between things are too many to trace, and they keep moving while you are counting them.</p>
+  </section>
+
+  <section class="chapter measure" data-stage="3">
+    <p class="eyebrow">Projection</p>
+    <h2>But what you project into the world influences it.</h2>
+    <p>A lot more than you think. In more places than you notice. And long before you get to see it.</p>
+    <p class="aside">Watch the rings leaving the small warm point at the centre. They travel further than the light does.</p>
+  </section>
+
+  <section class="chapter" data-stage="4">
+    <div class="measure">
+      <p class="eyebrow">Two axioms</p>
+      <h2>Two principles drive almost everything.</h2>
+      <p style="margin-top:1rem">They are close to axiomatic. It is very important to understand both, and the second more deeply than the first.</p>
+    </div>
+    <div class="axioms">
+      <article class="axiom">
+        <span class="tag">I · Theory of constraints</span>
+        <svg viewBox="0 0 220 90" role="img" aria-label="Many flows entering a single narrow gate; the gate sets the rate of the whole">
+          <g fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity=".75">
+            <path d="M4 12 C60 12, 70 40, 104 44"/><path d="M4 30 C60 30, 70 42, 104 45"/><path d="M4 48 C60 48, 70 46, 104 46"/><path d="M4 66 C60 66, 70 50, 104 47"/><path d="M4 84 C60 84, 70 54, 104 48"/>
+            <path d="M116 46 C150 46, 170 46, 216 46" stroke-dasharray="3 6"/>
+          </g>
+          <rect x="104" y="36" width="12" height="20" fill="#e0a458"/>
+          <text x="110" y="76" text-anchor="middle" font-family="Hanken Grotesk, Arial, sans-serif" font-size="8" letter-spacing="1.5" fill="currentColor" opacity=".7">THE GATE SETS THE RATE</text>
+        </svg>
+        <p>Any system moves only as fast as its narrowest point. Find the constraint and you have found where the system actually lives. A great deal of the political and economic shape of the world is this principle wearing different clothes.</p>
+        <span class="depth">Forms the world outside</span>
+      </article>
+      <article class="axiom">
+        <span class="tag">II · Vigilance against self-preservation</span>
+        <svg viewBox="0 0 220 90" role="img" aria-label="An eye at the centre of concentric rings, watching outward for threat">
+          <g fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity=".75">
+            <circle cx="110" cy="45" r="40" stroke-dasharray="2 5"/><circle cx="110" cy="45" r="27" stroke-dasharray="2 5" stroke-opacity=".5"/>
+            <path d="M84 45 Q110 24 136 45 Q110 66 84 45 Z"/>
+          </g>
+          <circle cx="110" cy="45" r="6" fill="#e0a458"/>
+          <text x="110" y="86" text-anchor="middle" font-family="Hanken Grotesk, Arial, sans-serif" font-size="8" letter-spacing="1.5" fill="currentColor" opacity=".7">A GUARD THAT NEVER CLOCKS OFF</text>
+        </svg>
+        <p>The mind is built to keep you alive, and it will trade almost anything to do it, including your growth, your honesty, and your ability to see clearly. The guard is useful. The guard also has to be watched.</p>
+        <span class="depth">Models the brain within · understand this one more deeply</span>
+      </article>
+    </div>
+  </section>
+
+  <section class="threshold measure" data-stage="5">
+    <p class="eyebrow">Self</p>
+    <h2>The study of the human mind is the study of a wedge of something bigger.</h2>
+    <p>That bigger thing is the concept of self. To understand it, and the society you live in, there are seven things to understand. Not as a checklist. As a system: each one feeds the others.</p>
+    <p class="seven"><b>1</b> Attention <b>2</b> Relationships <b>3</b> Growth <b>4</b> Health <b>5</b> Work <b>6</b> Thinking <b>7</b> Meaning</p>
+  </section>
+</main>
+
+<section class="self" id="self" aria-labelledby="mapTitle">
+  <div class="head">
+    <div>
+      <p class="eyebrow">The system of a self</p>
+      <h2 id="mapTitle">Seven stocks. Many flows.</h2>
+    </div>
+    <p>Choose a pillar to read it. The dotted lines are flows: hover a pillar to see what it feeds and what feeds it. None of them stands alone, which is the point.</p>
+  </div>
+
+  <div class="map-grid">
+    <div class="map-wrap">
+      <svg class="map" id="map" viewBox="0 0 800 800" role="group" aria-label="Interactive map of the seven pillars of self around a central self">
+        <defs>
+          <radialGradient id="emberGlow"><stop offset="0" stop-color="#e0a458" stop-opacity=".55"/><stop offset=".6" stop-color="#e0a458" stop-opacity=".12"/><stop offset="1" stop-color="#e0a458" stop-opacity="0"/></radialGradient>
+          <radialGradient id="emberFill" cx=".4" cy=".35"><stop offset="0" stop-color="#ffe6b8"/><stop offset="1" stop-color="#e0a458"/></radialGradient>
+        </defs>
+        <circle class="boundary" cx="400" cy="400" r="380"/>
+        <text class="legend" x="400" y="34" text-anchor="middle">THE BOUNDARY YOU DREW</text>
+        <g id="flows"></g>
+        <g class="core" id="core" tabindex="0" role="button" aria-label="Self, the centre of the map">
+          <circle class="glow" cx="400" cy="400" r="150"/>
+          <circle class="disc" cx="400" cy="400" r="66"/>
+          <text class="t1" x="400" y="404">self</text>
+          <text class="t2" x="400" y="424">a pattern, made known</text>
+        </g>
+        <g id="nodes"></g>
+      </svg>
+    </div>
+
+    <aside class="panel" id="panel" aria-live="polite"></aside>
+  </div>
+</section>
+
+<section class="close">
+  <div class="inner">
+    <p class="eyebrow">Meaning making, and luck</p>
+    <h2>The meaning of life is what you give it. <b>And once you assign it one, you figure out the rest.</b></h2>
+    <p>A lot of life is random, and your fortune is out of your hands. But you can widen the surface that luck can land on. Expose yourself to more things. Do more things. Travel. Put yourself out there, in the world. The more you expose yourself, the higher your chances. Be safe, look after yourself, and go.</p>
+    <p class="sign">Out of the shadows · scared · going anyway</p>
+  </div>
+</section>
+
+<script>
+(function(){
+  /* ----------------------------------------------------------
+     Pillars: the seven stocks of a self
+  ---------------------------------------------------------- */
+  const P = [
+    { n:1, key:'attention', short:'scarce resource', name:'Attention', sub:'the scarce resource',
+      title:'Time is equal. Attention is not.',
+      body:[
+        {q:'When the time you have is the same as everyone else, it is your attention that is the constraint.'},
+        'Time is a resource that is equally and equitably available to a large chunk of us. The terminally ill and interstellar travellers have it different, but this essay is not for them.',
+        'Every system has a few resource types that are vital for its sustenance and subsistence. Food, water and air for your body. Capital for an economy. And, generally speaking, attention. It is a super critical resource.',
+        'Learning the allocation of attention is a muscle, and it helps you in more ways than one throughout your life.'
+      ],
+      notes:null,
+      feeds:[6,5], fedBy:[4] },
+    { n:2, key:'relationships', short:'other people', name:'Relationships', sub:'and other people',
+      title:'To be human is to be known.',
+      body:[
+        {q:'Identity, which is a pattern of self, gets its meaning from the people who are viewing it. Ironic, isn’t it.'},
+        'To live life means to live with people in it. You can’t live without people. Don’t trust someone who says they can: they are ill, heartbroken, or sent by Skynet.',
+        'Treat the people in your life, and your relationships with them, as a garden. A garden that requires building and tending. Some will need more, some will stay with you for long, some will leave before you know it. Some nourish you, some bring beauty, and all of them will surprise you.',
+        'Always aim for a healthy garden that keeps growing and keeps surprising you. Don’t let age snatch away the surprises of human relationships. Over time you may have to do a lot more tending, or a lot more building. Don’t worry about the payoffs. Do what you can. The rest will follow.'
+      ],
+      notes:null,
+      feeds:[7,3], fedBy:[5] },
+    { n:3, key:'growth', short:'openness & friction', name:'Growth', sub:'openness, flexibility, problem solving',
+      title:'Follow friction. Sit with discomfort.',
+      body:[
+        'The world is an extremely complex system. For simplicity, it is best not to try to understand the whole system every time, and to accept the flukes of life as they come.',
+        'To live like that, you have to be open. It is one of the five personality traits for a reason. We love predictability because it signals safety; the mind is a prediction machine after all. But whatever model you are operating with, it comes with a probability of not happening. When that happens, you adapt. That is what life warrants.',
+        'You may feel grief when a model breaks. That is okay. Be kind. But it is important to move forward and adapt.',
+        {q:'Life, and growth in life, requires you to follow friction and sit with discomfort. It is natural to want to avoid it. It is best to pursue it.'}
+      ],
+      notes:['Learn to be a gradualist.','Attitude is not behaviour. Watch the second.','You can’t initiate change in others. You can only inspire it, by being yourself.'],
+      feeds:[6,5], fedBy:[2,4] },
+    { n:4, key:'health', short:'body & emotion', name:'Health', sub:'body & emotional regulation',
+      title:'Your emotions are data. Read them.',
+      body:[
+        'Build muscle, work on mobility, train endurance. All three matter.',
+        {q:'Understand that you control your feelings. No one else does.'},
+        'And emotions are important. They are signalling what you are struggling to articulate. Trust them, and treat them as data: what your mind and body are telling you before words have caught up.',
+        'Figure out why you are not doing well. You probably know why; you just haven’t articulated it yet. And to bring all of it together, sleep well.'
+      ],
+      notes:[
+        {k:'How the brain is modelled'},
+        'A prediction engine trying to save you and protect you.',
+        'It finds comfort and safety in the familiar.',
+        'Anxiety: the prediction-and-protection system running in overtime, doing more harm than good.',
+        'Depression: something in conflict inside you for a long time, resolving into numbness.',
+        'Repression and suppression are not the same as regulation.',
+        'Neuroplasticity: the model can be retrained. Meditation and journalling are two of the tools. Being there for someone is a third.'
+      ],
+      feeds:[1,3], fedBy:[3] },
+    { n:5, key:'work', short:'incentives', name:'Work', sub:'motivation & incentives',
+      title:'Understand incentives, and you understand why people act.',
+      body:[
+        'Your work will pay you in cash, and sometimes in other things: learning, a network, thick skin, doors that open.',
+        {q:'First ten years: focus on the non-money aspects. Ten to twenty: make money. Twenty on: let the money grow, and operate as a capital allocator and a storyteller.'},
+        'Your career, and what you make from it, should grow exponentially. Work collegiately. Bullying is not acceptable; know what that word means for you.',
+        'You have influence around you. Practise influence without authority, and build leverage with people who have a stake. It is good if you can create an incentive; if not, try to have some leverage.'
+      ],
+      notes:['Understand the mechanism of incentives and incentive design.','It explains why people act the way they do.','Map the incentives onto the org design and the picture completes.'],
+      feeds:[2], fedBy:[1,3,6] },
+    { n:6, key:'thinking', short:'creativity & art', name:'Thinking', sub:'creativity & art',
+      title:'A volume of knowledge is not the same as thinking.',
+      body:[
+        {q:'Can you reason about something? Look at it from multiple lenses? That is thinking.'},
+        'Writing, teaching and doing are the best ways to think better. Flywheel thinking and cause-and-effect are great skills for a knowledge worker. Always aim to explain anything from fundamentals.',
+        'Beyond thinking there is learning rate, and it compounds. The more you learn and can reason, the faster you get, and the easier new things become to grasp.',
+        'No matter what utilitarian skills you chase, they don’t matter in the end. Practise art. Your art can be anything, but dedicate yourself to the pursuit of it. You don’t have to master it. You should lose track of time while doing it.'
+      ],
+      notes:[{k:'Your art'},'Find your creative expression.','Engage in it and express every emotion creatively: happy, sad, good, bad, ugly, magical.','Try everything.'],
+      feeds:[5,7], fedBy:[1,3] },
+    { n:7, key:'meaning', short:'and luck', name:'Meaning', sub:'and luck',
+      title:'You cannot control luck. You can widen its landing area.',
+      body:[
+        'A lot of life is just random, and your fortune is out of your hands.',
+        'But what you can do to get lucky is expose yourself to more things. Put yourself out there, in the world. Do more things, and travel it. The more you expose yourself, the higher your chances. Of course, be safe, and look after yourself.',
+        {q:'The meaning of life is what you give it. And once you assign life a meaning, you figure out the rest of it.'}
+      ],
+      notes:null,
+      feeds:[1], fedBy:[2,6] }
+  ];
+
+  /* ----------------------------------------------------------
+     Build the map
+  ---------------------------------------------------------- */
+  const CX=400, CY=400, R=290;
+  const pos = P.map((p,i)=>{ const a = -Math.PI/2 + i*(2*Math.PI/7); return {x:CX+R*Math.cos(a), y:CY+R*Math.sin(a), a}; });
+  const flowsG = document.getElementById('flows');
+  const nodesG = document.getElementById('nodes');
+  const NS='http://www.w3.org/2000/svg';
+  const el=(t,attrs,parent)=>{ const e=document.createElementNS(NS,t); for(const k in attrs) e.setAttribute(k,attrs[k]); if(parent) parent.appendChild(e); return e; };
+
+  // core → each pillar (flows out of and into the self)
+  pos.forEach((q,i)=>{
+    const dx=q.x-CX, dy=q.y-CY, mx=CX+dx*.5 - dy*.18, my=CY+dy*.5 + dx*.18;
+    el('path',{class:'flow core-flow', d:`M${CX} ${CY} Q${mx} ${my} ${q.x} ${q.y}`, 'data-a':i+1,'data-b':0},flowsG);
+  });
+  // pillar → pillar
+  const edges=new Set();
+  P.forEach(p=>p.feeds.forEach(t=>edges.add(p.n<t?`${p.n}-${t}`:`${t}-${p.n}`)));
+  edges.forEach(k=>{
+    const [a,b]=k.split('-').map(Number), A=pos[a-1], B=pos[b-1];
+    const mx=(A.x+B.x)/2, my=(A.y+B.y)/2;
+    // bow the curve toward the centre so cross-flows don't cross the labels
+    const cx=mx+(CX-mx)*.45, cy=my+(CY-my)*.45;
+    el('path',{class:'flow cross', d:`M${A.x} ${A.y} Q${cx} ${cy} ${B.x} ${B.y}`, 'data-a':a,'data-b':b},flowsG);
+  });
+
+  P.forEach((p,i)=>{
+    const q=pos[i];
+    const g=el('g',{class:'node', tabindex:'0', role:'button', 'aria-label':`${p.n}. ${p.name}, ${p.sub}`, 'data-n':p.n, transform:`translate(${q.x} ${q.y})`},nodesG);
+    el('circle',{class:'ring', r:'54'},g);
+    el('circle',{class:'disc', r:'46'},g);
+    const num=el('text',{class:'num', y:'-14', 'text-anchor':'middle'},g); num.textContent=String(p.n).padStart(2,'0');
+    const name=el('text',{class:'name', y:'8', 'text-anchor':'middle'},g); name.textContent=p.name;
+    // sub label sits outside the disc, away from the centre
+    const sub=el('text',{class:'sub', y:'64', 'text-anchor':'middle'},g); sub.textContent=p.short;
+    g.addEventListener('click',()=>select(p.n));
+    g.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){e.preventDefault(); select(p.n);} });
+    g.addEventListener('mouseenter',()=>light(p.n));
+    g.addEventListener('mouseleave',()=>light(current));
+    g.addEventListener('focus',()=>light(p.n));
+    g.addEventListener('blur',()=>light(current));
+  });
+
+  const flows=[...flowsG.querySelectorAll('.flow')];
+  function light(n){
+    flows.forEach(f=>{
+      const a=+f.dataset.a, b=+f.dataset.b;
+      const hit = a===n || b===n;
+      f.classList.toggle('lit', hit);
+      f.classList.toggle('dimmed', !hit);
+    });
+  }
+  function lightAll(){ flows.forEach(f=>{ f.classList.remove('lit','dimmed'); }); }
+
+  /* ----------------------------------------------------------
+     Panel
+  ---------------------------------------------------------- */
+  const panel=document.getElementById('panel');
+  let current=1;
+  const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  function select(n, focus){
+    current=n; const p=P[n-1];
+    nodesG.querySelectorAll('.node').forEach(g=>g.classList.toggle('on', +g.dataset.n===n));
+    light(n);
+    const body=p.body.map(b=> typeof b==='string' ? `<p>${esc(b)}</p>` : `<p class="q">${esc(b.q)}</p>`).join('');
+    const notes=p.notes ? `<ul class="notes">${p.notes.map(x=> typeof x==='string' ? `<li>${esc(x)}</li>` : `<li class="k">${esc(x.k)}</li>`).join('')}</ul>` : '';
+    const link=list=>list.map(i=>`<button type="button" data-go="${i}">${esc(P[i-1].name)}</button>`).join(' ');
+    const links=`<p class="links">Feeds ${link(p.feeds)} &nbsp;·&nbsp; Fed by ${link(p.fedBy)}</p>`;
+    const prev=((n-2+7)%7)+1, next=(n%7)+1;
+    panel.innerHTML=`<div class="fade" style="display:grid;gap:1.1rem">
+      <p class="eyebrow">Pillar ${p.n} of 7 · ${esc(p.sub)}</p>
+      <h3>${esc(p.title)}</h3>
+      <div class="body">${body}</div>
+      ${notes}
+      ${links}
+      <div class="nav"><button type="button" data-go="${prev}">← ${esc(P[prev-1].name)}</button><button type="button" data-go="${next}">${esc(P[next-1].name)} →</button></div>
+    </div>`;
+    panel.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>select(+b.dataset.go,true)));
+    if(focus && window.matchMedia('(max-width:900px)').matches) panel.scrollIntoView({behavior:'smooth', block:'start'});
+  }
+  document.getElementById('core').addEventListener('click',()=>{ lightAll(); });
+  select(1);
+
+  /* ----------------------------------------------------------
+     Dawn: scroll drives the light
+  ---------------------------------------------------------- */
+  const root=document.documentElement, selfSec=document.getElementById('self'), sky=document.getElementById('sky');
+  const INK=[15,13,20], DAWN=[241,232,218], FG_D=[236,230,218], FG_L=[31,26,34], DIM_D=[169,161,163], DIM_L=[111,101,114];
+  const lerp=(a,b,t)=>a+(b-a)*t, mix=(a,b,t)=>`rgb(${a.map((v,i)=>Math.round(lerp(v,b[i],t))).join(',')})`;
+  const ease=t=>t*t*(3-2*t);
+  let light01=0;
+  function onScroll(){
+    const end = selfSec.offsetTop - innerHeight*.55;
+    const t = Math.min(1, Math.max(0, scrollY/Math.max(1,end)));
+    light01 = ease(t);
+    root.style.setProperty('--light', light01.toFixed(3));
+    root.style.setProperty('--bg', mix(INK,DAWN,light01));
+    root.style.setProperty('--fg', mix(FG_D,FG_L,light01));
+    root.style.setProperty('--fg-dim', mix(DIM_D,DIM_L,light01));
+    sky.style.opacity = String(1 - Math.max(0,(light01-.85)/.15));
+  }
+  addEventListener('scroll',onScroll,{passive:true}); addEventListener('resize',onScroll); onScroll();
+
+  /* ----------------------------------------------------------
+     Stages: which chapter has been reached (boundary, rings…)
+  ---------------------------------------------------------- */
+  let stage=0;
+  const io=new IntersectionObserver(es=>{ es.forEach(e=>{ if(e.isIntersecting) stage=Math.max(stage,+e.target.dataset.stage); }); },{threshold:.35});
+  document.querySelectorAll('[data-stage]').forEach(s=>io.observe(s));
+
+  /* ----------------------------------------------------------
+     Sky: a field of things influencing each other
+  ---------------------------------------------------------- */
+  const ctx=sky.getContext('2d');
+  const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let W,H,DPR, pts=[], rings=[], t0=performance.now(), lastRing=0;
+  function size(){ DPR=Math.min(2,devicePixelRatio||1); W=sky.width=innerWidth*DPR; H=sky.height=innerHeight*DPR;
+    const n=Math.round(Math.min(140, (innerWidth*innerHeight)/9000));
+    pts=Array.from({length:n},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.12*DPR,vy:(Math.random()-.5)*.12*DPR,r:(.6+Math.random()*1.2)*DPR,ph:Math.random()*6.28}));
+  }
+  size(); addEventListener('resize',size);
+  function frame(now){
+    const dt=Math.min(50, now-t0); t0=now;
+    ctx.clearRect(0,0,W,H);
+    const cx=W/2, cy=H/2, bR=Math.min(W,H)*.38;
+    const alpha = .85 - light01*.6;  // the field fades as day comes; in dark it is what you see
+    // boundary
+    if(stage>=1){
+      const grow=Math.min(1,(now-(frame.bAt||(frame.bAt=now)))/1400);
+      ctx.beginPath(); ctx.arc(cx,cy,bR,-Math.PI/2,-Math.PI/2+grow*Math.PI*2);
+      ctx.strokeStyle=`rgba(224,164,88,${.35*alpha})`; ctx.lineWidth=1*DPR; ctx.setLineDash([2*DPR,7*DPR]); ctx.stroke(); ctx.setLineDash([]);
+    }
+    // points & links
+    for(const p of pts){ if(!reduce){p.x+=p.vx*dt;p.y+=p.vy*dt;} if(p.x<0)p.x+=W; if(p.x>W)p.x-=W; if(p.y<0)p.y+=H; if(p.y>H)p.y-=H; }
+    const link=(stage>=2? 110 : 70)*DPR;
+    ctx.lineWidth=.6*DPR;
+    for(let i=0;i<pts.length;i++){ const a=pts[i];
+      for(let j=i+1;j<pts.length;j++){ const b=pts[j]; const dx=a.x-b.x, dy=a.y-b.y, d=Math.hypot(dx,dy);
+        if(d<link){ const inside = stage>=1 && Math.hypot(a.x-cx,a.y-cy)<bR && Math.hypot(b.x-cx,b.y-cy)<bR;
+          ctx.strokeStyle=inside?`rgba(224,164,88,${(1-d/link)*.35*alpha})`:`rgba(190,180,200,${(1-d/link)*.18*alpha})`;
+          ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke(); } } }
+    for(const p of pts){ const tw=.6+.4*Math.sin(now/900+p.ph);
+      ctx.fillStyle=`rgba(236,230,218,${.7*tw*alpha})`; ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,6.28); ctx.fill(); }
+    // the self: a small warm point, and what it projects
+    if(stage>=1){
+      const g=ctx.createRadialGradient(cx,cy,0,cx,cy,22*DPR); g.addColorStop(0,`rgba(255,230,184,${.9*alpha})`); g.addColorStop(1,'rgba(224,164,88,0)');
+      ctx.fillStyle=g; ctx.beginPath(); ctx.arc(cx,cy,22*DPR,0,6.28); ctx.fill();
+      ctx.fillStyle=`rgba(224,164,88,${alpha})`; ctx.beginPath(); ctx.arc(cx,cy,3*DPR,0,6.28); ctx.fill();
+    }
+    if(stage>=3 && !reduce){
+      if(now-lastRing>2200){ rings.push({t:now}); lastRing=now; }
+      rings=rings.filter(r=>now-r.t<9000);
+      for(const r of rings){ const k=(now-r.t)/9000; const rr=k*Math.max(W,H)*.75;
+        ctx.strokeStyle=`rgba(224,164,88,${(1-k)*.35*alpha})`; ctx.lineWidth=1*DPR; ctx.beginPath(); ctx.arc(cx,cy,rr,0,6.28); ctx.stroke(); }
+    }
+    if(light01<.999) requestAnimationFrame(frame); else { setTimeout(()=>requestAnimationFrame(frame),200); }
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+
+</body></html>

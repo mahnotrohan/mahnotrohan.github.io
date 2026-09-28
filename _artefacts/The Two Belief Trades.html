@@ -1,0 +1,411 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}</style></head><body>
+<title>The Two Belief Trades</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Besley:ital,wght@0,600;0,700;0,800;1,500&family=Archivo:wght@400;500;600&family=Spline+Sans+Mono:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --paper: #FAF0E7;
+    --panel: #FFF8F1;
+    --ink: #2A2318;
+    --muted: rgba(42, 35, 24, 0.64);
+    --faint: rgba(42, 35, 24, 0.42);
+    --line: rgba(42, 35, 24, 0.16);
+    --line-strong: rgba(42, 35, 24, 0.34);
+    --belief: #2E7D52;
+    --belief-bg: rgba(46, 125, 82, 0.10);
+    --val: #2E5FA6;
+    --val-bg: rgba(46, 95, 166, 0.09);
+    --mom: #BE4128;
+    --mom-bg: rgba(190, 65, 40, 0.09);
+    --verdict-bg: rgba(46, 125, 82, 0.07);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #1A1712;
+      --panel: #231F18;
+      --ink: #F0E5D6;
+      --muted: rgba(240, 229, 214, 0.66);
+      --faint: rgba(240, 229, 214, 0.45);
+      --line: rgba(240, 229, 214, 0.17);
+      --line-strong: rgba(240, 229, 214, 0.38);
+      --belief: #72C495;
+      --belief-bg: rgba(114, 196, 149, 0.13);
+      --val: #82ABE8;
+      --val-bg: rgba(130, 171, 232, 0.12);
+      --mom: #E9906F;
+      --mom-bg: rgba(233, 144, 111, 0.12);
+      --verdict-bg: rgba(114, 196, 149, 0.09);
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #1A1712;
+    --panel: #231F18;
+    --ink: #F0E5D6;
+    --muted: rgba(240, 229, 214, 0.66);
+    --faint: rgba(240, 229, 214, 0.45);
+    --line: rgba(240, 229, 214, 0.17);
+    --line-strong: rgba(240, 229, 214, 0.38);
+    --belief: #72C495;
+    --belief-bg: rgba(114, 196, 149, 0.13);
+    --val: #82ABE8;
+    --val-bg: rgba(130, 171, 232, 0.12);
+    --mom: #E9906F;
+    --mom-bg: rgba(233, 144, 111, 0.12);
+    --verdict-bg: rgba(114, 196, 149, 0.09);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Archivo", "Helvetica Neue", Arial, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.62;
+    margin: 0;
+    padding: 0 20px 96px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .sheet { max-width: 960px; margin: 0 auto; }
+  .col { max-width: 744px; }
+  h1, h2, h3 { font-family: "Besley", Georgia, "Times New Roman", serif; text-wrap: balance; margin: 0; }
+  p { margin: 0 0 1.05em; max-width: 68ch; }
+  strong { font-weight: 600; }
+  em { font-family: "Besley", Georgia, serif; font-style: italic; font-weight: 500; }
+  .mono { font-family: "Spline Sans Mono", "SFMono-Regular", Consolas, monospace; }
+
+  header.masthead { padding: 64px 0 28px; border-bottom: 2px solid var(--ink); margin-bottom: 8px; }
+  .eyebrow {
+    font-family: "Spline Sans Mono", monospace; font-size: 12px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: 12px; margin-bottom: 18px;
+  }
+  .eyebrow::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+  .eyebrow .b { color: var(--belief); font-weight: 600; }
+  header.masthead h1 { font-size: clamp(38px, 6vw, 58px); font-weight: 800; line-height: 1.04; letter-spacing: -0.01em; }
+  .dek { margin-top: 18px; font-size: 18.5px; line-height: 1.55; color: var(--muted); max-width: 62ch; }
+  .dek em { color: var(--ink); }
+  .dek .v { color: var(--val); font-weight: 600; font-style: normal; font-family: inherit; }
+  .dek .m { color: var(--mom); font-weight: 600; font-style: normal; font-family: inherit; }
+
+  section { padding-top: 56px; }
+  .sechead { display: flex; align-items: baseline; gap: 14px; border-top: 1px solid var(--line-strong); padding-top: 14px; margin-bottom: 22px; }
+  .sechead .no { font-family: "Spline Sans Mono", monospace; font-size: 13px; font-weight: 600; color: var(--faint); letter-spacing: 0.06em; }
+  .sechead h2 { font-size: clamp(24px, 3.4vw, 31px); font-weight: 700; }
+  .sechead .why { margin-left: auto; font-family: "Spline Sans Mono", monospace; font-size: 11.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint); white-space: nowrap; }
+  @media (max-width: 640px) { .sechead .why { display: none; } }
+  .sechead.val { border-top-color: var(--val); }
+  .sechead.val .no { color: var(--val); }
+  .sechead.mom { border-top-color: var(--mom); }
+  .sechead.mom .no { color: var(--mom); }
+
+  figure { margin: 30px 0 12px; }
+  .figframe { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 22px 18px 14px; overflow-x: auto; }
+  .figframe svg { display: block; min-width: 700px; max-width: 100%; height: auto; margin: 0 auto; }
+  figcaption { font-family: "Spline Sans Mono", monospace; font-size: 12px; color: var(--muted); letter-spacing: 0.03em; padding: 10px 4px 0; max-width: none; line-height: 1.6; }
+  figcaption b { color: var(--ink); font-weight: 600; }
+
+  .chip {
+    font-family: "Spline Sans Mono", monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.09em;
+    text-transform: uppercase; padding: 2.5px 8px 2px; border-radius: 3px; white-space: nowrap; display: inline-block;
+  }
+  .chip.belief { color: var(--belief); background: var(--belief-bg); }
+  .chip.val { color: var(--val); background: var(--val-bg); }
+  .chip.mom { color: var(--mom); background: var(--mom-bg); }
+
+  /* tenets */
+  .tenet { display: grid; grid-template-columns: 64px 1fr; gap: 18px; padding: 26px 0 18px; border-bottom: 1px solid var(--line); }
+  .tenet:last-of-type { border-bottom: none; }
+  .tenet .tno { font-family: "Spline Sans Mono", monospace; font-size: 15px; font-weight: 600; padding-top: 3px; }
+  .tenet.val .tno { color: var(--val); }
+  .tenet.mom .tno { color: var(--mom); }
+  .tenet h3 { font-size: 20.5px; font-weight: 700; margin-bottom: 10px; }
+  .tenet p { font-size: 16px; max-width: 66ch; }
+  .tenet p:last-child { margin-bottom: 0; }
+  @media (max-width: 560px) { .tenet { grid-template-columns: 1fr; gap: 6px; } }
+
+  /* case blocks */
+  .case {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 6px;
+    padding: 16px 18px 14px; margin: 14px 0 6px; max-width: 66ch;
+  }
+  .case .clabel { font-family: "Spline Sans Mono", monospace; font-size: 10.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 7px; }
+  .case.val .clabel { color: var(--val); }
+  .case.mom .clabel { color: var(--mom); }
+  .case p { font-size: 14.5px; margin: 0; color: var(--ink); max-width: none; }
+  .case p .fig { font-family: "Spline Sans Mono", monospace; font-size: 13px; font-weight: 600; }
+
+  /* failure panels */
+  .fail { border-left: 3px solid; border-radius: 0 6px 6px 0; padding: 22px 24px 16px; margin: 34px 0 8px; }
+  .fail.val { border-color: var(--val); background: var(--val-bg); }
+  .fail.mom { border-color: var(--mom); background: var(--mom-bg); }
+  .fail .flabel { font-family: "Spline Sans Mono", monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.13em; text-transform: uppercase; margin-bottom: 10px; }
+  .fail.val .flabel { color: var(--val); }
+  .fail.mom .flabel { color: var(--mom); }
+  .fail p { font-size: 15.5px; max-width: 66ch; }
+  .fail p:last-child { margin-bottom: 0; }
+
+  /* tables */
+  .tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 6px; background: var(--panel); margin: 26px 0 10px; }
+  table { border-collapse: collapse; width: 100%; min-width: 660px; font-size: 14.5px; }
+  th { font-family: "Spline Sans Mono", monospace; font-size: 11px; letter-spacing: 0.11em; text-transform: uppercase; font-weight: 600; color: var(--muted); text-align: left; padding: 12px 16px 10px; border-bottom: 1px solid var(--line-strong); }
+  th.v { color: var(--val); } th.m { color: var(--mom); }
+  td { padding: 11px 16px; border-bottom: 1px solid var(--line); vertical-align: top; line-height: 1.5; }
+  tr:last-child td { border-bottom: none; }
+  td.dim { font-family: "Spline Sans Mono", monospace; font-size: 12px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); font-weight: 600; white-space: nowrap; padding-top: 13px; }
+  td .num { font-family: "Spline Sans Mono", monospace; font-variant-numeric: tabular-nums; font-weight: 600; }
+  td.good { color: var(--ink); }
+
+  .verdict { margin: 34px 0 8px; padding: 24px 26px 20px; background: var(--verdict-bg); border-left: 3px solid var(--belief); border-radius: 0 6px 6px 0; }
+  .verdict .vlabel { font-family: "Spline Sans Mono", monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.13em; text-transform: uppercase; color: var(--belief); margin-bottom: 10px; }
+  .verdict p { font-size: 16px; max-width: 66ch; }
+  .verdict p:last-child { margin-bottom: 0; }
+
+  footer { margin-top: 72px; padding-top: 16px; border-top: 2px solid var(--ink); font-family: "Spline Sans Mono", monospace; font-size: 12px; color: var(--muted); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .fineprint { font-family: "Spline Sans Mono", monospace; font-size: 12px; color: var(--faint); margin-top: 26px; max-width: none; line-height: 1.7; }
+
+  /* svg roles */
+  svg.mech { color: var(--ink); }
+  svg.mech .axis { stroke: var(--line-strong); stroke-width: 1.2; fill: none; }
+  svg.mech .worth { stroke: var(--muted); stroke-width: 1.6; stroke-dasharray: 7 5; fill: none; }
+  svg.mech .price { stroke: currentColor; stroke-width: 2; fill: none; stroke-linejoin: round; }
+  svg.mech .gap { stroke: var(--val); stroke-width: 2; fill: none; }
+  svg.mech .slope { stroke: var(--mom); stroke-width: 2.4; fill: none; }
+  svg.mech .t-axis { font-family: "Spline Sans Mono", monospace; font-size: 11.5px; fill: var(--muted); letter-spacing: 0.06em; }
+  svg.mech .t-val { font-family: "Spline Sans Mono", monospace; font-size: 12.5px; font-weight: 600; fill: var(--val); letter-spacing: 0.07em; }
+  svg.mech .t-mom { font-family: "Spline Sans Mono", monospace; font-size: 12.5px; font-weight: 600; fill: var(--mom); letter-spacing: 0.07em; }
+  svg.mech .t-note { font-family: "Spline Sans Mono", monospace; font-size: 11px; fill: var(--muted); letter-spacing: 0.02em; }
+  svg.mech .mk-val { fill: var(--val); }
+  svg.mech .mk-mom { fill: var(--mom); }
+  svg.mech .mk-ax { fill: var(--line-strong); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    section, header.masthead { animation: rise 0.5s ease both; }
+    @keyframes rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  }
+  a { color: inherit; }
+  :focus-visible { outline: 2px solid var(--val); outline-offset: 2px; }
+</style>
+
+<div class="sheet">
+
+<header class="masthead">
+  <div class="eyebrow">Field guide No. 2 &#183; the <span class="b">belief branch</span>, magnified</div>
+  <h1>The Two Belief Trades</h1>
+  <p class="dek">On the market tree, <span class="v">value</span> and <span class="m">momentum</span> share one branch: both are bets against the person on the other side. They just hold opposite priors about the same chart — <em>prices return to worth</em> versus <em>prices keep going</em>. The full creed of each, tested against twenty years of Indian tape.</p>
+</header>
+
+<section id="mechanism">
+  <div class="sechead"><span class="no">§0</span><h2>One chart, two creeds</h2><span class="why">the disagreement, drawn</span></div>
+  <div class="col">
+    <p>Put a stock's <strong>market price</strong> on a chart next to a quiet dashed line — the slowly compounding <strong>worth of the underlying business</strong>. The two creeds transact on different features of this picture. Value acts on the <em>vertical</em> gap: how far price sits below worth. Momentum acts on the <em>tangent</em>: which way price is travelling, and how decisively. Everything else in this guide is the working-out of that one difference.</p>
+  </div>
+  <figure>
+    <div class="figframe">
+      <svg class="mech" viewBox="0 0 940 440" role="img" aria-label="A price line wanders around a slowly rising dashed intrinsic-value line: it crashes below it, then recovers and accelerates far above it. Value investing buys the vertical gap where price sits far below worth; momentum investing buys the rising slope where the trend is in force.">
+        <defs>
+          <marker id="axarrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" class="mk-ax"/></marker>
+          <marker id="valarrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" class="mk-val"/></marker>
+          <marker id="momarrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" class="mk-mom"/></marker>
+        </defs>
+        <!-- axes -->
+        <path class="axis" d="M60 380 H900" marker-end="url(#axarrow)"/>
+        <text class="t-axis" x="898" y="400" text-anchor="end">time</text>
+        <text class="t-axis" x="60" y="40">price</text>
+        <!-- intrinsic worth -->
+        <path class="worth" d="M60 252 L880 148"/>
+        <text class="t-note" x="878" y="132" text-anchor="end">intrinsic worth (the business, compounding)</text>
+        <!-- market price -->
+        <polyline class="price" points="60,272 120,262 170,278 210,300 240,322 265,332 300,318 350,296 400,270 450,246 490,232 540,210 580,190 620,158 660,132 700,118 740,96 790,76 840,64 880,56"/>
+        <text class="t-note" x="66" y="258">market price</text>
+        <!-- value gap -->
+        <path class="gap" d="M262 240 V324" marker-start="url(#valarrow)" marker-end="url(#valarrow)"/>
+        <text class="t-val" x="300" y="356">VALUE BUYS THIS GAP</text>
+        <text class="t-note" x="300" y="374">price far below worth &#183; the gap is the margin of safety</text>
+        <!-- momentum slope -->
+        <path class="slope" d="M636 152 L724 106" marker-end="url(#momarrow)"/>
+        <text class="t-mom" x="560" y="72">MOMENTUM BUYS THIS SLOPE</text>
+        <text class="t-note" x="560" y="90">trend in force &#183; strongest names in the ranking</text>
+      </svg>
+    </div>
+    <figcaption><b>Fig. 1</b> — the same chart, two different signals. Note the handoff: the value investor who bought the gap often sells, near the top right, to the momentum buyer arriving for the slope.</figcaption>
+  </figure>
+</section>
+
+<section id="value">
+  <div class="sechead val"><span class="no">PART I</span><h2>The tenets of value investing</h2><span class="why">Graham &#8594; Buffett &#8594; Dalal Street</span></div>
+  <div class="col">
+    <p>Value investing is the older creed — codified by Benjamin Graham in the 1930s, industrialised by Warren Buffett, and practised in India by a long line from Chandrakant Sampat to Radhakishan Damani and the PMS value shops. Its tenets form a single logical chain: each one exists because the previous one is true.</p>
+
+    <div class="tenet val"><div class="tno">V1</div><div>
+      <h3>A share is a piece of a business, not a ticker</h3>
+      <p>The founding move is a change of identity: you are not buying a symbol that wiggles, you are buying a fractional claim on inventories, brands, factories and future cash flows. Every later tenet depends on this — a wiggle has no "worth", but a business does.</p>
+      <div class="case val"><div class="clabel">Case &#183; ITC, 2019&#8211;21</div><p>For three years the ticker went nowhere — the market was pricing FII outflows, ESG screens against cigarettes, and meme-grade despair ("<em>ITC hai toh mumkin hai</em>"). The business, meanwhile, kept compounding: Aashirvaad, Sunfeast and a cigarette franchise gushing cash at a <span class="fig">~15&#8211;16&#215;</span> multiple with a <span class="fig">~5&#8211;6%</span> dividend yield. Owner and ticker had parted company — which is the entire opportunity.</p></div>
+    </div></div>
+
+    <div class="tenet val"><div class="tno">V2</div><div>
+      <h3>Mr. Market is your servant, not your guide</h3>
+      <p>Graham's allegory: the market is a manic business partner who shouts a new price at you every day. Some days he's euphoric, some days suicidal. You are free to ignore him — his quote is an <em>offer</em>, never <em>information about worth</em>. "In the short run a voting machine, in the long run a weighing machine."</p>
+      <div class="case val"><div class="clabel">Case &#183; March 2020</div><p>In one month the Nifty fell <span class="fig">~38%</span>. Did the ten-year cash flows of Indian banking, cement and FMCG fall 38% in those thirty days? The value investor's claim is precisely that they did not — and whoever treated the quote as an offer rather than a verdict was buying HDFC Bank at <span class="fig">~₹770</span>.</p></div>
+    </div></div>
+
+    <div class="tenet val"><div class="tno">V3</div><div>
+      <h3>Intrinsic value exists, and can be estimated — roughly</h3>
+      <p>Discounted cash flows, normalised earnings power, replacement cost of assets — the method matters less than the humility: you are estimating a <em>range</em>, not a decimal. Better roughly right than precisely wrong. This is also where the creed forked: Graham valued <em>assets</em> (deep value, "cigar butts"); Buffett and Munger valued <em>compounding quality</em> — a wonderful business at a fair price over a fair business at a wonderful price. Both forks exist on Dalal Street today.</p>
+      <div class="case val"><div class="clabel">Case &#183; Tata Motors, 2020</div><p>At the COVID trough the stock touched <span class="fig">~₹65</span> — a market cap that implied JLR was worth roughly nothing and the India CV cycle would never turn. Any sober sum-of-parts said otherwise. By 2024 the stock had crossed <span class="fig">₹1,000</span>. The estimate never needed to be precise; it needed the market cap to be absurd against the range.</p></div>
+    </div></div>
+
+    <div class="tenet val"><div class="tno">V4</div><div>
+      <h3>Margin of safety — buy at a discount wide enough to survive being wrong</h3>
+      <p>The most famous tenet, and the most misread. The gap between price and worth is not just your return — it is your <strong>insurance policy</strong> against your own errors, bad luck and a worse-than-expected future. Demand a discount so wide that a mediocre outcome still pays.</p>
+      <div class="case val"><div class="clabel">Case &#183; Coal India, 2020&#8211;21</div><p>At <span class="fig">~4&#8211;5&#215;</span> earnings with a <span class="fig">~9&#8211;10%</span> dividend yield, you were being <em>paid to wait</em>: even if the re-rating never came, the dividend alone beat fixed deposits. It came anyway — the stock roughly <span class="fig">4&#215;</span>'d by 2024. That's a margin of safety: heads you win, tails you win slowly.</p></div>
+    </div></div>
+
+    <div class="tenet val"><div class="tno">V5</div><div>
+      <h3>Bargains live where it hurts — contrarianism is structural, not stylistic</h3>
+      <p>A stock gets mispriced downward only when owning it is embarrassing, painful or forbidden — hated sectors, forced sellers, institutional no-go zones. The discomfort is not a side effect of value investing; it is the <em>source</em> of the discount. If it feels comfortable, the gap has already closed.</p>
+      <div class="case val"><div class="clabel">Case &#183; the PSU pack, 2020&#8211;24</div><p>In 2020, PSU stocks were institutionally "un-ownable" — governance discount, disinvestment overhang, decades of underperformance. SBI traded in the <span class="fig">₹150s</span> below book value. By 2024 it crossed <span class="fig">₹800</span>, and the same PSU basket that embarrassed portfolios became the market's darling. The discount existed <em>because</em> nobody could own it.</p></div>
+    </div></div>
+
+    <div class="tenet val"><div class="tno">V6</div><div>
+      <h3>Time arbitrage — patience is the actual edge</h3>
+      <p>In a market of quarterly horizons, the durable advantage is simply a longer clock. The value investor buys from sellers who <em>cannot wait</em> — funds facing redemptions, traders facing stop-losses, institutions facing career risk — and charges them for immediacy in the currency of future returns. Note what this means: the edge is temperamental, not intellectual. The analysis is learnable; the waiting is not.</p>
+      <div class="case val"><div class="clabel">Case &#183; ITC again, the resolution</div><p>The same stock that did nothing from 2019 to 2021 then roughly <span class="fig">2.4&#215;</span>'d in eighteen months as FMCG margins inflected and the hotels demerger surfaced value. The return was not earned in the eighteen months — it was earned in the three years of looking wrong.</p></div>
+    </div></div>
+
+    <div class="tenet val"><div class="tno">V7</div><div>
+      <h3>Cheap is not the same as mispriced — respect the value trap</h3>
+      <p>The tenet that separates professionals from screen-runners. Some stocks are cheap on <em>neglect</em> (mispriced), others on <em>decay</em> (priced correctly for a shrinking future). The tests: is the balance sheet real? does profit convert to cash? is governance clean? is there a catalyst — buyback, demerger, cycle turn, new owner — or only hope? A falling P/E with falling earnings is a trapdoor, not a bargain.</p>
+      <div class="case val"><div class="clabel">Counter-cases &#183; Yes Bank &#183; Vodafone Idea</div><p>Yes Bank looked "cheap" the whole way from <span class="fig">₹300+</span> to under <span class="fig">₹20</span> — the book value it was cheap against was fiction. Vodafone Idea has spent years optically cheap while AGR liabilities consumed the equity. And remember the mirror image: Coal India spent 2015&#8211;20 looking like this exact trap before proving to be deep value. The line between trap and bargain is drawn by the balance sheet and the terminal value of the business — never by the multiple alone.</p></div>
+    </div></div>
+
+    <div class="tenet val"><div class="tno">V8</div><div>
+      <h3>Selling has rules too: exit when price meets worth, the thesis breaks, or a better gap appears</h3>
+      <p>Value investing is symmetric: the same arithmetic that made you buy despair obliges you to sell euphoria. When price closes the gap to your estimate — or overshoots it — you are no longer holding a value position, just a position. This is why, in every cycle, the value seller and the momentum buyer meet at the same price and both feel clever.</p>
+      <div class="case val"><div class="clabel">Case &#183; the 2023&#8211;24 PSU melt-up</div><p>The investors who bought PSUs at half of book in 2020 found them at <span class="fig">3&#8211;4&#215;</span> book in the 2024 euphoria — railway and defence names at multiples the businesses couldn't grow into. Value discipline meant selling into that strength, to buyers whose signal said "strongest stocks in the market." Both creeds executed correctly, on opposite sides of the same trade.</p></div>
+    </div></div>
+
+    <div class="fail val">
+      <div class="flabel">How value fails</div>
+      <p><strong>Slowly, then all at once — and mostly by drought.</strong> Value's returns arrive in violent, unscheduled bursts after long deserts. In India the 2010&#8211;2020 decade belonged almost entirely to quality and growth; statistically cheap portfolios bled relative performance for years — long enough for clients to leave, funds to close, and the style to be declared dead, right before the 2021&#8211;24 value rally (the NSE's value index compounded at <span class="mono">~26% a year</span> over the five years to mid-2026). The other failure is the trap (V7): cheapness that was truth, not opportunity. Value's risk is not volatility — it is <em>being early for so long that you capitulate at the bottom</em>.</p>
+    </div>
+  </div>
+</section>
+
+<section id="momentum">
+  <div class="sechead mom"><span class="no">PART II</span><h2>The tenets of momentum investing</h2><span class="why">Jegadeesh&#8211;Titman &#8594; the NSE factor desk</span></div>
+  <div class="col">
+    <p>Momentum is the younger, more unsettling creed — documented by Jegadeesh and Titman in 1993 (stocks that beat the market over the past 3&#8211;12 months keep doing so for the next few), and stubbornly present in a century of data across nearly every market studied. Nowhere has it worked better than in India, which is why the NSE now runs official momentum indices and every fund house sells one. Its tenets are fewer axioms, more <em>operating procedures</em> — because momentum is less a philosophy than a machine you must not interfere with.</p>
+
+    <div class="tenet mom"><div class="tno">M1</div><div>
+      <h3>Trends persist — because humans underreact, then herd</h3>
+      <p>The empirical core. News diffuses slowly: analysts anchor to old estimates, institutions build positions over quarters, and holders sell winners too early (the disposition effect) — all of which makes prices <em>drift</em> toward new information rather than jump. Then herding overshoots it. Momentum harvests the drift and aims to leave before the overshoot unwinds.</p>
+      <div class="case mom"><div class="clabel">Evidence &#183; India</div><p>The Nifty200 Momentum 30 index has compounded at <span class="fig">~18.6% a year</span> (total return) since its April 2005 base — and an independent 18.5-year backtest that charges costs and taxes still finds <span class="fig">~14.0%</span> vs the Nifty 50's <span class="fig">~10.4%</span>. Among academic factors in India, momentum's premium has historically been the fattest — fatter than value's.</p></div>
+    </div></div>
+
+    <div class="tenet mom"><div class="tno">M2</div><div>
+      <h3>Price is information — don't argue with the tape</h3>
+      <p>The exact inversion of V2. Where Graham sees a manic partner to ignore, the momentum investor sees a voting machine that counts votes <em>faster than any analyst</em> — insiders, suppliers, channel checks, order books, all of it leaks into price first. A strong chart is someone else's research showing through.</p>
+      <div class="case mom"><div class="clabel">Case &#183; HAL &amp; BEL, 2022</div><p>Defence stocks broke to new highs while most brokerage models still carried old order-book assumptions. The price was "telling" about indigenisation orders, export clearances and margin expansion months before consensus estimates caught up. HAL roughly <span class="fig">10&#215;</span>'d from its 2020 levels to the 2024 peak. The chart knew first — that is the tenet.</p></div>
+    </div></div>
+
+    <div class="tenet mom"><div class="tno">M3</div><div>
+      <h3>Relative strength: own the leaders, whatever they are</h3>
+      <p>Momentum is a <em>ranking</em> discipline, not a story discipline. Cross-sectional momentum ranks the whole universe by trailing return and owns the top slice — sector-agnostic, narrative-agnostic. (Its cousin, time-series or trend following, holds an asset only while it trades above its own trend.) The NSE recipe: score every Nifty 200 stock on 6-month and 12-month volatility-adjusted returns, own the top 30, reshuffle twice a year.</p>
+      <div class="case mom"><div class="clabel">Case &#183; the style's shapeshifting</div><p>The same momentum index has, at different rebalances, been stuffed with Adani infra (2022), PSU banks and railways (2023&#8211;24), defence (2024), and financials/pharma after the 2025 reset. No loyalty, no thesis, no sector view — only rank. A value investor holds a business; a momentum investor holds a <em>position in a queue</em>.</p></div>
+    </div></div>
+
+    <div class="tenet mom"><div class="tno">M4</div><div>
+      <h3>The window matters: look back 3&#8211;12 months, skip the freshest move</h3>
+      <p>Momentum lives at a specific frequency. Under ~1 month, prices <em>mean-revert</em> (last week's spike fades); beyond ~3 years they mean-revert again (long-run overreaction — which is where value lives). The classic construction is "12-minus-1": rank on the past year excluding the most recent month. Too short is noise; too long is a trend already dying.</p>
+      <div class="case mom"><div class="clabel">Why it matters &#183; a Monday spike is not momentum</div><p>Buying Monday's 15% gainer is short-term reversal territory — statistically you're the exit liquidity. Buying the stock that has quietly outperformed for nine months is momentum. Same instinct, opposite mathematics; the window is what separates the tenet from the tip.</p></div>
+    </div></div>
+
+    <div class="tenet mom"><div class="tno">M5</div><div>
+      <h3>Ride winners, cut losers — invert your instincts</h3>
+      <p>Humans sell winners to "lock in" gains and hold losers to avoid admitting error. Momentum's edge comes from doing the exact opposite: let the winner run far past where it feels expensive, and eject the loser mechanically the moment it drops from the ranking — no averaging down, ever. Averaging down is a value action justified by worth; in a momentum book it is simply disobedience.</p>
+      <div class="case mom"><div class="clabel">Case &#183; Trent, 2020&#8211;25</div><p>From <span class="fig">~₹600</span> to over <span class="fig">₹8,000</span> in four years — but only for holders who sat through it looking "expensive" the entire way (often 100&#215;+ earnings). The same rulebook then forced the exit when relative strength collapsed in the 2024&#8211;25 correction, sparing the systematic holder the <span class="fig">40%+</span> drawdown that punished the loyal. Loyalty is a value virtue; in momentum it is a leak.</p></div>
+    </div></div>
+
+    <div class="tenet mom"><div class="tno">M6</div><div>
+      <h3>Buy high, sell higher — the 52-week high is a signal, not a ceiling</h3>
+      <p>Anchoring makes investors treat all-time highs as "too late", so they underreact to good news near highs — which is precisely why breakouts to new highs keep working. Feeling late is part of the trade's design; if it felt early, it would be value.</p>
+      <div class="case mom"><div class="clabel">Case &#183; Zomato, mid-2023</div><p>Reclaiming its ₹76 IPO price after the 2022 collapse "felt" like the last chance to exit at par — the anchoring trap. It was instead the breakout: the stock roughly <span class="fig">3&#215;</span>'d over the following eighteen months as profitability and the Blinkit story compounded the trend.</p></div>
+    </div></div>
+
+    <div class="tenet mom"><div class="tno">M7</div><div>
+      <h3>Be systematic or don't bother</h3>
+      <p>Every tenet above is psychologically unnatural — buying expensive-feeling stocks, selling small losses weekly, holding no opinions. Discretion will sand the edge off. So momentum is executed as a machine: fixed ranking rule, fixed rebalance calendar, position caps, wide diversification (30&#8211;50 names, because any single winner can implode). You are not picking stocks; you are operating a filter.</p>
+      <div class="case mom"><div class="clabel">Case &#183; the rebalance as an event</div><p>The NSE momentum indices reshuffle every June and December — mechanically, whatever the news. The December 2025 reconstitution alone was estimated to swing <span class="fig">~₹16,000 crore</span> of passive money across entering and exiting stocks. The machine doesn't read the papers; the papers now read the machine.</p></div>
+    </div></div>
+
+    <div class="tenet mom"><div class="tno">M8</div><div>
+      <h3>Survive the crash — momentum's edge pays for its tail</h3>
+      <p>Momentum's dark tenet: the strategy earns steadily and loses catastrophically, precisely at regime turns. When a crashed market V-recovers, a momentum book is positioned exactly backwards — long yesterday's defensives, absent from the rebound. Costs compound the problem: high churn means impact costs, STT, and short-term capital-gains tax (<span class="mono">20%</span> vs <span class="mono">12.5%</span> long-term, FY&#8202;2025&#8211;26), so the raw edge must out-earn its friction. Position caps, volatility scaling and the humility to expect a <span class="mono">&#8722;50%</span> someday are not add-ons; they are the strategy.</p>
+      <div class="case mom"><div class="clabel">Cases &#183; the graveyard</div><p><strong>2008&#8211;09:</strong> the backtested momentum index drew down <span class="fig">&#8722;70.5%</span> and took <span class="fig">65 months</span> to reclaim its high — the 2007 leaders (DLF, Unitech, Suzlon, Reliance Power) never came back at all. <strong>Jan 2023:</strong> Adani Enterprises sat near the top of momentum rankings when the Hindenburg report cut it <span class="fig">~60%</span> in weeks. <strong>Sep 2024&#8211;Mar 2025:</strong> the smallcap/momentum complex fell hardest in the correction, giving back years of relative gains in months. Momentum without a survival plan is just leverage with better marketing.</p></div>
+    </div></div>
+
+    <div class="fail mom">
+      <div class="flabel">How momentum fails</div>
+      <p><strong>Suddenly, at the turn.</strong> The strategy is short one specific thing: <em>regime change</em>. It also decays with crowding — India's momentum AUM has exploded since 2021, and the more money chasing the same semi-annual reshuffle, the more the entry and exit prices move against it (front-running the rebalance is now its own cottage industry). And because pre-2020 index numbers are backtests, not live money, the marketing decks understate what 2008 felt like to actually hold. Momentum's risk is not being wrong about a business — it owns no view of any business — it is <em>being positioned for yesterday on the day the weather flips</em>.</p>
+    </div>
+  </div>
+</section>
+
+<section id="headtohead">
+  <div class="sechead"><span class="no">PART III</span><h2>Head to head</h2><span class="why">the same rows, opposite cells</span></div>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th></th><th class="v">Value</th><th class="m">Momentum</th></tr></thead>
+      <tbody>
+        <tr><td class="dim">The prior</td><td>Prices <b>mean-revert</b> to business worth</td><td>Prices <b>drift</b> in the direction already travelling</td></tr>
+        <tr><td class="dim">The signal</td><td>Gap between price and estimated intrinsic value</td><td>Trailing 3&#8211;12 month relative return (rank)</td></tr>
+        <tr><td class="dim">Unit of analysis</td><td>The business — accounts, moats, management</td><td>The price series — everything else is noise</td></tr>
+        <tr><td class="dim">Buys when</td><td>It hurts: fear, neglect, forced selling</td><td>It feels late: breakouts, 52-week highs</td></tr>
+        <tr><td class="dim">Sells when</td><td>Price meets worth, or the thesis breaks</td><td>The rank drops — no other reason needed</td></tr>
+        <tr><td class="dim">Holding period</td><td>Years (LTCG territory, <span class="num">12.5%</span>)</td><td>Months (mostly STCG, <span class="num">20%</span>; churn 50&#8211;150%/yr)</td></tr>
+        <tr><td class="dim">Edge comes from</td><td>Temperament: a longer clock than the seller's</td><td>Discipline: obeying the machine against instinct</td></tr>
+        <tr><td class="dim">Fails by</td><td>Value traps; decade-long droughts; early capitulation</td><td>Crashes at regime turns; crowding; friction</td></tr>
+        <tr><td class="dim">Feels like</td><td>Being wrong for years, then right suddenly</td><td>Being right daily, then very wrong overnight</td></tr>
+        <tr><td class="dim">Patron saints</td><td>Graham, Buffett; Damani, the India value PMS lineage</td><td>Jegadeesh&#8211;Titman, Asness/AQR; NSE factor indices, quant AMCs</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="scoreboard">
+  <div class="sechead"><span class="no">§&#8202;IND</span><h2>The India scoreboard</h2><span class="why">what the tape actually paid</span></div>
+  <div class="col"><p>India is unusual: most factor research finds the <strong>momentum premium here among the strongest in the world</strong>, while value spent 2010&#8211;2020 in the wilderness before a ferocious 2021&#8211;24 comeback. The NSE's own factor indices — investable via index funds since ~2021 — are the cleanest public record:</p></div>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Measure</th><th class="m">Nifty200 Momentum 30</th><th class="v">Nifty500 Value 50</th></tr></thead>
+      <tbody>
+        <tr><td class="dim">Recipe</td><td>Top 30 of Nifty 200 by 6m + 12m volatility-adjusted return; June &amp; Dec reshuffle</td><td>50 cheapest of Nifty 500 by earnings, book &amp; sales yield + dividend yield; semi-annual</td></tr>
+        <tr><td class="dim">Long-run CAGR (TRI)</td><td><span class="num">~18.6%</span> since Apr-2005 base</td><td><span class="num">~25.8%</span> over the 5 yrs to mid-2026 (own base Oct 2018)</td></tr>
+        <tr><td class="dim">After costs &amp; taxes</td><td><span class="num">~14.0%</span> vs Nifty 50's <span class="num">~10.4%</span> (independent 18.5-yr backtest, Dec 2006 &#8211; Jun 2025)</td><td>Live funds only since ~2022&#8211;23 — the 5-yr number leans on the PSU/value supercycle</td></tr>
+        <tr><td class="dim">Worst moment</td><td><span class="num">&#8722;70.5%</span> (Oct 2007 &#8211; Dec 2008), <span class="num">65 months</span> to recover; hit hardest again in the Sep-2024 &#8211; Mar-2025 correction</td><td>The 2010&#8211;2020 drought: a decade of relative bleed while quality/growth ruled</td></tr>
+        <tr><td class="dim">Character</td><td>Higher beta (~1.2), fat right tail, brutal left tail</td><td>Cyclical, PSU/commodity-heavy, violent when the regime turns its way</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="col"><p class="fineprint">Sources: NSE Indices factsheets (June 2026) for both indices; BacktestIndia's 18.5-year after-cost study; Budget-2024 capital-gains rates as of FY&#8202;2025&#8211;26. Everything before each index's launch (Aug 2020 / late 2021) is backtest, not live money — treat the long-run CAGRs as ceilings, not promises. Stock examples (ITC, Coal India, Tata Motors, SBI, HAL, Trent, Zomato, Adani) use approximate historical prices for illustration.</p></div>
+</section>
+
+<section id="both">
+  <div class="sechead"><span class="no">§&#8202;FIN</span><h2>Must you choose?</h2><span class="why">yin, yang, and the rebalance</span></div>
+  <div class="col">
+    <p>No — and the best evidence says you shouldn't. Because the two creeds hold opposite priors, their bad years rarely coincide: value's droughts were momentum's feasts (2017, 2019&#8211;20), and momentum's crashes were value's harvests (2009, arguably 2025). Cliff Asness calls them the yin and yang of investing; AQR's famous result is that a simple 50/50 of the two factors beats either alone, everywhere it's been tested — the negative correlation means the blend earns both premia with less pain, and rebalancing between them forces you to sell whichever creed just had its party.</p>
+    <div class="verdict">
+      <div class="vlabel">The honest summary</div>
+      <p><strong>Value is a bet that other people overreact; momentum is a bet that they underreact — and both are true, at different horizons.</strong> Overreaction dominates at long horizons (3&#8211;5 years: despair overshoots, hence value), underreaction at medium ones (3&#8211;12 months: news drifts in slowly, hence momentum). That is why both premia can exist in the same market at the same time without contradiction.</p>
+      <p>But never forget which branch of the tree you are standing on. Both are <em>belief trades</em> — zero-sum against the person opposite. Value's counterparty is the panicked or constrained seller; momentum's is the anchored doubter and the late herd. Before every trade, the first-principles question stands: <em>who is on the other side, and why am I the one who's right?</em> If you have no answer, the time branch of the tree — the index fund — is not a consolation prize; it is the only trade that never needs one.</p>
+    </div>
+    <p class="fineprint">This guide is education, not investment advice or a recommendation — factor returns are historical, backtest-heavy, and taxes/regulations change. Companion to <em>Anatomy of a Market</em>, the first field guide in this series.</p>
+  </div>
+</section>
+
+<footer>
+  <span>The Two Belief Trades · field guide No. 2</span>
+  <span>value &#8646; momentum · Indian tape, 2005&#8211;2026</span>
+</footer>
+
+</div>
+
+</body></html>
