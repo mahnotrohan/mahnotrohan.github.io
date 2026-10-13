@@ -10,6 +10,7 @@ Books I've read recently. I tend to gravitate toward memoirs, decision-making, a
 
 ## 2026
 
+- Metamorphosis - Franz Kafka
 - Everything I Know About Love - Dolly Alderton
 - The Outsider: A Memoir for Misfits - Vir Das
 - Notes on Heartbreak - Annie Lord
