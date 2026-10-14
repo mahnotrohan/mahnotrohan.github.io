@@ -16,6 +16,19 @@ updated: 2026-09-19
     <p>This website is my digital garden.</p>
   </section>
 
+  <section class="about-section" aria-labelledby="principles-title">
+    <h2 id="principles-title">My Operating Principles</h2>
+    <ol>
+      <li>The world runs on stories and relationships. I want to get exceptionally good at them.</li>
+      <li>Learning never ends. No MBA. Studies are always ongoing. Nothing I learn is ever useless&mdash;it finds its way into life somehow. I love novelty, but I try not to skip depth.</li>
+      <li>Nothing is truly difficult. It can be trained. There is no such thing as impossible&mdash;only a problem statement and a frame of reference. Life moves by induction. If one person has done it, so can I.</li>
+      <li>Physical health and movement stay in my hands. They never get deprioritised.</li>
+      <li>Create a lot. Stay lean. Stay flexible. Keep reinventing myself.</li>
+      <li>Be agile. Stay active everywhere. Make lots of mistakes with limited blast radius. Learn by getting my hands dirty.</li>
+      <li>Make lists.</li>
+    </ol>
+  </section>
+
   <section class="about-section" aria-labelledby="now-title">
     <h2 id="now-title">Now</h2>
     <p class="about-updated">Last updated on {{ page.updated | date: "%-d %B %Y" }}</p>
