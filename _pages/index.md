@@ -47,7 +47,7 @@ permalink: /
       </button>
       <button class="thread-option" type="button" data-home-thread="identity" aria-pressed="false">
         <span class="thread-knot" aria-hidden="true"></span>
-        <span class="thread-label">Identity</span>
+        <span class="thread-label">Stories</span>
       </button>
       <button class="thread-option" type="button" data-home-thread="meaning" aria-pressed="false">
         <span class="thread-knot" aria-hidden="true"></span>
