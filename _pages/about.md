@@ -2,7 +2,6 @@
 layout: page
 title: About
 permalink: /about
-updated: 2026-09-19
 ---
 
 <div class="about-page">
@@ -27,14 +26,6 @@ updated: 2026-09-19
       <li>Be agile. Stay active everywhere. Make lots of mistakes with limited blast radius. Learn by getting my hands dirty.</li>
       <li>Make lists.</li>
     </ol>
-  </section>
-
-  <section class="about-section" aria-labelledby="now-title">
-    <h2 id="now-title">Now</h2>
-    <p class="about-updated">Last updated on {{ page.updated | date: "%-d %B %Y" }}</p>
-    <p>I took a month-long break from work in August, to get my ACL reconstruction surgery.</p>
-    <p>I&rsquo;ve been reading a lot of fiction, and my latest favourite is <em>The Three-Body Problem</em>.</p>
-    <p>I&rsquo;ve also been playing a lot of chess and poker. These games are very fun, and to my amusement, there&rsquo;s a lot to learn about strategy and risk from both.</p>
   </section>
 
   <section class="about-section" aria-labelledby="say-hello-title">
