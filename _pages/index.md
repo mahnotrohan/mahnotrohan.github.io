@@ -17,19 +17,19 @@ permalink: /
     <p class="home-recent-intro">Three places to begin.</p>
     <ol class="home-recent-list">
       <li>
-        <a class="home-recent-title" href="{{ '/notes/the-ledger/' | relative_url }}">The Ledger</a>
-        <p>A conflict you suppress becomes resentment; soon disagreement feels like dismissal.</p>
-        <time datetime="2026-07-30">30 Jul 2026 &middot; 2 min</time>
+        <a class="home-recent-title" href="{{ '/notes/make-the-chili/' | relative_url }}">Make The Chili</a>
+        <p>A look back at a year that changed me, and a reminder to show up for the people we love.</p>
+        <time datetime="2026-10-11">11 Oct 2026 &middot; 10 min</time>
       </li>
       <li>
-        <a class="home-recent-title" href="{{ '/notes/learning-and-intuition/' | relative_url }}">Learning &amp; Intuition</a>
-        <p>Some things you can only be told. Others can only be learned by doing.</p>
-        <time datetime="2026-07-29">29 Jul 2026 &middot; 2 min</time>
+        <a class="home-recent-title" href="{{ '/notes/thoughts-on-agentic-commerce/' | relative_url }}">Thoughts on Agentic Commerce</a>
+        <p>How shopping agents could shift consumer intent and distribution away from marketplaces.</p>
+        <time datetime="2026-10-11">11 Oct 2026 &middot; 3 min</time>
       </li>
       <li>
-        <a class="home-recent-title" href="{{ '/notes/the-ripples/' | relative_url }}">The Ripples</a>
-        <p>We don&rsquo;t see the world as it is; we see it as we are.</p>
-        <time datetime="2026-07-20">20 Jul 2026 &middot; 3 min</time>
+        <a class="home-recent-title" href="{{ '/notes/a-life-of-texture/' | relative_url }}">A Life of Texture</a>
+        <p>Why some things can only be understood by stepping out and experiencing them for yourself.</p>
+        <time datetime="2026-10-01">1 Oct 2026 &middot; 3 min</time>
       </li>
     </ol>
     <a class="quiet-link home-all-writing" href="{{ '/blog' | relative_url }}">All writing</a>
