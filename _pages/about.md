@@ -48,6 +48,7 @@ permalink: /about
       <li><a href="https://fs.blog/david-foster-wallace-this-is-water">David Foster Wallace: This Is Water</a></li>
       <li><a href="https://henrikkarlsson.xyz/p/unfolding">Unfolding</a></li>
       <li><a href="https://jamesclear.com/four-burners-theory">The Four Burners Theory</a></li>
+      <li><a href="https://ryolu.notion.site/how-to-make-something-great">How to Make Something Great</a></li>
       <li><a href="https://kitchensoap.com/2012/02/10/each-necessary-but-only-jointly-sufficient">Each Necessary but Only Jointly Sufficient</a></li>
       <li><a href="https://map.simonsarris.com/p/school-is-not-enough">School Is Not Enough</a></li>
       <li><a href="https://map.simonsarris.com/p/the-most-precious-resource-is-agency">The Most Precious Resource Is Agency</a></li>
