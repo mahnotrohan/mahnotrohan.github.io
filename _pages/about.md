@@ -18,13 +18,13 @@ permalink: /about
   <section class="about-section" aria-labelledby="principles-title">
     <h2 id="principles-title">My Operating Principles</h2>
     <ol>
-      <li>The world runs on stories and relationships. I want to get exceptionally good at them.</li>
-      <li>Learning never ends. No MBA. Studies are always ongoing. Nothing I learn is ever useless&mdash;it finds its way into life somehow. I love novelty, but I try not to skip depth.</li>
-      <li>Nothing is truly difficult. It can be trained. There is no such thing as impossible&mdash;only a problem statement and a frame of reference. Life moves by induction. If one person has done it, so can I.</li>
-      <li>Physical health and movement stay in my hands. They never get deprioritised.</li>
-      <li>Create a lot. Stay lean. Stay flexible. Keep reinventing myself.</li>
-      <li>Be agile. Stay active everywhere. Make lots of mistakes with limited blast radius. Learn by getting my hands dirty.</li>
-      <li>Make lists.</li>
+      <li>The world runs on stories and relationships. I want to keep getting better at understanding both.</li>
+      <li>Learning never ends. Stay curious, love novelty, and make room for depth. Nothing learned is ever truly wasted.</li>
+      <li>Approach the unfamiliar with curiosity. With practice and perspective, more becomes possible.</li>
+      <li>Care for my body. Make room for movement, rest, and health, even when life gets busy.</li>
+      <li>Create a lot. Stay light on my feet. Leave room to change, grow, and reinvent self.</li>
+      <li>Learn by doing. Experiment, make lots of mistakes on a small scale. Keep putting hands in mud.</li>
+      <li>Make lists. Give my thoughts a place to land.</li>
     </ol>
   </section>
 
