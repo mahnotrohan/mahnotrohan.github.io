@@ -4,6 +4,8 @@ title: A Healthy Dose of Pessimism
 date: 2026-10-18
 ---
 
+*“Pessimism of the intellect, optimism of the will.” — Antonio Gramsci*
+
 I was talking to a friend last week about the CIRCLES framework. He was preparing for a PM interview, and while discussing it with him, I recalled the wonder and joy I felt when, a lustrum ago, I first learnt about the framework. It opened up a whole new realm for me. Now I could give shape to all my random ideas.
 
 I have been a curious person since childhood, always wanting to know what’s under the hood, and being creative about new things — how to create them, how to experiment with them. The framework brought out a lot of optimism in me, because now I could articulate anything. Still, though, I had low confidence in how to actually implement those ideas.
