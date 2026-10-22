@@ -1,7 +1,7 @@
 ---
 layout: notes
 title: Field notes from observing love
-date: 2026-10-22
+date: 2026-10-21
 ---
 A running list of small things: the behaviours I keep noticing around me that warm my heart or make me smile.
 
