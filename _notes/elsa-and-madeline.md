@@ -2,7 +2,7 @@
 layout: notes
 published: true
 title: Elsa and Madeline
-date: 2026-10-21
+date: 2026-10-22
 ---
 
 This is a tale about Elsa and Madeline.
