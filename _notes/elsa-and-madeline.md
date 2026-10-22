@@ -1,6 +1,6 @@
 ---
 layout: notes
-published: false
+published: true
 title: Elsa and Madeline
 date: 2026-10-21
 ---
