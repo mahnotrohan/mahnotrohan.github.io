@@ -16,7 +16,7 @@ permalink: /about
   </section>
 
   <section class="about-section" aria-labelledby="principles-title">
-    <h2 id="principles-title">My Operating Principles</h2>
+    <h2 id="principles-title">My beliefs and values</h2>
     <ol>
       <li>The world runs on stories and relationships. I want to keep getting better at understanding both.</li>
       <li>Learning never ends. Stay curious, love novelty, and make room for depth. Nothing learned is ever truly wasted.</li>
