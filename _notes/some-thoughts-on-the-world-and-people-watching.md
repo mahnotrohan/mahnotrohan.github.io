@@ -1,6 +1,6 @@
 ---
 layout: notes
-published: false
+published: true
 title: Some thoughts on the world, and people watching
 date: 2026-10-21
 ---
