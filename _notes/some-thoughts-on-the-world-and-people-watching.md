@@ -2,7 +2,7 @@
 layout: notes
 published: true
 title: Some thoughts on the world, and people watching
-date: 2026-10-21
+date: 2026-10-27
 ---
 
 1. Most people are terrible listeners, and you're one more often than you'd think. That's okay. Notice how much you talk versus how much others talk to you, and aim for them to do twice the talking.
