@@ -6,31 +6,32 @@ permalink: /bookshelf
 
 # Shelf
 
-Books I've read recently. I tend to gravitate toward memoirs, decision-making, and fiction that makes me think sideways. You can also find me on [Goodreads](https://www.goodreads.com/user/show/104627899-rohan-mahnot).
+Books I've read. I tend to gravitate toward memoirs, and fiction. You can also find me on [Goodreads](https://www.goodreads.com/user/show/104627899-rohan-mahnot).
 
 ## 2026
 
+- Kitchen Confidential - Anthony Bourdain
 - Metamorphosis - Franz Kafka
-- Everything I Know About Love - Dolly Alderton
-- The Outsider: A Memoir for Misfits - Vir Das
-- Notes on Heartbreak - Annie Lord
-- Never Logged Out - Ria Chopra
-- Maybe You Should Talk to Someone - Lori Gottlieb
-- Project Hail Mary - Andy Weir
-- The Book Of Clarity - Paras Chopra
-- The Hard Thing About Hard Things - Ben Horowitz
-- Why we sleep - Matthew Walker
-- Famous Last Questions - Sanjana Ramachandran
-- Fluke: Chance, Chaos, and Why Everything We Do Matters - Brian Klaas
-- The Year of Magical Thinking - Joan Didion
-- Dear Dolly - Dolly Alderton
-- How to Know a Person - David Brooks
-- The Business of Venture Capital - Mahendra Ramsinghani
-- The Dark Forest - Cixin Liu
-- Death's End - Cixin Liu
-- The Fellowship of the Ring - John Ronald Reuel Tolkien
-- The Two Towers - JRR Tolkien
 - Only Dull People Are Brilliant at Breakfast - Oscar Wilde
+- The Two Towers - JRR Tolkien
+- The Fellowship of the Ring - John Ronald Reuel Tolkien
+- Death's End - Cixin Liu
+- The Dark Forest - Cixin Liu
+- The Business of Venture Capital - Mahendra Ramsinghani
+- How to Know a Person - David Brooks
+- Dear Dolly - Dolly Alderton
+- The Year of Magical Thinking - Joan Didion
+- Fluke: Chance, Chaos, and Why Everything We Do Matters - Brian Klaas
+- Famous Last Questions - Sanjana Ramachandran
+- Why we sleep - Matthew Walker
+- The Hard Thing About Hard Things - Ben Horowitz
+- The Book Of Clarity - Paras Chopra
+- Project Hail Mary - Andy Weir
+- Maybe You Should Talk to Someone - Lori Gottlieb
+- Never Logged Out - Ria Chopra
+- Notes on Heartbreak - Annie Lord
+- The Outsider: A Memoir for Misfits - Vir Das
+- Everything I Know About Love - Dolly Alderton
 
 ## 2025
 
