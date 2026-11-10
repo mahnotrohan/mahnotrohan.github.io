@@ -77,6 +77,7 @@ permalink: /about
       <li><a href="https://substack.com/home/post/p-193438542">Essay on Substack</a></li>
       <li><a href="https://tyler.cafe/a-good-time">A Good Time</a></li>
       <li><a href="https://waitbutwhy.com/2015/12/the-tail-end">The Tail End</a></li>
+      <li><a href="https://sive.rs/kimo">There&rsquo;s no speed limit</a></li>
       <li><a href="https://wellnesswisdom.substack.com/p/-wellness-wisdom-vol45-30-pieces">Wellness Wisdom, Vol. 45: 30 Pieces</a></li>
     </ul>
   </section>
