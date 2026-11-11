@@ -66,7 +66,7 @@ permalink: /
   </section>
 
   <section class="home-section home-interests" id="interests" aria-labelledby="interests-title">
-    <h1 id="interests-title"><a class="text-link" href="{{ '/interests' | relative_url }}">Interests</a></h1>
+    <h1>Interests</h1>
     <div class="home-content-grid">
       <div class="home-content-item">
         <a class="text-link" href="{{ '/interests/coffee' | relative_url }}">Coffee</a>
