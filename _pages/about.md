@@ -28,11 +28,6 @@ permalink: /about
     </ol>
   </section>
 
-  <section class="about-section" aria-labelledby="essays-title">
-    <h2 id="essays-title">Essays I revisit</h2>
-    <p><a class="text-link" href="/interests/essays-i-revisit">A living list of essays I loved reading, or like to revisit often.</a></p>
-  </section>
-
   <section class="about-section" aria-labelledby="say-hello-title">
     <h2 id="say-hello-title">Say hello</h2>
     <p class="hello-copy">I&rsquo;d love to hear from you&mdash;about something I wrote, a suggestion you enjoyed, or just to say hi.</p>
