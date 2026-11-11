@@ -66,19 +66,23 @@ permalink: /
   </section>
 
   <section class="home-section home-interests" id="interests" aria-labelledby="interests-title">
-    <h1 id="interests-title">Interests</h1>
+    <h1 id="interests-title"><a class="text-link" href="{{ '/interests' | relative_url }}">Interests</a></h1>
     <div class="home-content-grid">
       <div class="home-content-item">
-        <a class="text-link" href="{{ '/thoughts/on-coffee' | relative_url }}">Coffee</a>
+        <a class="text-link" href="{{ '/interests/coffee' | relative_url }}">Coffee</a>
         <p>Brewing, learning and drinking lots of coffee.</p>
       </div>
       <div class="home-content-item">
-        <a class="text-link" href="{{ '/bookshelf' | relative_url }}">Bookshelf</a>
-        <p>Lots of Memoirs, fiction, and business books. </p>
+        <a class="text-link" href="{{ '/interests/bookshelf' | relative_url }}">Bookshelf</a>
+        <p>Lots of memoirs, fiction, and business books.</p>
       </div>
       <div class="home-content-item">
-        <a class="text-link" href="{{ '/thoughts/on-food' | relative_url }}">Food</a>
-        <p>Joy of eating, and craft of cooking</p>
+        <a class="text-link" href="{{ '/interests/food' | relative_url }}">Food</a>
+        <p>Joy of eating, and craft of cooking.</p>
+      </div>
+      <div class="home-content-item">
+        <a class="text-link" href="{{ '/interests/essays-i-revisit' | relative_url }}">Essays I Revisit</a>
+        <p>A living list of essays I return to often.</p>
       </div>
     </div>
   </section>
